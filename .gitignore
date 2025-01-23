@@ -1,0 +1,9 @@
+.env
+secret.yaml
+secrets.yaml
+.terraform
+*.tfvars
+*.tfvars.json
+*.tfstate
+*.tfstate.*
+.terraform.tfstate.lock.info
