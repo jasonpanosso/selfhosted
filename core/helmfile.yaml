@@ -1,15 +1,32 @@
 repositories:
   - name: cnpg
     url: https://cloudnative-pg.github.io/charts
-  - name: traefik
-    url: https://traefik.github.io/charts
   - name: jetstack
     url: https://charts.jetstack.io
+  - name: bitnami
+    url: "https://charts.bitnami.com/bitnami"
+  - name: ingress-nginx
+    url: "https://kubernetes.github.io/ingress-nginx"
 
 releases:
-  - name: traefik
-    chart: traefik/traefik
-    version: 34.1.0
+  - name: metallb
+    namespace: metallb-system
+    chart: bitnami/metallb
+    version: 6.4.3
+    hooks:
+    - events: ["prepare"]
+      command: "kubectl"
+      args: ["apply", "-f", "./metallb-ns.yaml"]
+    values:
+      - speaker:
+         secretName: memberlist
+
+  - name: nginx
+    namespace: nginx-system
+    chart: ingress-nginx/ingress-nginx
+    version: 4.11.0
+    needs:
+      - metallb-system/metallb
 
   - name: cloudnative-pg
     namespace: cnpg-system

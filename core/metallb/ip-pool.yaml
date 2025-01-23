@@ -1,0 +1,8 @@
+apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
+metadata:
+  name: traefik-lb
+  namespace: metallb-system
+spec:
+  addresses:
+    - 10.96.0.2-10.96.0.20
