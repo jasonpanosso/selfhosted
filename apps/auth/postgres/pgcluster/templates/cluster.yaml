@@ -1,0 +1,18 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: {{.Values.cluster.name}}
+spec:
+  instances: {{.Values.cluster.instances}}
+  storage:
+    size: {{.Values.cluster.size}}
+  bootstrap:
+    initdb:
+      database: {{.Values.secret.autheliaDB.name}}
+      owner: {{.Values.secret.autheliaDB.user}}
+      secret:
+        name: {{.Values.autheliaDBCredentialsSecretName}}
+      postInitTemplateSQL:
+        - CREATE USER {{.Values.secret.lldapDB.user}} WITH PASSWORD '{{.Values.secret.lldapDB.password}}';
+        - CREATE DATABASE {{.Values.secret.lldapDB.name}} OWNER {{.Values.secret.lldapDB.user}};
+        - GRANT ALL PRIVILEGES ON DATABASE {{.Values.secret.lldapDB.name}} TO {{.Values.secret.lldapDB.user}};

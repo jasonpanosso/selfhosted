@@ -1,0 +1,7 @@
+releases:
+  - name: pgcluster
+    namespace: auth
+    chart: ./pgcluster
+    values:
+      - values.yaml
+      - secrets.enc.yaml
