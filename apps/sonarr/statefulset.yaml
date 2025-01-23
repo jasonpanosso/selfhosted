@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: sonarr
+spec:
+  selector:
+    matchLabels:
+      app: sonarr
+  serviceName: sonarr
+  template:
+    metadata:
+      labels:
+        app: sonarr
+    spec:
+      containers:
+        - image: ghcr.io/linuxserver/sonarr:version-4.0.12.2823
+          imagePullPolicy: Always
+          name: sonarr
+          ports:
+            - containerPort: 8989
+              name: http
+          readinessProbe:
+            httpGet:
+              path: /login
+              port: 8989
+            initialDelaySeconds: 10
+            periodSeconds: 15
+          resources:
+            requests:
+              cpu: 50m
+              memory: 256Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+          volumeMounts:
+            - name: config
+              mountPath: /config
+            - name: downloads
+              mountPath: /downloads
+            - name: shows
+              mountPath: /tv
+      volumes:
+        - name: config
+          emptyDir: {}
+        - name: shows
+          emptyDir: {}
+        - name: downloads
+          emptyDir: {}
+  # volumeClaimTemplates:
+  #   - metadata:
+  #       name: config
+  #     spec:
+  #       accessModes: ["ReadWriteOnce"]
+  #       resources:
+  #         requests:
+  #           storage: 1Gi
+  #       storageClassName: longhorn
