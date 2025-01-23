@@ -27,7 +27,8 @@ releases:
   - name: cloudflare-cluster-issuer
     chart: ./cloudflare-cluster-issuer
     values:
-      - values.yaml
-      - secrets.enc.yaml
+      - ./values.yaml
+    secrets:
+      - ./secrets.enc.yaml
     needs:
       - cert-manager/cert-manager
