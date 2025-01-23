@@ -1,0 +1,78 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: lldap
+  namespace: auth
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: lldap
+  template:
+    metadata:
+      labels:
+        app: lldap
+    spec:
+      enableServiceLinks: false
+      # affinity:
+      #   podAntiAffinity:
+      #     requiredDuringSchedulingIgnoredDuringExecution:
+      #       - topologyKey: kubernetes.io/hostname
+      #         labelSelector:
+      #           matchExpressions:
+      #             - key: app
+      #               operator: In
+      #               values:
+      #                 - lldap
+      # priorityClassName: high-priority
+      containers:
+        - name: lldap
+          image: docker.io/lldap/lldap:v0.6.1
+          imagePullPolicy: IfNotPresent
+          envFrom:
+            - configMapRef:
+                name: lldap-envs
+            - secretRef:
+                name: lldap-secrets
+          env:
+            - name: LLDAP_SMTP_OPTIONS__SERVER
+              valueFrom:
+                secretKeyRef:
+                  name: smtp-secrets
+                  key: host
+            - name: LLDAP_SMTP_OPTIONS__PORT
+              valueFrom:
+                secretKeyRef:
+                  name: smtp-secrets
+                  key: port
+            - name: LLDAP_SMTP_OPTIONS__USER
+              valueFrom:
+                secretKeyRef:
+                  name: smtp-secrets
+                  key: username
+            - name: LLDAP_SMTP_OPTIONS__PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: smtp-secrets
+                  key: password
+          ports:
+            - name: ldap
+              containerPort: 3890
+              protocol: TCP
+            - name: http
+              containerPort: 17170
+              protocol: TCP
+          resources:
+            requests:
+              cpu: 50m
+              memory: 256Mi
+            limits:
+              cpu: 250m
+              memory: 512Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 33%
+      maxSurge: 33%

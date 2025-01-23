@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: lldap-envs
+  namespace: auth
+data:
+  UID: "1000"
+  GID: "1000"
+  TZ: "America/Detroit"
+  LLDAP_LDAP_BASE_DN: "dc=needless,dc=info"
+  LLDAP_HTTP_URL: "https://account.needless.info"

@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: lldap
+  namespace: auth
+spec:
+  ports:
+    - port: 389
+      targetPort: 3890
+      name: ldap
+    - port: 17170
+      name: http
+  selector:
+    app: lldap
