@@ -2,12 +2,29 @@ repositories:
   - name: bitnami
     url: "https://charts.bitnami.com/bitnami"
 
+values:
+  - values.yaml
+
 releases:
   - name: auth-secrets
     namespace: auth
     chart: ./auth-secrets
     values:
+      - values.yaml
+    secrets:
       - secrets.enc.yaml
+      - postgres-secrets.enc.yaml
+
+  - name: pgcluster
+    namespace: auth
+    chart: ./pgcluster
+    values:
+      - values.yaml
+    secrets:
+      - postgres-secrets.enc.yaml
+    needs:
+      - auth-secrets
+
 
   - name: redis
     namespace: auth
@@ -19,7 +36,7 @@ releases:
           enabled: true
           masterSet: "mymaster"
       - auth:
-          existingSecret: "redis-secret"
+          existingSecret: {{.Values.redis.secretName}}
           existingSecretPasswordKey: "password"
           enableReplicaAuth: true
       - master:
@@ -39,5 +56,13 @@ releases:
             limits:
               cpu: "200m"
               memory: "256Mi"
+    needs:
+      - auth-secrets
+
+  - name: lldap
+    namespace: auth
+    chart: ./lldap
+    values:
+      - values.yaml
     needs:
       - auth-secrets

@@ -1,7 +1,0 @@
-cluster:
-  name: pg-cluster
-  instances: 3
-  size: 1Gi
-
-autheliaDBCredentialsSecretName: authelia-db-credentials
-lldapDBCredentialsSecretName: lldap-db-credentials

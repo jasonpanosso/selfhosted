@@ -2,7 +2,6 @@ kind: Deployment
 apiVersion: apps/v1
 metadata:
   name: lldap
-  namespace: auth
 spec:
   replicas: 2
   selector:
@@ -33,27 +32,27 @@ spec:
             - configMapRef:
                 name: lldap-envs
             - secretRef:
-                name: lldap-secrets
+                name: {{.Values.lldap.secretName}}
           env:
             - name: LLDAP_SMTP_OPTIONS__SERVER
               valueFrom:
                 secretKeyRef:
-                  name: smtp-secrets
+                  name: {{.Values.smtp.secretName}}
                   key: host
             - name: LLDAP_SMTP_OPTIONS__PORT
               valueFrom:
                 secretKeyRef:
-                  name: smtp-secrets
+                  name: {{.Values.smtp.secretName}}
                   key: port
             - name: LLDAP_SMTP_OPTIONS__USER
               valueFrom:
                 secretKeyRef:
-                  name: smtp-secrets
+                  name: {{.Values.smtp.secretName}}
                   key: username
             - name: LLDAP_SMTP_OPTIONS__PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: smtp-secrets
+                  name: {{.Values.smtp.secretName}}
                   key: password
           ports:
             - name: ldap

@@ -1,0 +1,18 @@
+pgcluster:
+  name: pg-cluster
+  instances: 3
+  size: 1Gi
+
+autheliaDB:
+  secretName: authelia-db-credentials
+lldapDB:
+  secretName: lldap-db-credentials
+
+smtp:
+  secretName: smtp
+
+redis:
+  secretName: redis
+
+lldap:
+  secretName: lldap
