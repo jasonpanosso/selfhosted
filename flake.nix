@@ -2,32 +2,37 @@
   description = "kubernetes in docker devshell flake";
 
   inputs.nixpkgs.url = "https://flakehub.com/f/NixOS/nixpkgs/0.1.*.tar.gz";
+  inputs.flake-utils.url = "github:numtide/flake-utils";
 
-  outputs = { self, nixpkgs }:
-    let
-      supportedSystems = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
-      forEachSupportedSystem = f: nixpkgs.lib.genAttrs supportedSystems (system: f {
-        pkgs = import nixpkgs { inherit system; config.allowUnfree = true; };
-      });
-    in
-    {
-      devShells = forEachSupportedSystem ({ pkgs }: {
-        default = pkgs.mkShell {
+  outputs = { self, nixpkgs, flake-utils }:
+    flake-utils.lib.eachDefaultSystem (system:
+      let
+        pkgs = import nixpkgs {
+          system = "x86_64-linux";
+          config.allowUnfree = true;
+          overlays = [
+            (final: prev: {
+              kubernetes-helm-wrapped = prev.wrapHelm prev.kubernetes-helm {
+                plugins = with prev.kubernetes-helmPlugins; [
+                  helm-diff
+                  helm-secrets
+                ];
+              };
+            })
+          ];
+        };
+      in
+      {
+        devShells.default = pkgs.mkShell {
           buildInputs = with pkgs; [
             docker
             minikube
             kubectl
-            helmfile
             terraform
             sops
-            (wrapHelm kubernetes-helm {
-              plugins = with pkgs.kubernetes-helmPlugins; [
-                helm-diff
-                helm-secrets
-              ];
-            })
+            kubernetes-helm-wrapped
+            helmfile-wrapped
           ];
         };
       });
-    };
 }
