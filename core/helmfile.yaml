@@ -1,0 +1,33 @@
+repositories:
+  - name: cnpg
+    url: https://cloudnative-pg.github.io/charts
+  - name: traefik
+    url: https://traefik.github.io/charts
+  - name: jetstack
+    url: https://charts.jetstack.io
+
+releases:
+  - name: traefik
+    chart: traefik/traefik
+    version: 34.1.0
+
+  - name: cloudnative-pg
+    namespace: cnpg-system
+    chart: cnpg/cloudnative-pg
+    version: 0.23.0
+
+  - name: cert-manager
+    namespace: cert-manager
+    chart: jetstack/cert-manager
+    version: 1.16.3
+    set:
+      - name: crds.enabled
+        value: true
+
+  - name: cloudflare-cluster-issuer
+    chart: ./cloudflare-cluster-issuer
+    values:
+      - values.yaml
+      - secrets.enc.yaml
+    needs:
+      - cert-manager/cert-manager

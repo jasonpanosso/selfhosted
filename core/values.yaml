@@ -1,0 +1,11 @@
+issuer:
+  name: cloudflare-issuer
+  email: jasonpanosso@protonmail.com
+  server: https://acme-v02.api.letsencrypt.org/directory
+  privateKeySecretName: letsencrypt-account-key
+  dnsZones:
+    - "needless.info"
+    - "*.needless.info"
+
+secret:
+  name: cloudflare-api-token
