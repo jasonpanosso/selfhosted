@@ -1,6 +1,4 @@
 .env
-secret.yaml
-secrets.yaml
 .terraform
 *.tfvars
 *.tfvars.json
