@@ -1,0 +1,4 @@
+apiVersion: v2
+name: radarr
+description: deploys radarr
+version: 0.1.0

@@ -1,0 +1,11 @@
+sonarr:
+  secretName: sonarr
+
+radarr:
+  secretName: radarr
+
+prowlarr:
+  secretName: prowlarr
+
+buildarr:
+  secretName: buildarr

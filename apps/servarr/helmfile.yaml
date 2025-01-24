@@ -1,0 +1,43 @@
+releases:
+  - name: sonarr
+    namespace: servarr
+    chart: ./sonarr
+    wait: true
+    secrets:
+      - secrets.enc.yaml
+    values:
+      - values.yaml
+
+  - name: radarr
+    namespace: servarr
+    chart: ./radarr
+    wait: true
+    secrets:
+      - secrets.enc.yaml
+    values:
+      - values.yaml
+
+  - name: prowlarr
+    namespace: servarr
+    chart: ./prowlarr
+    wait: true
+    secrets:
+      - secrets.enc.yaml
+    values:
+      - values.yaml
+    needs:
+      - radarr
+      - sonarr
+
+  - name: buildarr
+    namespace: servarr
+    chart: ./buildarr
+    wait: true
+    secrets:
+      - secrets.enc.yaml
+    values:
+      - values.yaml
+    needs:
+      - radarr
+      - sonarr
+      - prowlarr

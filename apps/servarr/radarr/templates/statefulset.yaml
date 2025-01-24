@@ -1,28 +1,38 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: sonarr
+  name: {{.Chart.Name}}
 spec:
   selector:
     matchLabels:
-      app: sonarr
-  serviceName: sonarr
+      app: {{.Chart.Name}}
+  serviceName: {{.Chart.Name}}
   template:
     metadata:
       labels:
-        app: sonarr
+        app: {{.Chart.Name}}
     spec:
+      # radarr requires config.xml to be writable, secrets are readonly
+      initContainers:
+        - name: init-secret
+          image: busybox:1.28
+          command: ['sh', '-c', 'cp /secrets/config.xml /config/config.xml']
+          volumeMounts:
+            - name: config
+              mountPath: /config
+            - name: secrets
+              mountPath: /secrets
       containers:
-        - image: ghcr.io/linuxserver/sonarr:version-4.0.12.2823
+        - image: ghcr.io/linuxserver/radarr:version-5.17.2.9580
           imagePullPolicy: Always
-          name: sonarr
+          name: radarr
           ports:
-            - containerPort: 8989
+            - containerPort: 7878
               name: http
           readinessProbe:
             httpGet:
               path: /login
-              port: 8989
+              port: 7878
             initialDelaySeconds: 10
             periodSeconds: 15
           resources:
@@ -38,16 +48,19 @@ spec:
             - name: config
               mountPath: /config
             - name: downloads
-              mountPath: /downloads
-            - name: shows
-              mountPath: /tv
+              mountPath: /data/downloads
+            - name: movies
+              mountPath: /data/movies
       volumes:
         - name: config
           emptyDir: {}
-        - name: shows
+        - name: movies
           emptyDir: {}
         - name: downloads
           emptyDir: {}
+        - name: secrets
+          secret:
+            secretName: {{.Values.radarr.secretName}}
   # volumeClaimTemplates:
   #   - metadata:
   #       name: config

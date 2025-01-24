@@ -1,0 +1,4 @@
+apiVersion: v2
+name: sonarr
+description: deploys sonarr
+version: 0.1.0
