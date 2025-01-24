@@ -1,0 +1,4 @@
+buildarr @ git+https://github.com/alikhil/buildarr.git@dev
+buildarr-sonarr @ git+https://github.com/rebuildarr/buildarr-sonarr.git@dev
+buildarr-radarr @ git+https://github.com/rebuildarr/buildarr-radarr.git@dev
+buildarr-prowlarr @ git+https://github.com/rebuildarr/buildarr-prowlarr.git@dev
