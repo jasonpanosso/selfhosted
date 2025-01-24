@@ -1,17 +1,16 @@
 kind: Deployment
 apiVersion: apps/v1
 metadata:
-  name: authelia
-  namespace: auth
+  name: {{.Chart.Name}}
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: authelia
+      app: {{.Chart.Name}}
   template:
     metadata:
       labels:
-        app: authelia
+        app: {{.Chart.Name}}
     spec:
       # https://www.authelia.com/integration/kubernetes/introduction/#enable-service-links
       enableServiceLinks: false
@@ -40,7 +39,7 @@ spec:
               value: template
           envFrom:
             - configMapRef:
-                name: authelia-env
+                name: {{.Chart.Name}}-env
           ports:
             - name: http
               containerPort: 9091
@@ -76,17 +75,15 @@ spec:
           emptyDir: {}
         - name: config
           configMap:
-            name: authelia-config
+            name: {{.Chart.Name}}-config
         - name: secrets
           projected:
             sources:
               - secret:
-                  name: authelia-secrets
+                  name: {{.Values.authelia.secretName}}
                   items:
                     - key: JWT_TOKEN
                       path: JWT_TOKEN
-                    - key: LDAP_PASSWORD
-                      path: LDAP_PASSWORD
                     - key: SESSION_KEY
                       path: SESSION_KEY
                     - key: ENCRYPTION_KEY
@@ -98,12 +95,17 @@ spec:
                     - key: OIDC_TEST_SECRET
                       path: OIDC_TEST_SECRET
               - secret:
-                  name: redis-secret
+                  name: {{.Values.lldap.secretName}}
+                  items:
+                    - key: LLDAP_LDAP_USER_PASS
+                      path: LDAP_PASSWORD
+              - secret:
+                  name: {{.Values.redis.secretName}}
                   items:
                     - key: password
                       path: REDIS_PASSWORD
               - secret:
-                  name: authelia-db-credentials
+                  name: {{.Values.autheliaDB.secretName}}
                   items:
                     - key: username
                       path: POSTGRES_USERNAME
@@ -112,7 +114,7 @@ spec:
                     - key: database
                       path: POSTGRES_DATABASE
               - secret:
-                  name: smtp-secrets
+                  name: {{.Values.smtp.secretName}}
                   items:
                     - key: username
                       path: SMTP_USERNAME

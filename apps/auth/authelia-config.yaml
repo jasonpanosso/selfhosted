@@ -1,0 +1,284 @@
+###############################################################################
+#                           Authelia Configuration                            #
+###############################################################################
+
+## The theme to display: light, dark, grey, auto.
+theme: dark
+
+##
+## Server Configuration
+##
+server:
+  ## The address to listen on
+  address: tcp://0.0.0.0:9091
+
+  ## Buffers usually should be configured to be the same value.
+  ## Explanation at https://www.authelia.com/docs/configuration/server.html
+  ## Read buffer size adjusts the server's max incoming request size in bytes.
+  ## Write buffer size does the same for outgoing responses.
+  buffers:
+    read: 4096
+    write: 4096
+
+log:
+  ## Level of verbosity for logs: info, debug, trace.
+  level: info
+
+  ## Format the logs are written as: json, text.
+  format: text
+
+##
+## TOTP Configuration
+##
+## Parameters used for TOTP generation.
+totp:
+  ## The issuer name displayed in the Authenticator application of your choice
+  ## See: https://github.com/google/google-authenticator/wiki/Key-Uri-Format for more info on issuer names
+  issuer: needless.info
+  ## The period in seconds a one-time password is current for. Changing this will require all users to register
+  ## their TOTP applications again. Warning: before changing period read the docs link below.
+  period: 30
+  ## The skew controls number of one-time passwords either side of the current one that are valid.
+  ## Warning: before changing skew read the docs link below.
+  skew: 1
+  ## See: https://www.authelia.com/docs/configuration/one-time-password.html#period-and-skew to read the documentation.
+
+##
+## Authentication Backend Provider Configuration
+##
+## Used for verifying user passwords and retrieve information such as email address and groups users belong to.
+##
+## The available providers are: `file`, `ldap`. You must use only one of these providers.
+authentication_backend:
+  ## Password Reset Options.
+  password_reset:
+    ## Disable both the HTML element and the API for reset password functionality.
+    disable: false
+
+    ## External reset password url that redirects the user to an external reset portal. This disables the internal reset
+    ## functionality.
+    custom_url: ""
+
+  ## The amount of time to wait before we refresh data from the authentication backend. Uses duration notation.
+  ## To disable this feature set it to 'disable', this will slightly reduce security because for Authelia, users will
+  ## always belong to groups they belonged to at the time of login even if they have been removed from them in LDAP.
+  ## To force update on every request you can set this to '0' or 'always', this will increase processor demand.
+  ## See the below documentation for more information.
+  ## Duration Notation docs:  https://www.authelia.com/docs/configuration/index.html#duration-notation-format
+  ## Refresh Interval docs: https://www.authelia.com/docs/configuration/authentication/ldap.html#refresh-interval
+  refresh_interval: 5m
+
+  ##
+  ## LDAP (Authentication Provider)
+  ##
+  ## This is the recommended Authentication Provider in production
+  ## because it allows Authelia to offload the stateful operations
+  ## onto the LDAP service.
+  ldap:
+    implementation: lldap
+    address: ldap://lldap.auth.svc.cluster.local
+    start_tls: false
+
+    base_dn: dc=needless,dc=info
+
+    ## The additional_users_dn is prefixed to base_dn and delimited by a comma when searching for users.
+    ## i.e. with this set to OU=Users and base_dn set to DC=a,DC=com; OU=Users,DC=a,DC=com is searched for users.
+    additional_users_dn: ou=people
+
+    users_filter: "(&(|({username_attribute}={input})({mail_attribute}={input}))(objectClass=person))"
+
+    ## The additional_groups_dn is prefixed to base_dn and delimited by a comma when searching for groups.
+    ## i.e. with this set to OU=Groups and base_dn set to DC=a,DC=com; OU=Groups,DC=a,DC=com is searched for groups.
+    additional_groups_dn: ou=groups
+
+    ## The groups filter used in search queries to find the groups of the user.
+    ## - {input} is a placeholder replaced by what the user inputs in the login form.
+    ## - {username} is a placeholder replace by the username stored in LDAP (based on `username_attribute`).
+    ## - {dn} is a matcher replaced by the user distinguished name, aka, user DN.
+    ## - {username_attribute} is a placeholder replaced by what is configured in `username_attribute`.
+    ## - {mail_attribute} is a placeholder replaced by what is configured in `mail_attribute`.
+    ##
+    ## If your groups use the `groupOfUniqueNames` structure use this instead:
+    ##    (&(uniquemember={dn})(objectclass=groupOfUniqueNames))
+    groups_filter: (member={dn})
+
+    attributes:
+      display_name: displayName
+      username: uid
+      group_name: cn
+      mail: mail
+
+    ## The username and password of the admin user.
+    user: cn=admin,ou=people,dc=needless,dc=info
+    ## Password can also be set using a secret: https://www.authelia.com/docs/configuration/secrets.html
+
+##
+## Access Control Configuration
+##
+## Access control is a list of rules defining the authorizations applied for one resource to users or group of users.
+##
+## If 'access_control' is not defined, ACL rules are disabled and the 'bypass' rule is applied, i.e., access is allowed
+## to anyone. Otherwise restrictions follow the rules defined.
+##
+## Note: One can use the wildcard * to match any subdomain.
+## It must stand at the beginning of the pattern. (example: *.mydomain.com)
+##
+## Note: You must put patterns containing wildcards between simple quotes for the YAML to be syntactically correct.
+##
+## Definition: A 'rule' is an object with the following keys: 'domain', 'subject', 'policy' and 'resources'.
+##
+## - 'domain' defines which domain or set of domains the rule applies to.
+##
+## - 'subject' defines the subject to apply authorizations to. This parameter is optional and matching any user if not
+##    provided. If provided, the parameter represents either a user or a group. It should be of the form
+##    'user:<username>' or 'group:<groupname>'.
+##
+## - 'policy' is the policy to apply to resources. It must be either 'bypass', 'one_factor', 'two_factor' or 'deny'.
+##
+## - 'resources' is a list of regular expressions that matches a set of resources to apply the policy to. This parameter
+##   is optional and matches any resource if not provided.
+##
+## Note: the order of the rules is important. The first policy matching (domain, resource, subject) applies.
+access_control:
+  ## Default policy can either be 'bypass', 'one_factor', 'two_factor' or 'deny'. It is the policy applied to any
+  ## resource if there is no policy to be applied to the user.
+  default_policy: deny
+
+  networks:
+    - name: internal
+      networks:
+        - 10.0.0.0/8
+        - 192.168.1.0/24
+
+  rules:
+    - domain: "*.needless.info"
+      policy: one_factor
+
+##
+## Session Provider Configuration
+##
+## The session cookies identify the user once logged in.
+## The available providers are: `memory`, `redis`. Memory is the provider unless redis is defined.
+session:
+  ## The name of the session cookie.
+  name: authelia
+
+  ## Sets the Cookie SameSite value. Possible options are none, lax, or strict.
+  ## Please read https://www.authelia.com/docs/configuration/session.html#same_site
+  same_site: lax
+
+  ## The time before the cookie expires and the session is destroyed if remember me IS NOT selected.
+  expiration: 1h
+
+  ## The inactivity time before the session is reset. If expiration is set to 1h, and this is set to 5m, if the user
+  ## does not select the remember me option their session will get destroyed after 1h, or after 5m since the last time
+  ## Authelia detected user activity.
+  inactivity: 5m
+
+  ## The time before the cookie expires and the session is destroyed if remember me IS selected.
+  ## Value of 0 disables remember me.
+  remember_me: 1M
+
+  # domain protection settings:
+  cookies:
+    - domain: "needless.info"
+      authelia_url: "https://auth.needless.info"
+      # default_redirection_url: 'https://needless.info'
+
+  ##
+  ## Redis Provider
+  ##
+  ## Important: Kubernetes (or HA) users must read https://www.authelia.com/docs/features/statelessness.html
+  ##
+  redis:
+    high_availability:
+      sentinel_name: mymaster
+      nodes:
+        - host: redis-node-0.redis-headless.auth.svc.cluster.local
+          port: 26379
+        - host: redis-node-1.redis-headless.auth.svc.cluster.local
+          port: 26379
+        - host: redis-node-2.redis-headless.auth.svc.cluster.local
+          port: 26379
+
+##
+## Regulation Configuration
+##
+## This mechanism prevents attackers from brute forcing the first factor. It bans the user if too many attempts are made
+## in a short period of time.
+regulation:
+  ## The number of failed login attempts before user is banned. Set it to 0 to disable regulation.
+  max_retries: 3
+
+  ## The time range during which the user can attempt login before being banned. The user is banned if the
+  ## authentication failed 'max_retries' times in a 'find_time' seconds window. Find Time accepts duration notation.
+  ## See: https://www.authelia.com/docs/configuration/index.html#duration-notation-format
+  find_time: 2m
+
+  ## The length of time before a banned user can login again. Ban Time accepts duration notation.
+  ## See: https://www.authelia.com/docs/configuration/index.html#duration-notation-format
+  ban_time: 5m
+
+##
+## Storage Provider Configuration
+##
+## The available providers are: `local`, `mysql`, `postgres`. You must use one and only one of these providers.
+storage:
+  ##
+  ## PostgreSQL (Storage Provider)
+  ##
+  postgres:
+    address: tcp://pg-cluster-rw:5432
+    database: {{ secret "/config/secrets/POSTGRES_DATABASE" }}
+    username: {{ secret "/config/secrets/POSTGRES_USERNAME" }}
+    ## Password can also be set using a secret: https://www.authelia.com/docs/configuration/secrets.html
+
+##
+## Notification Provider
+##
+## Notifications are sent to users when they require a password reset, a U2F registration or a TOTP registration.
+## The available providers are: filesystem, smtp. You must use only one of these providers.
+notifier:
+  ## You can disable the notifier startup check by setting this to true.
+  disable_startup_check: true
+  smtp:
+    address: "submission://email-smtp.us-east-1.amazonaws.com:587"
+    username: {{ secret "/config/secrets/SMTP_USERNAME" }}
+    identifier: "needless.info"
+    sender: "no-reply@needless.info"
+
+##
+## Identity Providers
+##
+identity_providers:
+  ##
+  ## OpenID Connect (Identity Provider)
+  ##
+  ## https://www.authelia.com/configuration/identity-providers/openid-connect/provider/
+  oidc:
+    ## The hmac_secret is used to sign OAuth2 tokens (authorization code, access tokens and refresh tokens).
+    ## HMAC Secret can also be set using a secret: https://www.authelia.com/docs/configuration/secrets.html
+    lifespans:
+      access_token: 1h
+      authorize_code: 1m
+      id_token: 1h
+    enable_client_debug_messages: false
+    enforce_pkce: public_clients_only
+    cors:
+      endpoints:
+        - authorization
+        - token
+        - revocation
+        - introspection
+        - userinfo
+      allowed_origins:
+        - "*"
+
+    # The list of issuer JSON Web Keys.
+    jwks:
+      - algorithm: "RS256"
+        key: {{ secret "/config/secrets/OIDC_JWKS_PRIVATE_KEY" | mindent 10 "|" | msquote }}
+
+    clients:
+      - client_id: "test"
+        client_secret: {{ secret "/config/secrets/OIDC_TEST_SECRET" }}

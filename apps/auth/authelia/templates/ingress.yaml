@@ -2,7 +2,6 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: authelia
-  namespace: auth
   annotations:
     # sticky sessions, to let login work properly when replicas>1
     nginx.ingress.kubernetes.io/affinity: "cookie"

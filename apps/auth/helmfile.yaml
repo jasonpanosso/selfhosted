@@ -25,7 +25,6 @@ releases:
     needs:
       - auth-secrets
 
-
   - name: redis
     namespace: auth
     chart: bitnami/redis
@@ -66,3 +65,17 @@ releases:
       - values.yaml
     needs:
       - auth-secrets
+      - pgcluster
+
+  - name: authelia
+    namespace: auth
+    chart: ./authelia
+    values:
+      - values.yaml
+      - authelia:
+          config: {{ readFile "authelia-config.yaml" | quote }}
+    needs:
+      - auth-secrets
+      - lldap
+      - pgcluster
+      - redis
