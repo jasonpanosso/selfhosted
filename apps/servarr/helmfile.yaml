@@ -1,4 +1,13 @@
 releases:
+  - name: qbittorrent
+    namespace: servarr
+    chart: ./qbittorrent
+    wait: true
+    secrets:
+      - secrets.enc.yaml
+    values:
+      - values.yaml
+
   - name: sonarr
     namespace: servarr
     chart: ./sonarr
@@ -41,3 +50,18 @@ releases:
       - radarr
       - sonarr
       - prowlarr
+      - qbittorrent
+
+  - name: configarr
+    namespace: servarr
+    chart: ./configarr
+    wait: true
+    secrets:
+      - secrets.enc.yaml
+    values:
+      - values.yaml
+    needs:
+      - radarr
+      - sonarr
+      - prowlarr
+      - buildarr

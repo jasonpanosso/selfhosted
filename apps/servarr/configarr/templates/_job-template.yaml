@@ -1,0 +1,30 @@
+{{- define "job.spec" -}}
+template:
+  metadata:
+    annotations:
+      checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+  spec:
+    containers:
+      - name: configarr
+        image: ghcr.io/raydak-labs/configarr:latest
+        imagePullPolicy: Always
+        envFrom:
+          - secretRef:
+              name: {{.Values.configarr.secretName}}
+        volumeMounts:
+          - name: cache
+            mountPath: /app/repos
+            subPath: configarr-repos
+          - name: config
+            mountPath: /app/config/config.yml
+            subPath: config.yml
+    volumes:
+      - name: cache
+        emptyDir: {}
+        # persistentVolumeClaim:
+        #   claimName: media-app-data
+      - name: config
+        configMap:
+          name: {{.Chart.Name}}
+    restartPolicy: Never
+{{- end }}

@@ -9,3 +9,9 @@ prowlarr:
 
 buildarr:
   secretName: buildarr
+
+configarr:
+  secretName: configarr
+
+qbittorrent:
+  secretName: qbittorrent

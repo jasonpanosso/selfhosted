@@ -1,0 +1,4 @@
+apiVersion: v2
+name: qbittorrent
+description: deploys qbittorrent
+version: 0.1.0

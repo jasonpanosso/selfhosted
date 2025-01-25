@@ -1,0 +1,87 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{.Chart.Name}}
+spec:
+  selector:
+    matchLabels:
+      app: {{.Chart.Name}}
+  serviceName: {{.Chart.Name}}
+  template:
+    metadata:
+      annotations:
+        checksum/secret: {{ include (print $.Template.BasePath "/secret.yaml") . | sha256sum }}
+        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+      labels:
+        app: {{.Chart.Name}}
+    spec:
+      initContainers:
+        - image: docker.io/library/busybox:stable
+          imagePullPolicy: Always
+          name: init-secrets
+          command:
+            - "/bin/sh"
+            - "-c"
+            - |
+              mkdir -p /config/wireguard && cp -L /readonly/wg0.conf /config/wireguard && \
+                mkdir -p /config/qBittorrent/config && cp -L /readonly/qBittorrent.conf /config/qBittorrent/config
+          volumeMounts:
+            - mountPath: /readonly
+              name: secrets
+            - mountPath: /config
+              name: config
+      containers:
+        - image: docker.io/binhex/arch-qbittorrentvpn:5.0.3-1-01
+          name: qbittorrent
+          envFrom:
+            - configMapRef:
+                name: {{.Chart.Name}}
+          ports:
+            - containerPort: 8080
+              name: http
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 15
+          resources:
+            requests:
+              cpu: 250m
+              memory: 512Mi
+            limits:
+              cpu: 1000m
+              memory: 2Gi
+          securityContext:
+            privileged: true
+          volumeMounts:
+            - name: config
+              mountPath: /config
+            - name: downloads
+              mountPath: /data/downloads
+            - name: videos
+              mountPath: /videos
+      volumes:
+        - name: config
+          emptyDir: {}
+        - name: downloads
+          emptyDir: {}
+          # persistentVolumeClaim:
+          #   claimName: nfs-downloads
+        - name: videos
+          emptyDir: {}
+          # persistentVolumeClaim:
+          #   claimName: nfs-videos
+        - name: secrets
+          secret:
+            secretName: {{.Values.qbittorrent.secretName}}
+            defaultMode: 0755
+  # volumeClaimTemplates:
+  #   - metadata:
+  #       name: config
+  #     spec:
+  #       accessModes: [ "ReadWriteOnce" ]
+  #       resources:
+  #         requests:
+  #           storage: 1Gi
+  #       storageClassName: longhorn
