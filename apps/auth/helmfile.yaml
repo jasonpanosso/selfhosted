@@ -72,8 +72,6 @@ releases:
     chart: ./authelia
     values:
       - values.yaml
-      - authelia:
-          config: {{ readFile "authelia-config.yaml" | quote }}
     needs:
       - auth-secrets
       - lldap

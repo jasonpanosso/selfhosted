@@ -151,6 +151,14 @@ access_control:
         - 192.168.1.0/24
 
   rules:
+    # *arr has no support for custom auth, have to byapss for api routes
+    - domain:
+        - prowlarr.needless.info
+        - radarr.needless.info
+        - sonarr.needless.info
+      resources:
+        - '^/api.*$'
+      policy: bypass
     - domain: "*.needless.info"
       policy: one_factor
 

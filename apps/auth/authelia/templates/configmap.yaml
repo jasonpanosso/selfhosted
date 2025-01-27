@@ -19,4 +19,4 @@ metadata:
   name: {{.Chart.Name}}-config
 data:
   configuration.yaml: |-
-{{.Values.authelia.config | indent 4}}
+{{.Files.Get "files/authelia-config.yaml" | indent 4}}
