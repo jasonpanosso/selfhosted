@@ -1,7 +1,7 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: lldap
+  name: {{.Chart.Name}}
   annotations:
     # sticky sessions, to let login work properly when replicas>1
     nginx.ingress.kubernetes.io/affinity: "cookie"
@@ -11,7 +11,7 @@ spec:
   tls:
     - hosts:
         - account.needless.info
-      secretName: lldap-tls
+      secretName: {{.Chart.Name}}-tls
   rules:
     - host: account.needless.info
       http:

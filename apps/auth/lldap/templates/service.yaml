@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: lldap
+  name: {{.Chart.Name}}
 spec:
   ports:
     - port: 389
@@ -10,4 +10,4 @@ spec:
     - port: 17170
       name: http
   selector:
-    app: lldap
+    app: {{.Chart.Name}}

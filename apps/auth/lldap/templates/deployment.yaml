@@ -1,16 +1,16 @@
 kind: Deployment
 apiVersion: apps/v1
 metadata:
-  name: lldap
+  name: {{.Chart.Name}}
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: lldap
+      app: {{.Chart.Name}}
   template:
     metadata:
       labels:
-        app: lldap
+        app: {{.Chart.Name}}
     spec:
       enableServiceLinks: false
       # affinity:
@@ -30,7 +30,7 @@ spec:
           imagePullPolicy: IfNotPresent
           envFrom:
             - configMapRef:
-                name: lldap-envs
+                name: {{.Chart.Name}}-envs
             - secretRef:
                 name: {{.Values.lldap.secretName}}
           env:

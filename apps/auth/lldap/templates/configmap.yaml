@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: lldap-envs
+  name: {{.Chart.Name}}-envs
 data:
   UID: "1000"
   GID: "1000"
