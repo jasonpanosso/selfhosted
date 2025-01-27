@@ -11,6 +11,9 @@ spec:
     metadata:
       labels:
         app: {{.Chart.Name}}
+      annotations:
+        checksum/configmap: {{ include (print .Template.BasePath "/configmap.yaml") . | sha256sum }}
+        checksum/secret: {{ include (print .Template.BasePath "/secret.yaml") . | sha256sum }}
     spec:
       initContainers:
         - name: init-ldap-plugin

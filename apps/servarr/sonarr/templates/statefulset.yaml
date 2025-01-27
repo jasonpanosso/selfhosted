@@ -11,6 +11,8 @@ spec:
     metadata:
       labels:
         app: {{.Chart.Name}}
+      annotations:
+        checksum/secret: {{ include (print .Template.BasePath "/secret.yaml") . | sha256sum }}
     spec:
       # sonarr requires config.xml to be writable, secrets are readonly
       initContainers:
