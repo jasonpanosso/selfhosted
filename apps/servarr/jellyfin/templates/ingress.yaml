@@ -1,0 +1,23 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{.Chart.Name}}
+  annotations:
+    cert-manager.io/cluster-issuer: "cloudflare-issuer"
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - video.needless.info
+      secretName: {{.Chart.Name}}-tls
+  rules:
+    - host: video.needless.info
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: {{.Chart.Name}}
+                port:
+                  number: 8096

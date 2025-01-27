@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PluginConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <LdapUsers />
+  <LdapServer>lldap.auth.svc.cluster.local</LdapServer>
+  <LdapPort>389</LdapPort>
+  <UseSsl>false</UseSsl>
+  <UseStartTls>false</UseStartTls>
+  <SkipSslVerify>false</SkipSslVerify>
+  <LdapBindUser>{{.Values.jellyfin.ldapBindUser}}</LdapBindUser>
+  <LdapBindPassword>{{.Values.jellyfin.ldapBindPassword}}</LdapBindPassword>
+  <LdapBaseDn>ou=people,dc=needless,dc=info</LdapBaseDn>
+  <LdapSearchFilter>(|(memberOf=cn=users,ou=groups,dc=needless,dc=info)(memberOf=cn=admins,ou=groups,dc=needless,dc=info))</LdapSearchFilter>
+  <LdapAdminBaseDn />
+  <LdapAdminFilter>(memberOf=cn=admins,ou=groups,dc=needless,dc=info)</LdapAdminFilter>
+  <EnableLdapAdminFilterMemberUid>false</EnableLdapAdminFilterMemberUid>
+  <LdapSearchAttributes>uid,mail</LdapSearchAttributes>
+  <LdapClientCertPath />
+  <LdapClientKeyPath />
+  <LdapRootCaPath />
+  <CreateUsersFromLdap>true</CreateUsersFromLdap>
+  <AllowPassChange>false</AllowPassChange>
+  <LdapUidAttribute>uid</LdapUidAttribute>
+  <LdapUsernameAttribute>cn</LdapUsernameAttribute>
+  <LdapPasswordAttribute>password</LdapPasswordAttribute>
+  <EnableLdapProfileImageSync>true</EnableLdapProfileImageSync>
+  <LdapProfileImageAttribute>avatar</LdapProfileImageAttribute>
+  <EnableAllFolders>true</EnableAllFolders>
+  <PasswordResetUrl />
+</PluginConfiguration>

@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{.Chart.Name}}-init-scripts
+data:
+  init-ldap-plugin.sh: |-
+{{.Files.Get "files/init-ldap-plugin.sh" | indent 4}}

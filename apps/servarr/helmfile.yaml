@@ -1,4 +1,12 @@
 releases:
+  - name: jellyfin
+    namespace: servarr
+    chart: ./jellyfin
+    secrets:
+      - secrets.enc.yaml
+    values:
+      - values.yaml
+
   - name: qbittorrent
     namespace: servarr
     chart: ./qbittorrent

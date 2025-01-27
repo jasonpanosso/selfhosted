@@ -1,0 +1,103 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{.Chart.Name}}
+spec:
+  selector:
+    matchLabels:
+      app: {{.Chart.Name}}
+  serviceName: {{.Chart.Name}}
+  template:
+    metadata:
+      labels:
+        app: {{.Chart.Name}}
+    spec:
+      initContainers:
+        - name: init-ldap-plugin
+          image: alpine:3.18.2
+          env:
+            - name: LDAP_PLUGIN_BASE_URL
+              value: "https://repo.jellyfin.org/releases/plugin/ldap-authentication/"
+            - name: LDAP_ARCHIVE
+              value: "ldap-authentication_19.0.0.0.zip"
+            - name: LDAP_PLUGIN_DIRECTORY
+              value: "/config/plugins/ldap"
+            - name: CONFIG_DIRECTORY
+              value: "/config/plugins/configurations"
+            - name: LDAP_CONFIG_FILE_PATH
+              value: "/secrets/LDAP-Auth.xml"
+          command: ['sh', '-c', '/init-scripts/init-ldap-plugin.sh']
+          volumeMounts:
+            - name: config
+              mountPath: /config
+            - name: secrets
+              mountPath: /secrets
+            - name: init-scripts
+              mountPath: /init-scripts
+      containers:
+        - image: docker.io/jellyfin/jellyfin:10.10.4
+          name: jellyfin
+          ports:
+            - containerPort: 8096
+              name: http
+          readinessProbe:
+            httpGet:
+              path: /web/index.html
+              port: 8096
+            failureThreshold: 5
+            initialDelaySeconds: 15
+            periodSeconds: 10
+            timeoutSeconds: 3
+          resources:
+            requests:
+              cpu: 1000m
+              memory: 1Gi
+            limits:
+              cpu: 4000m
+              memory: 8Gi
+          securityContext:
+            allowPrivilegeEscalation: false
+          volumeMounts:
+            - name: movies
+              mountPath: /movies
+              readOnly: True
+            - name: shows
+              mountPath: /tv
+              readOnly: True
+            - mountPath: /transcode
+              name: transcode
+            - mountPath: /cache
+              name: cache
+            - mountPath: /config
+              name: config
+      volumes:
+        - name: config
+          emptyDir: {}
+        - name: movies
+          emptyDir: {}
+          # persistentVolumeClaim:
+          #   claimName: nfs-videos-movies
+        - name: shows
+          emptyDir: {}
+          # persistentVolumeClaim:
+          #   claimName: nfs-videos-shows
+        - name: transcode
+          emptyDir: {}
+        - name: cache
+          emptyDir: {}
+        - name: secrets
+          secret:
+            secretName: {{.Values.jellyfin.secretName}}
+        - name: init-scripts
+          configMap:
+            name: {{.Chart.Name}}-init-scripts
+            defaultMode: 0777
+  # volumeClaimTemplates:
+  #   - metadata:
+  #       name: config
+  #     spec:
+  #       accessModes: [ "ReadWriteOnce" ]
+  #       resources:
+  #         requests:
+  #           storage: 5Gi
+  #       storageClassName: longhorn

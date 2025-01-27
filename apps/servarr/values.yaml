@@ -15,3 +15,7 @@ configarr:
 
 qbittorrent:
   secretName: qbittorrent
+
+jellyfin:
+  secretName: jellyfin
+  ldapBindUser: cn=jellyfin_bind_user,ou=people,dc=needless,dc=info
