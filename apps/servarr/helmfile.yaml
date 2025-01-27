@@ -60,9 +60,9 @@ releases:
       - prowlarr
       - qbittorrent
 
-  - name: configarr
+  - name: servarr-configuration
     namespace: servarr
-    chart: ./configarr
+    chart: ./servarr-configuration
     wait: true
     secrets:
       - secrets.enc.yaml

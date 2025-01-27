@@ -1,4 +1,0 @@
-apiVersion: v2
-name: configarr
-description: sets up configarr cronjob
-version: 0.1.0

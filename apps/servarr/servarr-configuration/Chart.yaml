@@ -1,0 +1,4 @@
+apiVersion: v2
+name: servarr-configuration
+description: sets up *arr configuration jobs
+version: 0.1.0

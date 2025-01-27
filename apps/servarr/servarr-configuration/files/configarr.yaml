@@ -1,0 +1,29 @@
+radarr:
+  instance1:
+    base_url: http://radarr:7878
+    api_key: !env RADARR_API_KEY
+
+    # this will eventually change to trash_id
+    quality_definition:
+      # https://github.com/TRaSH-Guides/Guides/blob/master/docs/json/radarr/quality-size/movie.json
+      type: movie
+
+    include:
+      # HD Bluray + WEB https://github.com/TRaSH-Guides/Guides/blob/master/docs/json/radarr/quality-profiles/hd-bluray-web.json
+      - template: d1d67249d3890e49bc12e275d989a7e9
+        source: TRASH
+
+sonarr:
+  instance1:
+    base_url: http://sonarr:8989
+    api_key: !env SONARR_API_KEY
+
+    # this will eventually change to trash_id
+    quality_definition:
+      # https://github.com/TRaSH-Guides/Guides/blob/master/docs/json/sonarr/quality-size/series.json
+      type: series
+
+    include:
+      # WEB-1080p https://github.com/TRaSH-Guides/Guides/blob/master/docs/json/sonarr/quality-profiles/web-1080p.json
+      - template: 72dae194fc92bf828f32cde7744e51a1
+        source: TRASH

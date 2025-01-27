@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{.Chart.Name}}
+data:
+  configarrConfig: |
+{{.Files.Get "files/configarr.yaml" | indent 4}}
+  downloadClientConfigurationScript: |-
+{{.Files.Get "files/configure_download_clients.sh" | indent 4}}
+  radarrDownloadClientConfigurationJson: |-
+{{.Files.Get "files/radarrDownloadClient.json" | indent 4}}
+  sonarrDownloadClientConfigurationJson: |-
+{{.Files.Get "files/sonarrDownloadClient.json" | indent 4}}
