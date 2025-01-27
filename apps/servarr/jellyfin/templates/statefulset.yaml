@@ -26,14 +26,23 @@ spec:
               value: "/config/plugins/configurations"
             - name: LDAP_CONFIG_FILE_PATH
               value: "/secrets/LDAP-Auth.xml"
-          command: ['sh', '-c', '/init-scripts/init-ldap-plugin.sh']
+          command: ['sh', '-c', '/scripts/init_ldap_plugin.sh']
           volumeMounts:
             - name: config
               mountPath: /config
             - name: secrets
               mountPath: /secrets
-            - name: init-scripts
-              mountPath: /init-scripts
+            - name: scripts
+              mountPath: /scripts
+
+        - name: init-system-xml
+          image: busybox:1.28
+          command: ['sh', '-c', '/scripts/init_system_xml.sh /scripts/system.xml']
+          volumeMounts:
+            - name: config
+              mountPath: /config
+            - name: scripts
+              mountPath: /scripts
       containers:
         - image: docker.io/jellyfin/jellyfin:10.10.4
           name: jellyfin
@@ -88,10 +97,17 @@ spec:
         - name: secrets
           secret:
             secretName: {{.Values.jellyfin.secretName}}
-        - name: init-scripts
+        - name: scripts
           configMap:
-            name: {{.Chart.Name}}-init-scripts
+            name: {{.Chart.Name}}
             defaultMode: 0777
+            items:
+              - key: ldapInitScript
+                path: init_ldap_plugin.sh
+              - key: jellyfinConfigInitScript
+                path: init_system_xml.sh
+              - key: baseJellyfinConfig
+                path: system.xml
   # volumeClaimTemplates:
   #   - metadata:
   #       name: config

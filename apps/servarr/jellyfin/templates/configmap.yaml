@@ -1,7 +1,11 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{.Chart.Name}}-init-scripts
+  name: {{.Chart.Name}}
 data:
-  init-ldap-plugin.sh: |-
-{{.Files.Get "files/init-ldap-plugin.sh" | indent 4}}
+  ldapInitScript: |-
+{{.Files.Get "files/init_ldap_plugin.sh" | indent 4}}
+  jellyfinConfigInitScript: |-
+{{.Files.Get "files/init_jellyfin_config.sh" | indent 4}}
+  baseJellyfinConfig: |-
+{{.Files.Get "files/system.xml" | indent 4}}
