@@ -21,6 +21,15 @@
             })
           ];
         };
+
+        mkScript = name: text:
+          let
+            script = pkgs.writeShellScriptBin name text;
+          in
+          script;
+        scripts = [
+          (mkScript "k" ''kubectl "$@"'')
+        ];
       in
       {
         devShells.default = pkgs.mkShell {
@@ -32,7 +41,7 @@
             sops
             kubernetes-helm-wrapped
             helmfile-wrapped
-          ];
+          ] ++ scripts;
         };
       });
 }
