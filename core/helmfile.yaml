@@ -51,6 +51,11 @@ releases:
     set:
       - name: crds.enabled
         value: true
+      - name: extraArgs
+        values:
+          - "--enable-certificate-owner-ref=true"
+          - "--dns01-recursive-nameservers-only"
+          - "--dns01-recursive-nameservers=8.8.8.8:53,1.1.1.1:53"
 
   - name: cloudflare-cluster-issuer
     chart: ./cloudflare-cluster-issuer
