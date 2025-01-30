@@ -1,0 +1,15 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: {{.Values.pgcluster.name}}
+spec:
+  instances: {{.Values.pgcluster.instances}}
+  storage:
+    size: {{.Values.pgcluster.size}}
+    storageClass: {{.Values.pgcluster.storageClass}}
+  bootstrap:
+    initdb:
+      postInitApplicationSQLRefs:
+        secretRefs:
+          - name: {{.Chart.Name}}
+          - key: secret.sql

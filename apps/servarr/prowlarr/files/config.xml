@@ -14,4 +14,10 @@
   <UrlBase></UrlBase>
   <InstanceName>Prowlarr</InstanceName>
   <UpdateMechanism>Docker</UpdateMechanism>
+  <PostgresPort>5432</PostgresPort>
+  <PostgresUser>{{.Values.prowlarr.db.user}}</PostgresUser>
+  <PostgresPassword>{{.Values.prowlarr.db.password}}</PostgresPassword>
+  <PostgresHost>{{.Values.pgcluster.name}}-rw.servarr.svc.cluster.local</PostgresHost>
+  <PostgresMainDb>{{.Values.prowlarr.db.mainDB}}</PostgresMainDb>
+  <PostgresLogDb>{{.Values.prowlarr.db.logDB}}</PostgresLogDb>
 </Config>

@@ -1,4 +1,13 @@
 releases:
+  - name: arr-pgcluster
+    namespace: servarr
+    chart: ./pgcluster
+    wait: true
+    secrets:
+      - secrets.enc.yaml
+    values:
+      - values.yaml
+
   - name: jellyfin
     namespace: servarr
     chart: ./jellyfin
@@ -24,6 +33,8 @@ releases:
       - secrets.enc.yaml
     values:
       - values.yaml
+    needs:
+      - arr-pgcluster
 
   - name: radarr
     namespace: servarr
@@ -33,6 +44,8 @@ releases:
       - secrets.enc.yaml
     values:
       - values.yaml
+    needs:
+      - arr-pgcluster
 
   - name: prowlarr
     namespace: servarr
@@ -45,6 +58,7 @@ releases:
     needs:
       - radarr
       - sonarr
+      - arr-pgcluster
 
   - name: buildarr
     namespace: servarr

@@ -1,12 +1,14 @@
 apiVersion: apps/v1
-kind: StatefulSet
+kind: Deployment
 metadata:
   name: {{.Chart.Name}}
 spec:
+  replicas: 1
+  strategy:
+    type: Recreate
   selector:
     matchLabels:
       app: {{.Chart.Name}}
-  serviceName: {{.Chart.Name}}
   template:
     metadata:
       labels:
@@ -14,7 +16,7 @@ spec:
       annotations:
         checksum/secret: {{ include (print .Template.BasePath "/secret.yaml") . | sha256sum }}
     spec:
-      # radarr requires config.xml to be writable, secrets are readonly
+      # prowlarr requires config.xml to be writable, secrets are readonly
       initContainers:
         - name: init-secret
           image: busybox:1.28
@@ -25,16 +27,16 @@ spec:
             - name: secrets
               mountPath: /secrets
       containers:
-        - image: ghcr.io/linuxserver/radarr:version-5.17.2.9580
+        - image: ghcr.io/linuxserver/prowlarr:version-1.30.2.4939
           imagePullPolicy: Always
-          name: radarr
+          name: prowlarr
           ports:
-            - containerPort: 7878
+            - containerPort: 9696
               name: http
           readinessProbe:
             httpGet:
               path: /login
-              port: 7878
+              port: 9696
             initialDelaySeconds: 10
             periodSeconds: 15
           resources:
@@ -49,20 +51,12 @@ spec:
           volumeMounts:
             - name: config
               mountPath: /config
-            - name: downloads
-              mountPath: /data/downloads
-            - name: movies
-              mountPath: /data/movies
       volumes:
         - name: config
           emptyDir: {}
-        - name: movies
-          emptyDir: {}
-        - name: downloads
-          emptyDir: {}
         - name: secrets
           secret:
-            secretName: {{.Values.radarr.secretName}}
+            secretName: {{.Values.prowlarr.secretName}}
   # volumeClaimTemplates:
   #   - metadata:
   #       name: config

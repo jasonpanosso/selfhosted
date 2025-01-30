@@ -14,4 +14,10 @@
   <UrlBase></UrlBase>
   <InstanceName>Radarr</InstanceName>
   <UpdateMechanism>Docker</UpdateMechanism>
+  <PostgresPort>5432</PostgresPort>
+  <PostgresUser>{{.Values.radarr.db.user}}</PostgresUser>
+  <PostgresPassword>{{.Values.radarr.db.password}}</PostgresPassword>
+  <PostgresHost>{{.Values.pgcluster.name}}-rw.servarr.svc.cluster.local</PostgresHost>
+  <PostgresMainDb>{{.Values.radarr.db.mainDB}}</PostgresMainDb>
+  <PostgresLogDb>{{.Values.radarr.db.logDB}}</PostgresLogDb>
 </Config>

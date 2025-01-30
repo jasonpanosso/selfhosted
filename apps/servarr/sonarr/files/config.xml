@@ -14,4 +14,10 @@
   <UrlBase></UrlBase>
   <InstanceName>Sonarr</InstanceName>
   <UpdateMechanism>Docker</UpdateMechanism>
+  <PostgresPort>5432</PostgresPort>
+  <PostgresUser>{{.Values.sonarr.db.user}}</PostgresUser>
+  <PostgresPassword>{{.Values.sonarr.db.password}}</PostgresPassword>
+  <PostgresHost>{{.Values.pgcluster.name}}-rw.servarr.svc.cluster.local</PostgresHost>
+  <PostgresMainDb>{{.Values.sonarr.db.mainDB}}</PostgresMainDb>
+  <PostgresLogDb>{{.Values.sonarr.db.logDB}}</PostgresLogDb>
 </Config>

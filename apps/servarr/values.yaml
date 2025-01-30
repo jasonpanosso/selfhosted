@@ -1,11 +1,29 @@
+pgcluster:
+  name: arr-pgcluster
+  instances: 3
+  size: 10Gi
+  storageClass: openebs-hostpath
+
 sonarr:
   secretName: sonarr
+  db:
+    mainDB: sonarr
+    logDB: sonarr_logs
+    user: sonarr
 
 radarr:
   secretName: radarr
+  db:
+    mainDB: radarr
+    logDB: radarr_logs
+    user: radarr
 
 prowlarr:
   secretName: prowlarr
+  db:
+    mainDB: prowlarr
+    logDB: prowlarr_logs
+    user: prowlarr
 
 buildarr:
   secretName: buildarr
