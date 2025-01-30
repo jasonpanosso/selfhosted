@@ -18,6 +18,7 @@ releases:
   - name: pgcluster
     namespace: auth
     chart: ./pgcluster
+    wait: true
     values:
       - values.yaml
     secrets:
@@ -29,6 +30,7 @@ releases:
     namespace: auth
     chart: bitnami/redis
     version: 20.6.3
+    wait: true
     values:
       - architecture: replication
       - sentinel:
@@ -61,6 +63,7 @@ releases:
   - name: lldap
     namespace: auth
     chart: ./lldap
+    wait: true
     values:
       - values.yaml
     needs:
@@ -70,6 +73,7 @@ releases:
   - name: authelia
     namespace: auth
     chart: ./authelia
+    wait: true
     values:
       - values.yaml
     needs:
