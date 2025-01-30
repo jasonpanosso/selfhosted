@@ -7,8 +7,15 @@ repositories:
     url: "https://charts.bitnami.com/bitnami"
   - name: ingress-nginx
     url: "https://kubernetes.github.io/ingress-nginx"
+  - name: openebs
+    url: "https://openebs.github.io/openebs"
 
 releases:
+  - name: openebs
+    namespace: openebs
+    chart: openebs/openebs
+    version: 4.1.3
+
   - name: metallb
     namespace: metallb-system
     chart: bitnami/metallb
@@ -40,6 +47,7 @@ releases:
     namespace: cert-manager
     chart: jetstack/cert-manager
     version: 1.16.3
+    wait: true
     set:
       - name: crds.enabled
         value: true
