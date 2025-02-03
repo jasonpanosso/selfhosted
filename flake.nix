@@ -21,14 +21,24 @@
             })
           ];
         };
-
         mkScript = name: text:
           let
             script = pkgs.writeShellScriptBin name text;
           in
           script;
+
         scripts = [
           (mkScript "k" ''kubectl "$@"'')
+          (mkScript "vagrant" ''docker run -it --rm \
+              -e LIBVIRT_DEFAULT_URI \
+              -v /var/run/libvirt/:/var/run/libvirt/ \
+              -v ~/.vagrant.d:/.vagrant.d \
+              -v $(realpath "''${PWD}"):''${PWD} \
+              -w "''${PWD}" \
+              --network host \
+              vagrantlibvirt/vagrant-libvirt:latest \
+                vagrant $@
+          '')
         ];
       in
       {
@@ -41,6 +51,7 @@
             sops
             kubernetes-helm-wrapped
             helmfile-wrapped
+            talosctl
           ] ++ scripts;
         };
       });
