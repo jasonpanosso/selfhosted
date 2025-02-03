@@ -4,8 +4,10 @@ metadata:
   name: nfs-server-claim
   namespace: nfs-server
 spec:
+  storageClassName: openebs-hostpath
   accessModes:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 50G
+      storage: 20G
+# todo: static pv

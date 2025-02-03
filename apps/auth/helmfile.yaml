@@ -32,6 +32,8 @@ releases:
     version: 20.6.3
     wait: true
     values:
+      - global:
+          defaultStorageClass: openebs-hostpath
       - architecture: replication
       - sentinel:
           enabled: true
@@ -41,6 +43,8 @@ releases:
           existingSecretPasswordKey: "password"
           enableReplicaAuth: true
       - master:
+          persistence:
+            size: 1Gi
           resources:
             requests:
               cpu: "200m"
@@ -49,6 +53,8 @@ releases:
               cpu: "400m"
               memory: "512Mi"
       - replica:
+          persistence:
+            size: 1Gi
           replicaCount: 3
           resources:
             requests:

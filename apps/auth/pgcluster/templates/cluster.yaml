@@ -6,6 +6,7 @@ spec:
   instances: {{.Values.pgcluster.instances}}
   storage:
     size: {{.Values.pgcluster.size}}
+    storageClass: {{.Values.pgcluster.storageClass}}
   bootstrap:
     initdb:
       database: {{.Values.autheliaDB.name}}
