@@ -1,0 +1,39 @@
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: shows
+  namespace: servarr
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 10Gi
+  volumeName: shows
+  storageClassName: "nfs-csi"
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  annotations:
+    pv.kubernetes.io/provisioned-by: nfs.csi.k8s.io
+  name: shows
+  namespace: servarr
+spec:
+  capacity:
+    storage: 10Gi
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: nfs-csi
+  mountOptions:
+    - nfsvers=4.1
+    - hard
+  volumeMode: Filesystem
+  csi:
+    driver: nfs.csi.k8s.io
+    readOnly: false
+    volumeHandle: shows
+    volumeAttributes:
+      server: nfs-server.nfs-server.svc.cluster.local
+      share: /shows

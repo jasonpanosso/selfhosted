@@ -12,8 +12,8 @@ spec:
       labels:
         app: {{.Chart.Name}}
       annotations:
-        checksum/configmap: {{ include (print .Template.BasePath "/configmap.yaml") . | sha256sum }}
-        checksum/secret: {{ include (print .Template.BasePath "/secret.yaml") . | sha256sum }}
+        checksum/configmap: {{include (print .Template.BasePath "/configmap.yaml") . | sha256sum}}
+        checksum/secret: {{include (print .Template.BasePath "/secret.yaml") . | sha256sum}}
     spec:
       initContainers:
         - name: init-ldap-plugin
@@ -72,10 +72,10 @@ spec:
           volumeMounts:
             - name: movies
               mountPath: /movies
-              readOnly: True
+              readOnly: true
             - name: shows
               mountPath: /tv
-              readOnly: True
+              readOnly: true
             - mountPath: /transcode
               name: transcode
             - mountPath: /cache
@@ -86,13 +86,11 @@ spec:
         - name: config
           emptyDir: {}
         - name: movies
-          emptyDir: {}
-          # persistentVolumeClaim:
-          #   claimName: nfs-videos-movies
+          persistentVolumeClaim:
+            claimName: movies
         - name: shows
-          emptyDir: {}
-          # persistentVolumeClaim:
-          #   claimName: nfs-videos-shows
+          persistentVolumeClaim:
+            claimName: shows
         - name: transcode
           emptyDir: {}
         - name: cache

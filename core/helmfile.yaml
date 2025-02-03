@@ -9,8 +9,31 @@ repositories:
     url: "https://kubernetes.github.io/ingress-nginx"
   - name: openebs
     url: "https://openebs.github.io/openebs"
+  - name: csi-driver-nfs
+    url: "https://raw.githubusercontent.com/kubernetes-csi/csi-driver-nfs/master/charts"
 
 releases:
+  - name: csi-driver
+    namespace: kube-system
+    chart: csi-driver-nfs/csi-driver-nfs
+    version: 4.10.0
+    set:
+      - name: controller.runOnControlPlane
+        value: true
+      - name: controller.replicas
+        value: 2
+    values:
+      - storageClass:
+          create: true
+          name: nfs-csi
+          parameters:
+            server: nfs-server.nfs-server.svc.cluster.local
+            share: /
+          reclaimPolicy: Delete
+          volumeBindingMode: Immediate
+          mountOptions:
+            - nfsvers=4.1
+
   - name: openebs
     namespace: openebs
     chart: openebs/openebs

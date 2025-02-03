@@ -10,8 +10,8 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/secret: {{ include (print $.Template.BasePath "/secret.yaml") . | sha256sum }}
-        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+        checksum/secret: {{include (print $.Template.BasePath "/secret.yaml") . | sha256sum}}
+        checksum/config: {{include (print $.Template.BasePath "/configmap.yaml") . | sha256sum}}
       labels:
         app: {{.Chart.Name}}
     spec:
@@ -52,36 +52,24 @@ spec:
             limits:
               cpu: 1000m
               memory: 2Gi
+          # TODO: test CAP_NET_ADMIN
           securityContext:
             privileged: true
+            sysctls:
+              - name: net.ipv4.conf.all.src_valid_mark
+                value: 1
           volumeMounts:
             - name: config
               mountPath: /config
             - name: downloads
               mountPath: /data/downloads
-            - name: videos
-              mountPath: /videos
       volumes:
         - name: config
           emptyDir: {}
         - name: downloads
-          emptyDir: {}
-          # persistentVolumeClaim:
-          #   claimName: nfs-downloads
-        - name: videos
-          emptyDir: {}
-          # persistentVolumeClaim:
-          #   claimName: nfs-videos
+          persistentVolumeClaim:
+            claimName: downloads
         - name: secrets
           secret:
             secretName: {{.Values.qbittorrent.secretName}}
             defaultMode: 0755
-  # volumeClaimTemplates:
-  #   - metadata:
-  #       name: config
-  #     spec:
-  #       accessModes: [ "ReadWriteOnce" ]
-  #       resources:
-  #         requests:
-  #           storage: 1Gi
-  #       storageClassName: longhorn

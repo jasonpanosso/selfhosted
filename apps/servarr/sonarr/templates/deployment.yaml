@@ -59,18 +59,11 @@ spec:
         - name: config
           emptyDir: {}
         - name: shows
-          emptyDir: {}
+          persistentVolumeClaim:
+            claimName: shows
         - name: downloads
-          emptyDir: {}
+          persistentVolumeClaim:
+            claimName: downloads
         - name: secrets
           secret:
             secretName: {{.Values.sonarr.secretName}}
-  # volumeClaimTemplates:
-  #   - metadata:
-  #       name: config
-  #     spec:
-  #       accessModes: ["ReadWriteOnce"]
-  #       resources:
-  #         requests:
-  #           storage: 1Gi
-  #       storageClassName: longhorn
