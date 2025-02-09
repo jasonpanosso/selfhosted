@@ -9,31 +9,4 @@ spec:
   resources:
     requests:
       storage: 10Gi
-  volumeName: movies
-  storageClassName: "nfs-csi"
----
-apiVersion: v1
-kind: PersistentVolume
-metadata:
-  annotations:
-    pv.kubernetes.io/provisioned-by: nfs.csi.k8s.io
-  name: movies
-  namespace: servarr
-spec:
-  capacity:
-    storage: 10Gi
-  accessModes:
-    - ReadWriteMany
-  persistentVolumeReclaimPolicy: Retain
-  storageClassName: nfs-csi
-  mountOptions:
-    - nfsvers=4.1
-    - hard
-  volumeMode: Filesystem
-  csi:
-    driver: nfs.csi.k8s.io
-    readOnly: false
-    volumeHandle: movies
-    volumeAttributes:
-      server: nfs-server.nfs-server.svc.cluster.local
-      share: /movies
+  storageClassName: nfs

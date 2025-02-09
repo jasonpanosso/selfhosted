@@ -9,25 +9,25 @@ repositories:
     url: "https://kubernetes.github.io/ingress-nginx"
   - name: openebs
     url: "https://openebs.github.io/openebs"
-  - name: csi-driver-nfs
-    url: "https://raw.githubusercontent.com/kubernetes-csi/csi-driver-nfs/master/charts"
+  - name: nfs-ganesha-server-and-external-provisioner
+    url: https://kubernetes-sigs.github.io/nfs-ganesha-server-and-external-provisioner/
 
 releases:
-  - name: csi-driver
+  - name: csi-driver-nfs
     namespace: kube-system
+    installed: false
     chart: csi-driver-nfs/csi-driver-nfs
     version: 4.10.0
-    set:
-      - name: controller.runOnControlPlane
-        value: true
-      - name: controller.replicas
-        value: 2
     values:
+      - controller:
+          dnsPolicy: ClusterFirstWithHostNet
+          runOnControlPlane: true
+          replicas: 1
       - storageClass:
           create: true
           name: nfs-csi
           parameters:
-            server: nfs-server.nfs-server.svc.cluster.local
+            server: nfs-ganesha-nfs-server-provisioner.nfs-server.svc.cluster.local
             share: /
           reclaimPolicy: Delete
           volumeBindingMode: Immediate
@@ -38,6 +38,45 @@ releases:
     namespace: openebs
     chart: openebs/openebs
     version: 4.1.3
+    wait: true
+    values:
+      - mayastor:
+          etcd:
+            localpvScConfig:
+              basePath: "/var/openebs/local/localpv-hostpath/etcd"
+          loki-stack:
+            localpvScConfig:
+              basePath: /var/openebs/local/localpv-hostpath/loki
+          csi:
+            node:
+              initContainers:
+                enabled: false
+      - engines:
+          local:
+            lvm:
+              enabled: false
+            zfs:
+              enabled: false
+
+  - name: nfs-ganesha
+    namespace: nfs-server
+    chart: nfs-ganesha-server-and-external-provisioner/nfs-server-provisioner
+    version: 1.8.0
+    values:
+      - image:
+          repository: devxygmbh/nfs-server-provisioner
+          tag: 6.3
+      - persistence:
+          enabled: true
+          storageClass: openebs-hostpath
+          size: 50G
+      - storageClass:
+          mountOptions:
+            - vers=4.1
+      - nodeSelector:
+          role: nfs-server
+    needs:
+      - openebs/openebs
 
   - name: metallb
     namespace: metallb-system
