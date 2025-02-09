@@ -18,6 +18,9 @@ spec:
       initContainers:
         - name: init-ldap-plugin
           image: alpine:3.18.2
+          envFrom:
+            - configMapRef:
+                name: standard-env
           env:
             - name: LDAP_PLUGIN_BASE_URL
               value: "https://repo.jellyfin.org/releases/plugin/ldap-authentication/"
@@ -101,7 +104,6 @@ spec:
         - name: scripts
           configMap:
             name: {{.Chart.Name}}
-            defaultMode: 0777
             items:
               - key: ldapInitScript
                 path: init_ldap_plugin.sh

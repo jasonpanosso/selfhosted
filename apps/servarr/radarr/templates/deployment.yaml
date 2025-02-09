@@ -30,6 +30,9 @@ spec:
         - image: ghcr.io/linuxserver/radarr:version-5.17.2.9580
           imagePullPolicy: Always
           name: radarr
+          envFrom:
+            - configMapRef:
+                name: standard-env
           ports:
             - containerPort: 7878
               name: http

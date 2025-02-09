@@ -19,6 +19,9 @@ spec:
       containers:
         - name: buildarr
           image: jpanosso/rebuildarr-testing:0.0.4
+          envFrom:
+            - configMapRef:
+                name: standard-env
           volumeMounts:
             - name: config
               mountPath: /config

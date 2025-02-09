@@ -3,8 +3,5 @@ kind: ConfigMap
 metadata:
   name: {{.Chart.Name}}-envs
 data:
-  UID: "1000"
-  GID: "1000"
-  TZ: "America/Detroit"
   LLDAP_LDAP_BASE_DN: "dc=needless,dc=info"
   LLDAP_HTTP_URL: "https://account.needless.info"

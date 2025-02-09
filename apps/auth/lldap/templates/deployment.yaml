@@ -30,6 +30,8 @@ spec:
           imagePullPolicy: IfNotPresent
           envFrom:
             - configMapRef:
+                name: standard-env
+            - configMapRef:
                 name: {{.Chart.Name}}-envs
             - secretRef:
                 name: {{.Values.lldap.secretName}}

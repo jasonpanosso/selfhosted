@@ -30,6 +30,9 @@ spec:
         - image: ghcr.io/linuxserver/sonarr:version-4.0.12.2823
           imagePullPolicy: Always
           name: sonarr
+          envFrom:
+            - configMapRef:
+                name: standard-env
           ports:
             - containerPort: 8989
               name: http

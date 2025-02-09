@@ -12,6 +12,8 @@ template:
         envFrom:
           - secretRef:
               name: {{.Values.servarrConfiguration.secretName}}
+          - configMapRef:
+              name: standard-env
         volumeMounts:
           - name: cache
             mountPath: /app/repos
@@ -38,6 +40,9 @@ template:
               secretKeyRef:
                 name: {{.Values.qbittorrent.secretName}}
                 key: password
+        envFrom:
+          - configMapRef:
+              name: standard-env
         volumeMounts:
           - name: scripts
             mountPath: /scripts

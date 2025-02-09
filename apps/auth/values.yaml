@@ -2,6 +2,7 @@ pgcluster:
   name: pg-cluster
   instances: 3
   size: 1Gi
+  storageClass: openebs-hostpath
 
 autheliaDB:
   secretName: authelia-db-credentials

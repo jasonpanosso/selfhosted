@@ -42,6 +42,8 @@ spec:
           envFrom:
             - configMapRef:
                 name: {{.Chart.Name}}-env
+            - configMapRef:
+                name: standard-env
           ports:
             - name: http
               containerPort: 9091

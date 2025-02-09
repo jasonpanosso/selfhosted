@@ -28,6 +28,9 @@ spec:
               mountPath: /secrets
       containers:
         - image: ghcr.io/linuxserver/prowlarr:version-1.30.2.4939
+          envFrom:
+            - configMapRef:
+                name: standard-env
           imagePullPolicy: Always
           name: prowlarr
           ports:
