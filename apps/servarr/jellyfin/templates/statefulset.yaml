@@ -107,8 +107,10 @@ spec:
             items:
               - key: ldapInitScript
                 path: init_ldap_plugin.sh
+                mode: 0755
               - key: jellyfinConfigInitScript
                 path: init_system_xml.sh
+                mode: 0755
               - key: baseJellyfinConfig
                 path: system.xml
   # volumeClaimTemplates:
