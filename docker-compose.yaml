@@ -1,0 +1,12 @@
+# temp jank instead of setting up registry in VM container
+services:
+  registry:
+    image: registry:2
+    network_mode: host
+    environment:
+      REGISTRY_STORAGE_FILESYSTEM_ROOTDIRECTORY: /data
+    volumes:
+      - data:/data
+
+volumes:
+  data:

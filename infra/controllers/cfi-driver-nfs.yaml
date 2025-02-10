@@ -1,0 +1,41 @@
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
+metadata:
+  name: csi-driver-nfs
+  namespace: kube-system
+spec:
+  interval: 24h
+  url: https://raw.githubusercontent.com/kubernetes-csi/csi-driver-nfs/master/charts
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: csi-driver-nfs
+  namespace: kube-system
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: csi-driver-nfs
+      version: "4.*"
+      sourceRef:
+        kind: HelmRepository
+        name: csi-driver-nfs
+        namespace: kube-system
+      interval: 12h
+  values:
+    controller:
+      dnsPolicy: ClusterFirstWithHostNet
+      runOnControlPlane: true
+      replicas: 1
+    storageClass:
+      create: true
+      name: nfs-csi
+      parameters:
+        server: nfs-ganesha-nfs-server-provisioner.nfs-server.svc.cluster.local
+        share: /
+      reclaimPolicy: Delete
+      volumeBindingMode: Immediate
+      mountOptions:
+        - nfsvers=4.1

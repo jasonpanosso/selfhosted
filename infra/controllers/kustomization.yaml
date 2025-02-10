@@ -1,0 +1,11 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - flux-operator.yaml
+  - cert-manager.yaml
+  - metallb.yaml
+  - ingress-nginx.yaml
+  - openebs.yaml
+  - nfs-ganesha.yaml
+  - cfi-driver-nfs.yaml
+  - cnpg.yaml

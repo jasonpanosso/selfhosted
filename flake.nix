@@ -52,6 +52,9 @@
             kubernetes-helm-wrapped
             helmfile-wrapped
             talosctl
+            fluxcd
+            just
+            age
           ] ++ scripts;
         };
       });
