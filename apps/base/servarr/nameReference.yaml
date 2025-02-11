@@ -1,0 +1,14 @@
+nameReference:
+  # pg user init secret.sql
+  - kind: Secret
+    fieldSpecs:
+      - kind: Cluster
+        path: spec/bootstrap/initdb/postInitSQLRefs/secretRefs/name
+  - kind: ConfigMap
+    fieldSpecs:
+      - kind: Deployment
+        path: spec/template/spec/containers/envFrom/configMapRef/name
+  - kind: ConfigMap
+    fieldSpecs:
+      - kind: Deployment
+        path: spec/template/spec/volumes/configMap/name

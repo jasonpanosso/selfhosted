@@ -1,0 +1,35 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: auth
+
+resources:
+  - ../../base/auth
+
+secretGenerator:
+  - name: authelia-db
+    namespace: auth
+    files:
+      - password=secrets/authelia_db_password.enc
+  - name: lldap-db
+    namespace: auth
+    files:
+      - password=secrets/lldap_db_password.enc
+  - name: authelia
+    namespace: auth
+    envs:
+      - secrets/authelia.env
+    files:
+      - OIDC_JWKS_PRIVATE_KEY=secrets/oidc_jwks_private_key.enc
+  - name: lldap
+    namespace: auth
+    envs:
+      - secrets/lldap.env
+  - name: pg-init
+    namespace: auth
+    files:
+      - secret.sql=secrets/secret.sql.enc
+  - name: smtp
+    namespace: auth
+    files:
+      - username=secrets/smtp_username.enc
+      - password=secrets/smtp_password.enc

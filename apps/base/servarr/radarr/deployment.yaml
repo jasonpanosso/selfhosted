@@ -1,0 +1,66 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: radarr
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: radarr
+  template:
+    metadata:
+      labels:
+        app: radarr
+    spec:
+      containers:
+        - image: ghcr.io/linuxserver/radarr:version-5.17.2.9580
+          imagePullPolicy: Always
+          name: radarr
+          envFrom:
+            - configMapRef:
+                name: standard-env
+            - configMapRef:
+                name: radarr-env
+          env:
+            - name: RADARR__POSTGRES__PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: radarr-db
+                  key: password
+          ports:
+            - containerPort: 7878
+              name: http
+          readinessProbe:
+            httpGet:
+              path: /login
+              port: 7878
+            initialDelaySeconds: 10
+            periodSeconds: 15
+          resources:
+            requests:
+              cpu: 50m
+              memory: 256Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+          volumeMounts:
+            - name: config
+              mountPath: /config
+            # - name: downloads
+            #   mountPath: /data/downloads
+            # - name: movies
+            #   mountPath: /data/movies
+      volumes:
+        - name: config
+          emptyDir: {}
+        # - name: movies
+        #   persistentVolumeClaim:
+        #     claimName: movies
+        # - name: downloads
+        #   persistentVolumeClaim:
+        #     claimName: downloads

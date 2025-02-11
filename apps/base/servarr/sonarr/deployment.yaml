@@ -1,0 +1,66 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sonarr
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: sonarr
+  template:
+    metadata:
+      labels:
+        app: sonarr
+    spec:
+      containers:
+        - image: ghcr.io/linuxserver/sonarr:version-4.0.12.2823
+          imagePullPolicy: Always
+          name: sonarr
+          envFrom:
+            - configMapRef:
+                name: standard-env
+            - configMapRef:
+                name: sonarr-env
+          env:
+            - name: SONARR__POSTGRES__PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: sonarr-db
+                  key: password
+          ports:
+            - containerPort: 8989
+              name: http
+          readinessProbe:
+            httpGet:
+              path: /login
+              port: 8989
+            initialDelaySeconds: 10
+            periodSeconds: 15
+          resources:
+            requests:
+              cpu: 50m
+              memory: 256Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+          volumeMounts:
+            - name: config
+              mountPath: /config
+            # - name: downloads
+            #   mountPath: /data/downloads
+            # - name: shows
+            #   mountPath: /data/shows
+      volumes:
+        - name: config
+          emptyDir: {}
+        # - name: movies
+        #   persistentVolumeClaim:
+        #     claimName: shows
+        # - name: downloads
+        #   persistentVolumeClaim:
+        #     claimName: downloads

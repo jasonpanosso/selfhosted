@@ -34,6 +34,8 @@ spec:
   values:
     controller:
       allowSnippetAnnotations: true
+      config:
+        annotations-risk-level: Critical
   dependsOn:
     - name: metallb
       namespace: metallb-system
