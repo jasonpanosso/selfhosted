@@ -9,3 +9,4 @@ resources:
   - nfs-ganesha.yaml
   - cfi-driver-nfs.yaml
   - cnpg.yaml
+  - capacitor.yaml
