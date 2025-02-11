@@ -1,4 +1,0 @@
-apiVersion: v2
-name: jellyfin
-description: deploys jellyfin
-version: 0.1.0

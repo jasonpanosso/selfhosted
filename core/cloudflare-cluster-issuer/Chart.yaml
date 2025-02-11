@@ -1,4 +1,0 @@
-apiVersion: v2
-name: cloudflare-cluster-issuer
-description: installs a ClusterIssuer for Cloudflare.
-version: 0.1.0

@@ -1,4 +1,0 @@
-apiVersion: v2
-name: pgcluster
-description: cnpg cluster for authelia & lldap
-version: 0.1.0

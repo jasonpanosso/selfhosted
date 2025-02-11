@@ -98,7 +98,7 @@ push:
 
   {{call_recipe}} diff_push "${registry}/flux-cluster-sync:local" "clusters/local"
   {{call_recipe}} diff_push "${registry}/flux-infra-sync:local" "infra"
-  # {{call_recipe}} diff_push "${registry}/flux-apps-sync:local" "apps"
+  {{call_recipe}} diff_push "${registry}/flux-apps-sync:local" "apps"
 
 sync:
   #!/usr/bin/env bash
@@ -109,7 +109,7 @@ sync:
   flux reconcile kustomization infra-controllers --with-source
 
   echo "Waiting for apps sync to complete"
-  # flux reconcile kustomization apps-sync --with-source
-  # flux tree kustomization apps-sync
+  flux reconcile kustomization apps-sync --with-source
+  flux tree kustomization apps-sync
 
   echo "✔ Cluster is in sync"

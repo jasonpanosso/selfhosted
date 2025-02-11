@@ -1,4 +1,0 @@
-apiVersion: v2
-name: buildarr
-description: deploys buildarr
-version: 0.1.0

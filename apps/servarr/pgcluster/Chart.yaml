@@ -1,4 +1,0 @@
-apiVersion: v2
-name: arr-pgcluster
-description: cnpg cluster for sonarr, radarr, & prowlarr
-version: 0.1.0
