@@ -1,5 +1,21 @@
 nameReference:
+  # pg user init secret.sql
   - kind: Secret
     fieldSpecs:
       - kind: Cluster
         path: spec/bootstrap/initdb/postInitSQLRefs/secretRefs/name
+  # authelia deployment secrets
+  - kind: Secret
+    fieldSpecs:
+      - kind: Deployment
+        path: spec/template/spec/volumes/projected/sources/secret/name
+  # lldap secret
+  - kind: Secret
+    fieldSpecs:
+      - kind: Deployment
+        path: spec/template/spec/containers/envFrom/secretRef/name
+  # lldap smtp secret
+  - kind: Secret
+    fieldSpecs:
+      - kind: Deployment
+        path: spec/template/spec/containers/env/valueFrom/secretKeyRef/name

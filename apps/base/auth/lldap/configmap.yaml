@@ -1,0 +1,13 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: lldap
+data:
+  LLDAP_LDAP_BASE_DN: "dc=needless,dc=info"
+  LLDAP_HTTP_URL: "https://account.needless.info"
+  LLDAP_SMTP_OPTIONS__SMTP_ENCRYPTION: STARTTLS
+  LLDAP_SMTP_OPTIONS__FROM: "no-reply <no-reply@needless.info>"
+  LLDAP_SMTP_OPTIONS__TO: "admin <admin@needless.info>"
+  LLDAP_SMTP_OPTIONS__SERVER: "email-smtp.us-east-1.amazonaws.com"
+  LLDAP_SMTP_OPTIONS__PORT: "587"

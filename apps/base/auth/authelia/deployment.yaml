@@ -1,0 +1,122 @@
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: authelia
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: authelia
+  template:
+    metadata:
+      labels:
+        app: authelia
+    spec:
+      # https://www.authelia.com/integration/kubernetes/introduction/#enable-service-links
+      enableServiceLinks: false
+      # max 1 replica per node
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - topologyKey: kubernetes.io/hostname
+              labelSelector:
+                matchExpressions:
+                  - key: app
+                    operator: In
+                    values:
+                      - authelia
+      # priorityClassName: high-priority
+      containers:
+        - name: authelia
+          image: ghcr.io/authelia/authelia:4.38.18
+          imagePullPolicy: IfNotPresent
+          command:
+            - authelia
+          args:
+            - --config=/config/configuration.yaml
+          env:
+            - name: X_AUTHELIA_CONFIG_FILTERS
+              value: template
+          envFrom:
+            - configMapRef:
+                name: authelia-env
+            - configMapRef:
+                name: standard-env
+          ports:
+            - name: http
+              containerPort: 9091
+              protocol: TCP
+          readinessProbe:
+            httpGet:
+              path: /api/health
+              port: http
+              scheme: HTTP
+            timeoutSeconds: 5
+            periodSeconds: 5
+            successThreshold: 1
+            failureThreshold: 5
+          resources:
+            requests:
+              cpu: 50m
+              memory: 256Mi
+            limits:
+              cpu: 250m
+              memory: 512Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+          volumeMounts:
+            - name: config
+              mountPath: /config
+            - name: secrets
+              readOnly: true
+              mountPath: /config/secrets
+      volumes:
+        - name: config
+          configMap:
+            name: authelia-config
+        - name: secrets
+          projected:
+            sources:
+              - secret:
+                  name: authelia
+                  items:
+                    - key: JWT_TOKEN
+                      path: JWT_TOKEN
+                    - key: SESSION_KEY
+                      path: SESSION_KEY
+                    - key: ENCRYPTION_KEY
+                      path: ENCRYPTION_KEY
+                    - key: OIDC_HMAC_SECRET
+                      path: OIDC_HMAC_SECRET
+                    - key: OIDC_JWKS_PRIVATE_KEY
+                      path: OIDC_JWKS_PRIVATE_KEY
+                    - key: OIDC_TEST_SECRET
+                      path: OIDC_TEST_SECRET
+              - secret:
+                  name: lldap
+                  items:
+                    - key: LLDAP_LDAP_USER_PASS
+                      path: LDAP_PASSWORD
+              - secret:
+                  name: redis
+                  items:
+                    - key: redis-password
+                      path: REDIS_PASSWORD
+              - secret:
+                  name: authelia-db
+                  items:
+                    - key: password
+                      path: POSTGRES_PASSWORD
+              - secret:
+                  name: smtp
+                  items:
+                    - key: username
+                      path: SMTP_USERNAME
+                    - key: password
+                      path: SMTP_PASSWORD
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 33%
+      maxSurge: 33%
