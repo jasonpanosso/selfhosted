@@ -4,7 +4,7 @@ namespace: auth
 
 resources:
   - namespace.yaml
-  - config-map.yaml
+  - configmap.yaml
   - redis.yaml
   - pgcluster.yaml
   - ./authelia
