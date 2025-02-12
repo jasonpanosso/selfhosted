@@ -8,6 +8,6 @@ resources:
   - ingress.yaml
 
 configMapGenerator:
-  - name: sonarr-env
+  - name: sonarr
     envs:
       - sonarr.env

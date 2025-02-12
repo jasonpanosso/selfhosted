@@ -1,0 +1,109 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: configarr
+spec:
+  schedule: "0 * * * *" # hourly
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: configarr
+              image: ghcr.io/raydak-labs/configarr:latest
+              imagePullPolicy: Always
+              env:
+                - name: RADARR_API_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      name: servarr-api-keys
+                      key: radarr
+                - name: SONARR_API_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      name: servarr-api-keys
+                      key: sonarr
+              envFrom:
+                - configMapRef:
+                    name: standard-env
+              volumeMounts:
+                - name: cache
+                  mountPath: /app/repos
+                  subPath: configarr-repos
+                - name: configarr
+                  mountPath: /app/config/config.yml
+                  subPath: config.yml
+              securityContext:
+                allowPrivilegeEscalation: false
+
+            - name: configure-radarr-download-clients
+              image: badouralix/curl-jq:alpine
+              command:
+                [
+                  "sh",
+                  "-c",
+                  '/scripts/configure_download_clients.sh "http://radarr:7878/api/v3/downloadclient" /scripts/radarrDownloadClient.json',
+                ]
+              env:
+                - name: API_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      name: servarr-api-keys
+                      key: radarr
+                - name: QBITTORRENT_PASSWORD
+                  value: test
+              envFrom:
+                - configMapRef:
+                    name: standard-env
+              volumeMounts:
+                - name: scripts
+                  mountPath: /scripts
+              securityContext:
+                allowPrivilegeEscalation: false
+
+            - name: configure-sonarr-download-clients
+              image: badouralix/curl-jq:alpine
+              command:
+                [
+                  "sh",
+                  "-c",
+                  '/scripts/configure_download_clients.sh "http://sonarr:8989/api/v3/downloadclient" /scripts/sonarrDownloadClient.json',
+                ]
+              env:
+                - name: API_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      name: servarr-api-keys
+                      key: sonarr
+                - name: QBITTORRENT_PASSWORD
+                  value: "test"
+              volumeMounts:
+                - name: scripts
+                  mountPath: /scripts
+              securityContext:
+                allowPrivilegeEscalation: false
+          volumes:
+            - name: cache
+              emptyDir: {}
+              # persistentVolumeClaim:
+              #   claimName: media-app-data
+            - name: configarr
+              configMap:
+                name: configarr
+                items:
+                  - key: configarrConfig
+                    path: config.yml
+            - name: scripts
+              configMap:
+                name: configarr
+                defaultMode: 0777
+                items:
+                  - key: downloadClientConfigurationScript
+                    path: configure_download_clients.sh
+                  - key: radarrDownloadClientConfigurationJson
+                    path: radarrDownloadClient.json
+                  - key: sonarrDownloadClientConfigurationJson
+                    path: sonarrDownloadClient.json
+          restartPolicy: Never

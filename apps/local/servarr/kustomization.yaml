@@ -1,6 +1,5 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-namespace: servarr
 
 resources:
   - ../../base/servarr
@@ -8,8 +7,8 @@ resources:
 secretGenerator:
   - name: servarr-api-keys
     namespace: servarr
-    files:
-      - secrets/servarr_api_keys.enc.yaml
+    envs:
+      - secrets/servarr_api_keys.enc.env
   - name: radarr-db
     namespace: servarr
     files:
@@ -26,7 +25,9 @@ secretGenerator:
     namespace: servarr
     files:
       - secret.sql=secrets/secret.sql.enc
-  - name: wireguard-config
+  - name: ovpn-conf
     namespace: torrent
     files:
-      - wg0.conf=secrets/wg0.conf.enc
+      - mv_ams.ovpn=secrets/ovpn.conf.enc
+      - vpn_ca.crt=secrets/vpn_ca.crt.enc
+      - vpn_userpass.txt=secrets/vpn_userpass.txt.enc

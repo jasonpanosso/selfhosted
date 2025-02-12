@@ -23,13 +23,18 @@ spec:
             - configMapRef:
                 name: standard-env
             - configMapRef:
-                name: sonarr-env
+                name: sonarr
           env:
             - name: SONARR__POSTGRES__PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: sonarr-db
                   key: password
+            - name: SONARR__AUTH__APIKEY
+              valueFrom:
+                secretKeyRef:
+                  name: servarr-api-keys
+                  key: sonarr
           ports:
             - containerPort: 8989
               name: http
@@ -51,16 +56,18 @@ spec:
           volumeMounts:
             - name: config
               mountPath: /config
-            # - name: downloads
-            #   mountPath: /data/downloads
-            # - name: shows
-            #   mountPath: /data/shows
+            - name: downloads
+              mountPath: /data/downloads
+            - name: shows
+              mountPath: /data/shows
       volumes:
         - name: config
           emptyDir: {}
-        # - name: movies
+        - name: shows
+          emptyDir: {}
         #   persistentVolumeClaim:
         #     claimName: shows
-        # - name: downloads
+        - name: downloads
+          emptyDir: {}
         #   persistentVolumeClaim:
         #     claimName: downloads

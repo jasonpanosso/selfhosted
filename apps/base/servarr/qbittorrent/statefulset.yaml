@@ -1,0 +1,79 @@
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: qbittorrent
+spec:
+  selector:
+    matchLabels:
+      app: qbittorrent
+  serviceName: qbittorrent
+  template:
+    metadata:
+      labels:
+        app: qbittorrent
+    spec:
+      initContainers:
+        - image: docker.io/library/busybox:stable
+          imagePullPolicy: Always
+          name: init-files
+          command:
+            - "/bin/sh"
+            - "-c"
+            - |
+              mkdir -p /config/openvpn && mkdir -p /config/qBittorrent/config && \
+                cp -a -L /ovpn-conf/. /config/openvpn && \
+                cp -L /qbt-conf/qBittorrent.conf /config/qBittorrent/config
+          volumeMounts:
+            - name: qbittorrent-conf
+              mountPath: /qbt-conf
+            - name: ovpn-conf
+              mountPath: /ovpn-conf
+            - name: config
+              mountPath: /config
+      containers:
+        - image: docker.io/binhex/arch-qbittorrentvpn:5.0.3-1-01
+          name: qbittorrent
+          env:
+            - name: TZ
+              value: "Etc/UTC"
+          envFrom:
+            - configMapRef:
+                name: qbittorrent-env
+          ports:
+            - containerPort: 8080
+              name: http
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 15
+          resources:
+            requests:
+              cpu: 250m
+              memory: 512Mi
+            limits:
+              cpu: 1000m
+              memory: 2Gi
+          securityContext:
+            capabilities:
+              add: ["NET_ADMIN"]
+          volumeMounts:
+            - name: config
+              mountPath: /config
+            - name: downloads
+              mountPath: /data/downloads
+      volumes:
+        - name: config
+          emptyDir: {}
+        - name: qbittorrent-conf
+          configMap:
+            name: qbittorrent-conf
+        - name: ovpn-conf
+          secret:
+            secretName: ovpn-conf
+        - name: downloads
+          emptyDir: {}
+          # persistentVolumeClaim:
+          #   claimName: downloads

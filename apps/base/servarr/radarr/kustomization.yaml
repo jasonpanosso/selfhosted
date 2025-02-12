@@ -8,6 +8,6 @@ resources:
   - ingress.yaml
 
 configMapGenerator:
-  - name: radarr-env
+  - name: radarr
     envs:
       - radarr.env

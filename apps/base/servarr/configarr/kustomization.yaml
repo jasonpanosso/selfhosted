@@ -1,0 +1,14 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: servarr
+
+resources:
+  - cronjob.yaml
+
+configMapGenerator:
+  - name: configarr
+    files:
+      - configarrConfig=files/configarr.yaml
+      - downloadClientConfigurationScript=files/configure_download_clients.sh
+      - radarrDownloadClientConfigurationJson=files/radarrDownloadClient.json
+      - sonarrDownloadClientConfigurationJson=files/sonarrDownloadClient.json

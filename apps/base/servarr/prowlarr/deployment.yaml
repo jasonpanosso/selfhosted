@@ -23,13 +23,18 @@ spec:
             - configMapRef:
                 name: standard-env
             - configMapRef:
-                name: prowlarr-env
+                name: prowlarr
           env:
             - name: PROWLARR__POSTGRES__PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: prowlarr-db
                   key: password
+            - name: PROWLARR__AUTH__APIKEY
+              valueFrom:
+                secretKeyRef:
+                  name: servarr-api-keys
+                  key: prowlarr
           ports:
             - containerPort: 9696
               name: http

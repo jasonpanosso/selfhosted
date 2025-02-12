@@ -12,3 +12,8 @@ nameReference:
     fieldSpecs:
       - kind: Deployment
         path: spec/template/spec/volumes/configMap/name
+  # mount jellyfin & qbittorrent secrets
+  - kind: Secret
+    fieldSpecs:
+      - kind: StatefulSet
+        path: spec/template/spec/volumes/secret/secretName
