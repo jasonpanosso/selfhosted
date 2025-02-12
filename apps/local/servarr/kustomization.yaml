@@ -26,7 +26,7 @@ secretGenerator:
     namespace: servarr
     files:
       - secret.sql=secrets/secret.sql.enc
-  - name: qbittorrent
-    namespace: servarr
+  - name: wireguard-config
+    namespace: torrent
     files:
       - wg0.conf=secrets/wg0.conf.enc
