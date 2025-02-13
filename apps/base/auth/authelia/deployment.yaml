@@ -101,7 +101,7 @@ spec:
               - secret:
                   name: redis
                   items:
-                    - key: redis-password
+                    - key: password
                       path: REDIS_PASSWORD
               - secret:
                   name: authelia-db

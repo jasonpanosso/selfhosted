@@ -35,6 +35,8 @@ spec:
     auth:
       enabled: true
       enableReplicaAuth: true
+      existingSecret: redis
+      existingSecretPasswordKey: password
     master:
       resources:
         requests:

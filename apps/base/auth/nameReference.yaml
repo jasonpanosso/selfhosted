@@ -19,3 +19,8 @@ nameReference:
     fieldSpecs:
       - kind: Deployment
         path: spec/template/spec/containers/env/valueFrom/secretKeyRef/name
+  # redis secret
+  - kind: Secret
+    fieldSpecs:
+      - kind: HelmRelease
+        path: spec/values/auth/existingSecret

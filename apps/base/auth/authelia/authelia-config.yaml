@@ -148,10 +148,13 @@ access_control:
     - name: internal
       networks:
         - 10.0.0.0/8
+        - 10.244.0.0/16
         - 192.168.1.0/24
+        - 192.168.121.0/24
 
   rules:
     # *arr has no support for custom auth, have to bypass for api routes
+    # /api routes are protected by API tokens
     - domain:
         - prowlarr.needless.info
         - radarr.needless.info
@@ -281,6 +284,9 @@ identity_providers:
         - userinfo
       allowed_origins:
         - "*"
+    authorization_policies:
+      policy_name:
+        default_policy: 'one_factor'
 
     # The list of issuer JSON Web Keys.
     jwks:

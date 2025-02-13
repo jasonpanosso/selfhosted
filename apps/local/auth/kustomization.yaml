@@ -33,3 +33,7 @@ secretGenerator:
     files:
       - username=secrets/smtp_username.enc
       - password=secrets/smtp_password.enc
+  - name: redis
+    namespace: auth
+    files:
+      - password=secrets/redis_password.enc
