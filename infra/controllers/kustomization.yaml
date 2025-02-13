@@ -7,6 +7,7 @@ resources:
   - ingress-nginx.yaml
   - openebs.yaml
   - nfs-ganesha.yaml
-  - cfi-driver-nfs.yaml
   - cnpg.yaml
   - capacitor.yaml
+  - kube-prometheus-stack.yaml
+  - metrics-server.yaml
