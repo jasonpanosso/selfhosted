@@ -16,7 +16,7 @@ spec:
         app: radarr
     spec:
       containers:
-        - image: ghcr.io/linuxserver/radarr:version-5.18.4
+        - image: ghcr.io/linuxserver/radarr:version-5.18.4.9674
           imagePullPolicy: Always
           name: radarr
           envFrom:
@@ -35,6 +35,8 @@ spec:
                 secretKeyRef:
                   name: servarr-api-keys
                   key: radarr
+            - name: FILE__RADARR__LOG__DBENABLED
+              value: /tmp/false
           ports:
             - containerPort: 7878
               name: http
@@ -60,8 +62,12 @@ spec:
               mountPath: /data/downloads
             - name: movies
               mountPath: /data/movies
+            - name: booleans
+              mountPath: /tmp
       volumes:
         - name: config
+          emptyDir: {}
+        - name: booleans
           emptyDir: {}
         - name: movies
           emptyDir: {}

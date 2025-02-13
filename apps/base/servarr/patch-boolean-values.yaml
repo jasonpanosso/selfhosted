@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: not-used
+spec:
+  template:
+    spec:
+      initContainers:
+        - name: init-boolean-files
+          image: alpine:latest
+          command: ["sh", "-c"]
+          args:
+            - |
+              echo -n "true" > /tmp/true &&
+              echo -n "false" > /tmp/false
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: [ALL]
+            seccompProfile:
+              type: RuntimeDefault
+          volumeMounts:
+            - name: booleans
+              mountPath: /tmp
+      volumes:
+        - name: booleans
+          emptyDir: {}

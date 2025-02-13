@@ -16,7 +16,7 @@ spec:
         app: sonarr
     spec:
       containers:
-        - image: ghcr.io/linuxserver/sonarr:version-4.0.12.2823
+        - image: ghcr.io/linuxserver/sonarr:version-4.0.13.2932
           imagePullPolicy: Always
           name: sonarr
           envFrom:
@@ -35,6 +35,8 @@ spec:
                 secretKeyRef:
                   name: servarr-api-keys
                   key: sonarr
+            - name: FILE__SONARR__LOG__DBENABLED
+              value: /tmp/false
           ports:
             - containerPort: 8989
               name: http
@@ -60,8 +62,12 @@ spec:
               mountPath: /data/downloads
             - name: shows
               mountPath: /data/shows
+            - name: booleans
+              mountPath: /tmp
       volumes:
         - name: config
+          emptyDir: {}
+        - name: booleans
           emptyDir: {}
         - name: shows
           emptyDir: {}

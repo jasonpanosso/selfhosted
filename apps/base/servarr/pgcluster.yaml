@@ -17,14 +17,8 @@ spec:
             key: secret.sql
       postInitApplicationSQL:
         - CREATE DATABASE radarr OWNER radarr;
-        - CREATE DATABASE radarr_logs OWNER radarr;
         - CREATE DATABASE sonarr OWNER sonarr;
-        - CREATE DATABASE sonarr_logs OWNER sonarr;
         - CREATE DATABASE prowlarr OWNER prowlarr;
-        - CREATE DATABASE prowlarr_logs OWNER prowlarr;
         - GRANT ALL PRIVILEGES ON DATABASE radarr TO radarr;
-        - GRANT ALL PRIVILEGES ON DATABASE radarr_logs TO radarr;
         - GRANT ALL PRIVILEGES ON DATABASE sonarr TO sonarr;
-        - GRANT ALL PRIVILEGES ON DATABASE sonarr_logs TO sonarr;
         - GRANT ALL PRIVILEGES ON DATABASE prowlarr TO prowlarr;
-        - GRANT ALL PRIVILEGES ON DATABASE prowlarr_logs TO prowlarr;
