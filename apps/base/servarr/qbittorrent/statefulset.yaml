@@ -66,7 +66,8 @@ spec:
               mountPath: /data/downloads
       volumes:
         - name: config
-          emptyDir: {}
+          persistentVolumeClaim:
+            claimName: qbt-config
         - name: qbittorrent-conf
           configMap:
             name: qbittorrent-conf
@@ -74,6 +75,14 @@ spec:
           secret:
             secretName: ovpn-conf
         - name: downloads
-          emptyDir: {}
-          # persistentVolumeClaim:
-          #   claimName: downloads
+          persistentVolumeClaim:
+            claimName: downloads
+  volumeClaimTemplates:
+    - metadata:
+        name: qbt-config
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 5Gi
+        storageClassName: openebs-hostpath

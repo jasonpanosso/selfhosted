@@ -1,0 +1,75 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: jellyfin
+spec:
+  selector:
+    matchLabels:
+      app: jellyfin
+  serviceName: jellyfin
+  template:
+    metadata:
+      labels:
+        app: jellyfin
+    spec:
+      containers:
+        - image: docker.io/jellyfin/jellyfin:10.10.4
+          name: jellyfin
+          ports:
+            - containerPort: 8096
+              name: http
+          readinessProbe:
+            httpGet:
+              path: /web/index.html
+              port: 8096
+            failureThreshold: 5
+            initialDelaySeconds: 15
+            periodSeconds: 10
+            timeoutSeconds: 3
+          resources:
+            requests:
+              cpu: 1000m
+              memory: 1Gi
+            limits:
+              cpu: 4000m
+              memory: 8Gi
+          securityContext:
+            allowPrivilegeEscalation: false
+          volumeMounts:
+            - name: movies
+              mountPath: /movies
+              readOnly: true
+            - name: shows
+              mountPath: /shows
+              readOnly: true
+            - mountPath: /transcode
+              name: transcode
+            - mountPath: /cache
+              name: cache
+            - mountPath: /config
+              name: config
+      volumes:
+        - name: config
+          persistentVolumeClaim:
+            claimName: jellyfin-config
+        - name: movies
+          emptyDir: {}
+          persistentVolumeClaim:
+            claimName: movies
+        - name: shows
+          emptyDir: {}
+          persistentVolumeClaim:
+            claimName: shows
+        - name: transcode
+          emptyDir: {}
+        - name: cache
+          emptyDir: {}
+  volumeClaimTemplates:
+    - metadata:
+        name: jellyfin-config
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 5Gi
+        storageClassName: openebs-hostpath

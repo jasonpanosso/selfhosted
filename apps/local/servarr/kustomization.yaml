@@ -9,6 +9,10 @@ secretGenerator:
     namespace: servarr
     envs:
       - secrets/servarr_api_keys.enc.env
+  - name: servarr-api-keys
+    namespace: monitoring
+    envs:
+      - secrets/servarr_api_keys.enc.env
   - name: radarr-db
     namespace: servarr
     files:
@@ -26,7 +30,7 @@ secretGenerator:
     files:
       - secret.sql=secrets/secret.sql.enc
   - name: ovpn-conf
-    namespace: torrent
+    namespace: servarr
     files:
       - mv_ams.ovpn=secrets/ovpn.conf.enc
       - vpn_ca.crt=secrets/vpn_ca.crt.enc

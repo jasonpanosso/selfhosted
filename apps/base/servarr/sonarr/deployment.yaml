@@ -70,10 +70,8 @@ spec:
         - name: booleans
           emptyDir: {}
         - name: shows
-          emptyDir: {}
-        #   persistentVolumeClaim:
-        #     claimName: shows
+          persistentVolumeClaim:
+            claimName: shows
         - name: downloads
-          emptyDir: {}
-        #   persistentVolumeClaim:
-        #     claimName: downloads
+          persistentVolumeClaim:
+            claimName: downloads
