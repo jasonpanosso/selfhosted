@@ -45,11 +45,19 @@ spec:
                 secretKeyRef:
                   name: smtp
                   key: username
+            - name: LLDAP_DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: lldap-db
+                  key: password
             - name: LLDAP_SMTP_OPTIONS__PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: smtp
                   key: password
+            - name: LLDAP_DATABASE_URL
+              value: |
+                postgres://lldap:$(LLDAP_DATABASE_PASSWORD)@pgcluster-rw.auth.svc.cluster.local/lldap
           ports:
             - name: ldap
               containerPort: 3890
