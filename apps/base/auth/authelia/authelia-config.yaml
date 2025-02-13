@@ -284,9 +284,6 @@ identity_providers:
         - userinfo
       allowed_origins:
         - "*"
-    authorization_policies:
-      policy_name:
-        default_policy: 'one_factor'
 
     # The list of issuer JSON Web Keys.
     jwks:
