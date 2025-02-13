@@ -27,4 +27,4 @@ spec:
               service:
                 name: prowlarr
                 port:
-                  number: 8989
+                  number: 9696
