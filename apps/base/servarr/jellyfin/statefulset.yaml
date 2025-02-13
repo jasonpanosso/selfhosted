@@ -49,15 +49,10 @@ spec:
             - mountPath: /config
               name: config
       volumes:
-        - name: config
-          persistentVolumeClaim:
-            claimName: jellyfin-config
         - name: movies
-          emptyDir: {}
           persistentVolumeClaim:
             claimName: movies
         - name: shows
-          emptyDir: {}
           persistentVolumeClaim:
             claimName: shows
         - name: transcode
@@ -66,7 +61,7 @@ spec:
           emptyDir: {}
   volumeClaimTemplates:
     - metadata:
-        name: jellyfin-config
+        name: config
       spec:
         accessModes: ["ReadWriteOnce"]
         resources:

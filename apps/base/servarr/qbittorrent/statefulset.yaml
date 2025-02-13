@@ -65,9 +65,6 @@ spec:
             - name: downloads
               mountPath: /data/downloads
       volumes:
-        - name: config
-          persistentVolumeClaim:
-            claimName: qbt-config
         - name: qbittorrent-conf
           configMap:
             name: qbittorrent-conf
@@ -79,7 +76,7 @@ spec:
             claimName: downloads
   volumeClaimTemplates:
     - metadata:
-        name: qbt-config
+        name: config
       spec:
         accessModes: ["ReadWriteOnce"]
         resources:
