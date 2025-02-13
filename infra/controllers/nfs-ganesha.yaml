@@ -42,7 +42,7 @@ spec:
       storageClass: openebs-hostpath
       size: 50G
     storageClass:
-      create: false
+      create: true
       mountOptions:
         - vers=4.1
     nodeSelector:
