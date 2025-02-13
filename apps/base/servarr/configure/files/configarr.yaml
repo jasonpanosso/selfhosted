@@ -1,3 +1,7 @@
+whisparrEnabled: false
+readarrEnabled: false
+lidarrEnabled: false
+
 radarr:
   instance1:
     base_url: http://radarr:7878
@@ -10,8 +14,27 @@ radarr:
         standard: jellyfin-tmdb
 
     media_management:
-      downloadPropersAndRepacks: "doNotPrefer"
+      id: 1
+      autoUnmonitorPreviouslyDownloadedMovies: false
+      recycleBin: ""
+      recycleBinCleanupDays: 7
+      downloadPropersAndRepacks: doNotPrefer
+      createEmptyMovieFolders: false
+      deleteEmptyFolders: false
+      fileDate: "1"
+      rescanAfterRefresh: always
+      autoRenameFolders: true
+      pathsDefaultStatic: true
+      setPermissionsLinux: false
+      chmodFolder: ""
+      chownGroup: ""
+      skipFreeSpaceCheckWhenImporting: false
+      minimumFreeSpaceWhenImporting: 100
       copyUsingHardlinks: true
+      useScriptImport: false
+      importExtraFiles: true
+      extraFileExtensions: srt,sub,idx,vob
+      enableMediaInfo: true
 
     media_naming_api:
       replaceIllegalCharacters: true
@@ -26,6 +49,9 @@ radarr:
       # HD Bluray + WEB https://github.com/TRaSH-Guides/Guides/blob/master/docs/json/radarr/quality-profiles/hd-bluray-web.json
       - template: d1d67249d3890e49bc12e275d989a7e9
         source: TRASH
+
+    delete_old_custom_formats: true
+    replace_existing_custom_formats: true
 
     delete_unmanaged_custom_formats:
       enabled: true
@@ -45,13 +71,34 @@ sonarr:
         anime: default
 
     media_management:
-      downloadPropersAndRepacks: "doNotPrefer"
+      id: 1
+      autoUnmonitorPreviouslyDownloadedEpisodes: true
+      recycleBin: ""
+      recycleBinCleanupDays: 7
+      downloadPropersAndRepacks: doNotPrefer
+      createEmptySeriesFolders: false
+      deleteEmptyFolders: false
+      fileDate: 2
+      rescanAfterRefresh: always
+      setPermissionsLinux: false
+      chmodFolder: ""
+      chownGroup: ""
+      episodeTitleRequired: always
+      skipFreeSpaceCheckWhenImporting: false
+      minimumFreeSpaceWhenImporting: 100
       copyUsingHardlinks: true
+      useScriptImport: false
+      importExtraFiles: true
+      extraFileExtensions: srt,sub,idx,vob
+      enableMediaInfo: true
 
     media_naming_api:
+      id: 1
+      renameEpisodes: true
       replaceIllegalCharacters: true
       multiEpisodeStyle: 5
       colonReplacementFormat: 4
+      customColonReplacementFormat: Smart Replace
 
     # this will eventually change to trash_id
     quality_definition:
@@ -62,6 +109,9 @@ sonarr:
       # WEB-1080p https://github.com/TRaSH-Guides/Guides/blob/master/docs/json/sonarr/quality-profiles/web-1080p.json
       - template: 72dae194fc92bf828f32cde7744e51a1
         source: TRASH
+
+    delete_old_custom_formats: true
+    replace_existing_custom_formats: true
 
     delete_unmanaged_custom_formats:
       enabled: true

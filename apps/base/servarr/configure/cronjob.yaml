@@ -1,16 +1,79 @@
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  name: configarr
+  name: configure
 spec:
-  schedule: "0 * * * *" # hourly
+  schedule: "0 7 * * *" # 7 AM
   successfulJobsHistoryLimit: 1
   failedJobsHistoryLimit: 1
   jobTemplate:
     spec:
       template:
         spec:
+          initContainers:
+            - name: buildarr-envsubst
+              image: alpine:latest
+              command:
+                - sh
+                - "-c"
+                - |
+                  apk add --no-cache gettext && \
+                    envsubst < /buildarr/buildarr.yaml > /buildarr-envsubst/buildarr.yaml
+              env:
+                - name: RADARR_API_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      name: servarr-api-keys
+                      key: radarr
+                - name: SONARR_API_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      name: servarr-api-keys
+                      key: sonarr
+                - name: PROWLARR_API_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      name: servarr-api-keys
+                      key: prowlarr
+              envFrom:
+                - configMapRef:
+                    name: standard-env
+              volumeMounts:
+                - name: buildarr-envsubst
+                  mountPath: /buildarr-envsubst
+                - name: buildarr
+                  mountPath: /buildarr
+              securityContext:
+                allowPrivilegeEscalation: false
+                capabilities:
+                  drop: [ALL]
+                seccompProfile:
+                  type: RuntimeDefault
+
           containers:
+            - name: buildarr
+              image: jpanosso/rebuildarr-testing:0.0.4
+              command: ["sh", "-c", "buildarr run /config/buildarr.yaml"]
+              envFrom:
+                - configMapRef:
+                    name: standard-env
+              volumeMounts:
+                - name: buildarr-envsubst
+                  mountPath: /config
+              resources:
+                requests:
+                  cpu: 50m
+                  memory: 256Mi
+                limits:
+                  cpu: 250m
+                  memory: 512Mi
+              securityContext:
+                allowPrivilegeEscalation: false
+                capabilities:
+                  drop: [ALL]
+                seccompProfile:
+                  type: RuntimeDefault
+
             - name: configarr
               image: ghcr.io/raydak-labs/configarr:latest
               imagePullPolicy: Always
@@ -33,10 +96,13 @@ spec:
                   mountPath: /app/repos
                   subPath: configarr-repos
                 - name: configarr
-                  mountPath: /app/config/config.yml
-                  subPath: config.yml
+                  mountPath: /app/config
               securityContext:
                 allowPrivilegeEscalation: false
+                capabilities:
+                  drop: [ALL]
+                seccompProfile:
+                  type: RuntimeDefault
 
             - name: configure-radarr-download-clients
               image: badouralix/curl-jq:alpine
@@ -53,7 +119,7 @@ spec:
                       name: servarr-api-keys
                       key: radarr
                 - name: QBITTORRENT_PASSWORD
-                  value: test
+                  value: ""
               envFrom:
                 - configMapRef:
                     name: standard-env
@@ -62,6 +128,10 @@ spec:
                   mountPath: /scripts
               securityContext:
                 allowPrivilegeEscalation: false
+                capabilities:
+                  drop: [ALL]
+                seccompProfile:
+                  type: RuntimeDefault
 
             - name: configure-sonarr-download-clients
               image: badouralix/curl-jq:alpine
@@ -78,12 +148,17 @@ spec:
                       name: servarr-api-keys
                       key: sonarr
                 - name: QBITTORRENT_PASSWORD
-                  value: "test"
+                  value: ""
               volumeMounts:
                 - name: scripts
                   mountPath: /scripts
               securityContext:
                 allowPrivilegeEscalation: false
+                capabilities:
+                  drop: [ALL]
+                seccompProfile:
+                  type: RuntimeDefault
+
           volumes:
             - name: cache
               emptyDir: {}
@@ -92,18 +167,13 @@ spec:
             - name: configarr
               configMap:
                 name: configarr
-                items:
-                  - key: configarrConfig
-                    path: config.yml
+            - name: buildarr-envsubst
+              emptyDir: {}
+            - name: buildarr
+              configMap:
+                name: buildarr
             - name: scripts
               configMap:
-                name: configarr
+                name: servarr-configuration-scripts
                 defaultMode: 0777
-                items:
-                  - key: downloadClientConfigurationScript
-                    path: configure_download_clients.sh
-                  - key: radarrDownloadClientConfigurationJson
-                    path: radarrDownloadClient.json
-                  - key: sonarrDownloadClientConfigurationJson
-                    path: sonarrDownloadClient.json
           restartPolicy: Never
