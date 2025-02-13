@@ -4,7 +4,8 @@ apiVersion: apps/v1
 metadata:
   name: authelia
 spec:
-  replicas: 2
+  replicas: 3
+  revisionHistoryLimit: 3
   selector:
     matchLabels:
       app: authelia
