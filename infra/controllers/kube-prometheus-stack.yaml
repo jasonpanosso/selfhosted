@@ -57,7 +57,46 @@ spec:
               resources:
                 requests:
                   storage: 10Gi
-
     grafana:
+      adminUser: admin
+      adminPassword: admin
       plugins:
         - grafana-piechart-panel
+      dashboardProviders:
+        dashboardproviders.yaml:
+          apiVersion: 1
+          providers:
+            - name: "default"
+              orgId: 1
+              folder: ""
+              type: file
+              disableDeletion: false
+              editable: true
+              options:
+                path: /var/lib/grafana/dashboards/default
+      dashboards:
+        default:
+          flux:
+            gnetId: 16714
+            revision: 1
+            datasource: Prometheus
+          cert-manager:
+            gnetId: 20842
+            revision: 3
+            datasource: Prometheus
+          metallb:
+            gnetId: 20162
+            revision: 6
+            datasource: Prometheus
+          cloudnative-pg:
+            gnetId: 20417
+            revision: 3
+            datasource: Prometheus
+          radarr:
+            gnetId: 12896
+            revision: 1
+            datasource: Prometheus
+          ingress-nginx:
+            gnetId: 21336
+            revision: 1
+            datasource: Prometheus

@@ -37,3 +37,17 @@ spec:
   values:
     speaker:
       secretName: memberlist
+      metrics:
+        enabled: true
+        serviceMonitor:
+          enabled: true
+          namespace: monitoring
+    controller:
+      metrics:
+        enabled: true
+        serviceMonitor:
+          enabled: true
+          namespace: monitoring
+  dependsOn:
+    - name: kube-prometheus-stack
+      namespace: monitoring

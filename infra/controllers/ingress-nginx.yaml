@@ -36,6 +36,15 @@ spec:
       allowSnippetAnnotations: true
       config:
         annotations-risk-level: Critical
+      metrics:
+        enabled: true
+        serviceMonitor:
+          enabled: true
+      podAnnotations:
+        prometheus.io/port: "10254"
+        prometheus.io/scrape: "true"
   dependsOn:
+    - name: kube-prometheus-stack
+      namespace: monitoring
     - name: metallb
       namespace: metallb-system
