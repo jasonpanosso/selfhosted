@@ -28,7 +28,7 @@
           script;
 
         scripts = [
-          (mkScript "k" ''kubectl "$@"'')
+          (mkScript "k" ''kubecolor "$@"'')
           (mkScript "vagrant" ''docker run -it --rm \
               -e LIBVIRT_DEFAULT_URI \
               -v /var/run/libvirt/:/var/run/libvirt/ \
@@ -47,6 +47,7 @@
             docker
             minikube
             kubectl
+            kubecolor
             terraform
             sops
             kubernetes-helm-wrapped
