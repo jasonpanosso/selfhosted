@@ -4,5 +4,7 @@ kind: Kustomization
 resources:
   - capacitor.yaml
   - grafana.yaml
-  - radarr.yaml
   - flux.yaml
+  - radarr.yaml
+  - sonarr.yaml
+  - prowlarr.yaml
