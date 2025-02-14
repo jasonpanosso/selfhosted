@@ -1,0 +1,30 @@
+---
+apiVersion: kyverno.io/v2
+kind: PolicyException
+metadata:
+  name: kube-prometheus-stack-exception
+  namespace: kyverno
+spec:
+  exceptions:
+    - policyName: disallow-host-ports
+      ruleNames:
+        - host-ports-none
+    - policyName: disallow-host-path
+      ruleNames:
+        - host-path
+        - autogen-host-path
+    - policyName: disallow-host-namespaces
+      ruleNames:
+        - host-namespaces
+        - autogen-host-namespaces
+  match:
+    any:
+      - resources:
+          kinds:
+            - Pod
+            - DaemonSet
+          namespaces:
+            - monitoring
+          names:
+            - prometheus-node-exporter*
+            - kube-prometheus-stack-prometheus-node-exporter*

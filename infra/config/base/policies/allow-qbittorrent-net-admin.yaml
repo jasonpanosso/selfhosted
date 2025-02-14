@@ -1,0 +1,22 @@
+---
+apiVersion: kyverno.io/v2
+kind: PolicyException
+metadata:
+  name: qbittorrent-pod-security-exception
+  namespace: kyverno
+spec:
+  exceptions:
+    - policyName: disallow-capabilities
+      ruleNames:
+        - adding-capabilities
+        - autogen-adding-capabilities
+  match:
+    any:
+      - resources:
+          kinds:
+            - Pod
+            - StatefulSet
+          namespaces:
+            - servarr
+          names:
+            - qbittorrent*
