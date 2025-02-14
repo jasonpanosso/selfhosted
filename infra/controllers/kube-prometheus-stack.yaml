@@ -54,8 +54,22 @@ spec:
                 requests:
                   storage: 10Gi
     grafana:
-      adminUser: admin
-      adminPassword: admin
+      grafana.ini:
+        paths:
+          data: /var/lib/grafana/
+          logs: /var/log/grafana
+          plugins: /var/lib/grafana/plugins
+          provisioning: /etc/grafana/provisioning
+        analytics:
+          check_for_updates: true
+        log:
+          mode: console
+        grafana_net:
+          url: https://grafana.net
+        auth.proxy:
+          enabled: true
+          header_name: Remote-User
+          auto_sign_up: true
       plugins:
         - grafana-piechart-panel
       dashboardProviders:
