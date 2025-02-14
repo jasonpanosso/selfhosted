@@ -2,7 +2,7 @@
 apiVersion: kyverno.io/v2
 kind: PolicyException
 metadata:
-  name: kube-prometheus-stack-exception
+  name: prometheus-node-exporter-exception
   namespace: kyverno
 spec:
   exceptions:
