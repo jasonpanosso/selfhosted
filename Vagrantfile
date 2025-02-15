@@ -19,7 +19,10 @@ Vagrant.configure("2") do |config|
       domain.memory = 4096
       domain.serial :type => "file", :source => {:path => "/tmp/worker-node-1.log"}
       domain.storage :file, :device => :cdrom, :path => "/tmp/metal-amd64.iso"
+      # install disk
       domain.storage :file, :size => '50G', :type => 'raw'
+      # data disk
+      domain.storage :file, :size => '60G', :type => 'raw'
       domain.boot 'hd'
       domain.boot 'cdrom'
     end
@@ -32,7 +35,10 @@ Vagrant.configure("2") do |config|
       domain.memory = 4096
       domain.serial :type => "file", :source => {:path => "/tmp/worker-node-2.log"}
       domain.storage :file, :device => :cdrom, :path => "/tmp/metal-amd64.iso"
+      # install disk
       domain.storage :file, :size => '50G', :type => 'raw'
+      # data disk
+      domain.storage :file, :size => '60G', :type => 'raw'
       domain.boot 'hd'
       domain.boot 'cdrom'
     end
@@ -45,8 +51,9 @@ Vagrant.configure("2") do |config|
       domain.memory = 4096
       domain.serial :type => "file", :source => {:path => "/tmp/worker-node-3.log"}
       domain.storage :file, :device => :cdrom, :path => "/tmp/metal-amd64.iso"
+      # install disk
       domain.storage :file, :size => '50G', :type => 'raw'
-      # 2nd drive
+      # data disk
       domain.storage :file, :size => '60G', :type => 'raw'
       domain.boot 'hd'
       domain.boot 'cdrom'
