@@ -10,16 +10,6 @@
         pkgs = import nixpkgs {
           system = "x86_64-linux";
           config.allowUnfree = true;
-          overlays = [
-            (final: prev: {
-              kubernetes-helm-wrapped = prev.wrapHelm prev.kubernetes-helm {
-                plugins = with prev.kubernetes-helmPlugins; [
-                  helm-diff
-                  helm-secrets
-                ];
-              };
-            })
-          ];
         };
         mkScript = name: text:
           let
@@ -45,13 +35,11 @@
         devShells.default = pkgs.mkShell {
           buildInputs = with pkgs; [
             docker
-            minikube
             kubectl
             kubecolor
             terraform
             sops
-            kubernetes-helm-wrapped
-            helmfile-wrapped
+            kubernetes-helm
             talosctl
             fluxcd
             just
