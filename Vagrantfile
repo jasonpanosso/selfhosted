@@ -16,7 +16,7 @@ Vagrant.configure("2") do |config|
     node.vm.provider :libvirt do |domain|
       domain.default_prefix = "vagrant"
       domain.cpus = 4
-      domain.memory = 4096
+      domain.memory = 6192
       domain.serial :type => "file", :source => {:path => "/tmp/worker-node-1.log"}
       domain.storage :file, :device => :cdrom, :path => "/tmp/metal-amd64.iso"
       # install disk
@@ -32,7 +32,7 @@ Vagrant.configure("2") do |config|
     node.vm.provider :libvirt do |domain|
       domain.default_prefix = "vagrant"
       domain.cpus = 4
-      domain.memory = 4096
+      domain.memory = 6192
       domain.serial :type => "file", :source => {:path => "/tmp/worker-node-2.log"}
       domain.storage :file, :device => :cdrom, :path => "/tmp/metal-amd64.iso"
       # install disk
