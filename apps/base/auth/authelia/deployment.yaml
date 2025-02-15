@@ -4,7 +4,7 @@ apiVersion: apps/v1
 metadata:
   name: authelia
 spec:
-  replicas: 3
+  replicas: 2
   revisionHistoryLimit: 3
   selector:
     matchLabels:
@@ -28,6 +28,29 @@ spec:
                     values:
                       - authelia
       # priorityClassName: high-priority
+      initContainers:
+        - name: wait-for-redis
+          image: redis:bookworm
+          env:
+            - name: REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: redis
+                  key: password
+          envFrom:
+            - configMapRef:
+                name: standard-env
+          command:
+            - sh
+            - "-c"
+            - |
+              until redis-cli -h redis.auth.svc.cluster.local -p 6379 -a "$REDIS_PASSWORD" ping | grep -q PONG; do
+                  echo "Waiting for Redis..."
+                  sleep 1
+              done
+              echo "Redis is available!"
+          securityContext:
+            allowPrivilegeEscalation: false
       containers:
         - name: authelia
           image: ghcr.io/authelia/authelia:4.38.18
