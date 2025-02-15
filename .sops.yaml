@@ -1,7 +1,10 @@
 creation_rules:
-  - path_regex: .*\.yaml$
+  - path_regex: .*/local/.*
     pgp: 7F4BBBCE5FA232F9DC9E6707CD4B7B6A06A225FD
     age: age1whuwk0z9j9u6kc488dxw8sunl83d4dqf87vx23mmlch8djpa3gxsr3eeea
 
+  - path_regex: .*/prod/.*
+    pgp: 7F4BBBCE5FA232F9DC9E6707CD4B7B6A06A225FD
+    age: age1ukrrt44dctfz6krhl5ynjtm2w6vt7jk20057gz7g2s7nervrxeqqd57cdf
+
   - pgp: 7F4BBBCE5FA232F9DC9E6707CD4B7B6A06A225FD
-    age: age1whuwk0z9j9u6kc488dxw8sunl83d4dqf87vx23mmlch8djpa3gxsr3eeea
