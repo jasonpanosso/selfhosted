@@ -1,26 +1,20 @@
 ---
-apiVersion: networking.k8s.io/v1
-kind: Ingress
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
 metadata:
   name: lldap
-  annotations:
-    # sticky sessions, to let login work properly when replicas>1
-    nginx.ingress.kubernetes.io/affinity: "cookie"
-    cert-manager.io/cluster-issuer: "letsencrypt"
 spec:
-  ingressClassName: nginx
-  tls:
-    - hosts:
-        - account.needless.info
-      secretName: lldap-tls
-  rules:
-    - host: account.needless.info
-      http:
-        paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: lldap
-                port:
-                  number: 17170
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`account.needless.info`)
+      kind: Rule
+      services:
+        - kind: Service
+          name: lldap
+          port: 17170
+          sticky:
+            cookie:
+              httpOnly: true
+              secure: true
+              name: TraefikLdapSticky
