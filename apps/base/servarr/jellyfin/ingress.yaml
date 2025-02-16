@@ -1,23 +1,15 @@
-apiVersion: networking.k8s.io/v1
-kind: Ingress
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
 metadata:
   name: jellyfin
-  annotations:
-    cert-manager.io/cluster-issuer: "letsencrypt"
 spec:
-  ingressClassName: nginx
-  tls:
-    - hosts:
-        - video.needless.info
-      secretName: jellyfin-tls
-  rules:
-    - host: video.needless.info
-      http:
-        paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: jellyfin
-                port:
-                  number: 8096
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`video.needless.info`)
+      kind: Rule
+      services:
+        - kind: Service
+          name: jellyfin
+          port: 8096
