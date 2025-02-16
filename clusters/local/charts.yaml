@@ -1,0 +1,11 @@
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
+metadata:
+  name: lldap
+  namespace: flux-system
+spec:
+  interval: 1m
+  type: oci
+  url: oci://192.168.121.1:5000/flux-charts
+  insecure: true
