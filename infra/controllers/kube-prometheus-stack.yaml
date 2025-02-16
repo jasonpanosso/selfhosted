@@ -106,7 +106,7 @@ spec:
             gnetId: 12896
             revision: 1
             datasource: Prometheus
-          ingress-nginx:
-            gnetId: 21336
-            revision: 1
+          Traefik:
+            gnetId: 17347
+            revision: 9
             datasource: Prometheus

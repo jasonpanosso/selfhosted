@@ -5,7 +5,6 @@ resources:
   - kyverno.yaml
   - cert-manager.yaml
   - metallb.yaml
-  - ingress-nginx.yaml
   - openebs.yaml
   - nfs-ganesha.yaml
   - cnpg.yaml
