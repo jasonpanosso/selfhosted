@@ -6,19 +6,40 @@ metadata:
   namespace: auth
 spec:
   instances: 3
+  managed:
+    roles:
+      - name: authelia
+        ensure: present
+        passwordSecret:
+          name: authelia-db
+        login: true
+      - name: lldap
+        ensure: present
+        login: true
+        passwordSecret:
+          name: lldap-db
   storage:
     size: 1Gi
     storageClass: openebs-hostpath
   monitoring:
     enablePodMonitor: true
-  bootstrap:
-    initdb:
-      postInitSQLRefs:
-        secretRefs:
-          - name: pg-init
-            key: secret.sql
-      postInitApplicationSQL:
-        - CREATE DATABASE lldap OWNER lldap;
-        - CREATE DATABASE authelia OWNER authelia;
-        - GRANT ALL PRIVILEGES ON DATABASE lldap TO lldap;
-        - GRANT ALL PRIVILEGES ON DATABASE authelia TO authelia;
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
+  name: authelia
+spec:
+  name: authelia
+  owner: authelia
+  cluster:
+    name: pgcluster
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
+  name: lldap
+spec:
+  name: lldap
+  owner: lldap
+  cluster:
+    name: pgcluster

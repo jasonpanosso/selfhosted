@@ -5,22 +5,86 @@ metadata:
   name: pgcluster
   namespace: servarr
 spec:
+  managed:
+    roles:
+      - name: radarr
+        ensure: present
+        passwordSecret:
+          name: radarr-db
+        login: true
+      - name: sonarr
+        ensure: present
+        login: true
+        passwordSecret:
+          name: sonarr-db
+      - name: prowlarr
+        ensure: present
+        login: true
+        passwordSecret:
+          name: prowlarr-db
+      - name: jellyseerr
+        ensure: present
+        login: true
+        passwordSecret:
+          name: jellyseerr-db
+      - name: jellyfin
+        ensure: present
+        login: true
+        passwordSecret:
+          name: jellyfin-db
   instances: 3
   storage:
     size: 10Gi
     storageClass: openebs-hostpath
   monitoring:
     enablePodMonitor: true
-  bootstrap:
-    initdb:
-      postInitSQLRefs:
-        secretRefs:
-          - name: pg-init
-            key: secret.sql
-      postInitApplicationSQL:
-        - CREATE DATABASE radarr OWNER radarr;
-        - CREATE DATABASE sonarr OWNER sonarr;
-        - CREATE DATABASE prowlarr OWNER prowlarr;
-        - GRANT ALL PRIVILEGES ON DATABASE radarr TO radarr;
-        - GRANT ALL PRIVILEGES ON DATABASE sonarr TO sonarr;
-        - GRANT ALL PRIVILEGES ON DATABASE prowlarr TO prowlarr;
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
+  name: radarr
+spec:
+  name: radarr
+  owner: radarr
+  cluster:
+    name: pgcluster
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
+  name: sonarr
+spec:
+  name: sonarr
+  owner: sonarr
+  cluster:
+    name: pgcluster
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
+  name: prowlarr
+spec:
+  name: prowlarr
+  owner: prowlarr
+  cluster:
+    name: pgcluster
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
+  name: jellyseerr
+spec:
+  name: jellyseerr
+  owner: jellyseerr
+  cluster:
+    name: pgcluster
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
+  name: jellyfin
+spec:
+  name: jellyfin
+  owner: jellyfin
+  cluster:
+    name: pgcluster
