@@ -1,10 +1,13 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
+
 resources:
   - flux-instance.yaml
+  - metallb.yaml
   - ../base
+
 secretGenerator:
   - name: cloudflare-api-token
     namespace: cert-manager
     files:
-      - apiToken=cloudflare_token.enc
+      - apiToken=cloudflare_token.encrypted
