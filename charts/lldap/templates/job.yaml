@@ -106,25 +106,25 @@ spec:
         {{- if .Values.bootstrap.users.configs.enabled }}
         - name: {{ .Values.bootstrap.users.configs.volumeName }}
           secret:
-            name: {{ .Values.bootstrap.users.configs.secretName }}
+            secretName: {{ .Values.bootstrap.users.configs.secretName }}
         {{- end }}
 
         {{- if .Values.bootstrap.users.schemas.enabled }}
         - name: {{ .Values.bootstrap.users.schemas.volumeName }}
           secret:
-            name: {{ .Values.bootstrap.users.schemas.secretName }}
+            secretName: {{ .Values.bootstrap.users.schemas.secretName }}
         {{- end }}
 
         {{- if .Values.bootstrap.groups.configs.enabled }}
         - name: {{ .Values.bootstrap.groups.configs.volumeName }}
           secret:
-            name: {{ .Values.bootstrap.groups.configs.secretName }}
+            secretName: {{ .Values.bootstrap.groups.configs.secretName }}
         {{- end }}
 
         {{- if .Values.bootstrap.groups.schemas.enabled }}
         - name: {{ .Values.bootstrap.groups.schemas.volumeName }}
           secret:
-            name: {{ .Values.bootstrap.groups.schemas.secretName }}
+            secretName: {{ .Values.bootstrap.groups.schemas.secretName }}
         {{- end }}
 
       {{- with .Values.bootstrap.volumes }}

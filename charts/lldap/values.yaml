@@ -20,7 +20,7 @@ bootstrap:
       enabled: false
       path: "/bootstrap/group-configs"
       volumeName: "group-configs"
-      secretName: "test"
+      secretName: ""
     schemas:
       enabled: false
       path: "/bootstrap/group-schemas"
