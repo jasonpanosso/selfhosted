@@ -4,7 +4,6 @@
 
 bootstrap:
   enabled: true
-  image: "debian:bookworm-slim"
   doCleanup: true
   admin:
     username:

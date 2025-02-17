@@ -8,10 +8,10 @@ spec:
   chart:
     spec:
       chart: lldap
-      version: "0.0.2"
+      version: "0.0.3"
       sourceRef:
         kind: HelmRepository
-        name: lldap
+        name: local-charts
         namespace: flux-system
       interval: 12h
   driftDetection:

@@ -1,8 +1,22 @@
 {{- if .Values.bootstrap.enabled }}
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: {{ include "lldap.fullname" . }}-bootstrap
+  annotations:
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-weight": "-6"
+    "helm.sh/hook-delete-policy": hook-succeeded
+  labels:
+    {{- include "lldap.labels" . | nindent 4 }}
+data:
+  bootstrap.sh: |
+{{ .Files.Get "files/bootstrap.sh" | indent 4 }}
+---
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: {{ include "lldap.fullname" . }}
+  name: {{ include "lldap.fullname" . }}-bootstrap
   labels:
     {{- include "lldap.labels" . | nindent 4 }}
   annotations:
@@ -19,21 +33,16 @@ spec:
       restartPolicy: OnFailure
       containers:
       - name: bootstrap
-        image: {{ .Values.bootstrap.image }}
-        command: ["sh",  "-c"]
-        args:
-          - |
-            $(cat <<'EOF'
-            {{ .Files.Get "files/bootstrap.sh" | indent 12 }}
-            EOF
-            )
+        image: "{{ .Values.image.repository }}:v{{ .Values.image.tag | default .Chart.AppVersion }}"
+        command:
+          - /bootstrap/bootstrap.sh
         {{- with .Values.bootstrap.envFrom }}
         envFrom:
           {{- toYaml . | nindent 10 }}
         {{- end }}
         env:
           - name: LLDAP_URL
-            value: {{ include "lldap.fullname" . }}
+            value: "http://{{ include "lldap.fullname" . }}:{{ .Values.service.webui.port }}"
           - name: DO_CLEANUP
             value: {{ .Values.bootstrap.doCleanup | quote }}
 
@@ -102,7 +111,20 @@ spec:
           {{- with .Values.bootstrap.volumeMounts }}
             {{- toYaml . | nindent 10 }}
           {{- end }}
+
+          - name: bootstrap
+            mountPath: /bootstrap/bootstrap.sh
+            subPath: bootstrap.sh
+            readOnly: true
       volumes:
+        - name: bootstrap
+          configMap:
+            name: "{{ include "lldap.fullname" . }}-bootstrap"
+            defaultMode: 0555
+            items:
+              - key: bootstrap.sh
+                path: bootstrap.sh
+
         {{- if .Values.bootstrap.users.configs.enabled }}
         - name: {{ .Values.bootstrap.users.configs.volumeName }}
           secret:
