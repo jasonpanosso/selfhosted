@@ -14,6 +14,8 @@ spec:
         name: cnpg
         namespace: cnpg-system
       interval: 12h
+  test:
+    enable: true
   values:
     fullNameOverride: pgcluster
     mode: standalone

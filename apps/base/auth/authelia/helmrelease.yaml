@@ -25,6 +25,8 @@ spec:
     - name: redis
     - name: lldap
     - name: pgcluster
+  driftDetection:
+    mode: enabled
   values:
     secret:
       disabled: true
