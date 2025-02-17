@@ -2,8 +2,79 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
+bootstrap:
+  enabled: true
+  image: "debian:bookworm-slim"
+  doCleanup: true
+  admin:
+    username:
+      secret:
+        name: ""
+        key: "username"
+    password:
+      secret:
+        name: ""
+        key: "password"
+  groups:
+    configs:
+      enabled: false
+      path: "/bootstrap/group-configs"
+      volumeName: "group-configs"
+      secretName: "test"
+    schemas:
+      enabled: false
+      path: "/bootstrap/group-schemas"
+      volumeName: "group-schemas"
+      secretName: ""
+  users:
+    configs:
+      enabled: false
+      path: "/bootstrap/user-configs"
+      volumeName: "user-configs"
+      secretName: ""
+    schemas:
+      enabled: false
+      path: "/bootstrap/user-schemas"
+      volumeName: "user-schemas"
+      secretName: ""
+  env: []
+  envFrom: []
+  volumes: []
+  volumeMounts: []
+
 lldap:
-  basedn: "dc=needless,dc=info"
+  basedn: ""
+  keySeed:
+    secret:
+      name: ""
+      key: ""
+  jwt:
+    secret:
+      name: ""
+      key: ""
+  admin:
+    password:
+      secret:
+        name: ""
+        key: "password"
+  httpURL: ""
+  smtp:
+    enablePasswordReset: false
+    server:
+      address: ""
+      port: 587
+    encryption: ""
+    from: ""
+    to: ""
+    user:
+      secret:
+        name: ""
+        usernameKey: "username"
+        passwordKey: "password"
+  databaseURL:
+    secret:
+      name: ""
+      key: "url"
 
 replicaCount: 1
 
@@ -36,12 +107,10 @@ envFrom: []
 initContainers: []
 
 pod:
-  ldap:
-    port: 3890
-  ldaps:
-    port: 6360
-  webui:
-    port: 17170
+  ports:
+    ldap: 3890
+    ldaps: 6360
+    webui: 17170
 
 podSecurityContext:
   {}

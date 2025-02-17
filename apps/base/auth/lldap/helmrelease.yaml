@@ -8,18 +8,68 @@ spec:
   chart:
     spec:
       chart: lldap
-      version: "0.0.1"
+      version: "0.0.2"
       sourceRef:
         kind: HelmRepository
         name: lldap
         namespace: flux-system
       interval: 12h
+  driftDetection:
+    mode: enabled
+  test:
+    enable: true
   dependsOn:
     - name: pgcluster
   values:
-    replicaCount: 2
+    replicaCount: 3
+    bootstrap:
+      enabled: true
+      admin:
+        password:
+          secret:
+            name: lldap
+            key: LLDAP_LDAP_USER_PASS
+      groups:
+        configs:
+          enabled: true
+          secretName: lldap-group-configs
+      users:
+        configs:
+          enabled: true
+          secretName: lldap-user-configs
+      env:
+        - name: LLDAP_ADMIN_USERNAME
+          value: admin
+
     lldap:
-      basedn: "dc=needless,dc=info"
+      basedn: dc=needless,dc=info
+      keySeed:
+        secret:
+          name: lldap
+          key: LLDAP_KEY_SEED
+      jwt:
+        secret:
+          name: lldap
+          key: LLDAP_JWT_SECRET
+      admin:
+        password:
+          secret:
+            name: lldap
+            key: LLDAP_LDAP_USER_PASS
+      httpURL: "https://account.needless.info"
+      smtp:
+        enablePasswordReset: true
+        server:
+          address: email-smtp.us-east-1.amazonaws.com
+          port: 587
+        encryption: STARTTLS
+        from: "no-reply <no-reply@needless.info>"
+        to: "admin <admin@needless.info>"
+        user:
+          secret:
+            name: smtp
+            usernameKey: username
+            passwordKey: password
     resources:
       requests:
         cpu: 50m
@@ -34,44 +84,17 @@ spec:
       ldaps:
         enabled: false
     pod:
-      ldap:
-        port: 3890
-
-    envFrom:
-      - secretRef:
-          name: lldap
+      ports:
+        ldap: 3890
+        webui: 17170
 
     env:
       - name: TZ
         value: "Etc/UTC"
-      - name: LLDAP_HTTP_URL
-        value: "https://account.needless.info"
-      - name: LLDAP_SMTP_OPTIONS__SMTP_ENCRYPTION
-        value: STARTTLS
-      - name: LLDAP_SMTP_OPTIONS__FROM
-        value: "no-reply <no-reply@needless.info>"
-      - name: LLDAP_SMTP_OPTIONS__TO
-        value: "admin <admin@needless.info>"
-      - name: LLDAP_SMTP_OPTIONS__SERVER
-        value: "email-smtp.us-east-1.amazonaws.com"
-      - name: LLDAP_SMTP_OPTIONS__PORT
-        value: "587"
-      - name: LLDAP_SMTP_OPTIONS__ENABLE_PASSWORD_RESET
-        value: "true"
-      - name: LLDAP_SMTP_OPTIONS__USER
-        valueFrom:
-          secretKeyRef:
-            name: smtp
-            key: username
       - name: PG_DATABASE_PASSWORD
         valueFrom:
           secretKeyRef:
             name: lldap-db
-            key: password
-      - name: LLDAP_SMTP_OPTIONS__PASSWORD
-        valueFrom:
-          secretKeyRef:
-            name: smtp
             key: password
       - name: LLDAP_DATABASE_URL
         value: |

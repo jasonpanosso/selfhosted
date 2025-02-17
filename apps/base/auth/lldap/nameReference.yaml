@@ -4,6 +4,18 @@ nameReference:
       - kind: HelmRelease
         path: spec/values/env/valueFrom/secretKeyRef/name
       - kind: HelmRelease
-        path: spec/values/envFrom/secretRef/name
-      - kind: HelmRelease
         path: spec/values/initContainers/env/valueFrom/secretKeyRef/name
+      - kind: HelmRelease
+        path: spec/values/lldap/keySeed/secret/name
+      - kind: HelmRelease
+        path: spec/values/lldap/jwt/secret/name
+      - kind: HelmRelease
+        path: spec/values/lldap/admin/password/secret/name
+      - kind: HelmRelease
+        path: spec/values/lldap/smtp/user/secret/name
+      - kind: HelmRelease
+        path: spec/values/bootstrap/admin/password/secret/name
+      - kind: HelmRelease
+        path: spec/values/bootstrap/groups/configs/secretName
+      - kind: HelmRelease
+        path: spec/values/bootstrap/users/configs/secretName
