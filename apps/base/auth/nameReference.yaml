@@ -2,8 +2,8 @@ nameReference:
   # pgcluster secrets
   - kind: Secret
     fieldSpecs:
-      - kind: Cluster
-        path: spec/managed/roles/passwordSecret/name
+      - kind: HelmRelease
+        path: spec/values/cluster/roles/passwordSecret/name
   # authelia deployment secrets
   - kind: Secret
     fieldSpecs:

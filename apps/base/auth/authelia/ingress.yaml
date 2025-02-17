@@ -12,7 +12,7 @@ spec:
       services:
         - kind: Service
           name: authelia
-          port: 9091
+          port: 80
           sticky:
             cookie:
               httpOnly: true

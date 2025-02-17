@@ -3,15 +3,8 @@ kind: Kustomization
 namespace: auth
 
 resources:
-  - configmap.yaml
-  - deployment.yaml
-  - service.yaml
+  - helmrelease.yaml
   - ingress.yaml
-
-configMapGenerator:
-  - name: authelia-config
-    files:
-      - configuration.yaml=authelia-config.yaml
 
 configurations:
   - nameReference.yaml

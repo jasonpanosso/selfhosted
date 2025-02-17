@@ -1,3 +1,4 @@
+{{- if .Values.service.enabled }}
 apiVersion: v1
 kind: Service
 metadata:
@@ -8,16 +9,17 @@ spec:
   type: {{ .Values.service.type }}
   ports:
     - port: {{ .Values.service.ldap.port }}
-      targetPort: {{ .Values.service.ldap.port }}
+      targetPort: {{ .Values.pod.ldap.port }}
       protocol: TCP
       name: ldap
     - port: {{ .Values.service.ldaps.port }}
-      targetPort: {{ .Values.service.ldaps.port }}
+      targetPort: {{ .Values.pod.ldaps.port }}
       protocol: TCP
       name: ldaps
     - port: {{ .Values.service.webui.port }}
-      targetPort: {{ .Values.service.webui.port }}
+      targetPort: {{ .Values.pod.webui.port }}
       protocol: TCP
       name: webui
   selector:
     {{- include "lldap.selectorLabels" . | nindent 4 }}
+{{- end }}

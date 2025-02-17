@@ -1,0 +1,99 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: lldap
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: lldap
+      version: "0.0.1"
+      sourceRef:
+        kind: HelmRepository
+        name: lldap
+        namespace: flux-system
+      interval: 12h
+  dependsOn:
+    - name: pgcluster
+  values:
+    replicaCount: 2
+    lldap:
+      basedn: "dc=needless,dc=info"
+    resources:
+      requests:
+        cpu: 50m
+        memory: 256Mi
+      limits:
+        cpu: 250m
+        memory: 512Mi
+
+    service:
+      ldap:
+        port: 389
+      ldaps:
+        enabled: false
+    pod:
+      ldap:
+        port: 3890
+
+    envFrom:
+      - secretRef:
+          name: lldap
+
+    env:
+      - name: TZ
+        value: "Etc/UTC"
+      - name: LLDAP_HTTP_URL
+        value: "https://account.needless.info"
+      - name: LLDAP_SMTP_OPTIONS__SMTP_ENCRYPTION
+        value: STARTTLS
+      - name: LLDAP_SMTP_OPTIONS__FROM
+        value: "no-reply <no-reply@needless.info>"
+      - name: LLDAP_SMTP_OPTIONS__TO
+        value: "admin <admin@needless.info>"
+      - name: LLDAP_SMTP_OPTIONS__SERVER
+        value: "email-smtp.us-east-1.amazonaws.com"
+      - name: LLDAP_SMTP_OPTIONS__PORT
+        value: "587"
+      - name: LLDAP_SMTP_OPTIONS__ENABLE_PASSWORD_RESET
+        value: "true"
+      - name: LLDAP_SMTP_OPTIONS__USER
+        valueFrom:
+          secretKeyRef:
+            name: smtp
+            key: username
+      - name: PG_DATABASE_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: lldap-db
+            key: password
+      - name: LLDAP_SMTP_OPTIONS__PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: smtp
+            key: password
+      - name: LLDAP_DATABASE_URL
+        value: |
+          postgres://lldap:$(PG_DATABASE_PASSWORD)@pgcluster-rw.auth.svc.cluster.local/lldap
+
+    initContainers:
+      - name: wait-for-cnpg
+        image: postgres:17
+        command:
+          - sh
+          - -c
+          - |
+            echo "Waiting for pgcluster to be ready..."
+            until pg_isready -h pgcluster-rw.auth.svc.cluster.local -p 5432 -d lldap -U lldap; do
+              sleep 2
+            done
+            echo "pgcluster ready"
+        env:
+          - name: PGPASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: lldap-db
+                key: password
+        securityContext:
+          allowPrivilegeEscalation: false

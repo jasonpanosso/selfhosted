@@ -3,3 +3,9 @@ nameReference:
     fieldSpecs:
       - kind: Deployment
         path: spec/template/spec/volumes/configMap/name
+  - kind: Secret
+    fieldSpecs:
+      - kind: HelmRelease
+        path: spec/values/pod/extraVolumes/projected/sources/secret/name
+      - kind: HelmRelease
+        path: spec/values/pod/initContainers/env/valueFrom/secretKeyRef/name

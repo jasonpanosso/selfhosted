@@ -35,6 +35,14 @@ env: []
 envFrom: []
 initContainers: []
 
+pod:
+  ldap:
+    port: 3890
+  ldaps:
+    port: 6360
+  webui:
+    port: 17170
+
 podSecurityContext:
   {}
   # fsGroup: 2000
@@ -49,6 +57,7 @@ securityContext:
   # runAsUser: 1000
 
 service:
+  enabled: true
   type: ClusterIP
   ldap:
     enable: true

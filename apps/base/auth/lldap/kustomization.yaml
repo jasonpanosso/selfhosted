@@ -3,7 +3,8 @@ kind: Kustomization
 namespace: auth
 
 resources:
-  - configmap.yaml
-  - deployment.yaml
-  - service.yaml
+  - helmrelease.yaml
   - ingress.yaml
+
+configurations:
+  - nameReference.yaml

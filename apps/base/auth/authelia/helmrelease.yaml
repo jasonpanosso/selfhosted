@@ -1,0 +1,240 @@
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
+metadata:
+  name: authelia
+spec:
+  interval: 24h
+  url: https://charts.authelia.com
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: authelia
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: authelia
+      version: "0.9.16"
+      sourceRef:
+        kind: HelmRepository
+        name: authelia
+      interval: 12h
+  dependsOn:
+    - name: redis
+    - name: lldap
+    - name: pgcluster
+  values:
+    secret:
+      disabled: true
+    configMap:
+      enabled: true
+
+      theme: dark
+      access_control:
+        default_policy: deny
+        networks:
+          - name: internal
+            networks:
+              - 10.0.0.0/8
+              - 10.244.0.0/16
+              - 192.168.1.0/24
+              - 192.168.121.0/24
+        rules:
+          # *arr has no support for custom auth, have to bypass for api routes
+          # /api routes are protected by API tokens
+          - domain:
+              - prowlarr.needless.info
+              - radarr.needless.info
+              - sonarr.needless.info
+            resources:
+              - "^/api.*$"
+            policy: bypass
+          - domain: "*.needless.info"
+            policy: one_factor
+
+      session:
+        name: authelia
+        same_site: lax
+        expiration: 1h
+        inactivity: 5m
+        remember_me: 1M
+        cookies:
+          - domain: "needless.info"
+            authelia_url: "https://auth.needless.info"
+        redis:
+          enabled: true
+          high_availability:
+            enabled: true
+            sentinel_name: mysentinel
+            nodes:
+              - host: redis-node-0.redis-headless.auth.svc.cluster.local
+                port: 26379
+              - host: redis-node-1.redis-headless.auth.svc.cluster.local
+                port: 26379
+              - host: redis-node-2.redis-headless.auth.svc.cluster.local
+                port: 26379
+            password:
+              disabled: true
+          password:
+            disabled: true
+
+      storage:
+        encryption_key:
+          disabled: true
+        postgres:
+          enabled: true
+          address: "tcp://pgcluster-rw:5432"
+          database: "authelia"
+          username: "authelia"
+          ssl:
+            mode: disable
+          password:
+            disabled: true
+
+      notifier:
+        disable_startup_check: true
+        smtp:
+          enabled: true
+          address: "submission://email-smtp.us-east-1.amazonaws.com:587"
+          username: '{{secret "/config/secrets/SMTP_USERNAME"}}'
+          identifier: "needless.info"
+          sender: "Authelia <no-reply@needless.info>"
+          password:
+            disable: true
+
+      authentication_backend:
+        password_reset:
+          disable: false
+        ldap:
+          enabled: true
+          implementation: lldap
+          address: ldap://lldap.auth.svc.cluster.local
+          base_dn: dc=needless,dc=info
+          additional_users_dn: ou=people
+          additional_groups_dn: ou=groups
+          user: cn=admin,ou=people,dc=needless,dc=info
+          users_filter: (&(|({username_attribute}={input})({mail_attribute}={input}))(objectClass=person))
+          groups_filter: (member={dn})
+          password:
+            disabled: true
+          attributes:
+            display_name: displayName
+            username: uid
+            group_name: cn
+            mail: mail
+
+      identity_providers:
+        oidc:
+          enabled: true
+          jwks:
+            - algorithm: "RS256"
+              key:
+                path: /config/secrets/OIDC_JWKS_PRIVATE_KEY
+          clients:
+            - client_id: "test"
+              client_secret:
+                path: /config/secrets/OIDC_TEST_SECRET
+          lifespans:
+            access_token: 1h
+            authorize_code: 1m
+            id_token: 1h
+          enable_client_debug_messages: false
+          enforce_pkce: public_clients_only
+          cors:
+            endpoints:
+              - authorization
+              - token
+              - revocation
+              - introspection
+              - userinfo
+            allowed_origins:
+              - "*"
+    pod:
+      initContainers:
+        - name: wait-for-cnpg
+          image: postgres:17
+          command:
+            - sh
+            - -c
+            - |
+              echo "Waiting for pgcluster to be ready..."
+              until pg_isready -h pgcluster-rw.auth.svc.cluster.local -p 5432 -d authelia -U authelia; do
+                sleep 2
+              done
+              echo "pgcluster ready"
+          env:
+            - name: PGPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: authelia-db
+                  key: password
+          securityContext:
+            allowPrivilegeEscalation: false
+      env:
+        - name: TZ
+          value: "ETC/Utc"
+        - name: AUTHELIA_IDENTITY_VALIDATION_RESET_PASSWORD_JWT_SECRET_FILE
+          value: /config/secrets/JWT_TOKEN
+        - name: AUTHELIA_SESSION_SECRET_FILE
+          value: /config/secrets/SESSION_KEY
+        - name: AUTHELIA_SESSION_REDIS_PASSWORD_FILE
+          value: /config/secrets/REDIS_PASSWORD
+        - name: AUTHELIA_SESSION_REDIS_HIGH_AVAILABILITY_SENTINEL_PASSWORD_FILE
+          value: /config/secrets/REDIS_PASSWORD
+        - name: AUTHELIA_AUTHENTICATION_BACKEND_LDAP_PASSWORD_FILE
+          value: /config/secrets/LDAP_PASSWORD
+        - name: AUTHELIA_STORAGE_ENCRYPTION_KEY_FILE
+          value: /config/secrets/ENCRYPTION_KEY
+        - name: AUTHELIA_STORAGE_POSTGRES_PASSWORD_FILE
+          value: /config/secrets/POSTGRES_PASSWORD
+        - name: AUTHELIA_IDENTITY_PROVIDERS_OIDC_HMAC_SECRET_FILE
+          value: /config/secrets/OIDC_HMAC_SECRET
+        - name: AUTHELIA_NOTIFIER_SMTP_PASSWORD
+          value: /config/secrets/SMTP_PASSWORD
+      extraVolumeMounts:
+        - name: secret
+          readOnly: true
+          mountPath: /config/secrets
+      extraVolumes:
+        - name: secret
+          projected:
+            sources:
+              - secret:
+                  name: authelia
+                  items:
+                    - key: JWT_TOKEN
+                      path: JWT_TOKEN
+                    - key: SESSION_KEY
+                      path: SESSION_KEY
+                    - key: ENCRYPTION_KEY
+                      path: ENCRYPTION_KEY
+                    - key: OIDC_HMAC_SECRET
+                      path: OIDC_HMAC_SECRET
+                    - key: OIDC_JWKS_PRIVATE_KEY
+                      path: OIDC_JWKS_PRIVATE_KEY
+                    - key: OIDC_TEST_SECRET
+                      path: OIDC_TEST_SECRET
+              - secret:
+                  name: lldap
+                  items:
+                    - key: LLDAP_LDAP_USER_PASS
+                      path: LDAP_PASSWORD
+              - secret:
+                  name: redis
+                  items:
+                    - key: password
+                      path: REDIS_PASSWORD
+              - secret:
+                  name: authelia-db
+                  items:
+                    - key: password
+                      path: POSTGRES_PASSWORD
+              - secret:
+                  name: smtp
+                  items:
+                    - key: username
+                      path: SMTP_USERNAME
+                    - key: password
+                      path: SMTP_PASSWORD

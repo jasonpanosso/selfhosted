@@ -56,13 +56,13 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: ldap
-              containerPort: {{ .Values.service.ldap.port }}
+              containerPort: {{ .Values.pod.ldap.port }}
               protocol: TCP
             - name: ldaps
-              containerPort: {{ .Values.service.ldaps.port }}
+              containerPort: {{ .Values.pod.ldaps.port }}
               protocol: TCP
             - name: webui
-              containerPort: {{ .Values.service.webui.port }}
+              containerPort: {{ .Values.pod.webui.port }}
               protocol: TCP
           livenessProbe:
             httpGet:
