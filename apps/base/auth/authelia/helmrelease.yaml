@@ -69,7 +69,7 @@ spec:
           enabled: true
           high_availability:
             enabled: true
-            sentinel_name: mysentinel
+            sentinel_name: mymaster
             nodes:
               - host: redis-node-0.redis-headless.auth.svc.cluster.local
                 port: 26379

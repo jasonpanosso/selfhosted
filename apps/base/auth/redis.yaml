@@ -31,7 +31,12 @@ spec:
     architecture: replication
     sentinel:
       enabled: true
-      masterSet: mysentinel
+      masterSet: mymaster
+      downAfterMilliseconds: 10000
+      failoverTimeout: 5000
+      livenessProbe:
+        enabled: true
+        initialDelaySeconds: 120
     auth:
       enabled: true
       enableReplicaAuth: true
