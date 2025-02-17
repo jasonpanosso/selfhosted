@@ -35,7 +35,7 @@ spec:
           - name: LLDAP_URL
             value: {{ include "lldap.fullname" . }}
           - name: DO_CLEANUP
-            value: {{ .Values.bootstrap.doCleanup }}
+            value: {{ .Values.bootstrap.doCleanup | quote }}
 
           {{- if and .Values.bootstrap.admin.username.secret.name .Values.bootstrap.admin.username.secret.key }}
           - name: LLDAP_ADMIN_USERNAME

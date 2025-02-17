@@ -58,7 +58,7 @@ spec:
             key: LLDAP_LDAP_USER_PASS
       httpURL: "https://account.needless.info"
       smtp:
-        enablePasswordReset: true
+        enablePasswordReset: "true"
         server:
           address: email-smtp.us-east-1.amazonaws.com
           port: 587
