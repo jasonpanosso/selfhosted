@@ -1,0 +1,10 @@
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
+metadata:
+  name: lldap
+  namespace: flux-system
+spec:
+  interval: 5m
+  type: oci
+  url: oci://ghcr.io/jasonpanosso/lldap

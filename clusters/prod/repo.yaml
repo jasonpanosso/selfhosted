@@ -1,0 +1,25 @@
+---
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: GitRepository
+metadata:
+  name: flux-system
+  namespace: flux-system
+spec:
+  interval: 5m
+  url: https://github.com/jasonpanosso/selfhosted
+  ref:
+    branch: main
+  ignore:
+    - terraform/
+    - talos/
+    - charts/
+    - "**/local/**"
+    - .github
+    - terraform
+    - terraform
+    - .sops.yaml
+    - Vagrantfile
+    - docker-compose.yaml
+    - flake.lock
+    - flake.nix
+    - justfile
