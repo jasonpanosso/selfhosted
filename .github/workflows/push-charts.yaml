@@ -12,7 +12,7 @@ env:
   OCI_REPO: "oci://ghcr.io/jasonpanosso/manifests/${{ github.event.repository.name }}"
 
 jobs:
-  kubernetes:
+  push-helm-charts:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
