@@ -41,6 +41,7 @@ spec:
   timeout: 5m
   path: ./config/local
   prune: true
+  wait: true
   decryption:
     provider: sops
     secretRef:

@@ -31,6 +31,7 @@ spec:
     name: flux-system
   path: ./infra/config/prod
   prune: true
+  wait: true
   patches:
     - patch: |
         - op: replace
