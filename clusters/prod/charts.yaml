@@ -2,9 +2,9 @@
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: HelmRepository
 metadata:
-  name: lldap
+  name: local-charts
   namespace: flux-system
 spec:
   interval: 5m
   type: oci
-  url: oci://ghcr.io/jasonpanosso/lldap
+  url: oci://ghcr.io/jasonpanosso/manifests/selfhosted
