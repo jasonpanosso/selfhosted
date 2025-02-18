@@ -15,8 +15,6 @@ spec:
     - charts/
     - "**/local/**"
     - .github
-    - terraform
-    - terraform
     - .sops.yaml
     - Vagrantfile
     - docker-compose.yaml
