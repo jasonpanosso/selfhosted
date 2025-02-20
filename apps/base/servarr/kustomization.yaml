@@ -21,18 +21,6 @@ patches:
   - target:
       kind: Deployment
       name: sonarr
-    path: patch-wait-for-cnpg.yaml
-  - target:
-      kind: Deployment
-      name: radarr
-    path: patch-wait-for-cnpg.yaml
-  - target:
-      kind: Deployment
-      name: prowlarr
-    path: patch-wait-for-cnpg.yaml
-  - target:
-      kind: Deployment
-      name: sonarr
     path: patch-boolean-values.yaml
   - target:
       kind: Deployment
