@@ -40,6 +40,19 @@ spec:
       policyExceptions:
         enabled: true
         namespace: "*"
+    cleanupController:
+      rbac:
+        clusterRole:
+          extraResources:
+            - apiGroups:
+                - apps
+              resources:
+                - replicasets
+              verbs:
+                - get
+                - list
+                - watch
+                - delete
   dependsOn:
     - name: kube-prometheus-stack
       namespace: monitoring
