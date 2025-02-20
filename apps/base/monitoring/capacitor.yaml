@@ -11,10 +11,6 @@ spec:
     - match: Host(`flux.needless.info`)
       kind: Rule
       middlewares:
-        - name: geoblock
-          namespace: traefik
-        - name: fail2ban
-          namespace: traefik
         - name: forward-auth
           namespace: traefik
       services:
