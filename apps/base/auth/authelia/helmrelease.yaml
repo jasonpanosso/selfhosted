@@ -32,8 +32,12 @@ spec:
       disabled: true
     configMap:
       enabled: true
-
       theme: dark
+
+      server:
+        endpoints:
+          automatic_authz_implementations: ["ForwardAuth"]
+
       access_control:
         default_policy: deny
         networks:
@@ -63,8 +67,9 @@ spec:
         inactivity: 5m
         remember_me: 1M
         cookies:
-          - domain: "needless.info"
-            authelia_url: "https://auth.needless.info"
+          - domain: needless.info
+            subdomain: auth
+            default_redirection_url: https://www.needless.info
         redis:
           enabled: true
           high_availability:
