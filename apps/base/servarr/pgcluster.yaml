@@ -1,43 +1,61 @@
 ---
-apiVersion: postgresql.cnpg.io/v1
-kind: Cluster
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
 metadata:
   name: pgcluster
-  namespace: servarr
 spec:
-  managed:
-    roles:
-      - name: radarr
-        ensure: present
-        passwordSecret:
-          name: radarr-db
-        login: true
-      - name: sonarr
-        ensure: present
-        login: true
-        passwordSecret:
-          name: sonarr-db
-      - name: prowlarr
-        ensure: present
-        login: true
-        passwordSecret:
-          name: prowlarr-db
-      - name: jellyseerr
-        ensure: present
-        login: true
-        passwordSecret:
-          name: jellyseerr-db
-      - name: jellyfin
-        ensure: present
-        login: true
-        passwordSecret:
-          name: jellyfin-db
-  instances: 3
-  storage:
-    size: 10Gi
-    storageClass: openebs-hostpath
-  monitoring:
-    enablePodMonitor: true
+  interval: 30m
+  chart:
+    spec:
+      chart: cluster
+      version: "0.2.1"
+      sourceRef:
+        kind: HelmRepository
+        name: cnpg
+        namespace: cnpg-system
+      interval: 12h
+  test:
+    enable: true
+  values:
+    fullNameOverride: pgcluster
+    mode: standalone
+    backups:
+      enabled: false
+    cluster:
+      instances: 3
+      storage:
+        size: 10Gi
+        storageClass: openebs-hostpath
+      roles:
+        - name: radarr
+          ensure: present
+          passwordSecret:
+            name: radarr-db
+          login: true
+        - name: sonarr
+          ensure: present
+          login: true
+          passwordSecret:
+            name: sonarr-db
+        - name: prowlarr
+          ensure: present
+          login: true
+          passwordSecret:
+            name: prowlarr-db
+        - name: jellyfin
+          ensure: present
+          login: true
+          passwordSecret:
+            name: jellyfin-db
+        - name: jellyseerr
+          ensure: present
+          login: true
+          passwordSecret:
+            name: jellyseerr-db
+      monitoring:
+        enabled: true
+        podMonitor:
+          enabled: true
 ---
 apiVersion: postgresql.cnpg.io/v1
 kind: Database
