@@ -11,6 +11,32 @@ spec:
       template:
         spec:
           initContainers:
+            - name: wait-for-services
+              image: curlimages/curl:8.1.2
+              command: ["/bin/sh", "-c"]
+              args:
+                - |
+                  set -e
+                  for svc in prowlarr radarr sonarr; do
+                    echo "Waiting for ${svc} to be online..."
+                    until curl -sf "http://${svc}/ping"; do
+                      echo "Service ${svc} not ready yet. Retrying in 5 seconds..."
+                      sleep 5
+                    done
+                    echo "${svc} ready!"
+                  done
+
+                  until curl -sf "http://qbittorrent"; do
+                    echo "Service qbittorrent not ready yet. Retrying in 5 seconds..."
+                    sleep 5
+                  done
+              securityContext:
+                allowPrivilegeEscalation: false
+                capabilities:
+                  drop: [ALL]
+                seccompProfile:
+                  type: RuntimeDefault
+
             - name: buildarr-envsubst
               image: alpine:latest
               command:
