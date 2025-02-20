@@ -10,8 +10,8 @@ kubeconfig
 
 controlplane*.yaml
 worker*.yaml
-!controlplane*.enc.yaml
-!worker*.enc.yaml
+!controlplane*.encrypted.yaml
+!worker*.encrypted.yaml
 age.agekey
 .vagrant
 .envrc
