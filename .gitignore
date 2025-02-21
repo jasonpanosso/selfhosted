@@ -7,12 +7,22 @@
 .terraform.tfstate.lock.info
 talosconfig
 kubeconfig
-
-controlplane*.yaml
-worker*.yaml
-!controlplane*.encrypted.yaml
-!worker*.encrypted.yaml
 age.agekey
 .vagrant
 .envrc
 .ansible
+
+# all secrets
+**/secrets/**
+talos/**
+# allow traversal of secrets dirs
+!**/secrets/**/
+!talos/**/
+# allow sops files in secrets dirs
+!**/secrets/*.sops*
+!**/secrets/**/*.sops*
+!talos/*.sops*
+!talos/**/*.sops*
+# allow kustomization.yaml in secrets dirs
+!talos/kustomization.yaml
+!talos/**/kustomization.yaml
