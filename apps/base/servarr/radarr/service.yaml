@@ -5,6 +5,10 @@ metadata:
   name: radarr
 spec:
   ports:
-    - port: 7878
+    - name: http
+      port: 80
+      targetPort: http
+    - name: radarr
+      port: 7878
   selector:
     app: radarr

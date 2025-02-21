@@ -5,6 +5,10 @@ metadata:
   name: sonarr
 spec:
   ports:
-    - port: 8989
+    - name: http
+      port: 80
+      targetPort: http
+    - name: sonarr
+      port: 8989
   selector:
     app: sonarr
