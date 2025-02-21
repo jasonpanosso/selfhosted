@@ -9,11 +9,6 @@ configMapGenerator:
   - name: configarr
     files:
       - config.yml=files/configarr.yaml
-  - name: servarr-configuration-scripts
-    files:
-      - configure_download_clients.sh=files/configure_download_clients.sh
-      - sonarrDownloadClient.json=files/sonarrDownloadClient.json
-      - radarrDownloadClient.json=files/radarrDownloadClient.json
   - name: buildarr
     files:
       - buildarr.yaml=files/buildarr.yaml

@@ -25,11 +25,6 @@ spec:
                     done
                     echo "${svc} ready!"
                   done
-
-                  until curl -sf "http://qbittorrent"; do
-                    echo "Service qbittorrent not ready yet. Retrying in 5 seconds..."
-                    sleep 5
-                  done
               securityContext:
                 allowPrivilegeEscalation: false
                 capabilities:
@@ -129,62 +124,6 @@ spec:
                   drop: [ALL]
                 seccompProfile:
                   type: RuntimeDefault
-
-            - name: configure-radarr-download-clients
-              image: badouralix/curl-jq:alpine
-              command:
-                [
-                  "sh",
-                  "-c",
-                  '/scripts/configure_download_clients.sh "http://radarr:7878/api/v3/downloadclient" /scripts/radarrDownloadClient.json',
-                ]
-              env:
-                - name: API_KEY
-                  valueFrom:
-                    secretKeyRef:
-                      name: servarr-api-keys
-                      key: radarr
-                - name: QBITTORRENT_PASSWORD
-                  value: ""
-              envFrom:
-                - configMapRef:
-                    name: standard-env
-              volumeMounts:
-                - name: scripts
-                  mountPath: /scripts
-              securityContext:
-                allowPrivilegeEscalation: false
-                capabilities:
-                  drop: [ALL]
-                seccompProfile:
-                  type: RuntimeDefault
-
-            - name: configure-sonarr-download-clients
-              image: badouralix/curl-jq:alpine
-              command:
-                [
-                  "sh",
-                  "-c",
-                  '/scripts/configure_download_clients.sh "http://sonarr:8989/api/v3/downloadclient" /scripts/sonarrDownloadClient.json',
-                ]
-              env:
-                - name: API_KEY
-                  valueFrom:
-                    secretKeyRef:
-                      name: servarr-api-keys
-                      key: sonarr
-                - name: QBITTORRENT_PASSWORD
-                  value: ""
-              volumeMounts:
-                - name: scripts
-                  mountPath: /scripts
-              securityContext:
-                allowPrivilegeEscalation: false
-                capabilities:
-                  drop: [ALL]
-                seccompProfile:
-                  type: RuntimeDefault
-
           volumes:
             - name: cache
               emptyDir: {}
@@ -198,8 +137,4 @@ spec:
             - name: buildarr
               configMap:
                 name: buildarr
-            - name: scripts
-              configMap:
-                name: servarr-configuration-scripts
-                defaultMode: 0777
           restartPolicy: Never
