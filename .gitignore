@@ -11,6 +11,8 @@ age.agekey
 .vagrant
 .envrc
 .ansible
+worker*.yaml
+controlplane*.yaml
 
 # all secrets
 **/secrets/**
