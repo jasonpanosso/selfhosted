@@ -25,7 +25,7 @@ talosctl -n WORKER_1_IP apply-config --insecure --file talos/local/worker-1.yaml
 talosctl -n WORKER_2_IP apply-config --insecure --file talos/local/worker-2.yaml
 talosctl -n WORKER_3_IP apply-config --insecure --file talos/local/worker-3.yaml
 
-# with talos local age.agekey
+# with age.agekey
 kubectl create ns flux-system
 kubectl create secret generic sops-age --namespace=flux-system --from-file=age.agekey
 
