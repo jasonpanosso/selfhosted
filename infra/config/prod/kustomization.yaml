@@ -10,4 +10,4 @@ secretGenerator:
   - name: cloudflare-api-token
     namespace: cert-manager
     files:
-      - apiToken=cloudflare_token.encrypted
+      - apiToken=cloudflare_token.sops.txt

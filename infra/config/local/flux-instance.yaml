@@ -28,7 +28,7 @@ spec:
     kind: OCIRepository
     url: oci://192.168.121.1:5000/flux-cluster-sync
     ref: local
-    path: ./
+    path: ./kustomization.yaml
   kustomize:
     patches:
       - target:
