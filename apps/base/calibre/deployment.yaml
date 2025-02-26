@@ -1,0 +1,50 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: calibre-web-automated-book-downloader
+spec:
+  replicas: 1
+  revisionHistoryLimit: 3
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: calibre-web-automated-book-downloader
+  template:
+    metadata:
+      labels:
+        app: calibre-web-automated-book-downloader
+    spec:
+      containers:
+        - image: ghcr.io/calibrain/calibre-web-automated-book-downloader:latest
+          imagePullPolicy: Always
+          name: calibre-web-automated-book-downloader
+          env:
+            - name: CLOUDFLARE_PROXY_URL
+              value: http://flaresolverr.servarr.svc.cluster.local
+          ports:
+            - containerPort: 8084
+              name: http
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 8084
+            initialDelaySeconds: 10
+            periodSeconds: 15
+          # resources:
+          #   requests:
+          #     cpu: 50m
+          #     memory: 256Mi
+          #   limits:
+          #     cpu: 500m
+          #     memory: 512Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+          volumeMounts:
+            - name: ingest
+              mountPath: /cwa-book-ingest
+      volumes:
+        - name: ingest
+          persistentVolumeClaim:
+            claimName: book-ingest

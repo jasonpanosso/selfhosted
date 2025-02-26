@@ -1,0 +1,36 @@
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: calibre-web-automated
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`calibre.${domain}.${tld}`)
+      kind: Rule
+      middlewares:
+        - name: forward-auth
+          namespace: traefik
+      services:
+        - kind: Service
+          name: calibre-web-automated
+          port: 8083
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: calibre-web-automated-book-downloader
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`books.${domain}.${tld}`)
+      kind: Rule
+      middlewares:
+        - name: forward-auth
+          namespace: traefik
+      services:
+        - kind: Service
+          name: calibre-web-automated-book-downloader
+          port: 8084

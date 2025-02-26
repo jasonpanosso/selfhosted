@@ -1,0 +1,66 @@
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: calibre-web-automated
+spec:
+  selector:
+    matchLabels:
+      app: calibre-web-automated
+  serviceName: calibre-web-automated
+  template:
+    metadata:
+      labels:
+        app: calibre-web-automated
+    spec:
+      containers:
+        - image: crocodilestick/calibre-web-automated:V3.0.4
+          name: calibre-web-automated
+          ports:
+            - containerPort: 8083
+              name: http
+          readinessProbe:
+            httpGet:
+              path: /login
+              port: 8083
+            failureThreshold: 5
+            initialDelaySeconds: 15
+            periodSeconds: 10
+            timeoutSeconds: 3
+          # resources:
+          #   requests:
+          #     cpu: 1000m
+          #     memory: 1Gi
+          #   limits:
+          #     cpu: 4000m
+          #     memory: 8Gi
+          securityContext:
+            allowPrivilegeEscalation: false
+          volumeMounts:
+            - name: ingest
+              mountPath: /cwa-book-ingest
+            - name: config
+              mountPath: /config
+            - name: library
+              mountPath: /calibre-library
+      volumes:
+        - name: ingest
+          persistentVolumeClaim:
+            claimName: book-ingest
+  volumeClaimTemplates:
+    - metadata:
+        name: config
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 1Gi
+        storageClassName: openebs-hostpath
+    - metadata:
+        name: library
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 10Gi
+        storageClassName: openebs-hostpath

@@ -5,3 +5,4 @@ resources:
   - ./auth
   - ./servarr
   - ./monitoring
+  - ./calibre
