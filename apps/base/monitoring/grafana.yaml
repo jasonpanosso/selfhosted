@@ -8,7 +8,7 @@ spec:
   entryPoints:
     - websecure
   routes:
-    - match: Host(`grafana.needless.info`)
+    - match: Host(`grafana.${domain}.${tld}`)
       kind: Rule
       middlewares:
         - name: forward-auth

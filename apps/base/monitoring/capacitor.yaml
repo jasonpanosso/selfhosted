@@ -8,7 +8,7 @@ spec:
   entryPoints:
     - websecure
   routes:
-    - match: Host(`flux.needless.info`)
+    - match: Host(`flux.${domain}.${tld}`)
       kind: Rule
       middlewares:
         - name: forward-auth

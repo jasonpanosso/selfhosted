@@ -7,7 +7,7 @@ spec:
   entryPoints:
     - websecure
   routes:
-    - match: Host(`torrent.needless.info`)
+    - match: Host(`torrent.${domain}.${tld}`)
       kind: Rule
       middlewares:
         - name: forward-auth

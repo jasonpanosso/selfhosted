@@ -33,3 +33,7 @@ spec:
   sourceRef:
     kind: OCIRepository
     name: apps-source
+  postBuild:
+    substituteFrom:
+      - kind: ConfigMap
+        name: post-build-substitutions

@@ -42,7 +42,7 @@ spec:
           value: admin
 
     lldap:
-      basedn: dc=needless,dc=info
+      basedn: dc=${domain},dc=${tld}
       keySeed:
         secret:
           name: lldap
@@ -56,15 +56,15 @@ spec:
           secret:
             name: lldap
             key: LLDAP_LDAP_USER_PASS
-      httpURL: "https://account.needless.info"
+      httpURL: "https://account.${domain}.${tld}"
       smtp:
         enablePasswordReset: "true"
         server:
           address: email-smtp.us-east-1.amazonaws.com
           port: 587
         encryption: STARTTLS
-        from: "no-reply <no-reply@needless.info>"
-        to: "admin <admin@needless.info>"
+        from: "no-reply <no-reply@${domain}.${tld}>"
+        to: "admin <admin@${domain}.${tld}>"
         user:
           secret:
             name: smtp

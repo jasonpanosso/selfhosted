@@ -7,7 +7,7 @@ spec:
   entryPoints:
     - websecure
   routes:
-    - match: Host(`auth.needless.info`)
+    - match: Host(`auth.${domain}.${tld}`)
       kind: Rule
       services:
         - kind: Service

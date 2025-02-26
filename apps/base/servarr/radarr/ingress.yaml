@@ -7,7 +7,7 @@ spec:
   entryPoints:
     - websecure
   routes:
-    - match: Host(`radarr.needless.info`)
+    - match: Host(`radarr.${domain}.${tld}`)
       kind: Rule
       middlewares:
         - name: forward-auth

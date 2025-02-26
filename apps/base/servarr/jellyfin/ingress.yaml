@@ -7,7 +7,7 @@ spec:
   entryPoints:
     - websecure
   routes:
-    - match: Host(`video.needless.info`)
+    - match: Host(`video.${domain}.${tld}`)
       kind: Rule
       services:
         - kind: Service

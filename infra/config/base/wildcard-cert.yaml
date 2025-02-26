@@ -1,3 +1,4 @@
+---
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
@@ -6,8 +7,8 @@ metadata:
 spec:
   secretName: wildcard-tls
   dnsNames:
-    - "needless.info"
-    - "*.needless.info"
+    - ${domain}.${tld}
+    - "*.${domain}.${tld}"
   issuerRef:
     name: letsencrypt
     kind: ClusterIssuer

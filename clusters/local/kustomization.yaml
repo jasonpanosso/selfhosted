@@ -5,3 +5,13 @@ resources:
   - charts.yaml
   - infra.yaml
   - apps.yaml
+
+configMapGenerator:
+  - name: post-build-substitutions
+    namespace: flux-system
+    literals:
+      - domain=needless
+      - tld=info
+
+configurations:
+  - nameReference.yaml

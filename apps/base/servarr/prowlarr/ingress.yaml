@@ -7,7 +7,7 @@ spec:
   entryPoints:
     - websecure
   routes:
-    - match: Host(`prowlarr.needless.info`)
+    - match: Host(`prowlarr.${domain}.${tld}`)
       kind: Rule
       middlewares:
         - name: forward-auth

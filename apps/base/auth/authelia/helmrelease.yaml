@@ -51,13 +51,13 @@ spec:
           # *arr has no support for custom auth, have to bypass for api routes
           # /api routes are protected by API tokens
           - domain:
-              - prowlarr.needless.info
-              - radarr.needless.info
-              - sonarr.needless.info
+              - prowlarr.${domain}.${tld}
+              - radarr.${domain}.${tld}
+              - sonarr.${domain}.${tld}
             resources:
               - "^/api.*$"
             policy: bypass
-          - domain: "*.needless.info"
+          - domain: "*.${domain}.${tld}"
             policy: one_factor
 
       session:
@@ -67,9 +67,9 @@ spec:
         inactivity: 5m
         remember_me: 1M
         cookies:
-          - domain: needless.info
+          - domain: ${domain}.${tld}
             subdomain: auth
-            default_redirection_url: https://www.needless.info
+            default_redirection_url: https://www.${domain}.${tld}
         redis:
           enabled: true
           high_availability:
@@ -106,8 +106,8 @@ spec:
           enabled: true
           address: "submission://email-smtp.us-east-1.amazonaws.com:587"
           username: '{{secret "/config/secrets/SMTP_USERNAME"}}'
-          identifier: "needless.info"
-          sender: "Authelia <no-reply@needless.info>"
+          identifier: "${domain}.${tld}"
+          sender: "Authelia <no-reply@${domain}.${tld}>"
           password:
             disable: true
 
@@ -118,10 +118,10 @@ spec:
           enabled: true
           implementation: lldap
           address: ldap://lldap.auth.svc.cluster.local
-          base_dn: dc=needless,dc=info
+          base_dn: dc=${domain},dc=${tld}
           additional_users_dn: ou=people
           additional_groups_dn: ou=groups
-          user: cn=admin,ou=people,dc=needless,dc=info
+          user: cn=admin,ou=people,dc=${domain},dc=${tld}
           users_filter: (&(|({username_attribute}={input})({mail_attribute}={input}))(objectClass=person))
           groups_filter: (member={dn})
           password:

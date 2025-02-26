@@ -57,10 +57,7 @@ spec:
       target:
         kind: ClusterIssuer
         name: letsencrypt
-    - patch: |
-        - op: replace
-          path: /spec/acme/solvers/0/selector/dnsZones
-          value: ["*.needless.info", "needless.info"]
-      target:
-        kind: ClusterIssuer
-        name: letsencrypt
+  postBuild:
+    substituteFrom:
+      - kind: ConfigMap
+        name: post-build-substitutions
