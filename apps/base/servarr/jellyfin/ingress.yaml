@@ -7,7 +7,7 @@ spec:
   entryPoints:
     - websecure
   routes:
-    - match: Host(`video.${domain}.${tld}`)
+    - match: Host(`watch.${domain}.${tld}`)
       kind: Rule
       services:
         - kind: Service
