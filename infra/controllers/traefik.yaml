@@ -33,6 +33,14 @@ spec:
         namespace: traefik
       interval: 12h
   values:
+    ports:
+      web:
+        redirections:
+          entryPoint:
+            to: websecure
+            scheme: https
+      websecure:
+        asDefault: true
     providers:
       kubernetesCRD:
         allowCrossNamespace: true
