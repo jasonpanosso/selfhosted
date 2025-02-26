@@ -18,12 +18,12 @@ spec:
                 - |
                   set -e
                   for svc in prowlarr radarr sonarr; do
-                    echo "Waiting for ${svc} to be online..."
-                    until curl -sf "http://${svc}/ping"; do
-                      echo "Service ${svc} not ready yet. Retrying in 5 seconds..."
+                    echo "Waiting for $svc to be online..."
+                    until curl -sf "http://$svc/ping"; do
+                      echo "Service $svc not ready yet. Retrying in 5 seconds..."
                       sleep 5
                     done
-                    echo "${svc} ready!"
+                    echo "$svc ready!"
                   done
               securityContext:
                 allowPrivilegeEscalation: false
