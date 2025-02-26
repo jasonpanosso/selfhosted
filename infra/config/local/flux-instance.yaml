@@ -5,8 +5,9 @@ metadata:
   namespace: flux-system
   annotations:
     fluxcd.controlplane.io/reconcile: "enabled"
-    fluxcd.controlplane.io/reconcileEvery: "1h"
-    fluxcd.controlplane.io/reconcileTimeout: "3m"
+    fluxcd.controlplane.io/reconcileEvery: "1hr"
+    fluxcd.controlplane.io/reconcileArtifactEvery: "10m"
+    fluxcd.controlplane.io/reconcileTimeout: "20m"
 spec:
   distribution:
     version: "2.x"
@@ -28,7 +29,7 @@ spec:
     kind: OCIRepository
     url: oci://192.168.121.1:5000/flux-cluster-sync
     ref: local
-    path: ./kustomization.yaml
+    path: ./
   kustomize:
     patches:
       - target:
