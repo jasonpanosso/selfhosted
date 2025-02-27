@@ -37,7 +37,6 @@
             docker
             kubectl
             kubecolor
-            terraform
             sops
             kubernetes-helm
             talosctl
