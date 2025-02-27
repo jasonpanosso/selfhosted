@@ -9,3 +9,5 @@ nameReference:
         path: spec/values/pod/extraVolumes/projected/sources/secret/name
       - kind: HelmRelease
         path: spec/values/pod/initContainers/env/valueFrom/secretKeyRef/name
+      - kind: HelmRelease
+        path: spec/values/pod/env/valueFrom/secretKeyRef/name

@@ -16,7 +16,7 @@ spec:
   chart:
     spec:
       chart: authelia
-      version: "0.9.16"
+      version: "0.9.x"
       sourceRef:
         kind: HelmRepository
         name: authelia
@@ -104,10 +104,9 @@ spec:
         disable_startup_check: true
         smtp:
           enabled: true
-          address: "submission://email-smtp.us-east-1.amazonaws.com:587"
-          username: '{{secret "/config/secrets/SMTP_USERNAME"}}'
+          address: submission://smtp.gmail.com:587
           identifier: "${domain}.${tld}"
-          sender: "Authelia <no-reply@${domain}.${tld}>"
+          subject: "[Authelia] {title}"
           password:
             disable: true
 
@@ -198,8 +197,13 @@ spec:
           value: /config/secrets/POSTGRES_PASSWORD
         - name: AUTHELIA_IDENTITY_PROVIDERS_OIDC_HMAC_SECRET_FILE
           value: /config/secrets/OIDC_HMAC_SECRET
-        - name: AUTHELIA_NOTIFIER_SMTP_PASSWORD
+        - name: AUTHELIA_NOTIFIER_SMTP_PASSWORD_FILE
           value: /config/secrets/SMTP_PASSWORD
+        - name: AUTHELIA_NOTIFIER_SMTP_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: smtp
+              key: username
       extraVolumeMounts:
         - name: secret
           readOnly: true
@@ -241,7 +245,5 @@ spec:
               - secret:
                   name: smtp
                   items:
-                    - key: username
-                      path: SMTP_USERNAME
                     - key: password
                       path: SMTP_PASSWORD

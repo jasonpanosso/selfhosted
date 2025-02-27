@@ -60,11 +60,9 @@ spec:
       smtp:
         enablePasswordReset: "true"
         server:
-          address: email-smtp.us-east-1.amazonaws.com
+          address: smtp.gmail.com
           port: 587
         encryption: STARTTLS
-        from: "no-reply <no-reply@${domain}.${tld}>"
-        to: "admin <admin@${domain}.${tld}>"
         user:
           secret:
             name: smtp
@@ -72,8 +70,8 @@ spec:
             passwordKey: password
     resources:
       requests:
-        cpu: 50m
-        memory: 256Mi
+        cpu: 250m
+        memory: 512Mi
       limits:
         cpu: 250m
         memory: 512Mi
