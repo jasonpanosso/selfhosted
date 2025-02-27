@@ -3,7 +3,6 @@ apiVersion: source.toolkit.fluxcd.io/v1
 kind: HelmRepository
 metadata:
   name: bitnami
-  namespace: auth
 spec:
   interval: 24h
   type: oci
@@ -13,7 +12,6 @@ apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: redis
-  namespace: auth
 spec:
   interval: 30m
   chart:
@@ -32,6 +30,7 @@ spec:
     sentinel:
       enabled: true
       masterSet: mymaster
+      quorum: 2
       downAfterMilliseconds: 10000
       failoverTimeout: 5000
       livenessProbe:
@@ -42,20 +41,14 @@ spec:
       enableReplicaAuth: true
       existingSecret: redis
       existingSecretPasswordKey: password
-    master:
-      resources:
-        requests:
-          cpu: "200m"
-          memory: "256Mi"
-        limits:
-          cpu: "400m"
-          memory: "512Mi"
+      usePasswordFiles: false
+      usePasswordFileFromSecret: false
     replica:
       replicaCount: 3
       resources:
         requests:
-          cpu: "100m"
-          memory: "128Mi"
+          cpu: "200m"
+          memory: "256Mi"
         limits:
           cpu: "200m"
           memory: "256Mi"
