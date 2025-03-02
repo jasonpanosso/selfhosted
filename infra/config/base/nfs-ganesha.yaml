@@ -4,15 +4,6 @@ kind: Namespace
 metadata:
   name: nfs-server
 ---
-apiVersion: source.toolkit.fluxcd.io/v1
-kind: HelmRepository
-metadata:
-  name: nfs-ganesha-server-and-external-provisioner
-  namespace: flux-system
-spec:
-  interval: 24h
-  url: https://kubernetes-sigs.github.io/nfs-ganesha-server-and-external-provisioner/
----
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
@@ -35,7 +26,7 @@ spec:
       tag: 6.3
     persistence:
       enabled: true
-      storageClass: openebs-hostpath
+      storageClass: local-path
       size: 50G
     storageClass:
       create: true
@@ -43,6 +34,3 @@ spec:
         - vers=4.1
     nodeSelector:
       role: nfs-server
-  dependsOn:
-    - name: openebs
-      namespace: openebs
