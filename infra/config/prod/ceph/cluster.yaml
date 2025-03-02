@@ -1,0 +1,125 @@
+apiVersion: ceph.rook.io/v1
+kind: CephCluster
+metadata:
+  name: rook-ceph
+spec:
+  cephVersion:
+    image: quay.io/ceph/ceph:v19.2.1
+    allowUnsupported: false
+  dataDirHostPath: /var/lib/rook
+  skipUpgradeChecks: false
+  continueUpgradeAfterChecksEvenIfNotHealthy: false
+  waitTimeoutForHealthyOSDInMinutes: 10
+  upgradeOSDRequiresHealthyPGs: false
+  mon:
+    count: 3
+    allowMultiplePerNode: false
+  mgr:
+    count: 2
+    allowMultiplePerNode: false
+    modules:
+      - name: rook
+        enabled: true
+  resources:
+    api:
+      requests:
+        cpu: "500m"
+        memory: "512Mi"
+      limits:
+        memory: "512Mi"
+    mgr:
+      limits:
+        memory: "1Gi"
+      requests:
+        cpu: "500m"
+        memory: "1Gi"
+    mon:
+      requests:
+        cpu: "500m"
+        memory: "1Gi"
+      limits:
+        memory: "1Gi"
+    osd:
+      requests:
+        cpu: "1"
+        memory: "2Gi"
+      limits:
+        memory: "2Gi"
+  dashboard:
+    enabled: true
+  monitoring:
+    enabled: true
+    metricsDisabled: false
+    exporter:
+      perfCountersPrioLimit: 5
+      statsPeriodSeconds: 5
+  network:
+    connections:
+      encryption:
+        enabled: false
+      compression:
+        enabled: false
+      requireMsgr2: false
+  crashCollector:
+    disable: false
+  logCollector:
+    enabled: true
+    periodicity: daily # one of: hourly, daily, weekly, monthly
+    maxLogSize: 500M # SUFFIX may be 'M' or 'G'. Must be at least 1M.
+  cleanupPolicy:
+    confirmation: ""
+    sanitizeDisks:
+      method: quick
+      dataSource: zero
+      iteration: 1
+    allowUninstallWithVolumes: false
+  annotations:
+  labels:
+  removeOSDsIfOutAndSafeToRemove: false
+  priorityClassNames:
+    # all: rook-ceph-default-priority-class
+    mon: system-node-critical
+    osd: system-node-critical
+    mgr: system-cluster-critical
+    # crashcollector: rook-ceph-crashcollector-priority-class
+  storage: # cluster level storage configuration and selection
+    useAllNodes: true
+    useAllDevices: true
+    config:
+    allowDeviceClassUpdate: false # whether to allow changing the device class of an OSD after it is created
+    allowOsdCrushWeightUpdate: false # whether to allow resizing the OSD crush weight after osd pvc is increased
+    scheduleAlways: false
+    onlyApplyOSDPlacement: false
+  disruptionManagement:
+    managePodBudgets: true
+    osdMaintenanceTimeout: 30
+    pgHealthCheckTimeout: 0
+
+  csi:
+    readAffinity:
+      enabled: false
+  healthCheck:
+    daemonHealth:
+      mon:
+        disabled: false
+        interval: 45s
+      osd:
+        disabled: false
+        interval: 60s
+      status:
+        disabled: false
+        interval: 60s
+    livenessProbe:
+      mon:
+        disabled: false
+      mgr:
+        disabled: false
+      osd:
+        disabled: false
+    startupProbe:
+      mon:
+        disabled: false
+      mgr:
+        disabled: false
+      osd:
+        disabled: false

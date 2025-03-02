@@ -55,12 +55,12 @@ spec:
         resources:
           requests:
             storage: 1Gi
-        storageClassName: openebs-hostpath
+        storageClassName: rook-ceph-block
     - metadata:
         name: library
       spec:
         accessModes: ["ReadWriteOnce"]
         resources:
           requests:
-            storage: 10Gi
-        storageClassName: openebs-hostpath
+            storage: 20Gi
+        storageClassName: rook-ceph-block

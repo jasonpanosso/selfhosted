@@ -4,6 +4,7 @@ kind: Kustomization
 resources:
   - flux-instance.yaml
   - metallb.yaml
+  - ceph/
   - ../base
 
 secretGenerator:

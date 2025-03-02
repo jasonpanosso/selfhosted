@@ -25,7 +25,7 @@ spec:
       instances: 3
       storage:
         size: 1Gi
-        storageClass: openebs-hostpath
+        storageClass: local-path
       roles:
         - name: authelia
           ensure: present

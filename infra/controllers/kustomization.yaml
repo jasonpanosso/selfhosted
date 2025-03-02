@@ -6,8 +6,8 @@ resources:
   - kyverno.yaml
   - cert-manager.yaml
   - metallb.yaml
-  - openebs.yaml
-  - nfs-ganesha.yaml
+  - local-path-provisioner.yaml
+  - rook-ceph.yaml
   - cnpg.yaml
   - capacitor.yaml
   - kube-prometheus-stack.yaml

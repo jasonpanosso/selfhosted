@@ -16,7 +16,7 @@ spec:
       interval: 12h
   values:
     global:
-      defaultStorageClass: openebs-hostpath
+      defaultStorageClass: local-path
     architecture: replication
     sentinel:
       enabled: true
