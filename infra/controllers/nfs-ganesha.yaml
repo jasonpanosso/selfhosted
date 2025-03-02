@@ -8,7 +8,7 @@ apiVersion: source.toolkit.fluxcd.io/v1
 kind: HelmRepository
 metadata:
   name: nfs-ganesha-server-and-external-provisioner
-  namespace: nfs-server
+  namespace: flux-system
 spec:
   interval: 24h
   url: https://kubernetes-sigs.github.io/nfs-ganesha-server-and-external-provisioner/
@@ -27,7 +27,7 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: nfs-ganesha-server-and-external-provisioner
-        namespace: nfs-server
+        namespace: flux-system
       interval: 12h
   values:
     image:
