@@ -25,11 +25,6 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: flux
-  sync:
-    kind: GitRepository
-    url: https://github.com/jasonpanosso/selfhosted.git
-    ref: refs/heads/main
-    path: ./clusters/prod
   kustomize:
     patches:
       - target:
