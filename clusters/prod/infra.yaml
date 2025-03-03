@@ -40,3 +40,7 @@ spec:
       target:
         kind: ClusterIssuer
         name: letsencrypt
+  postBuild:
+    substituteFrom:
+      - kind: ConfigMap
+        name: post-build-substitutions

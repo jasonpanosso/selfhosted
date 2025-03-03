@@ -21,3 +21,7 @@ spec:
   dependsOn:
     - name: infra-config
     - name: infra-controllers
+  postBuild:
+    substituteFrom:
+      - kind: ConfigMap
+        name: post-build-substitutions
