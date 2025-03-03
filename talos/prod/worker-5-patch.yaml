@@ -1,0 +1,20 @@
+# Topton N100
+machine:
+    install:
+        disk: /dev/nvme0n1
+    network:
+        hostname: worker-5
+        interfaces:
+            - interface: enp4s0
+              addresses:
+                  - 192.168.20.115/24
+              routes:
+                  - network: 0.0.0.0/0
+                    gateway: 192.168.20.1
+              dhcp: true
+    disks:
+        - device: /dev/disk/by-id/wwn-0x50014ee2bae73e2a
+          partitions:
+              - mountpoint: /var/local-path-provisioner
+    nodeLabels:
+        role: nfs-server

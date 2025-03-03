@@ -1,0 +1,16 @@
+# Dell Wyse 5070
+machine:
+    install:
+        disk: /dev/sdb
+    network:
+        hostname: controlplane-3
+        interfaces:
+            - interface: enp1s0
+              addresses:
+                  - 192.168.20.103/24
+              routes:
+                  - network: 0.0.0.0/0
+                    gateway: 192.168.20.1
+              vip:
+                  ip: 192.168.20.100
+              dhcp: true
