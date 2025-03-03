@@ -4,6 +4,5 @@ namespace: flux-system
 
 resources:
   - kyverno-policies.yaml
-  - bitnami.yaml
   - authelia.yaml
   - nfs-ganesha.yaml
