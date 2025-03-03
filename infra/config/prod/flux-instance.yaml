@@ -27,8 +27,8 @@ spec:
       app.kubernetes.io/name: flux
   sync:
     kind: GitRepository
-    url: https://github.com/jasonpanosso/selfhosted
-    ref: main
+    url: https://github.com/jasonpanosso/selfhosted.git
+    ref: refs/heads/main
     path: ./clusters/prod
   kustomize:
     patches:
