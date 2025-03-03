@@ -23,7 +23,7 @@ spec:
   values:
     replicaCount: 3
     bootstrap:
-      enabled: true
+      enabled: false
       admin:
         password:
           secret:
