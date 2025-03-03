@@ -33,7 +33,7 @@ spec:
   values:
     speaker:
       frr:
-        enabled: true
+        enabled: false
       secretName: memberlist
       metrics:
         enabled: true
