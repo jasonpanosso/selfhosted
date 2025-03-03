@@ -11,10 +11,6 @@ spec:
   path: ./clusters/prod
   prune: true
   wait: true
-  decryption:
-    provider: sops
-    secretRef:
-      name: sops-age
   sourceRef:
     kind: GitRepository
     name: flux-system
