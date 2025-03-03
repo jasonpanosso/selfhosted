@@ -1,5 +1,5 @@
 ---
-apiVersion: source.toolkit.fluxcd.io/v1beta2
+apiVersion: source.toolkit.fluxcd.io/v1
 kind: GitRepository
 metadata:
   name: flux-system
@@ -9,15 +9,10 @@ spec:
   url: https://github.com/jasonpanosso/selfhosted
   ref:
     branch: main
-  ignore:
-    - terraform/
-    - talos/
-    - charts/
-    - "**/local/**"
-    - .github
-    - .sops.yaml
-    - Vagrantfile
-    - docker-compose.yaml
-    - flake.lock
-    - flake.nix
-    - justfile
+  ignore: |
+    # exclude all
+    /*
+    !/infra
+    !/clusters
+    !/apps
+    **/local/**
