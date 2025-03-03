@@ -12,5 +12,6 @@ resources:
   - allow-kube-flannel.yaml
   - allow-kube-controller-manager.yaml
   - allow-cephfs.yaml
+  - allow-local-path-provisioner.yaml
   - cleanup-empty-replicasets.yaml
   - baseline.yaml
