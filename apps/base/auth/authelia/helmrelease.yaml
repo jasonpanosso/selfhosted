@@ -24,7 +24,6 @@ spec:
     secret:
       disabled: true
     configMap:
-      enabled: true
       theme: dark
 
       server:
@@ -66,6 +65,8 @@ spec:
             policy: two_factor
 
       session:
+        encryption_key:
+          disabled: true
         name: authelia
         same_site: lax
         expiration: 1h
@@ -113,7 +114,7 @@ spec:
           identifier: "${domain}.${tld}"
           subject: "[Authelia] {title}"
           password:
-            disable: true
+            disabled: true
 
       authentication_backend:
         password_reset:
@@ -136,9 +137,29 @@ spec:
             group_name: cn
             mail: mail
 
+      totp:
+        issuer: ${domain}.${tld}
+        skew: 1
+        secret_size: 32
+        algorithm: SHA1
+        digits: 6
+        period: 30
+        allowed_algorithms: ["SHA1"]
+        allowed_digits: [6]
+        allowed_periods: [30]
+
+      identity_validation:
+        reset_password:
+          jwt_lifespan: 5 minutes
+          jwt_algorithm: HS256
+          secret:
+            disabled: true
+
       identity_providers:
         oidc:
           enabled: true
+          hmac_secret:
+            disabled: true
           jwks:
             - algorithm: "RS256"
               key:
