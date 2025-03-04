@@ -28,7 +28,9 @@ spec:
 
       server:
         endpoints:
-          automatic_authz_implementations: ["ForwardAuth"]
+          automatic_authz_implementations:
+            - ForwardAuth
+            - AuthRequest
 
       access_control:
         default_policy: deny
