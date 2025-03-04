@@ -43,12 +43,10 @@ spec:
               - 192.168.10.0/24
               - 192.168.121.0/24
         rules:
-          # note: this is not enforced via middleware, this is enforced by the
-          # jellyfin-authelia plugin via the authelia http api
-          - domain: watch.${domain}.${tld}
-            subject:
-              - group:jellyfin_users
-              - group:jellyfin_admins
+          - domain:
+              - calibre.${domain}.${tld}
+              - books.${domain}.${tld}
+            subject: group:calibre_web
             policy: one_factor
 
           # *arr has no support for custom auth, have to bypass for api routes
