@@ -29,24 +29,3 @@ prowlarr:
             enable_rss: true
             minimum_seeders: 1
         delete_unmanaged: true
-
-radarr:
-  hostname: "radarr"
-  port: 7878
-  protocol: "http"
-  api_key: $RADARR_API_KEY
-  settings:
-    media_management:
-      root_folders:
-        definitions:
-          - /data/movies
-
-sonarr:
-  hostname: "sonarr"
-  port: 8989
-  protocol: "http"
-  api_key: $SONARR_API_KEY
-  settings:
-    media_management:
-      root_folders:
-        - /data/shows
