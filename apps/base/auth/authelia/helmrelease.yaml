@@ -39,8 +39,14 @@ spec:
               - 10.0.0.0/8
               - 10.244.0.0/16
               - 192.168.1.0/24
+              - 192.168.10.0/24
               - 192.168.121.0/24
         rules:
+          # jellyfin does not have support for forwardauth, and mobile apps can
+          # not login via authelia html page
+          - domain: watch.${domain}.${tld}
+            policy: bypass
+
           # *arr has no support for custom auth, have to bypass for api routes
           # /api routes are protected by API tokens
           - domain:
@@ -50,8 +56,14 @@ spec:
             resources:
               - "^/api.*$"
             policy: bypass
+
+          # do not block authelia
+          - domain: auth.${domain}.${tld}
+            policy: bypass
+
           - domain: "*.${domain}.${tld}"
-            policy: one_factor
+            subject: group:admins
+            policy: two_factor
 
       session:
         name: authelia
