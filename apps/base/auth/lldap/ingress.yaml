@@ -9,6 +9,9 @@ spec:
   routes:
     - match: Host(`account.${domain}.${tld}`)
       kind: Rule
+      middlewares:
+        - name: forward-auth
+          namespace: traefik
       services:
         - kind: Service
           name: lldap
