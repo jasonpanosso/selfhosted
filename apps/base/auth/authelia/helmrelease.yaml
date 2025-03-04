@@ -21,14 +21,6 @@ spec:
   driftDetection:
     mode: enabled
   values:
-    resources:
-      requests:
-        cpu: 250m
-        memory: 512Mi
-      limits:
-        cpu: 250m
-        memory: 512Mi
-
     secret:
       disabled: true
     configMap:
@@ -159,6 +151,29 @@ spec:
             allowed_origins:
               - "*"
     pod:
+      kind: Deployment
+      replicas: 3
+      resources:
+        requests:
+          cpu: 250m
+          memory: 512Mi
+        limits:
+          cpu: 250m
+          memory: 512Mi
+      selectors:
+        affinity:
+          podAntiAffinity:
+            preferredDuringSchedulingIgnoredDuringExecution:
+              - weight: 100
+                podAffinityTerm:
+                  labelSelector:
+                    matchExpressions:
+                      - key: app.kubernetes.io/name
+                        operator: In
+                        values:
+                          - authelia
+                  topologyKey: kubernetes.io/hostname
+
       initContainers:
         - name: wait-for-cnpg
           image: postgres:17
