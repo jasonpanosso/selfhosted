@@ -26,13 +26,13 @@ spec:
             initialDelaySeconds: 15
             periodSeconds: 10
             timeoutSeconds: 3
-          resources:
-            requests:
-              cpu: 1000m
-              memory: 1Gi
-            limits:
-              cpu: 4000m
-              memory: 8Gi
+          # resources:
+          #   requests:
+          #     cpu: 1000m
+          #     memory: 1Gi
+          #   limits:
+          #     cpu: 4000m
+          #     memory: 8Gi
           securityContext:
             allowPrivilegeEscalation: false
           volumeMounts:
