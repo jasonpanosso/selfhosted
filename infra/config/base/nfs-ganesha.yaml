@@ -24,6 +24,15 @@ spec:
     image:
       repository: devxygmbh/nfs-server-provisioner
       tag: 6.3
+    resources:
+      limits:
+        cpu: 1500m
+        memory: 4096Mi
+      requests:
+        cpu: 1500m
+        memory: 4096Mi
+    priorityClass:
+      name: system-node-critical
     persistence:
       enabled: true
       storageClass: local-path
