@@ -41,10 +41,13 @@ spec:
               - 192.168.10.0/24
               - 192.168.121.0/24
         rules:
-          # jellyfin does not have support for forwardauth, and mobile apps can
-          # not login via authelia html page
+          # note: this is not enforced via middleware, this is enforced by the
+          # jellyfin-authelia plugin via the authelia http api
           - domain: watch.${domain}.${tld}
-            policy: bypass
+            subject:
+              - group:jellyfin_users
+              - group:jellyfin_admins
+            policy: one_factor
 
           # *arr has no support for custom auth, have to bypass for api routes
           # /api routes are protected by API tokens
