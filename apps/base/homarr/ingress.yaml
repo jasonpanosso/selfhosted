@@ -1,0 +1,17 @@
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: homarr
+  labels:
+    app.kubernetes.io/name: homarr
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`dashboard.${domain}.${tld}`)
+      kind: Rule
+      services:
+        - kind: Service
+          name: homarr
+          port: 7575
