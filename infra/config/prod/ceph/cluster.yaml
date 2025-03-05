@@ -23,28 +23,28 @@ spec:
   resources:
     api:
       requests:
-        cpu: "500m"
-        memory: "512Mi"
+        cpu: 500m
+        memory: 512Mi
       limits:
-        memory: "512Mi"
+        memory: 512Mi
     mgr:
       limits:
-        memory: "1Gi"
+        memory: 1Gi
       requests:
-        cpu: "500m"
-        memory: "1Gi"
+        cpu: 500m
+        memory: 1Gi
     mon:
       requests:
-        cpu: "500m"
-        memory: "1Gi"
+        cpu: 500m
+        memory: 1Gi
       limits:
-        memory: "1Gi"
+        memory: 1Gi
     osd:
       requests:
-        cpu: "1"
-        memory: "2Gi"
+        cpu: 1
+        memory: 1Gi
       limits:
-        memory: "2Gi"
+        memory: 2Gi
   dashboard:
     enabled: true
   monitoring:
