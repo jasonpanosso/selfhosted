@@ -283,3 +283,26 @@ spec:
             - rook-ceph
           names:
             - rook-ceph-mgr*
+---
+apiVersion: kyverno.io/v2
+kind: PolicyException
+metadata:
+  name: rook-ceph-mds-exception
+  namespace: kyverno
+spec:
+  exceptions:
+    - policyName: disallow-host-path
+      ruleNames:
+        - host-path
+        - autogen-host-path
+  match:
+    any:
+      - resources:
+          kinds:
+            - Pod
+            - Deployment
+            - ReplicaSet
+          namespaces:
+            - rook-ceph
+          names:
+            - rook-ceph-mds*
