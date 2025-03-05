@@ -2,15 +2,17 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: jellyfin
+  labels:
+    app.kubernetes.io/name: jellyfin
 spec:
   selector:
     matchLabels:
-      app: jellyfin
+      app.kubernetes.io/name: jellyfin
   serviceName: jellyfin
   template:
     metadata:
       labels:
-        app: jellyfin
+        app.kubernetes.io/name: jellyfin
     spec:
       containers:
         - image: docker.io/jellyfin/jellyfin:10.10.4

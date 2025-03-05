@@ -3,15 +3,17 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: qbittorrent
+  labels:
+    app.kubernetes.io/name: qbittorrent
 spec:
   selector:
     matchLabels:
-      app: qbittorrent
+      app.kubernetes.io/name: qbittorrent
   serviceName: qbittorrent
   template:
     metadata:
       labels:
-        app: qbittorrent
+        app.kubernetes.io/name: qbittorrent
     spec:
       initContainers:
         - image: docker.io/library/busybox:stable

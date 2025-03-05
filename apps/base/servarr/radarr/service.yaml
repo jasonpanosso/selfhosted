@@ -3,6 +3,8 @@ apiVersion: v1
 kind: Service
 metadata:
   name: radarr
+  labels:
+    app.kubernetes.io/name: radarr
 spec:
   ports:
     - name: http
@@ -11,4 +13,4 @@ spec:
     - name: radarr
       port: 7878
   selector:
-    app: radarr
+    app.kubernetes.io/name: radarr

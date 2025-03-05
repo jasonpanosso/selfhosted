@@ -3,6 +3,8 @@ apiVersion: v1
 kind: Service
 metadata:
   name: qbittorrent
+  labels:
+    app.kubernetes.io/name: qbittorrent
 spec:
   ports:
     - name: qbittorrent
@@ -11,4 +13,4 @@ spec:
       port: 80
       targetPort: http
   selector:
-    app: qbittorrent
+    app.kubernetes.io/name: qbittorrent

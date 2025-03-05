@@ -3,6 +3,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: radarr
+  labels:
+    app.kubernetes.io/name: radarr
 spec:
   replicas: 1
   revisionHistoryLimit: 3
@@ -10,11 +12,11 @@ spec:
     type: Recreate
   selector:
     matchLabels:
-      app: radarr
+      app.kubernetes.io/name: radarr
   template:
     metadata:
       labels:
-        app: radarr
+        app.kubernetes.io/name: radarr
     spec:
       initContainers:
         - name: wait-for-cnpg

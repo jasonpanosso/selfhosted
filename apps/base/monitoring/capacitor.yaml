@@ -4,6 +4,8 @@ kind: IngressRoute
 metadata:
   name: capacitor
   namespace: monitoring
+  labels:
+    app.kubernetes.io/name: capacitor
 spec:
   entryPoints:
     - websecure

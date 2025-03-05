@@ -3,6 +3,8 @@ apiVersion: traefik.io/v1alpha1
 kind: IngressRoute
 metadata:
   name: calibre-web-automated
+  labels:
+    app.kubernetes.io/name: calibre-web-automated
 spec:
   entryPoints:
     - websecure
@@ -21,6 +23,8 @@ apiVersion: traefik.io/v1alpha1
 kind: IngressRoute
 metadata:
   name: calibre-web-automated-book-downloader
+  labels:
+    app.kubernetes.io/name: calibre-web-automated-book-downloader
 spec:
   entryPoints:
     - websecure

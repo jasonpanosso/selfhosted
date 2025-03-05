@@ -3,6 +3,8 @@ apiVersion: traefik.io/v1alpha1
 kind: IngressRoute
 metadata:
   name: jellyfin
+  labels:
+    app.kubernetes.io/name: jellyfin
 spec:
   entryPoints:
     - websecure

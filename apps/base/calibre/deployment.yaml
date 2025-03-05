@@ -3,6 +3,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: calibre-web-automated-book-downloader
+  labels:
+    app.kubernetes.io/name: calibre-web-automated-book-downloader
 spec:
   replicas: 1
   revisionHistoryLimit: 3
@@ -10,11 +12,11 @@ spec:
     type: Recreate
   selector:
     matchLabels:
-      app: calibre-web-automated-book-downloader
+      app.kubernetes.io/name: calibre-web-automated-book-downloader
   template:
     metadata:
       labels:
-        app: calibre-web-automated-book-downloader
+        app.kubernetes.io/name: calibre-web-automated-book-downloader
     spec:
       containers:
         - image: ghcr.io/calibrain/calibre-web-automated-book-downloader:latest

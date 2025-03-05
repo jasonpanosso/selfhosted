@@ -3,15 +3,17 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: calibre-web-automated
+  labels:
+    app.kubernetes.io/name: calibre-web-automated
 spec:
   selector:
     matchLabels:
-      app: calibre-web-automated
+      app.kubernetes.io/name: calibre-web-automated
   serviceName: calibre-web-automated
   template:
     metadata:
       labels:
-        app: calibre-web-automated
+        app.kubernetes.io/name: calibre-web-automated
     spec:
       containers:
         - image: crocodilestick/calibre-web-automated:V3.0.4

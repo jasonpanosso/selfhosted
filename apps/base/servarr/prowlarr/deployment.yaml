@@ -3,6 +3,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: prowlarr
+  labels:
+    app.kubernetes.io/name: prowlarr
 spec:
   replicas: 1
   revisionHistoryLimit: 3
@@ -10,11 +12,11 @@ spec:
     type: Recreate
   selector:
     matchLabels:
-      app: prowlarr
+      app.kubernetes.io/name: prowlarr
   template:
     metadata:
       labels:
-        app: prowlarr
+        app.kubernetes.io/name: prowlarr
     spec:
       initContainers:
         - name: wait-for-cnpg

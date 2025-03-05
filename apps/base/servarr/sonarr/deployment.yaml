@@ -3,6 +3,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: sonarr
+  labels:
+    app.kubernetes.io/name: sonarr
 spec:
   replicas: 1
   revisionHistoryLimit: 3
@@ -10,11 +12,11 @@ spec:
     type: Recreate
   selector:
     matchLabels:
-      app: sonarr
+      app.kubernetes.io/name: sonarr
   template:
     metadata:
       labels:
-        app: sonarr
+        app.kubernetes.io/name: sonarr
     spec:
       initContainers:
         - name: wait-for-cnpg
