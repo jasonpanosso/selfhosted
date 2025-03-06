@@ -39,6 +39,16 @@ spec:
           env:
             - name: TZ
               value: "Etc/UTC"
+            - name: VPN_USER
+              valueFrom:
+                secretKeyRef:
+                  name: ovpn-conf
+                  key: username
+            - name: VPN_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: ovpn-conf
+                  key: password
           envFrom:
             - configMapRef:
                 name: qbittorrent-env
