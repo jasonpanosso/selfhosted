@@ -1,0 +1,17 @@
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: jellyseerr
+  labels:
+    app.kubernetes.io/name: jellyseerr
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`jellyseerr.${domain}.${tld}`)
+      kind: Rule
+      services:
+        - kind: Service
+          name: jellyseerr
+          port: 5055
