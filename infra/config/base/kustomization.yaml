@@ -7,8 +7,8 @@ resources:
   - wildcard-cert.yaml
   - nfs-ganesha.yaml
   - drm-plugin.yaml
-  - ./middleware
-  - ./policies
+  - middleware/
+  - policies/
 
 configurations:
   - nameReference.yaml
