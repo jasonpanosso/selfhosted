@@ -46,5 +46,5 @@ spec:
         name: letsencrypt
   postBuild:
     substituteFrom:
-      - kind: ConfigMap
+      - kind: Secret
         name: post-build-substitutions

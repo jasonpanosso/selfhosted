@@ -9,12 +9,11 @@ resources:
   - apps.yaml
   - charts.yaml
 
-configMapGenerator:
+secretGenerator:
   - name: post-build-substitutions
     namespace: flux-system
-    literals:
-      - domain=needless
-      - tld=info
+    envs:
+      - substitutions.sops.env
 
 configurations:
   - nameReference.yaml

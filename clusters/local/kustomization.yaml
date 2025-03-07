@@ -10,8 +10,8 @@ configMapGenerator:
   - name: post-build-substitutions
     namespace: flux-system
     literals:
-      - domain=needless
-      - tld=info
+      - domain=jasonpanosso
+      - tld=dev
 
 configurations:
   - nameReference.yaml
