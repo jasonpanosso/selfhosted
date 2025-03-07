@@ -15,5 +15,3 @@ machine:
         routes:
           - network: 0.0.0.0/0
             gateway: 192.168.20.1
-  nodeLabels:
-    has_gpu: true
