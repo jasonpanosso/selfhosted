@@ -14,8 +14,6 @@ spec:
       labels:
         app.kubernetes.io/name: jellyfin
     spec:
-      nodeSelector:
-        has_gpu: "true"
       containers:
         - image: docker.io/jellyfin/jellyfin:10.10.4
           name: jellyfin
@@ -33,10 +31,11 @@ spec:
           resources:
             requests:
               cpu: 1000m
-              memory: 1Gi
+              memory: 2Gi
             limits:
-              cpu: 4000m
+              cpu: 3000m
               memory: 8Gi
+              squat.ai/drm: "1"
           securityContext:
             allowPrivilegeEscalation: false
           volumeMounts:
@@ -46,8 +45,6 @@ spec:
             - name: shows
               mountPath: /shows
               readOnly: true
-            - name: transcode
-              mountPath: /cache/transcodes
             - name: cache
               mountPath: /cache
             - name: config
@@ -59,8 +56,6 @@ spec:
         - name: shows
           persistentVolumeClaim:
             claimName: shows
-        - name: transcode
-          emptyDir: {}
         - name: cache
           emptyDir: {}
   volumeClaimTemplates:
