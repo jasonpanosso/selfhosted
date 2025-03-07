@@ -15,6 +15,8 @@ spec:
       labels:
         app.kubernetes.io/name: qbittorrent
     spec:
+      securityContext:
+        fsGroup: 1000
       initContainers:
         - image: docker.io/library/busybox:stable
           imagePullPolicy: Always
@@ -23,38 +25,64 @@ spec:
             - "/bin/sh"
             - "-c"
             - |
-              mkdir -p /config/openvpn && mkdir -p /config/qBittorrent/config && \
-                cp -a -L /ovpn-conf/. /config/openvpn && \
-                cp -L /qbt-conf/qBittorrent.conf /config/qBittorrent/config
+              mkdir -p /config/qBittorrent && \
+                cp -L /qbt-conf/qBittorrent.conf /config/qBittorrent
           volumeMounts:
             - name: qbittorrent-conf
               mountPath: /qbt-conf
-            - name: ovpn-conf
-              mountPath: /ovpn-conf
             - name: config
               mountPath: /config
+
+        # gluetun sidecar
+        - image: ghcr.io/qdm12/gluetun:latest
+          imagePullPolicy: Always
+          restartPolicy: Always
+          name: gluetun
+          resources:
+            requests:
+              cpu: 250m
+              memory: 256Mi
+            limits:
+              cpu: 250m
+              memory: 256Mi
+              squat.ai/tun: "1"
+          ports:
+            - name: http
+              containerPort: 8080
+          env:
+            - name: TZ
+              value: "Etc/UTC"
+            - name: FIREWALL_DEBUG
+              value: "on"
+            - name: FIREWALL_INPUT_PORTS
+              value: "8080"
+            - name: VPN_TYPE
+              value: wireguard
+            - name: BLOCK_MALICIOUS
+              value: "off"
+            - name: BLOCK_SURVEILLANCE
+              value: "off"
+            - name: BLOCK_ADS
+              value: "off"
+            - name: DOT
+              value: "off"
+          envFrom:
+            - secretRef:
+                name: wg-conf
+          securityContext:
+            capabilities:
+              add:
+                - NET_ADMIN
       containers:
-        - image: docker.io/binhex/arch-qbittorrentvpn:5.0.3-1-01
+        - image: linuxserver/qbittorrent:5.0.4
           name: qbittorrent
           env:
             - name: TZ
               value: "Etc/UTC"
-            - name: VPN_USER
-              valueFrom:
-                secretKeyRef:
-                  name: ovpn-conf
-                  key: username
-            - name: VPN_PASS
-              valueFrom:
-                secretKeyRef:
-                  name: ovpn-conf
-                  key: password
-          envFrom:
-            - configMapRef:
-                name: qbittorrent-env
-          ports:
-            - containerPort: 8080
-              name: http
+            - name: PUID
+              value: "1000"
+            - name: GUID
+              value: "1000"
           readinessProbe:
             httpGet:
               path: /
@@ -64,13 +92,10 @@ spec:
           resources:
             requests:
               cpu: 250m
-              memory: 512Mi
+              memory: 1280Mi
             limits:
               cpu: 1000m
-              memory: 2Gi
-          securityContext:
-            capabilities:
-              add: ["NET_ADMIN"]
+              memory: 1280Mi
           volumeMounts:
             - name: config
               mountPath: /config
@@ -80,9 +105,6 @@ spec:
         - name: qbittorrent-conf
           configMap:
             name: qbittorrent-conf
-        - name: ovpn-conf
-          secret:
-            secretName: ovpn-conf
         - name: downloads
           persistentVolumeClaim:
             claimName: downloads
