@@ -14,6 +14,8 @@ spec:
       labels:
         app.kubernetes.io/name: jellyfin
     spec:
+      nodeSelector:
+        has_gpu: "true"
       containers:
         - image: docker.io/jellyfin/jellyfin:10.10.4
           name: jellyfin
@@ -28,13 +30,13 @@ spec:
             initialDelaySeconds: 15
             periodSeconds: 10
             timeoutSeconds: 3
-          # resources:
-          #   requests:
-          #     cpu: 1000m
-          #     memory: 1Gi
-          #   limits:
-          #     cpu: 4000m
-          #     memory: 8Gi
+          resources:
+            requests:
+              cpu: 1000m
+              memory: 1Gi
+            limits:
+              cpu: 4000m
+              memory: 8Gi
           securityContext:
             allowPrivilegeEscalation: false
           volumeMounts:
