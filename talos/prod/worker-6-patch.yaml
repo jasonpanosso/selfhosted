@@ -1,0 +1,19 @@
+# orange pi 5
+machine:
+  install:
+    image: factory.talos.dev/installer/af10c8f63c99bc8d90aea6f601d4b1e65ede330557ee0f769f9bf332fc20f341:v1.9.4
+    wipe: false
+    extraKernelArgs:
+      - talos.platform=metal
+    disk: /dev/mmcblk0
+  network:
+    hostname: worker-6
+    interfaces:
+      - interface: end0
+        addresses:
+          - 192.168.20.116/24
+        routes:
+          - network: 0.0.0.0/0
+            gateway: 192.168.20.1
+  nodeLabels:
+    has_gpu: true
