@@ -6,6 +6,7 @@ resources:
   - cluster-issuer.yaml
   - wildcard-cert.yaml
   - nfs-ganesha.yaml
+  - drm-plugin.yaml
   - ./middleware
   - ./policies
 

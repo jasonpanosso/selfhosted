@@ -1,0 +1,26 @@
+---
+apiVersion: kyverno.io/v2
+kind: PolicyException
+metadata:
+  name: generic-device-plugin-exception
+  namespace: kyverno
+spec:
+  exceptions:
+    - policyName: disallow-host-path
+      ruleNames:
+        - host-path
+        - autogen-host-path
+    - policyName: disallow-privileged-containers
+      ruleNames:
+        - privileged-containers
+        - autogen-privileged-containers
+  match:
+    any:
+      - resources:
+          kinds:
+            - Pod
+            - DaemonSet
+          namespaces:
+            - kube-system
+          names:
+            - "*-generic-device-plugin"

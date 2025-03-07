@@ -13,5 +13,6 @@ resources:
   - allow-kube-controller-manager.yaml
   - allow-cephfs.yaml
   - allow-local-path-provisioner.yaml
+  - allow-generic-device-plugin.yaml
   - cleanup-empty-replicasets.yaml
   - baseline.yaml
