@@ -18,6 +18,8 @@ spec:
   values:
     global:
       defaultStorageClass: local-path
+    volumePermissions:
+      enabled: true
     architecture: replication
     sentinel:
       enabled: true
