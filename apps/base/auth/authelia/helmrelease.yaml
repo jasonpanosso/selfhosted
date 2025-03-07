@@ -249,7 +249,7 @@ spec:
             allowPrivilegeEscalation: false
       env:
         - name: TZ
-          value: "ETC/Utc"
+          value: "ETC/UTC"
         - name: AUTHELIA_IDENTITY_VALIDATION_RESET_PASSWORD_JWT_SECRET_FILE
           value: /config/secrets/JWT_TOKEN
         - name: AUTHELIA_SESSION_SECRET_FILE
