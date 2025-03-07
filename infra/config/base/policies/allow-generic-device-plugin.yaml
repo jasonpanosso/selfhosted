@@ -24,3 +24,4 @@ spec:
             - kube-system
           names:
             - "*-generic-device-plugin"
+            - "*-generic-device-plugin-*"
