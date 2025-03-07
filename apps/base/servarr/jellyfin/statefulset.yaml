@@ -46,12 +46,12 @@ spec:
             - name: shows
               mountPath: /shows
               readOnly: true
-            - mountPath: /transcode
-              name: transcode
-            - mountPath: /cache
-              name: cache
-            - mountPath: /config
-              name: config
+            - name: transcode
+              mountPath: /cache/transcodes
+            - name: cache
+              mountPath: /cache
+            - name: config
+              mountPath: /config
       volumes:
         - name: movies
           persistentVolumeClaim:
