@@ -1,0 +1,13 @@
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: jellyseerr
+  labels:
+    app.kubernetes.io/name: jellyseerr
+spec:
+  storageClassName: rook-ceph-block
+  accessModes: ["ReadWriteOnce"]
+  resources:
+    requests:
+      storage: 5Gi

@@ -102,4 +102,5 @@ spec:
               mountPath: /app/config
       volumes:
         - name: config
-          emptyDir: {}
+          persistentVolumeClaim:
+            claimName: jellyseerr

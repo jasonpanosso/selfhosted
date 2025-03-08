@@ -3,6 +3,7 @@ kind: Kustomization
 namespace: servarr
 
 resources:
+  - pvc.yaml
   - deployment.yaml
   - service.yaml
   - ingress.yaml
