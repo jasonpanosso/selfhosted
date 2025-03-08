@@ -70,7 +70,7 @@ spec:
               name: http
           readinessProbe:
             httpGet:
-              path: /login
+              path: /ping
               port: 8989
             initialDelaySeconds: 10
             periodSeconds: 15
