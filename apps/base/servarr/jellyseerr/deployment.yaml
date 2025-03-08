@@ -63,6 +63,11 @@ spec:
                 secretKeyRef:
                   name: servarr-api-keys
                   key: sonarr
+            - name: API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: servarr-api-keys
+                  key: jellyseerr
             - name: DB_TYPE
               value: postgres
             - name: DB_HOST
