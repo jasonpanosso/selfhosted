@@ -46,6 +46,14 @@ spec:
         ruleSelector:
           matchLabels: null
         retention: 7d
+        resources:
+          requests:
+            cpu: 500m
+            memory: 1Gi
+          limits:
+            cpu: 500m
+            memory: 2Gi
+
         storageSpec:
           volumeClaimTemplate:
             spec:
