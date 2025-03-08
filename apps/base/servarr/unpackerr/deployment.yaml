@@ -1,0 +1,63 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: unpackerr
+  labels:
+    app.kubernetes.io/name: unpackerr
+spec:
+  replicas: 1
+  revisionHistoryLimit: 3
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: unpackerr
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: unpackerr
+    spec:
+      containers:
+        - image: golift/unpackerr:0.14
+          imagePullPolicy: Always
+          name: unpackerr
+          envFrom:
+            - configMapRef:
+                name: standard-env
+          env:
+            - name: TZ
+              value: ETC/UTC
+            - name: UN_RADARR_0_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: servarr-api-keys
+                  key: radarr
+            - name: UN_SONARR_0_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: servarr-api-keys
+                  key: sonarr
+          resources:
+            requests:
+              cpu: 250m
+              memory: 256Mi
+            limits:
+              cpu: 1
+              memory: 2048Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            runAsUser: 1000
+            runAsGroup: 1000
+          volumeMounts:
+            - name: downloads
+              mountPath: /data/downloads
+            - name: config
+              mountPath: /config
+      volumes:
+        - name: downloads
+          persistentVolumeClaim:
+            claimName: downloads
+        - name: config
+          configMap:
+            name: unpackerr

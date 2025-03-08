@@ -10,6 +10,7 @@ resources:
   - ./radarr
   - ./sonarr
   - ./prowlarr
+  - ./unpackerr
   - ./flaresolverr
   - ./configure
   - ./qbittorrent
