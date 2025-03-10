@@ -3,13 +3,13 @@ kind: Kustomization
 
 resources:
   - sources/
+  - device-plugins/
+  - middleware/
   - cluster-issuer.yaml
   - wildcard-cert.yaml
   - nfs-ganesha.yaml
-  - drm-plugin.yaml
-  - tun-plugin.yaml
-  - middleware/
   - policies/
+  - grafana/
 
 configurations:
   - nameReference.yaml

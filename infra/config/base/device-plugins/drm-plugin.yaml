@@ -2,19 +2,25 @@
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
-  name: tun-generic-device-plugin
-  namespace: kube-system
+  name: drm-generic-device-plugin
   labels:
-    app.kubernetes.io/name: tun-generic-device-plugin
+    app.kubernetes.io/name: drm-generic-device-plugin
 spec:
   selector:
     matchLabels:
-      app.kubernetes.io/name: tun-generic-device-plugin
+      app.kubernetes.io/name: drm-generic-device-plugin
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: tun-generic-device-plugin
+        app.kubernetes.io/name: drm-generic-device-plugin
     spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: "extensions.talos.dev/i915"
+                    operator: Exists
       priorityClassName: system-node-critical
       tolerations:
         - operator: "Exists"
@@ -26,12 +32,12 @@ spec:
           args:
             - --device
             - |
-              name: tun
+              name: drm
               groups:
                 - count: 1000
                   paths:
-                    - path: /dev/net/tun
-          name: tun-generic-device-plugin
+                    - path: /dev/dri/renderD128
+          name: drm-generic-device-plugin
           resources:
             requests:
               cpu: 50m
