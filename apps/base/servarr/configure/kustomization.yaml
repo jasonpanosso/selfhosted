@@ -9,6 +9,3 @@ configMapGenerator:
   - name: configarr
     files:
       - config.yml=files/configarr.yaml
-  - name: buildarr
-    files:
-      - buildarr.yaml=files/buildarr.yaml

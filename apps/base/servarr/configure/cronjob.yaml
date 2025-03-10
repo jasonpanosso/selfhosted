@@ -33,71 +33,9 @@ spec:
                 seccompProfile:
                   type: RuntimeDefault
 
-            - name: buildarr-envsubst
-              image: alpine:latest
-              command:
-                - sh
-                - "-c"
-                - |
-                  apk add --no-cache gettext && \
-                    envsubst < /buildarr/buildarr.yaml > /buildarr-envsubst/buildarr.yaml
-              env:
-                - name: RADARR_API_KEY
-                  valueFrom:
-                    secretKeyRef:
-                      name: servarr-api-keys
-                      key: radarr
-                - name: SONARR_API_KEY
-                  valueFrom:
-                    secretKeyRef:
-                      name: servarr-api-keys
-                      key: sonarr
-                - name: PROWLARR_API_KEY
-                  valueFrom:
-                    secretKeyRef:
-                      name: servarr-api-keys
-                      key: prowlarr
-              envFrom:
-                - configMapRef:
-                    name: standard-env
-              volumeMounts:
-                - name: buildarr-envsubst
-                  mountPath: /buildarr-envsubst
-                - name: buildarr
-                  mountPath: /buildarr
-              securityContext:
-                allowPrivilegeEscalation: false
-                capabilities:
-                  drop: [ALL]
-                seccompProfile:
-                  type: RuntimeDefault
-
           containers:
-            - name: buildarr
-              image: jpanosso/rebuildarr-testing:0.0.4
-              command: ["sh", "-c", "buildarr run /config/buildarr.yaml"]
-              envFrom:
-                - configMapRef:
-                    name: standard-env
-              volumeMounts:
-                - name: buildarr-envsubst
-                  mountPath: /config
-              resources:
-                requests:
-                  cpu: 50m
-                  memory: 256Mi
-                limits:
-                  cpu: 250m
-                  memory: 512Mi
-              securityContext:
-                allowPrivilegeEscalation: false
-                capabilities:
-                  drop: [ALL]
-                seccompProfile:
-                  type: RuntimeDefault
-
             - name: configarr
-              image: ghcr.io/raydak-labs/configarr:latest
+              image: ghcr.io/raydak-labs/configarr:1.13
               imagePullPolicy: Always
               env:
                 - name: RADARR_API_KEY
@@ -128,14 +66,7 @@ spec:
           volumes:
             - name: cache
               emptyDir: {}
-              # persistentVolumeClaim:
-              #   claimName: media-app-data
             - name: configarr
               configMap:
                 name: configarr
-            - name: buildarr-envsubst
-              emptyDir: {}
-            - name: buildarr
-              configMap:
-                name: buildarr
           restartPolicy: Never
