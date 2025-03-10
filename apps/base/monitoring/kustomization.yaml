@@ -6,3 +6,4 @@ resources:
   - grafana.yaml
   - flux.yaml
   - ceph.yaml
+  - alertmanager.yaml
