@@ -3,7 +3,6 @@ apiVersion: traefik.io/v1alpha1
 kind: IngressRoute
 metadata:
   name: grafana
-  namespace: monitoring
   labels:
     app.kubernetes.io/name: grafana
 spec:
@@ -17,5 +16,5 @@ spec:
           namespace: traefik
       services:
         - kind: Service
-          name: kube-prometheus-stack-grafana
+          name: grafana
           port: 80

@@ -1,0 +1,97 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: monitoring
+
+resources:
+  - helmrelease.yaml
+  - datasources.yaml
+  - ingressroute.yaml
+
+generatorOptions:
+  labels:
+    grafana_dashboard: "1"
+    kustomize.toolkit.fluxcd.io/substitute: disabled
+    app.kubernetes.io/name: grafana
+
+configMapGenerator:
+  - name: alertmanager-overview
+    files:
+      - dashboards/alertmanager-overview.json
+  - name: apiserver
+    files:
+      - dashboards/apiserver.json
+  - name: cluster-total
+    files:
+      - dashboards/cluster-total.json
+  - name: controller-manager
+    files:
+      - dashboards/controller-manager.json
+  - name: etcd
+    files:
+      - dashboards/etcd.json
+  - name: grafana-overview
+    files:
+      - dashboards/grafana-overview.json
+  - name: k8s-coredns
+    files:
+      - dashboards/k8s-coredns.json
+  - name: k8s-resources-cluster
+    files:
+      - dashboards/k8s-resources-cluster.json
+  - name: k8s-resources-namespace
+    files:
+      - dashboards/k8s-resources-namespace.json
+  - name: k8s-resources-node
+    files:
+      - dashboards/k8s-resources-node.json
+  - name: k8s-resources-pod
+    files:
+      - dashboards/k8s-resources-pod.json
+  - name: k8s-resources-workload
+    files:
+      - dashboards/k8s-resources-workload.json
+  - name: k8s-resources-workloads-namespace
+    files:
+      - dashboards/k8s-resources-workloads-namespace.json
+  - name: kubelet
+    files:
+      - dashboards/kubelet.json
+  - name: namespace-by-pod
+    files:
+      - dashboards/namespace-by-pod.json
+  - name: namespace-by-workload
+    files:
+      - dashboards/namespace-by-workload.json
+  - name: node-cluster-rsrc-use
+    files:
+      - dashboards/node-cluster-rsrc-use.json
+  - name: node-rsrc-use
+    files:
+      - dashboards/node-rsrc-use.json
+  - name: nodes-aix
+    files:
+      - dashboards/nodes-aix.json
+  - name: nodes-darwin
+    files:
+      - dashboards/nodes-darwin.json
+  - name: nodes
+    files:
+      - dashboards/nodes.json
+  - name: persistentvolumesusage
+    files:
+      - dashboards/persistentvolumesusage.json
+  - name: pod-total
+    files:
+      - dashboards/pod-total.json
+  - name: prometheus
+    files:
+      - dashboards/prometheus.json
+  - name: proxy
+    files:
+      - dashboards/proxy.json
+  - name: scheduler
+    files:
+      - dashboards/scheduler.json
+  - name: workload-total
+    files:
+      - dashboards/workload-total.json

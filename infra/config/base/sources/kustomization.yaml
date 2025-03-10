@@ -6,3 +6,4 @@ resources:
   - kyverno-policies.yaml
   - authelia.yaml
   - nfs-ganesha.yaml
+  - grafana.yaml
