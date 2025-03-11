@@ -76,13 +76,9 @@ spec:
       containers:
         - image: linuxserver/qbittorrent:5.0.4
           name: qbittorrent
-          env:
-            - name: TZ
-              value: "Etc/UTC"
-            - name: PUID
-              value: "1000"
-            - name: PGID
-              value: "1000"
+          envFrom:
+            - configMapRef:
+                name: standard-env
           readinessProbe:
             httpGet:
               path: /
