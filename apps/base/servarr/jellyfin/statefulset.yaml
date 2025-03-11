@@ -39,23 +39,22 @@ spec:
           securityContext:
             allowPrivilegeEscalation: false
           volumeMounts:
-            - name: movies
+            - name: media
               mountPath: /movies
+              subPath: movies
               readOnly: true
-            - name: shows
+            - name: media
               mountPath: /shows
+              subPath: shows
               readOnly: true
             - name: cache
               mountPath: /cache
             - name: config
               mountPath: /config
       volumes:
-        - name: movies
+        - name: media
           persistentVolumeClaim:
-            claimName: movies
-        - name: shows
-          persistentVolumeClaim:
-            claimName: shows
+            claimName: media
         - name: cache
           emptyDir: {}
   volumeClaimTemplates:
