@@ -101,10 +101,6 @@ spec:
           datasource:
             - name: DS_PROMETHEUS
               value: prometheus
-        radarr:
-          gnetId: 12896
-          revision: 1
-          datasource: Prometheus
         Traefik:
           gnetId: 17347
           revision: 9
