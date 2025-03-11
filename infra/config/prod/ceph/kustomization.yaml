@@ -6,3 +6,4 @@ resources:
   - cluster.yaml
   - replica-pool.yaml
   - cephfs.yaml
+  - hddfs.yaml
