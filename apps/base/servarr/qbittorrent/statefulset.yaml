@@ -99,15 +99,16 @@ spec:
           volumeMounts:
             - name: config
               mountPath: /config
-            - name: downloads
+            - name: media
               mountPath: /data/downloads
+              subPath: downloads
       volumes:
         - name: qbittorrent-conf
           configMap:
             name: qbittorrent-conf
-        - name: downloads
+        - name: media
           persistentVolumeClaim:
-            claimName: downloads
+            claimName: media
   volumeClaimTemplates:
     - metadata:
         name: config
