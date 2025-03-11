@@ -18,6 +18,8 @@ spec:
       labels:
         app.kubernetes.io/name: sonarr
     spec:
+      securityContext:
+        fsGroup: 1000
       initContainers:
         - name: wait-for-cnpg
           image: postgres:17
@@ -86,20 +88,19 @@ spec:
           volumeMounts:
             - name: config
               mountPath: /config
-            - name: downloads
-              mountPath: /data/downloads
-            - name: shows
-              mountPath: /data/shows
             - name: booleans
               mountPath: /tmp
+            - name: media
+              mountPath: /data/downloads
+              subPath: downloads
+            - name: media
+              mountPath: /data/shows
+              subPath: shows
       volumes:
         - name: config
           emptyDir: {}
         - name: booleans
           emptyDir: {}
-        - name: shows
+        - name: media
           persistentVolumeClaim:
-            claimName: shows
-        - name: downloads
-          persistentVolumeClaim:
-            claimName: downloads
+            claimName: media
