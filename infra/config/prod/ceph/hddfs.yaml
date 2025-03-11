@@ -23,6 +23,8 @@ kind: StorageClass
 metadata:
   name: rook-cephfs-hdd
 provisioner: rook-ceph.cephfs.csi.ceph.com
+reclaimPolicy: Delete
+allowVolumeExpansion: true
 parameters:
   clusterID: rook-ceph
   fsName: hddfs
@@ -33,4 +35,3 @@ parameters:
   csi.storage.k8s.io/controller-expand-secret-namespace: rook-ceph
   csi.storage.k8s.io/node-stage-secret-name: rook-csi-cephfs-node
   csi.storage.k8s.io/node-stage-secret-namespace: rook-ceph
-reclaimPolicy: Delete
