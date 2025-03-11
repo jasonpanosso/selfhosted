@@ -16,9 +16,9 @@ kind: Service
 metadata:
   name: calibre-web-automated-book-downloader
   labels:
-    app.kubernetes.io/name: calibre-web-automated-book-downloader
+    app.kubernetes.io/name: calibre-web-automated
 spec:
   ports:
     - port: 8084
   selector:
-    app.kubernetes.io/name: calibre-web-automated-book-downloader
+    app.kubernetes.io/name: calibre-web-automated

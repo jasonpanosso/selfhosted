@@ -4,8 +4,6 @@ namespace: calibre
 
 resources:
   - namespace.yaml
-  - volume.yaml
   - statefulset.yaml
-  - deployment.yaml
   - service.yaml
   - ingress.yaml

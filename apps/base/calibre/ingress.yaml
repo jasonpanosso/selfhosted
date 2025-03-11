@@ -24,7 +24,7 @@ kind: IngressRoute
 metadata:
   name: calibre-web-automated-book-downloader
   labels:
-    app.kubernetes.io/name: calibre-web-automated-book-downloader
+    app.kubernetes.io/name: calibre-web-automated
 spec:
   entryPoints:
     - websecure
