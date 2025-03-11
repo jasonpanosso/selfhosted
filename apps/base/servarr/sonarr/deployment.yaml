@@ -91,11 +91,7 @@ spec:
             - name: booleans
               mountPath: /tmp
             - name: media
-              mountPath: /data/downloads
-              subPath: downloads
-            - name: media
-              mountPath: /data/shows
-              subPath: shows
+              mountPath: /data
       volumes:
         - name: config
           emptyDir: {}

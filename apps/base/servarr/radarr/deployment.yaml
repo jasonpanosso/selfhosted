@@ -89,11 +89,7 @@ spec:
             - name: config
               mountPath: /config
             - name: media
-              mountPath: /data/downloads
-              subPath: downloads
-            - name: media
-              mountPath: /data/movies
-              subPath: movies
+              mountPath: /data
             - name: booleans
               mountPath: /tmp
       volumes:
