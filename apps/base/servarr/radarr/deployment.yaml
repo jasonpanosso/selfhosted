@@ -18,6 +18,8 @@ spec:
       labels:
         app.kubernetes.io/name: radarr
     spec:
+      securityContext:
+        fsGroup: 1000
       initContainers:
         - name: wait-for-cnpg
           image: postgres:17
@@ -86,10 +88,12 @@ spec:
           volumeMounts:
             - name: config
               mountPath: /config
-            - name: downloads
+            - name: media
               mountPath: /data/downloads
-            - name: movies
+              subPath: downloads
+            - name: media
               mountPath: /data/movies
+              subPath: movies
             - name: booleans
               mountPath: /tmp
       volumes:
@@ -97,9 +101,6 @@ spec:
           emptyDir: {}
         - name: booleans
           emptyDir: {}
-        - name: movies
+        - name: media
           persistentVolumeClaim:
-            claimName: movies
-        - name: downloads
-          persistentVolumeClaim:
-            claimName: downloads
+            claimName: media
