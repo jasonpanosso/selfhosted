@@ -5,6 +5,7 @@ metadata:
   name: replica-pool
 spec:
   failureDomain: host
+  deviceClass: ssd
   replicated:
     size: 3
     requireSafeReplicaSize: true
