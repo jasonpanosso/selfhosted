@@ -20,6 +20,8 @@ spec:
     modules:
       - name: rook
         enabled: true
+      - name: pg_autoscaler
+        enabled: true
   resources:
     api:
       requests:
