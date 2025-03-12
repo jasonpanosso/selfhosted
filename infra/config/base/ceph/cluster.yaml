@@ -55,6 +55,13 @@ spec:
       limits:
         cpu: 1
         memory: 3Gi
+    osd-nvme:
+      requests:
+        cpu: 1
+        memory: 3Gi
+      limits:
+        cpu: 1
+        memory: 3Gi
   dashboard:
     enabled: true
   monitoring:

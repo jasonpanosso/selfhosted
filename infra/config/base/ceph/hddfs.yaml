@@ -6,7 +6,7 @@ spec:
   metadataPool:
     failureDomain: host
     enableCrushUpdates: true
-    deviceClass: ssd
+    deviceClass: nvme
     replicated:
       size: 3
       requireSafeReplicaSize: true
