@@ -36,15 +36,16 @@ spec:
     mon:
       requests:
         cpu: 500m
-        memory: 1Gi
-      limits:
-        memory: 1Gi
-    osd:
-      requests:
-        cpu: 1
-        memory: 1Gi
+        memory: 2Gi
       limits:
         memory: 2Gi
+    osd:
+      requests:
+        cpu: 500m
+        memory: 3Gi
+      limits:
+        cpu: 500m
+        memory: 3Gi
   dashboard:
     enabled: true
   monitoring:
@@ -85,9 +86,8 @@ spec:
   storage: # cluster level storage configuration and selection
     useAllNodes: true
     useAllDevices: true
-    config:
-    allowDeviceClassUpdate: false # whether to allow changing the device class of an OSD after it is created
-    allowOsdCrushWeightUpdate: false # whether to allow resizing the OSD crush weight after osd pvc is increased
+    allowDeviceClassUpdate: true # whether to allow changing the device class of an OSD after it is created
+    allowOsdCrushWeightUpdate: true # whether to allow resizing the OSD crush weight after osd pvc is increased
     scheduleAlways: false
     onlyApplyOSDPlacement: false
   disruptionManagement:
