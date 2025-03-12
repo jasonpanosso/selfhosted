@@ -4,10 +4,12 @@ kind: Kustomization
 resources:
   - sources/
   - ceph/
+  - service-monitors/
   - device-plugins/
   - middleware/
   - cluster-issuer.yaml
   - wildcard-cert.yaml
+  - monitoring-dashboards/
   - policies/
   - grafana/
 

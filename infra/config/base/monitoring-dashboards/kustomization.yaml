@@ -3,6 +3,5 @@ kind: Kustomization
 
 resources:
   - capacitor.yaml
-  - flux.yaml
   - ceph.yaml
   - alertmanager.yaml
