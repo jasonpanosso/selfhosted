@@ -16,7 +16,7 @@ spec:
       enableCrushUpdates: true
       deviceClass: hdd
       replicated:
-        size: 1
+        size: 2
         requireSafeReplicaSize: false
   preserveFilesystemOnDelete: true
   metadataServer:
