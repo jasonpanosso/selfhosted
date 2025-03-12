@@ -46,6 +46,13 @@ spec:
       limits:
         cpu: 500m
         memory: 3Gi
+    osd-ssd:
+      requests:
+        cpu: 1
+        memory: 3Gi
+      limits:
+        cpu: 1
+        memory: 3Gi
   dashboard:
     enabled: true
   monitoring:
@@ -74,15 +81,11 @@ spec:
       dataSource: zero
       iteration: 1
     allowUninstallWithVolumes: false
-  annotations:
-  labels:
-  removeOSDsIfOutAndSafeToRemove: false
+  removeOSDsIfOutAndSafeToRemove: true
   priorityClassNames:
-    # all: rook-ceph-default-priority-class
     mon: system-node-critical
     osd: system-node-critical
     mgr: system-cluster-critical
-    # crashcollector: rook-ceph-crashcollector-priority-class
   storage: # cluster level storage configuration and selection
     useAllNodes: true
     useAllDevices: true
