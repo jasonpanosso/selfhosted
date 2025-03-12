@@ -100,10 +100,6 @@ push:
   {{call_recipe}} diff_push "${registry}/flux-infra-sync:local" "infra"
   {{call_recipe}} diff_push "${registry}/flux-apps-sync:local" "apps"
 
-  helm package charts/lldap
-  helm push lldap-*.tgz "oci://${registry}/flux-charts"
-  rm lldap-*.tgz
-
 sync:
   #!/usr/bin/env bash
 
