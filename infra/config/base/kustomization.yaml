@@ -3,6 +3,7 @@ kind: Kustomization
 
 resources:
   - sources/
+  - ceph/
   - device-plugins/
   - middleware/
   - cluster-issuer.yaml
