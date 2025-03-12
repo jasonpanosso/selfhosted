@@ -18,6 +18,8 @@ spec:
       labels:
         app.kubernetes.io/name: unpackerr
     spec:
+      securityContext:
+        fsGroup: 1000
       containers:
         - image: golift/unpackerr:0.14
           imagePullPolicy: Always
