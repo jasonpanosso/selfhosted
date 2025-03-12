@@ -47,7 +47,7 @@ spec:
           securityContext:
             allowPrivilegeEscalation: false
       containers:
-        - image: fallenbagel/jellyseerr:2.3.0
+        - image: fallenbagel/jellyseerr:2.5.0
           imagePullPolicy: Always
           name: jellyseerr
           env:
