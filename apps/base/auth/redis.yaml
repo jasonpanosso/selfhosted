@@ -17,7 +17,7 @@ spec:
   timeout: 20m
   values:
     global:
-      defaultStorageClass: local-path
+      defaultStorageClass: rook-ceph-block
     volumePermissions:
       enabled: true
     architecture: replication
@@ -46,6 +46,8 @@ spec:
         limits:
           cpu: "200m"
           memory: "256Mi"
+      persistence:
+        size: 2Gi
     metrics:
       enabled: true
       serviceMonitor:
