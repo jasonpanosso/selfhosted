@@ -16,9 +16,3 @@ machine:
         routes:
           - network: 0.0.0.0/0
             gateway: 192.168.20.1
-  disks:
-    - device: /dev/disk/by-id/wwn-0x50014ee2bae73e2a
-      partitions:
-        - mountpoint: /var/local-path-provisioner
-  nodeLabels:
-    role: nfs-server

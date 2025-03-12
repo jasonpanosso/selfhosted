@@ -4,7 +4,6 @@ kind: Kustomization
 resources:
   - allow-prometheus-node-exporter.yaml
   - allow-qbittorrent-net-admin.yaml
-  - allow-nfs-ganesha-capabilities.yaml
   - allow-metallb-speaker.yaml
   - allow-kube-apiserver.yaml
   - allow-kube-proxy.yaml
