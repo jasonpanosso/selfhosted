@@ -5,7 +5,6 @@ namespace: servarr
 resources:
   - namespace.yaml
   - pvc.yaml
-  - volumes.yaml
   - configmap.yaml
   - pgcluster.yaml
   - ./radarr
