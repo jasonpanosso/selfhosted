@@ -50,14 +50,15 @@ spec:
             runAsUser: 1000
             runAsGroup: 1000
           volumeMounts:
-            - name: downloads
+            - name: media
               mountPath: /data/downloads
+              subPath: downloads
             - name: config
               mountPath: /config
       volumes:
-        - name: downloads
+        - name: media
           persistentVolumeClaim:
-            claimName: downloads
+            claimName: media
         - name: config
           configMap:
             name: unpackerr
