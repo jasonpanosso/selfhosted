@@ -29,7 +29,7 @@ spec:
                 name: standard-env
           env:
             - name: TZ
-              value: ETC/UTC
+              value: Etc/UTC
             - name: UN_RADARR_0_API_KEY
               valueFrom:
                 secretKeyRef:
