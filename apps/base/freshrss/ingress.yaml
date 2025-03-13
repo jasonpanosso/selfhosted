@@ -1,0 +1,20 @@
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: freshrss
+  labels:
+    app.kubernetes.io/name: freshrss
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`rss.${domain}.${tld}`)
+      kind: Rule
+      middlewares:
+        - name: forward-auth
+          namespace: traefik
+      services:
+        - kind: Service
+          name: freshrss
+          port: 80
