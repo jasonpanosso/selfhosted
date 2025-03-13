@@ -1,18 +1,15 @@
 ---
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: jellyseerr
   labels:
     app.kubernetes.io/name: jellyseerr
 spec:
-  replicas: 1
-  revisionHistoryLimit: 3
-  strategy:
-    type: Recreate
   selector:
     matchLabels:
       app.kubernetes.io/name: jellyseerr
+  serviceName: jellyfin
   template:
     metadata:
       labels:
@@ -100,7 +97,12 @@ spec:
           volumeMounts:
             - name: config
               mountPath: /app/config
-      volumes:
-        - name: config
-          persistentVolumeClaim:
-            claimName: jellyseerr
+  volumeClaimTemplates:
+    - metadata:
+        name: config
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 5Gi
+        storageClassName: rook-ceph-block

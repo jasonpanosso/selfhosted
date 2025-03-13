@@ -1,18 +1,15 @@
 ---
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: radarr
   labels:
     app.kubernetes.io/name: radarr
 spec:
-  replicas: 1
-  revisionHistoryLimit: 3
-  strategy:
-    type: Recreate
   selector:
     matchLabels:
       app.kubernetes.io/name: radarr
+  serviceName: radarr
   template:
     metadata:
       labels:
@@ -94,8 +91,15 @@ spec:
             - name: media
               mountPath: /data
       volumes:
-        - name: config
-          emptyDir: {}
         - name: media
           persistentVolumeClaim:
             claimName: media
+  volumeClaimTemplates:
+    - metadata:
+        name: config
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 5Gi
+        storageClassName: rook-ceph-block

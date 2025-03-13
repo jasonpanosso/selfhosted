@@ -3,7 +3,7 @@ kind: Kustomization
 namespace: servarr
 
 resources:
-  - deployment.yaml
+  - statefulset.yaml
   - service.yaml
   - ingress.yaml
 

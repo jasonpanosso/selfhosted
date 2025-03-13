@@ -1,23 +1,22 @@
 ---
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
-  name: prowlarr
+  name: sonarr
   labels:
-    app.kubernetes.io/name: prowlarr
+    app.kubernetes.io/name: sonarr
 spec:
-  replicas: 1
-  revisionHistoryLimit: 3
-  strategy:
-    type: Recreate
   selector:
     matchLabels:
-      app.kubernetes.io/name: prowlarr
+      app.kubernetes.io/name: sonarr
+  serviceName: radarr
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: prowlarr
+        app.kubernetes.io/name: sonarr
     spec:
+      securityContext:
+        fsGroup: 1000
       initContainers:
         - name: wait-for-cnpg
           image: postgres:17
@@ -25,7 +24,7 @@ spec:
           args:
             - |
               echo "Waiting for pgcluster to be ready..."
-              until psql prowlarr -c '' 2>&1; do
+              until psql sonarr -c '' 2>&1; do
                 sleep 2
               done
               echo "pgcluster ready"
@@ -35,60 +34,72 @@ spec:
             - name: PGHOST
               value: pgcluster-rw.servarr.svc.cluster.local
             - name: PGUSER
-              value: prowlarr
+              value: sonarr
             - name: PGPASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: prowlarr-db
+                  name: sonarr-db
                   key: password
           securityContext:
             allowPrivilegeEscalation: false
       containers:
-        - image: ghcr.io/linuxserver/prowlarr:version-1.31.2.4975
+        - image: ghcr.io/linuxserver/sonarr:version-4.0.13.2932
           imagePullPolicy: Always
-          name: prowlarr
+          name: sonarr
           envFrom:
             - configMapRef:
                 name: standard-env
             - configMapRef:
-                name: prowlarr
+                name: sonarr
           env:
-            - name: PROWLARR__POSTGRES__PASSWORD
+            - name: SONARR__POSTGRES__PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: prowlarr-db
+                  name: sonarr-db
                   key: password
-            - name: PROWLARR__AUTH__APIKEY
+            - name: SONARR__AUTH__APIKEY
               valueFrom:
                 secretKeyRef:
                   name: servarr-api-keys
-                  key: prowlarr
-            - name: PROWLARR__LOG__DBENABLED
+                  key: sonarr
+            - name: SONARR__LOG__DBENABLED
               valueFrom:
                 configMapKeyRef:
                   name: booleans
                   key: falsy
           ports:
-            - containerPort: 9696
+            - containerPort: 8989
               name: http
           readinessProbe:
             httpGet:
               path: /ping
-              port: 9696
+              port: 8989
             initialDelaySeconds: 10
             periodSeconds: 15
           resources:
             requests:
-              cpu: 50m
-              memory: 256Mi
-            limits:
               cpu: 500m
               memory: 512Mi
+            limits:
+              cpu: 1500m
+              memory: 2048Mi
           securityContext:
             allowPrivilegeEscalation: false
           volumeMounts:
             - name: config
               mountPath: /config
+            - name: media
+              mountPath: /data
       volumes:
-        - name: config
-          emptyDir: {}
+        - name: media
+          persistentVolumeClaim:
+            claimName: media
+  volumeClaimTemplates:
+    - metadata:
+        name: config
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 5Gi
+        storageClassName: rook-ceph-block
