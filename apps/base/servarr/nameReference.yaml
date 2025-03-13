@@ -4,16 +4,19 @@ nameReference:
     fieldSpecs:
       - kind: HelmRelease
         path: spec/values/cluster/roles/passwordSecret/name
+  # standard-env
   - kind: ConfigMap
     fieldSpecs:
       - kind: Deployment
         path: spec/template/spec/containers/envFrom/configMapRef/name
+      - kind: StatefulSet
+        path: spec/template/spec/containers/envFrom/configMapRef/name
+      - kind: CronJob
+        path: spec/jobTemplate/spec/template/spec/containers/envFrom/configMapRef/name
   - kind: ConfigMap
     fieldSpecs:
       - kind: Deployment
         path: spec/template/spec/volumes/configMap/name
-  - kind: ConfigMap
-    fieldSpecs:
       - kind: StatefulSet
         path: spec/template/spec/volumes/configMap/name
   # mount jellyfin & qbittorrent secrets
@@ -25,7 +28,12 @@ nameReference:
     fieldSpecs:
       - kind: StatefulSet
         path: spec/template/spec/initContainers/envFrom/secretRef/name
-  - kind: Secret
-    fieldSpecs:
       - kind: Deployment
         path: spec/template/spec/initContainers/env/valueFrom/secretKeyRef/name
+  # booleans
+  - kind: ConfigMap
+    fieldSpecs:
+      - kind: Deployment
+        path: spec/template/spec/containers/env/valueFrom/configMapKeyRef/name
+      - kind: StatefulSet
+        path: spec/template/spec/containers/env/valueFrom/configMapKeyRef/name

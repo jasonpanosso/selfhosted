@@ -63,8 +63,11 @@ spec:
                 secretKeyRef:
                   name: servarr-api-keys
                   key: prowlarr
-            - name: FILE__PROWLARR__LOG__DBENABLED
-              value: /tmp/false
+            - name: PROWLARR__LOG__DBENABLED
+              valueFrom:
+                configMapKeyRef:
+                  name: booleans
+                  key: falsy
           ports:
             - containerPort: 9696
               name: http
@@ -86,10 +89,6 @@ spec:
           volumeMounts:
             - name: config
               mountPath: /config
-            - name: booleans
-              mountPath: /tmp
       volumes:
         - name: config
-          emptyDir: {}
-        - name: booleans
           emptyDir: {}

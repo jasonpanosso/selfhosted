@@ -65,8 +65,11 @@ spec:
                 secretKeyRef:
                   name: servarr-api-keys
                   key: radarr
-            - name: FILE__RADARR__LOG__DBENABLED
-              value: /tmp/false
+            - name: RADARR__LOG__DBENABLED
+              valueFrom:
+                configMapKeyRef:
+                  name: booleans
+                  key: falsy
           ports:
             - containerPort: 7878
               name: http
@@ -90,12 +93,8 @@ spec:
               mountPath: /config
             - name: media
               mountPath: /data
-            - name: booleans
-              mountPath: /tmp
       volumes:
         - name: config
-          emptyDir: {}
-        - name: booleans
           emptyDir: {}
         - name: media
           persistentVolumeClaim:

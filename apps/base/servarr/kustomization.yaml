@@ -5,7 +5,6 @@ namespace: servarr
 resources:
   - namespace.yaml
   - pvc.yaml
-  - configmap.yaml
   - pgcluster.yaml
   - ./radarr
   - ./sonarr
@@ -17,19 +16,18 @@ resources:
   - ./jellyfin
   - ./jellyseerr
 
+configMapGenerator:
+  - name: standard-env
+    literals:
+      - PUID="1000"
+      - PGID="1000"
+      - TZ=Etc/UTC
+  # prowlarr/radarr/sonarr can not parse true/false env vars with quotes,
+  # loading env vars from config map has no quotes(??)
+  - name: booleans
+    literals:
+      - truthy="true"
+      - falsy="false"
+
 configurations:
   - nameReference.yaml
-
-patches:
-  - target:
-      kind: Deployment
-      name: sonarr
-    path: patch-boolean-values.yaml
-  - target:
-      kind: Deployment
-      name: radarr
-    path: patch-boolean-values.yaml
-  - target:
-      kind: Deployment
-      name: prowlarr
-    path: patch-boolean-values.yaml

@@ -65,8 +65,11 @@ spec:
                 secretKeyRef:
                   name: servarr-api-keys
                   key: sonarr
-            - name: FILE__SONARR__LOG__DBENABLED
-              value: /tmp/false
+            - name: SONARR__LOG__DBENABLED
+              valueFrom:
+                configMapKeyRef:
+                  name: booleans
+                  key: falsy
           ports:
             - containerPort: 8989
               name: http
@@ -88,14 +91,10 @@ spec:
           volumeMounts:
             - name: config
               mountPath: /config
-            - name: booleans
-              mountPath: /tmp
             - name: media
               mountPath: /data
       volumes:
         - name: config
-          emptyDir: {}
-        - name: booleans
           emptyDir: {}
         - name: media
           persistentVolumeClaim:
