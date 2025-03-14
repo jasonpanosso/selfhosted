@@ -1,4 +1,3 @@
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -21,7 +20,7 @@ spec:
       securityContext:
         fsGroup: 1000
       containers:
-        - image: ghcr.io/unpackerr/unpackerr:0.13 # {"$imagepolicy": "flux-system:unpackerr"}
+        - image: ghcr.io/unpackerr/unpackerr:v0.14.5 # {"$imagepolicy": "flux-system:unpackerr"}
           imagePullPolicy: Always
           name: unpackerr
           envFrom:
