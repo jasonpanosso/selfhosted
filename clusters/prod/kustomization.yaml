@@ -14,6 +14,12 @@ secretGenerator:
     namespace: flux-system
     envs:
       - substitutions.sops.env
+  - name: github-app
+    namespace: flux-system
+    envs:
+      - github_app_ids.sops.env
+    files:
+      - githubAppPrivateKey=github_app_private_key.sops.pem
 
 configurations:
   - nameReference.yaml

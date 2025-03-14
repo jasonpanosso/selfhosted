@@ -3,3 +3,7 @@ nameReference:
     fieldSpecs:
       - kind: Kustomization
         path: /spec/postBuild/substituteFrom/name
+  - kind: Secret
+    fieldSpecs:
+      - kind: GitRepository
+        path: /spec/secretRef/name

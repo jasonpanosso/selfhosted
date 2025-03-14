@@ -7,6 +7,9 @@ metadata:
 spec:
   interval: 5m
   url: https://github.com/jasonpanosso/selfhosted
+  provider: github
+  secretRef:
+    name: github-app
   ref:
     branch: main
   ignore: |
