@@ -21,7 +21,7 @@ spec:
       securityContext:
         fsGroup: 1000
       containers:
-        - image: ghcr.io/unpackerr/unpackerr:0.13
+        - image: ghcr.io/unpackerr/unpackerr:0.13 # {"$imagepolicy": "flux-system:unpackerr"}
           imagePullPolicy: Always
           name: unpackerr
           envFrom:

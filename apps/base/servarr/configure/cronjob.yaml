@@ -35,7 +35,7 @@ spec:
 
           containers:
             - name: configarr
-              image: ghcr.io/raydak-labs/configarr:1.13
+              image: ghcr.io/raydak-labs/configarr:1.13 # {"$imagepolicy": "flux-system:configarr"}
               imagePullPolicy: Always
               env:
                 - name: RADARR_API_KEY

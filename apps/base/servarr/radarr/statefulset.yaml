@@ -43,7 +43,7 @@ spec:
           securityContext:
             allowPrivilegeEscalation: false
       containers:
-        - image: ghcr.io/linuxserver/radarr:5.19.3
+        - image: ghcr.io/linuxserver/radarr:5.19.3 # {"$imagepolicy": "flux-system:radarr"}
           imagePullPolicy: Always
           name: radarr
           envFrom:

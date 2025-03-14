@@ -43,7 +43,7 @@ spec:
           securityContext:
             allowPrivilegeEscalation: false
       containers:
-        - image: ghcr.io/linuxserver/sonarr:4.0.13
+        - image: ghcr.io/linuxserver/sonarr:4.0.13 # {"$imagepolicy": "flux-system:sonarr"}
           imagePullPolicy: Always
           name: sonarr
           envFrom:

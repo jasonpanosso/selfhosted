@@ -14,7 +14,7 @@ spec:
         app.kubernetes.io/name: freshrss
     spec:
       containers:
-        - image: docker.io/freshrss/freshrss:1.26.0
+        - image: docker.io/freshrss/freshrss:1.26.0 # {"$imagepolicy": "flux-system:freshrss"}
           name: freshrss
           env:
             - name: CRON_MIN
