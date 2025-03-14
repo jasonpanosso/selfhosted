@@ -12,6 +12,7 @@ resources:
   - monitoring-dashboards/
   - policies/
   - grafana/
+  - image-automation/
 
 configurations:
   - nameReference.yaml

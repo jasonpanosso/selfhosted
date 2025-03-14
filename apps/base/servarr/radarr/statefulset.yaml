@@ -43,7 +43,7 @@ spec:
           securityContext:
             allowPrivilegeEscalation: false
       containers:
-        - image: ghcr.io/linuxserver/radarr:version-5.19.3.9730
+        - image: ghcr.io/linuxserver/radarr:5.19.3
           imagePullPolicy: Always
           name: radarr
           envFrom:

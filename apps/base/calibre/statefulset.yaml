@@ -16,7 +16,7 @@ spec:
         app.kubernetes.io/name: calibre-web-automated
     spec:
       containers:
-        - image: crocodilestick/calibre-web-automated:V3.0.4
+        - image: docker.io/crocodilestick/calibre-web-automated:V3.0.4
           name: calibre-web-automated
           ports:
             - containerPort: 8083

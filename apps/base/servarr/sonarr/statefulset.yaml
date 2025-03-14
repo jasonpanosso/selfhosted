@@ -43,7 +43,7 @@ spec:
           securityContext:
             allowPrivilegeEscalation: false
       containers:
-        - image: ghcr.io/linuxserver/sonarr:version-4.0.13.2932
+        - image: ghcr.io/linuxserver/sonarr:4.0.13
           imagePullPolicy: Always
           name: sonarr
           envFrom:

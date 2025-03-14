@@ -1,0 +1,19 @@
+---
+apiVersion: image.toolkit.fluxcd.io/v1beta2
+kind: ImageRepository
+metadata:
+  name: prowlarr
+spec:
+  image: ghcr.io/linuxserver/prowlarr
+  interval: 12h
+---
+apiVersion: image.toolkit.fluxcd.io/v1beta2
+kind: ImagePolicy
+metadata:
+  name: prowlarr
+spec:
+  imageRepositoryRef:
+    name: prowlarr
+  policy:
+    semver:
+      range: ^1.31

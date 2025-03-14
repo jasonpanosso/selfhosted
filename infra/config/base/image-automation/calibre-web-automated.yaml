@@ -1,0 +1,22 @@
+---
+apiVersion: image.toolkit.fluxcd.io/v1beta2
+kind: ImageRepository
+metadata:
+  name: calibre-web-automated
+spec:
+  image: docker.io/crocodilestick/calibre-web-automated
+  interval: 12h
+---
+apiVersion: image.toolkit.fluxcd.io/v1beta2
+kind: ImagePolicy
+metadata:
+  name: calibre-web-automated
+spec:
+  imageRepositoryRef:
+    name: calibre-web-automated
+  filterTags:
+    pattern: ^V?(?P<version>.*)$
+    extract: $version
+  policy:
+    semver:
+      range: ^3.0.4
