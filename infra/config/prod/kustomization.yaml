@@ -3,6 +3,7 @@ kind: Kustomization
 
 resources:
   - metallb.yaml
+  - imageupdateautomation.yaml
   - ../base
 
 secretGenerator:
