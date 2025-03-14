@@ -1,0 +1,19 @@
+---
+apiVersion: image.toolkit.fluxcd.io/v1beta2
+kind: ImageRepository
+metadata:
+  name: unpackerr
+spec:
+  image: ghcr.io/unpackerr/unpackerr
+  interval: 12h
+---
+apiVersion: image.toolkit.fluxcd.io/v1beta2
+kind: ImagePolicy
+metadata:
+  name: unpackerr
+spec:
+  imageRepositoryRef:
+    name: unpackerr
+  policy:
+    semver:
+      range: ^0.14

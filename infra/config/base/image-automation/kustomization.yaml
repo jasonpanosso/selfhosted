@@ -4,6 +4,13 @@ namespace: flux-system
 
 resources:
   - calibre-web-automated.yaml
+  - configarr.yaml
+  - flaresolverr.yaml
+  - freshrss.yaml
+  - jellyfin.yaml
+  - jellyseerr.yaml
+  - prowlarr.yaml
+  - qbittorrent.yaml
   - radarr.yaml
   - sonarr.yaml
-  - prowlarr.yaml
+  - unpackerr.yaml

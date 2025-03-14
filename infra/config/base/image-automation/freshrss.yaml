@@ -1,0 +1,19 @@
+---
+apiVersion: image.toolkit.fluxcd.io/v1beta2
+kind: ImageRepository
+metadata:
+  name: freshrss
+spec:
+  image: docker.io/freshrss/freshrss
+  interval: 12h
+---
+apiVersion: image.toolkit.fluxcd.io/v1beta2
+kind: ImagePolicy
+metadata:
+  name: freshrss
+spec:
+  imageRepositoryRef:
+    name: freshrss
+  policy:
+    semver:
+      range: ^1.26.0

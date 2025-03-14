@@ -16,7 +16,7 @@ spec:
         app.kubernetes.io/name: jellyfin
     spec:
       containers:
-        - image: docker.io/jellyfin/jellyfin:10.10.6
+        - image: ghcr.io/jellyfin/jellyfin:10.10.6
           name: jellyfin
           ports:
             - containerPort: 8096

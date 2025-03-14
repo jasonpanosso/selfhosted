@@ -44,7 +44,7 @@ spec:
           securityContext:
             allowPrivilegeEscalation: false
       containers:
-        - image: fallenbagel/jellyseerr:2.5.0
+        - image: ghcr.io/fallenbagel/jellyseerr:2.5.0
           imagePullPolicy: Always
           name: jellyseerr
           env:

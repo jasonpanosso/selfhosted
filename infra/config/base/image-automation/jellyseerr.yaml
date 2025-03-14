@@ -1,0 +1,19 @@
+---
+apiVersion: image.toolkit.fluxcd.io/v1beta2
+kind: ImageRepository
+metadata:
+  name: jellyseerr
+spec:
+  image: ghcr.io/fallenbagel/jellyseerr
+  interval: 12h
+---
+apiVersion: image.toolkit.fluxcd.io/v1beta2
+kind: ImagePolicy
+metadata:
+  name: jellyseerr
+spec:
+  imageRepositoryRef:
+    name: jellyseerr
+  policy:
+    semver:
+      range: ^2.5.0

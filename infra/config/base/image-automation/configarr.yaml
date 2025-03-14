@@ -1,0 +1,19 @@
+---
+apiVersion: image.toolkit.fluxcd.io/v1beta2
+kind: ImageRepository
+metadata:
+  name: configarr
+spec:
+  image: ghcr.io/raydak-labs/configarr
+  interval: 12h
+---
+apiVersion: image.toolkit.fluxcd.io/v1beta2
+kind: ImagePolicy
+metadata:
+  name: configarr
+spec:
+  imageRepositoryRef:
+    name: configarr
+  policy:
+    semver:
+      range: ^1.13
