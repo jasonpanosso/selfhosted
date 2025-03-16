@@ -1,13 +1,6 @@
 # Dell Wyse 5070
 machine:
   install:
-    disk: /dev/sdb
+    disk: /dev/disk/by-id/ata-ORICO_3T3JCA0BA5IGAZO6XC0Y
   network:
     hostname: worker-2
-    interfaces:
-      - interface: enp1s0
-        addresses:
-          - 192.168.20.112/24
-        routes:
-          - network: 0.0.0.0/0
-            gateway: 192.168.20.1

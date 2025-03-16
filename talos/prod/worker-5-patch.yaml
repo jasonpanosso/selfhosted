@@ -1,7 +1,7 @@
 # Topton N100
 machine:
   install:
-    disk: /dev/nvme0n1
+    disk: /dev/disk/by-id/nvme-Patriot_M.2_P300_256GB_P300IDBB24110706005
     # intel i915 extension
     image: factory.talos.dev/installer/ad574ba93e52c1e55139a86e034ffe548fa497c6ebbfbd2b4ae6fe0044d4ae6b:v1.9.4
     wipe: false
@@ -9,10 +9,3 @@ machine:
       - talos.platform=metal
   network:
     hostname: worker-5
-    interfaces:
-      - interface: enp4s0
-        addresses:
-          - 192.168.20.115/24
-        routes:
-          - network: 0.0.0.0/0
-            gateway: 192.168.20.1

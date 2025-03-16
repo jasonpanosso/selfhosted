@@ -8,10 +8,3 @@ machine:
     disk: /dev/mmcblk0
   network:
     hostname: worker-6
-    interfaces:
-      - interface: end0
-        addresses:
-          - 192.168.20.116/24
-        routes:
-          - network: 0.0.0.0/0
-            gateway: 192.168.20.1
