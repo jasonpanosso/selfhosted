@@ -96,8 +96,8 @@ spec:
     osd: system-node-critical
     mgr: system-cluster-critical
   storage: # cluster level storage configuration and selection
-    useAllNodes: true
-    useAllDevices: true
+    useAllNodes: false
+    useAllDevices: false
     allowDeviceClassUpdate: true # whether to allow changing the device class of an OSD after it is created
     allowOsdCrushWeightUpdate: true # whether to allow resizing the OSD crush weight after osd pvc is increased
     scheduleAlways: false

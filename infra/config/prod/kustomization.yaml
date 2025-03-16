@@ -11,3 +11,8 @@ secretGenerator:
     namespace: cert-manager
     envs:
       - cloudflare_token.sops.env
+
+patches:
+  - path: cephcluster-patch.yaml
+    target:
+      kind: CephCluster

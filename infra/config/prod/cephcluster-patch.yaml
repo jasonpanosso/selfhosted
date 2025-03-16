@@ -1,0 +1,19 @@
+apiVersion: ceph.rook.io/v1
+kind: CephCluster
+metadata:
+  name: rook-ceph
+spec:
+  storage:
+    nodes:
+      - name: worker-1
+        deviceFilter: ^nvme
+      - name: worker-3
+        deviceFilter: ^nvme
+      - name: worker-4
+        deviceFilter: ^nvme
+      - name: worker-5
+        devices:
+          - name: /dev/disk/by-id/ata-HGST_HDN724040ALE640_PK1334PEJSXBUS
+          - name: /dev/disk/by-id/ata-WDC_WD10EZEX-08WN4A0_WD-WCC6Y4XJFF72
+      - name: worker-6
+        deviceFilter: ^nvme
