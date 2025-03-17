@@ -1,4 +1,3 @@
----
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -44,7 +43,7 @@ spec:
           securityContext:
             allowPrivilegeEscalation: false
       containers:
-        - image: ghcr.io/fallenbagel/jellyseerr:2.5.0 # {"$imagepolicy": "flux-system:jellyseerr"}
+        - image: ghcr.io/fallenbagel/jellyseerr:2.5.1 # {"$imagepolicy": "flux-system:jellyseerr"}
           imagePullPolicy: Always
           name: jellyseerr
           env:
