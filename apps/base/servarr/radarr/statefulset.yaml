@@ -1,4 +1,3 @@
----
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -43,7 +42,7 @@ spec:
           securityContext:
             allowPrivilegeEscalation: false
       containers:
-        - image: ghcr.io/linuxserver/radarr:5.19.3 # {"$imagepolicy": "flux-system:radarr"}
+        - image: ghcr.io/linuxserver/radarr:5.20.2 # {"$imagepolicy": "flux-system:radarr"}
           imagePullPolicy: Always
           name: radarr
           envFrom:
