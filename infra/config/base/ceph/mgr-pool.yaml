@@ -1,0 +1,17 @@
+---
+apiVersion: ceph.rook.io/v1
+kind: CephBlockPool
+metadata:
+  name: builtin-mgr
+spec:
+  name: .mgr
+  failureDomain: host
+  deviceClass: nvme
+  enableCrushUpdates: true
+  replicated:
+    size: 3
+    requireSafeReplicaSize: true
+  parameters:
+    compression_mode: none
+  mirroring:
+    enabled: false
