@@ -27,5 +27,4 @@ talos/**
 !talos/**/*.sops*
 !talos/**/*patch.yaml
 # allow kustomization.yaml in secrets dirs
-!talos/kustomization.yaml
-!talos/**/kustomization.yaml
+!**/secrets/kustomization.yaml

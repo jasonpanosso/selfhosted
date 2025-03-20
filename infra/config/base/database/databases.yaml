@@ -1,0 +1,70 @@
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
+  name: authelia
+spec:
+  name: authelia
+  owner: authelia
+  cluster:
+    name: pgcluster
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
+  name: lldap
+spec:
+  name: lldap
+  owner: lldap
+  cluster:
+    name: pgcluster
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
+  name: radarr
+spec:
+  name: radarr
+  owner: radarr
+  cluster:
+    name: pgcluster
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
+  name: sonarr
+spec:
+  name: sonarr
+  owner: sonarr
+  cluster:
+    name: pgcluster
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
+  name: prowlarr
+spec:
+  name: prowlarr
+  owner: prowlarr
+  cluster:
+    name: pgcluster
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
+  name: jellyseerr
+spec:
+  name: jellyseerr
+  owner: jellyseerr
+  cluster:
+    name: pgcluster
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
+  name: jellyfin
+spec:
+  name: jellyfin
+  owner: jellyfin
+  cluster:
+    name: pgcluster

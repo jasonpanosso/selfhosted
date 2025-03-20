@@ -1,0 +1,49 @@
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: pgcluster
+spec:
+  instances: 3
+  storage:
+    size: 20Gi
+    storageClass: local-path
+  managed:
+    roles:
+      - name: authelia
+        ensure: present
+        passwordSecret:
+          name: authelia-db
+        login: true
+      - name: lldap
+        ensure: present
+        login: true
+        passwordSecret:
+          name: lldap-db
+      - name: radarr
+        ensure: present
+        passwordSecret:
+          name: radarr-db
+        login: true
+      - name: sonarr
+        ensure: present
+        login: true
+        passwordSecret:
+          name: sonarr-db
+      - name: prowlarr
+        ensure: present
+        login: true
+        passwordSecret:
+          name: prowlarr-db
+      - name: jellyfin
+        ensure: present
+        login: true
+        passwordSecret:
+          name: jellyfin-db
+      - name: jellyseerr
+        ensure: present
+        login: true
+        passwordSecret:
+          name: jellyseerr-db
+  monitoring:
+    enablePodMonitor: true
