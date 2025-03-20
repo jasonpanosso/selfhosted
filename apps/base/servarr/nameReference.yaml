@@ -1,9 +1,4 @@
 nameReference:
-  # pgcluster secrets
-  - kind: Secret
-    fieldSpecs:
-      - kind: HelmRelease
-        path: spec/values/cluster/roles/passwordSecret/name
   # standard-env
   - kind: ConfigMap
     fieldSpecs:
@@ -24,12 +19,6 @@ nameReference:
     fieldSpecs:
       - kind: StatefulSet
         path: spec/template/spec/volumes/secret/secretName
-  - kind: Secret
-    fieldSpecs:
-      - kind: StatefulSet
-        path: spec/template/spec/initContainers/envFrom/secretRef/name
-      - kind: Deployment
-        path: spec/template/spec/initContainers/env/valueFrom/secretKeyRef/name
   # booleans
   - kind: ConfigMap
     fieldSpecs:

@@ -2,10 +2,6 @@ nameReference:
   - kind: Secret
     fieldSpecs:
       - kind: HelmRelease
-        path: spec/values/env/valueFrom/secretKeyRef/name
-      - kind: HelmRelease
-        path: spec/values/initContainers/env/valueFrom/secretKeyRef/name
-      - kind: HelmRelease
         path: spec/values/lldap/keySeed/secret/name
       - kind: HelmRelease
         path: spec/values/lldap/jwt/secret/name

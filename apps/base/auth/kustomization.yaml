@@ -5,7 +5,6 @@ namespace: auth
 resources:
   - namespace.yaml
   - redis.yaml
-  - pgcluster.yaml
   - ./authelia
   - ./lldap
 
