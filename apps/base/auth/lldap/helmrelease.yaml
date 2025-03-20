@@ -96,25 +96,4 @@ spec:
             key: password
       - name: LLDAP_DATABASE_URL
         value: |
-          postgres://lldap:$(PG_DATABASE_PASSWORD)@pgcluster-rw.auth.svc.cluster.local/lldap
-
-    initContainers:
-      - name: wait-for-cnpg
-        image: postgres:17
-        command:
-          - sh
-          - -c
-          - |
-            echo "Waiting for pgcluster to be ready..."
-            until pg_isready -h pgcluster-rw.auth.svc.cluster.local -p 5432 -d lldap -U lldap; do
-              sleep 2
-            done
-            echo "pgcluster ready"
-        env:
-          - name: PGPASSWORD
-            valueFrom:
-              secretKeyRef:
-                name: lldap-db
-                key: password
-        securityContext:
-          allowPrivilegeEscalation: false
+          postgres://lldap:$(PG_DATABASE_PASSWORD)@pgcluster-rw.db.svc.cluster.local/lldap

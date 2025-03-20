@@ -14,31 +14,6 @@ spec:
       labels:
         app.kubernetes.io/name: prowlarr
     spec:
-      initContainers:
-        - name: wait-for-cnpg
-          image: postgres:17
-          command: ["sh", "-c"]
-          args:
-            - |
-              echo "Waiting for pgcluster to be ready..."
-              until psql prowlarr -c '' 2>&1; do
-                sleep 2
-              done
-              echo "pgcluster ready"
-          env:
-            - name: PGCONNECT_TIMEOUT
-              value: "3"
-            - name: PGHOST
-              value: pgcluster-rw.servarr.svc.cluster.local
-            - name: PGUSER
-              value: prowlarr
-            - name: PGPASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: prowlarr-db
-                  key: password
-          securityContext:
-            allowPrivilegeEscalation: false
       containers:
         - image: ghcr.io/linuxserver/prowlarr:1.32.2 # {"$imagepolicy": "flux-system:prowlarr"}
           imagePullPolicy: Always

@@ -101,7 +101,7 @@ spec:
           disabled: true
         postgres:
           enabled: true
-          address: "tcp://pgcluster-rw:5432"
+          address: "tcp://pgcluster-rw.db:5432"
           database: "authelia"
           username: "authelia"
           ssl:
@@ -210,26 +210,6 @@ spec:
                           - authelia
                   topologyKey: kubernetes.io/hostname
 
-      initContainers:
-        - name: wait-for-cnpg
-          image: postgres:17
-          command:
-            - sh
-            - -c
-            - |
-              echo "Waiting for pgcluster to be ready..."
-              until pg_isready -h pgcluster-rw.auth.svc.cluster.local -p 5432 -d authelia -U authelia; do
-                sleep 2
-              done
-              echo "pgcluster ready"
-          env:
-            - name: PGPASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: authelia-db
-                  key: password
-          securityContext:
-            allowPrivilegeEscalation: false
       env:
         - name: TZ
           value: Etc/UTC
