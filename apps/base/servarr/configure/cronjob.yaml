@@ -34,7 +34,7 @@ spec:
                   type: RuntimeDefault
           containers:
             - name: configarr
-              image: ghcr.io/raydak-labs/configarr:1.13.1 # {"$imagepolicy": "flux-system:configarr"}
+              image: ghcr.io/raydak-labs/configarr:1.13.2 # {"$imagepolicy": "flux-system:configarr"}
               imagePullPolicy: Always
               env:
                 - name: RADARR_API_KEY
