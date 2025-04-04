@@ -1,28 +1,21 @@
 nameReference:
-  # standard-env
+  # generated config maps
   - kind: ConfigMap
     fieldSpecs:
       - kind: Deployment
         path: spec/template/spec/containers/envFrom/configMapRef/name
       - kind: StatefulSet
         path: spec/template/spec/containers/envFrom/configMapRef/name
-      - kind: CronJob
-        path: spec/jobTemplate/spec/template/spec/containers/envFrom/configMapRef/name
-  - kind: ConfigMap
-    fieldSpecs:
       - kind: Deployment
         path: spec/template/spec/volumes/configMap/name
       - kind: StatefulSet
         path: spec/template/spec/volumes/configMap/name
-  # mount jellyfin & qbittorrent secrets
+      - kind: Deployment
+        path: spec/template/spec/containers/env/valueFrom/configMapKeyRef/name
+      - kind: StatefulSet
+        path: spec/template/spec/containers/env/valueFrom/configMapKeyRef/name
+  # generated secrets
   - kind: Secret
     fieldSpecs:
       - kind: StatefulSet
         path: spec/template/spec/volumes/secret/secretName
-  # booleans
-  - kind: ConfigMap
-    fieldSpecs:
-      - kind: Deployment
-        path: spec/template/spec/containers/env/valueFrom/configMapKeyRef/name
-      - kind: StatefulSet
-        path: spec/template/spec/containers/env/valueFrom/configMapKeyRef/name

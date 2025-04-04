@@ -16,11 +16,6 @@ resources:
   - ./jellyseerr
 
 configMapGenerator:
-  - name: standard-env
-    literals:
-      - PUID="1000"
-      - PGID="1000"
-      - TZ=Etc/UTC
   # prowlarr/radarr/sonarr can not parse true/false env vars with quotes,
   # loading env vars from config map has no quotes(??)
   - name: booleans
