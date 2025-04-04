@@ -18,8 +18,6 @@ spec:
     mode: enabled
   test:
     enable: true
-  dependsOn:
-    - name: pgcluster
   values:
     replicaCount: 3
     bootstrap:

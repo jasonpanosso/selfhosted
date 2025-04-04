@@ -17,7 +17,6 @@ spec:
   dependsOn:
     - name: redis
     - name: lldap
-    - name: pgcluster
   driftDetection:
     mode: enabled
   values:
