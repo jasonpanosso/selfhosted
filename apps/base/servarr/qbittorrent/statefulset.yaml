@@ -16,7 +16,10 @@ spec:
         app.kubernetes.io/name: qbittorrent
     spec:
       securityContext:
-        fsGroup: 1000
+        runAsUser: 65534
+        runAsGroup: 65534
+        fsGroup: 65534
+        fsGroupChangePolicy: OnRootMismatch
       initContainers:
         - image: docker.io/library/busybox:stable
           imagePullPolicy: Always
@@ -70,15 +73,17 @@ spec:
             - secretRef:
                 name: wg-conf
           securityContext:
+            runAsUser: 0
+            allowPrivilegeEscalation: false
             capabilities:
               add:
                 - NET_ADMIN
       containers:
-        - image: ghcr.io/linuxserver/qbittorrent:5.0.4 # {"$imagepolicy": "flux-system:qbittorrent"}
+        - image: ghcr.io/home-operations/qbittorrent:5.0.4 # {"$imagepolicy": "flux-system:qbittorrent"}
           name: qbittorrent
-          envFrom:
-            - configMapRef:
-                name: standard-env
+          env:
+            - name: TZ
+              value: "Etc/UTC"
           readinessProbe:
             httpGet:
               path: /
@@ -92,6 +97,8 @@ spec:
             limits:
               cpu: 1000m
               memory: 1280Mi
+          securityContext:
+            allowPrivilegeEscalation: false
           volumeMounts:
             - name: config
               mountPath: /config

@@ -4,7 +4,7 @@ kind: ImageRepository
 metadata:
   name: qbittorrent
 spec:
-  image: ghcr.io/linuxserver/qbittorrent
+  image: ghcr.io/home-operations/qbittorrent
   interval: 12h
 ---
 apiVersion: image.toolkit.fluxcd.io/v1beta2
