@@ -15,6 +15,11 @@ spec:
       labels:
         app.kubernetes.io/name: jellyfin
     spec:
+      securityContext:
+        runAsUser: 65534
+        runAsGroup: 65534
+        fsGroup: 65534
+        fsGroupChangePolicy: OnRootMismatch
       containers:
         - image: ghcr.io/jellyfin/jellyfin:10.10.6 # {"$imagepolicy": "flux-system:jellyfin"}
           name: jellyfin
