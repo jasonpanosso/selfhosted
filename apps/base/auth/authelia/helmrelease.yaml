@@ -8,7 +8,7 @@ spec:
   chart:
     spec:
       chart: authelia
-      version: "0.9.x"
+      version: "0.10.x"
       sourceRef:
         kind: HelmRepository
         name: authelia
@@ -24,7 +24,6 @@ spec:
       disabled: true
     configMap:
       theme: dark
-
       server:
         endpoints:
           automatic_authz_implementations:
@@ -33,19 +32,11 @@ spec:
 
       access_control:
         default_policy: deny
-        networks:
-          - name: internal
-            networks:
-              - 10.0.0.0/8
-              - 10.244.0.0/16
-              - 192.168.1.0/24
-              - 192.168.10.0/24
-              - 192.168.121.0/24
         rules:
           - domain:
               - calibre.${domain}.${tld}
               - books.${domain}.${tld}
-            subject: group:calibre_web
+            subject: group:calibre_users
             policy: one_factor
 
           # *arr has no support for custom auth, have to bypass for api routes
