@@ -7,3 +7,4 @@ resources:
   - mgr-pool.yaml
   - replica-pool.yaml
   - hddfs.yaml
+  - hdd-replica-pool.yaml
