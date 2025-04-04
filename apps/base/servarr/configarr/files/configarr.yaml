@@ -109,6 +109,9 @@ sonarr:
       # WEB-1080p https://github.com/TRaSH-Guides/Guides/blob/master/docs/json/sonarr/quality-profiles/web-1080p.json
       - template: 72dae194fc92bf828f32cde7744e51a1
         source: TRASH
+      # WEB-1080p-alternative https://github.com/TRaSH-Guides/Guides/blob/master/docs/json/sonarr/quality-profiles/web-1080p-alternative.json
+      - template: 9d142234e45d6143785ac55f5a9e8dc9
+        source: TRASH
 
     delete_old_custom_formats: true
     replace_existing_custom_formats: true
