@@ -6,5 +6,13 @@ resources:
   - helmrelease.yaml
   - ingress.yaml
 
+secretGenerator:
+  - name: lldap-group-configs
+    files:
+      - admins.json=groups/admins.json
+      - jellyfinAdmins.json=groups/jellyfinAdmins.json
+      - jellyfinUsers.json=groups/jellyfinUsers.json
+      - calibreUsers.json=groups/calibreUsers.json
+
 configurations:
   - nameReference.yaml
