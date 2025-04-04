@@ -4,7 +4,7 @@ kind: ImageRepository
 metadata:
   name: radarr
 spec:
-  image: ghcr.io/linuxserver/radarr
+  image: ghcr.io/home-operations/radarr
   interval: 12h
 ---
 apiVersion: image.toolkit.fluxcd.io/v1beta2

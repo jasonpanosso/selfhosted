@@ -15,14 +15,15 @@ spec:
         app.kubernetes.io/name: radarr
     spec:
       securityContext:
-        fsGroup: 1000
+        runAsUser: 65534
+        runAsGroup: 65534
+        fsGroup: 65534
+        fsGroupChangePolicy: OnRootMismatch
       containers:
-        - image: ghcr.io/linuxserver/radarr:5.21.1 # {"$imagepolicy": "flux-system:radarr"}
+        - image: ghcr.io/home-operations/radarr:5.21.1 # {"$imagepolicy": "flux-system:radarr"}
           imagePullPolicy: Always
           name: radarr
           envFrom:
-            - configMapRef:
-                name: standard-env
             - configMapRef:
                 name: radarr
           env:

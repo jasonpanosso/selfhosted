@@ -4,7 +4,7 @@ kind: ImageRepository
 metadata:
   name: sonarr
 spec:
-  image: ghcr.io/linuxserver/sonarr
+  image: ghcr.io/home-operations/sonarr
   interval: 12h
 ---
 apiVersion: image.toolkit.fluxcd.io/v1beta2
