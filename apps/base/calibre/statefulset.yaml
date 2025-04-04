@@ -50,7 +50,7 @@ spec:
           name: calibre-web-automated-book-downloader
           env:
             - name: CLOUDFLARE_PROXY_URL
-              value: http://flaresolverr.servarr.svc.cluster.local
+              value: http://flaresolverr.flaresolverr.svc.cluster.local
           ports:
             - containerPort: 8084
               name: http

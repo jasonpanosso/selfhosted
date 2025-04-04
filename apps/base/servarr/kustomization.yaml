@@ -9,7 +9,6 @@ resources:
   - ./sonarr
   - ./prowlarr
   - ./unpackerr
-  - ./flaresolverr
   - ./configure
   - ./qbittorrent
   - ./jellyfin
