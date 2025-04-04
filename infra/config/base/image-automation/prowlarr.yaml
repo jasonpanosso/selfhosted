@@ -4,7 +4,7 @@ kind: ImageRepository
 metadata:
   name: prowlarr
 spec:
-  image: ghcr.io/linuxserver/prowlarr
+  image: ghcr.io/home-operations/prowlarr
   interval: 12h
 ---
 apiVersion: image.toolkit.fluxcd.io/v1beta2

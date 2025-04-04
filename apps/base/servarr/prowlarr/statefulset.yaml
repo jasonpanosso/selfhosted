@@ -14,13 +14,16 @@ spec:
       labels:
         app.kubernetes.io/name: prowlarr
     spec:
+      securityContext:
+        runAsUser: 65534
+        runAsGroup: 65534
+        fsGroup: 65534
+        fsGroupChangePolicy: OnRootMismatch
       containers:
-        - image: ghcr.io/linuxserver/prowlarr:1.32.2 # {"$imagepolicy": "flux-system:prowlarr"}
+        - image: ghcr.io/home-operations/prowlarr:1.32.2 # {"$imagepolicy": "flux-system:prowlarr"}
           imagePullPolicy: Always
           name: prowlarr
           envFrom:
-            - configMapRef:
-                name: standard-env
             - configMapRef:
                 name: prowlarr
           env:
