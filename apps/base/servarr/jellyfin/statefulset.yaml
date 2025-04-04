@@ -57,6 +57,8 @@ spec:
               mountPath: /cache
             - name: config
               mountPath: /config
+            - name: metadata
+              mountPath: /config/metadata
       volumes:
         - name: media
           persistentVolumeClaim:
@@ -72,3 +74,11 @@ spec:
           requests:
             storage: 5Gi
         storageClassName: rook-ceph-block
+    - metadata:
+        name: metadata
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 100Gi
+        storageClassName: rook-ceph-block-hdd
