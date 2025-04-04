@@ -8,42 +8,34 @@
     flake-utils.lib.eachDefaultSystem (system:
       let
         pkgs = import nixpkgs {
-          system = "x86_64-linux";
-          config.allowUnfree = true;
+          system = system;
         };
-        mkScript = name: text:
-          let
-            script = pkgs.writeShellScriptBin name text;
-          in
-          script;
 
-        scripts = [
-          (mkScript "k" ''kubecolor "$@"'')
-          (mkScript "vagrant" ''docker run -it --rm \
-              -e LIBVIRT_DEFAULT_URI \
-              -v /var/run/libvirt/:/var/run/libvirt/ \
-              -v ~/.vagrant.d:/.vagrant.d \
-              -v $(realpath "''${PWD}"):''${PWD} \
-              -w "''${PWD}" \
-              --network host \
-              vagrantlibvirt/vagrant-libvirt:latest \
-                vagrant $@
-          '')
-        ];
+        vagrant-docker = pkgs.writeShellScriptBin "vagrant" ''
+          docker run -it --rm \
+            -e LIBVIRT_DEFAULT_URI \
+            -v /var/run/libvirt/:/var/run/libvirt/ \
+            -v ~/.vagrant.d:/.vagrant.d \
+            -v $(realpath "''${PWD}"):''${PWD} \
+            -w "''${PWD}" \
+            --network host \
+            vagrantlibvirt/vagrant-libvirt:latest \
+              vagrant $@
+        '';
       in
       {
         devShells.default = pkgs.mkShell {
           buildInputs = with pkgs; [
             docker
             kubectl
-            kubecolor
             sops
             kubernetes-helm
             talosctl
             fluxcd
             just
             age
-          ] ++ scripts;
+            vagrant-docker
+          ];
         };
       });
 }
