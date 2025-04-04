@@ -37,6 +37,8 @@ spec:
               image: ghcr.io/raydak-labs/configarr:1.13.3 # {"$imagepolicy": "flux-system:configarr"}
               imagePullPolicy: Always
               env:
+                - name: TZ
+                  value: Etc/UTC
                 - name: RADARR_API_KEY
                   valueFrom:
                     secretKeyRef:
@@ -47,9 +49,6 @@ spec:
                     secretKeyRef:
                       name: servarr-api-keys
                       key: sonarr
-              envFrom:
-                - configMapRef:
-                    name: standard-env
               volumeMounts:
                 - name: cache
                   mountPath: /app/repos

@@ -86,7 +86,7 @@ spec:
 
     env:
       - name: TZ
-        value: "Etc/UTC"
+        value: Etc/UTC
       - name: PG_DATABASE_PASSWORD
         valueFrom:
           secretKeyRef:

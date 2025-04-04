@@ -54,7 +54,7 @@ spec:
               containerPort: 8080
           env:
             - name: TZ
-              value: "Etc/UTC"
+              value: Etc/UTC
             - name: FIREWALL_DEBUG
               value: "on"
             - name: FIREWALL_INPUT_PORTS
@@ -83,7 +83,7 @@ spec:
           name: qbittorrent
           env:
             - name: TZ
-              value: "Etc/UTC"
+              value: Etc/UTC
           readinessProbe:
             httpGet:
               path: /
