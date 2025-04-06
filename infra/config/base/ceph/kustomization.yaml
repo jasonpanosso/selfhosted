@@ -8,3 +8,4 @@ resources:
   - replica-pool.yaml
   - hddfs.yaml
   - hdd-replica-pool.yaml
+  - object-store.yaml

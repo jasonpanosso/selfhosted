@@ -1,0 +1,41 @@
+---
+apiVersion: ceph.rook.io/v1
+kind: CephObjectStore
+metadata:
+  name: my-store
+spec:
+  metadataPool:
+    failureDomain: host
+    enableCrushUpdates: true
+    deviceClass: nvme
+    replicated:
+      size: 3
+  dataPool:
+    failureDomain: osd
+    enableCrushUpdates: true
+    deviceClass: hdd
+    # For production it is recommended to use more chunks, such as 4+2 or 8+4
+    erasureCoded:
+      dataChunks: 2
+      codingChunks: 1
+  preservePoolsOnDelete: true
+  gateway:
+    port: 80
+    instances: 1
+  hosting:
+    advertiseEndpoint:
+      dnsName: s3.rook-ceph.svc
+      port: 443
+      useTls: true
+    dnsNames:
+      - s3.${domain}.${tld}
+---
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: rook-ceph-bucket
+provisioner: rook-ceph.ceph.rook.io/bucket
+reclaimPolicy: Delete
+parameters:
+  objectStoreName: my-store
+  objectStoreNamespace: rook-ceph
