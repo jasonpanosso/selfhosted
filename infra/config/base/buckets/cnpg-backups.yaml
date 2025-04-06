@@ -8,5 +8,4 @@ spec:
   bucketName: cnpg-backups
   storageClassName: rook-ceph-bucket
   additionalConfig:
-    maxObjects: "1000"
     bucketMaxSize: "100G"
