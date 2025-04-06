@@ -11,3 +11,9 @@ patches:
   - path: cephcluster-patch.yaml
     target:
       kind: CephCluster
+  - path: cnpgcluster-patch.yaml
+    target:
+      kind: Cluster
+
+configurations:
+  - nameReference.yaml

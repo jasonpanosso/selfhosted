@@ -1,0 +1,8 @@
+nameReference:
+  # cnpg backup S3 access/secret key
+  - kind: Secret
+    fieldSpecs:
+      - kind: Cluster
+        path: spec/backup/barmanObjectStore/s3Credentials/accessKeyId/name
+      - kind: Cluster
+        path: spec/backup/barmanObjectStore/s3Credentials/secretAccessKey/name

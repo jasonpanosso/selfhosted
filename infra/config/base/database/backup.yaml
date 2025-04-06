@@ -1,0 +1,12 @@
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: ScheduledBackup
+metadata:
+  name: pgcluster
+spec:
+  # daily @ midnight
+  schedule: "0 0 0 * * *"
+  immediate: true
+  backupOwnerReference: cluster
+  cluster:
+    name: pgcluster
