@@ -4,6 +4,7 @@ kind: Kustomization
 resources:
   - sources/
   - ceph/
+  - buckets/
   - database/
   - service-monitors/
   - device-plugins/
