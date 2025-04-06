@@ -9,3 +9,4 @@ resources:
   - hddfs.yaml
   - hdd-replica-pool.yaml
   - object-store.yaml
+  - ingress.yaml

@@ -1,0 +1,15 @@
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: s3
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`s3.${domain}.${tld}`) || HostRegexp(`^.+\.s3\.${domain}\.${tld}$`)
+      kind: Rule
+      services:
+        - kind: Service
+          name: rook-ceph-rgw-my-store
+          port: 80

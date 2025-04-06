@@ -24,9 +24,9 @@ spec:
     instances: 1
   hosting:
     advertiseEndpoint:
-      dnsName: s3.rook-ceph.svc
-      port: 443
-      useTls: true
+      dnsName: rook-ceph-rgw-my-store.rook-ceph.svc
+      port: 80
+      useTls: false
     dnsNames:
       - s3.${domain}.${tld}
 ---

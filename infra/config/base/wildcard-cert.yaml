@@ -9,6 +9,7 @@ spec:
   dnsNames:
     - ${domain}.${tld}
     - "*.${domain}.${tld}"
+    - "*.s3.${domain}.${tld}"
   issuerRef:
     name: letsencrypt
     kind: ClusterIssuer
