@@ -9,6 +9,7 @@
       let
         pkgs = import nixpkgs {
           system = system;
+          config.allowUnfree = true;
         };
 
         vagrant-docker = pkgs.writeShellScriptBin "vagrant" ''
@@ -26,14 +27,15 @@
       {
         devShells.default = pkgs.mkShell {
           buildInputs = with pkgs; [
+            age
             docker
-            kubectl
-            sops
-            kubernetes-helm
-            talosctl
             fluxcd
             just
-            age
+            kubectl
+            kubernetes-helm
+            sops
+            talosctl
+            terraform
             vagrant-docker
           ];
         };
