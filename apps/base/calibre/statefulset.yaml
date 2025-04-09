@@ -82,7 +82,7 @@ spec:
         accessModes: ["ReadWriteOnce"]
         resources:
           requests:
-            storage: 1Gi
+            storage: 10Gi
         storageClassName: rook-ceph-block
     - metadata:
         name: library
@@ -90,5 +90,5 @@ spec:
         accessModes: ["ReadWriteOnce"]
         resources:
           requests:
-            storage: 20Gi
-        storageClassName: rook-ceph-block
+            storage: 100Gi
+        storageClassName: rook-ceph-block-hdd
