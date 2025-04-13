@@ -1,4 +1,3 @@
----
 apiVersion: batch/v1
 kind: CronJob
 metadata:
@@ -35,7 +34,7 @@ spec:
                   type: RuntimeDefault
           containers:
             - name: configarr
-              image: ghcr.io/raydak-labs/configarr:1.13.3 # {"$imagepolicy": "flux-system:configarr"}
+              image: ghcr.io/raydak-labs/configarr:1.13.4 # {"$imagepolicy": "flux-system:configarr"}
               imagePullPolicy: Always
               env:
                 - name: TZ
