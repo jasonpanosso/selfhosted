@@ -15,3 +15,11 @@ resources:
   - traefik.yaml
   - vertical-pod-autoscaler.yaml
   - goldilocks.yaml
+
+labels:
+  - pairs:
+      goldilocks.fairwinds.com/enabled: "true"
+    fields:
+      - path: metadata/labels
+        create: true
+        kind: Namespace
