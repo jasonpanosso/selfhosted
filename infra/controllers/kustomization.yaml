@@ -13,3 +13,4 @@ resources:
   - kube-prometheus-stack.yaml
   - metrics-server.yaml
   - traefik.yaml
+  - vertical-pod-autoscaler.yaml
