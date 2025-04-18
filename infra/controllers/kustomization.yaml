@@ -14,3 +14,4 @@ resources:
   - metrics-server.yaml
   - traefik.yaml
   - vertical-pod-autoscaler.yaml
+  - goldilocks.yaml

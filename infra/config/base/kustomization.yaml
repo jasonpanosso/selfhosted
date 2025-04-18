@@ -15,6 +15,7 @@ resources:
   - policies/
   - grafana/
   - image-automation/
+  - goldilocks/
 
 configurations:
   - nameReference.yaml
