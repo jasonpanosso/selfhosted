@@ -40,6 +40,16 @@ spec:
         - image: ghcr.io/qdm12/gluetun:latest
           imagePullPolicy: Always
           restartPolicy: Always
+          lifecycle:
+            postStart:
+              exec:
+                # https://github.com/qdm12/gluetun-wiki/blob/main/setup/advanced/kubernetes.md
+                command:
+                  [
+                    "/bin/sh",
+                    "-c",
+                    "(ip rule del table 51820; ip -6 rule del table 51820) || true",
+                  ]
           name: gluetun
           resources:
             requests:
@@ -61,14 +71,6 @@ spec:
               value: "8080"
             - name: VPN_TYPE
               value: wireguard
-            - name: BLOCK_MALICIOUS
-              value: "off"
-            - name: BLOCK_SURVEILLANCE
-              value: "off"
-            - name: BLOCK_ADS
-              value: "off"
-            - name: DOT
-              value: "off"
           envFrom:
             - secretRef:
                 name: wg-conf
@@ -84,11 +86,15 @@ spec:
           env:
             - name: TZ
               value: Etc/UTC
+            - name: QBT_TORRENTING_PORT
+              value: "47042"
+            - name: QBT_WEBUI_PORT
+              value: "8080"
           readinessProbe:
             httpGet:
               path: /
               port: 8080
-            initialDelaySeconds: 5
+            initialDelaySeconds: 10
             periodSeconds: 15
           resources:
             requests:
