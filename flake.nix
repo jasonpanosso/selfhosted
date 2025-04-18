@@ -20,6 +20,7 @@
             fluxcd
             kubectl
             kubernetes-helm
+            kube-linter
             sops
             talosctl
             terraform
