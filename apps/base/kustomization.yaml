@@ -7,3 +7,11 @@ resources:
   - servarr/
   - calibre/
   - freshrss/
+
+labels:
+  - pairs:
+      goldilocks.fairwinds.com/enabled: "true"
+    fields:
+      - path: metadata/labels
+        create: true
+        kind: Namespace
