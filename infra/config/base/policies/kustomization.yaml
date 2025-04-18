@@ -1,3 +1,4 @@
+---
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
@@ -10,7 +11,7 @@ resources:
   - allow-kube-scheduler.yaml
   - allow-kube-flannel.yaml
   - allow-kube-controller-manager.yaml
-  - allow-cephfs.yaml
+  - allow-rook-ceph.yaml
   - allow-local-path-provisioner.yaml
   - allow-generic-device-plugin.yaml
   - cleanup-empty-replicasets.yaml
