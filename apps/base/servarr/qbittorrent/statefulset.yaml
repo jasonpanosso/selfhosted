@@ -38,7 +38,6 @@ spec:
 
         # gluetun sidecar
         - image: ghcr.io/qdm12/gluetun:v3.40.0 # {"$imagepolicy": "flux-system:gluetun"}
-          imagePullPolicy: Always
           restartPolicy: Always
           lifecycle:
             postStart:
@@ -50,6 +49,13 @@ spec:
                     "-c",
                     "(ip rule del table 51820; ip -6 rule del table 51820) || true",
                   ]
+          readinessProbe:
+            exec:
+              command:
+                - /gluetun-entrypoint
+                - healthcheck
+            initialDelaySeconds: 10
+            periodSeconds: 15
           name: gluetun
           resources:
             requests:
@@ -71,6 +77,15 @@ spec:
               value: "8080"
             - name: VPN_TYPE
               value: wireguard
+            - name: PUID
+              value: "65534"
+            - name: PGID
+              value: "65534"
+            # https://github.com/qdm12/gluetun/issues/2630
+            - name: DNS_ADDRESS
+              value: 1.1.1.1
+            - name: DOT
+              value: off
           envFrom:
             - secretRef:
                 name: wg-conf
