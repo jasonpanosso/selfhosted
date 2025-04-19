@@ -37,7 +37,7 @@ spec:
               mountPath: /config
 
         # gluetun sidecar
-        - image: ghcr.io/qdm12/gluetun:latest
+        - image: ghcr.io/qdm12/gluetun:v3.40.0 # {"$imagepolicy": "flux-system:gluetun"}
           imagePullPolicy: Always
           restartPolicy: Always
           lifecycle:
