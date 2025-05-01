@@ -1,4 +1,3 @@
----
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -35,7 +34,6 @@ spec:
               mountPath: /qbt-conf
             - name: config
               mountPath: /config
-
         # gluetun sidecar
         - image: ghcr.io/qdm12/gluetun:v3.40.0 # {"$imagepolicy": "flux-system:gluetun"}
           restartPolicy: Always
@@ -43,12 +41,7 @@ spec:
             postStart:
               exec:
                 # https://github.com/qdm12/gluetun-wiki/blob/main/setup/advanced/kubernetes.md
-                command:
-                  [
-                    "/bin/sh",
-                    "-c",
-                    "(ip rule del table 51820; ip -6 rule del table 51820) || true",
-                  ]
+                command: ["/bin/sh", "-c", "(ip rule del table 51820; ip -6 rule del table 51820) || true"]
           readinessProbe:
             exec:
               command:
@@ -96,7 +89,7 @@ spec:
               add:
                 - NET_ADMIN
       containers:
-        - image: ghcr.io/home-operations/qbittorrent:5.0.4 # {"$imagepolicy": "flux-system:qbittorrent"}
+        - image: ghcr.io/home-operations/qbittorrent:5.1.0 # {"$imagepolicy": "flux-system:qbittorrent"}
           name: qbittorrent
           env:
             - name: TZ
