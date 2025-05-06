@@ -45,7 +45,7 @@ spec:
               mountPath: /config
             - name: library
               mountPath: /calibre-library
-        - image: ghcr.io/calibrain/calibre-web-automated-book-downloader:latest
+        - image: ghcr.io/calibrain/calibre-web-automated-book-downloader:sha-3d2d285
           imagePullPolicy: Always
           name: calibre-web-automated-book-downloader
           env:
