@@ -20,7 +20,7 @@ spec:
         fsGroup: 65534
         fsGroupChangePolicy: OnRootMismatch
       containers:
-        - image: ghcr.io/home-operations/prowlarr:1.36.0 # {"$imagepolicy": "flux-system:prowlarr"}
+        - image: ghcr.io/home-operations/prowlarr:1.36.1 # {"$imagepolicy": "flux-system:prowlarr"}
           imagePullPolicy: Always
           name: prowlarr
           envFrom:
