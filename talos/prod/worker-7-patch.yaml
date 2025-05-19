@@ -1,0 +1,10 @@
+# orange pi 5 plus
+machine:
+  install:
+    image: factory.talos.dev/metal-installer/42a8c82f893fd2208240bbcfef122e6d6a91388c399ffcfc1df0ef7f43066f7a:v1.10.2
+    wipe: false
+    extraKernelArgs:
+      - talos.platform=metal
+    disk: /dev/mmcblk0
+  network:
+    hostname: worker-7
