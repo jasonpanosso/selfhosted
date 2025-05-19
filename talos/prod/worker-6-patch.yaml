@@ -1,7 +1,7 @@
 # orange pi 5
 machine:
   install:
-    image: factory.talos.dev/installer/af10c8f63c99bc8d90aea6f601d4b1e65ede330557ee0f769f9bf332fc20f341:v1.9.4
+    image: factory.talos.dev/metal-installer/f2cc7c4f0bba2ba38ac71b9bfc527af63b5b9603158981e13cbf9fbcb637aa89:v1.10.2
     wipe: false
     extraKernelArgs:
       - talos.platform=metal
