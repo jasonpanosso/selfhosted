@@ -15,6 +15,7 @@ resources:
   - traefik.yaml
   - vertical-pod-autoscaler.yaml
   - goldilocks.yaml
+  - descheduler.yaml
 
 labels:
   - pairs:
