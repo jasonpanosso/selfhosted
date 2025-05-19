@@ -33,7 +33,7 @@ spec:
     recommender:
       extraArgs:
         prometheus-address: |
-          http://kube-prometheus-stack-operator.monitoring.svc.cluster.local:9090
+          http://kube-prometheus-stack-prometheus.monitoring.svc.cluster.local:9090
         storage: prometheus
       podMonitor:
         enabled: true
