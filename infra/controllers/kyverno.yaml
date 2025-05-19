@@ -41,6 +41,7 @@ spec:
         enabled: true
         namespace: "*"
     cleanupController:
+      replicas: 3
       rbac:
         clusterRole:
           extraResources:
@@ -53,6 +54,12 @@ spec:
                 - list
                 - watch
                 - delete
+    admissionController:
+      replicas: 3
+    backgroundController:
+      replicas: 2
+    reportsController:
+      replicas: 2
   dependsOn:
     - name: kube-prometheus-stack
       namespace: monitoring
