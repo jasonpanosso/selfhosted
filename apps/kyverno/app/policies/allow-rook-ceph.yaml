@@ -1,0 +1,330 @@
+---
+apiVersion: kyverno.io/v2
+kind: PolicyException
+metadata:
+  name: csi-cephfsplugin-exception
+spec:
+  exceptions:
+    - policyName: disallow-host-path
+      ruleNames:
+        - host-path
+        - autogen-host-path
+    - policyName: disallow-host-namespaces
+      ruleNames:
+        - host-namespaces
+        - autogen-host-namespaces
+    - policyName: disallow-capabilities
+      ruleNames:
+        - adding-capabilities
+        - autogen-adding-capabilities
+    - policyName: disallow-privileged-containers
+      ruleNames:
+        - autogen-privileged-containers
+        - privileged-containers
+  match:
+    any:
+      - resources:
+          kinds:
+            - Pod
+            - DaemonSet
+          namespaces:
+            - rook-ceph
+          names:
+            - csi-cephfsplugin*
+---
+apiVersion: kyverno.io/v2
+kind: PolicyException
+metadata:
+  name: csi-rbdplugin-exception
+  namespace: kyverno
+spec:
+  exceptions:
+    - policyName: disallow-host-path
+      ruleNames:
+        - host-path
+        - autogen-host-path
+    - policyName: disallow-host-namespaces
+      ruleNames:
+        - host-namespaces
+        - autogen-host-namespaces
+    - policyName: disallow-capabilities
+      ruleNames:
+        - adding-capabilities
+        - autogen-adding-capabilities
+    - policyName: disallow-privileged-containers
+      ruleNames:
+        - autogen-privileged-containers
+        - privileged-containers
+  match:
+    any:
+      - resources:
+          kinds:
+            - Pod
+            - DaemonSet
+          namespaces:
+            - rook-ceph
+          names:
+            - csi-rbdplugin*
+---
+apiVersion: kyverno.io/v2
+kind: PolicyException
+metadata:
+  name: rook-discover-exception
+  namespace: kyverno
+spec:
+  exceptions:
+    - policyName: disallow-host-path
+      ruleNames:
+        - host-path
+        - autogen-host-path
+    - policyName: disallow-privileged-containers
+      ruleNames:
+        - autogen-privileged-containers
+        - privileged-containers
+  match:
+    any:
+      - resources:
+          kinds:
+            - Pod
+            - DaemonSet
+          namespaces:
+            - rook-ceph
+          names:
+            - rook-discover*
+---
+apiVersion: kyverno.io/v2
+kind: PolicyException
+metadata:
+  name: csi-rbdplugin-provisioner-exception
+  namespace: kyverno
+spec:
+  exceptions:
+    - policyName: disallow-host-path
+      ruleNames:
+        - host-path
+        - autogen-host-path
+  match:
+    any:
+      - resources:
+          kinds:
+            - Pod
+            - ReplicaSet
+            - Deployment
+          namespaces:
+            - rook-ceph
+          names:
+            - csi-rbdplugin-provisioner*
+---
+apiVersion: kyverno.io/v2
+kind: PolicyException
+metadata:
+  name: csi-cephfsplugin-provisioner-exception
+  namespace: kyverno
+spec:
+  exceptions:
+    - policyName: disallow-host-path
+      ruleNames:
+        - host-path
+        - autogen-host-path
+  match:
+    any:
+      - resources:
+          kinds:
+            - Pod
+            - ReplicaSet
+            - Deployment
+          namespaces:
+            - rook-ceph
+          names:
+            - csi-cephfsplugin-provisioner*
+---
+apiVersion: kyverno.io/v2
+kind: PolicyException
+metadata:
+  name: rook-ceph-mon-exception
+  namespace: kyverno
+spec:
+  exceptions:
+    - policyName: disallow-host-path
+      ruleNames:
+        - host-path
+        - autogen-host-path
+  match:
+    any:
+      - resources:
+          kinds:
+            - Pod
+            - ReplicaSet
+            - Deployment
+          namespaces:
+            - rook-ceph
+          names:
+            - rook-ceph-mon*
+---
+apiVersion: kyverno.io/v2
+kind: PolicyException
+metadata:
+  name: rook-ceph-exporter-worker-exception
+  namespace: kyverno
+spec:
+  exceptions:
+    - policyName: disallow-host-path
+      ruleNames:
+        - host-path
+        - autogen-host-path
+  match:
+    any:
+      - resources:
+          kinds:
+            - Pod
+            - ReplicaSet
+            - Deployment
+          namespaces:
+            - rook-ceph
+          names:
+            - rook-ceph-exporter-worker*
+---
+apiVersion: kyverno.io/v2
+kind: PolicyException
+metadata:
+  name: rook-ceph-osd-prepare-worker-exception
+  namespace: kyverno
+spec:
+  exceptions:
+    - policyName: disallow-host-path
+      ruleNames:
+        - host-path
+        - autogen-host-path
+    - policyName: disallow-privileged-containers
+      ruleNames:
+        - autogen-privileged-containers
+        - privileged-containers
+  match:
+    any:
+      - resources:
+          kinds:
+            - Pod
+            - Job
+          namespaces:
+            - rook-ceph
+          names:
+            - rook-ceph-osd-prepare-worker*
+---
+apiVersion: kyverno.io/v2
+kind: PolicyException
+metadata:
+  name: rook-ceph-crashcollector-worker-exception
+  namespace: kyverno
+spec:
+  exceptions:
+    - policyName: disallow-host-path
+      ruleNames:
+        - host-path
+        - autogen-host-path
+  match:
+    any:
+      - resources:
+          kinds:
+            - Pod
+            - Deployment
+            - ReplicaSet
+          namespaces:
+            - rook-ceph
+          names:
+            - rook-ceph-crashcollector-worker*
+---
+apiVersion: kyverno.io/v2
+kind: PolicyException
+metadata:
+  name: rook-ceph-osd-exception
+  namespace: kyverno
+spec:
+  exceptions:
+    - policyName: disallow-host-path
+      ruleNames:
+        - host-path
+        - autogen-host-path
+    - policyName: disallow-privileged-containers
+      ruleNames:
+        - autogen-privileged-containers
+        - privileged-containers
+  match:
+    any:
+      - resources:
+          kinds:
+            - Pod
+            - Deployment
+            - ReplicaSet
+          namespaces:
+            - rook-ceph
+          names:
+            - rook-ceph-osd*
+---
+apiVersion: kyverno.io/v2
+kind: PolicyException
+metadata:
+  name: rook-ceph-mgr-exception
+  namespace: kyverno
+spec:
+  exceptions:
+    - policyName: disallow-host-path
+      ruleNames:
+        - host-path
+        - autogen-host-path
+  match:
+    any:
+      - resources:
+          kinds:
+            - Pod
+            - Deployment
+            - ReplicaSet
+          namespaces:
+            - rook-ceph
+          names:
+            - rook-ceph-mgr*
+---
+apiVersion: kyverno.io/v2
+kind: PolicyException
+metadata:
+  name: rook-ceph-mds-exception
+  namespace: kyverno
+spec:
+  exceptions:
+    - policyName: disallow-host-path
+      ruleNames:
+        - host-path
+        - autogen-host-path
+  match:
+    any:
+      - resources:
+          kinds:
+            - Pod
+            - Deployment
+            - ReplicaSet
+          namespaces:
+            - rook-ceph
+          names:
+            - rook-ceph-mds*
+---
+apiVersion: kyverno.io/v2
+kind: PolicyException
+metadata:
+  name: rook-ceph-rgw-exception
+  namespace: kyverno
+spec:
+  exceptions:
+    - policyName: disallow-host-path
+      ruleNames:
+        - host-path
+        - autogen-host-path
+  match:
+    any:
+      - resources:
+          kinds:
+            - Pod
+            - Deployment
+            - ReplicaSet
+          namespaces:
+            - rook-ceph
+          names:
+            - rook-ceph-rgw*

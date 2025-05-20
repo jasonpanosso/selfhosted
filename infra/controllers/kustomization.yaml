@@ -3,24 +3,4 @@ kind: Kustomization
 
 resources:
   - flux-operator.yaml
-  - kyverno.yaml
-  - cert-manager.yaml
-  - metallb.yaml
-  - local-path-provisioner.yaml
   - rook-ceph.yaml
-  - cnpg.yaml
-  - capacitor.yaml
-  - kube-prometheus-stack.yaml
-  - metrics-server.yaml
-  - traefik.yaml
-  - vertical-pod-autoscaler.yaml
-  - goldilocks.yaml
-  - descheduler.yaml
-
-labels:
-  - pairs:
-      goldilocks.fairwinds.com/enabled: "true"
-    fields:
-      - path: metadata/labels
-        create: true
-        kind: Namespace

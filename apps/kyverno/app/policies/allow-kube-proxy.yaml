@@ -1,0 +1,29 @@
+---
+apiVersion: kyverno.io/v2
+kind: PolicyException
+metadata:
+  name: kube-proxy-pod-security-exception
+spec:
+  exceptions:
+    - policyName: disallow-host-path
+      ruleNames:
+        - host-path
+        - autogen-host-path
+    - policyName: disallow-host-namespaces
+      ruleNames:
+        - host-namespaces
+        - autogen-host-namespaces
+    - policyName: disallow-privileged-containers
+      ruleNames:
+        - privileged-containers
+        - autogen-privileged-containers
+  match:
+    any:
+      - resources:
+          kinds:
+            - Pod
+            - DaemonSet
+          namespaces:
+            - kube-system
+          names:
+            - kube-proxy*

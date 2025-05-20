@@ -1,0 +1,23 @@
+---
+apiVersion: kyverno.io/v2
+kind: PolicyException
+metadata:
+  name: local-path-provisioner-exception
+spec:
+  exceptions:
+    - policyName: disallow-host-path
+      ruleNames:
+        - host-path
+        - autogen-host-path
+  match:
+    any:
+      - resources:
+          kinds:
+            - Pod
+            - Deployment
+            - ReplicaSet
+          namespaces:
+            - local-path-provisioner
+          names:
+            - helper-pod*
+            - local-path-provisioner*

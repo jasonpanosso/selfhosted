@@ -1,0 +1,66 @@
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: &app drm-generic-device-plugin
+  labels:
+    app.kubernetes.io/name: *app
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: *app
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: *app
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: "extensions.talos.dev/i915"
+                    operator: Exists
+      priorityClassName: system-node-critical
+      tolerations:
+        - operator: "Exists"
+          effect: "NoExecute"
+        - operator: "Exists"
+          effect: "NoSchedule"
+      containers:
+        - image: *app
+          args:
+            - --device
+            - |
+              name: drm
+              groups:
+                - count: 1000
+                  paths:
+                    - path: /dev/dri/renderD128
+          name: *app
+          resources:
+            requests:
+              cpu: 50m
+              memory: 10Mi
+            limits:
+              cpu: 50m
+              memory: 20Mi
+          ports:
+            - containerPort: 8080
+              name: http
+          securityContext:
+            privileged: true
+          volumeMounts:
+            - name: device-plugin
+              mountPath: /var/lib/kubelet/device-plugins
+            - name: dev
+              mountPath: /dev
+      volumes:
+        - name: device-plugin
+          hostPath:
+            path: /var/lib/kubelet/device-plugins
+        - name: dev
+          hostPath:
+            path: /dev
+  updateStrategy:
+    type: RollingUpdate

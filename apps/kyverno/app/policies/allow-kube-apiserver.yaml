@@ -1,0 +1,24 @@
+---
+apiVersion: kyverno.io/v2
+kind: PolicyException
+metadata:
+  name: kube-apiserver-pod-security-exception
+spec:
+  exceptions:
+    - policyName: disallow-host-path
+      ruleNames:
+        - host-path
+        - autogen-host-path
+    - policyName: disallow-host-namespaces
+      ruleNames:
+        - host-namespaces
+        - autogen-host-namespaces
+  match:
+    any:
+      - resources:
+          kinds:
+            - Pod
+          namespaces:
+            - kube-system
+          names:
+            - kube-apiserver*

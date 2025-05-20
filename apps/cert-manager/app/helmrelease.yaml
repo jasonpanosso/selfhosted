@@ -1,0 +1,42 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/source.toolkit.fluxcd.io/ocirepository_v1beta2.json
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: OCIRepository
+metadata:
+  name: cert-manager
+spec:
+  interval: 5m
+  layerSelector:
+    mediaType: application/vnd.cncf.helm.chart.content.v1.tar+gzip
+    operation: copy
+  ref:
+    tag: v1.17.2
+  url: oci://quay.io/jetstack/charts/cert-manager
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/source.toolkit.fluxcd.io/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: cert-manager
+spec:
+  interval: 1h
+  chartRef:
+    kind: OCIRepository
+    name: cert-manager
+  install:
+    remediation:
+      retries: -1
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      retries: 3
+  values:
+    crds:
+      enabled: true
+    extraArgs:
+      - "--enable-certificate-owner-ref=true"
+      - "--dns01-recursive-nameservers-only"
+      - "--dns01-recursive-nameservers=8.8.8.8:53,1.1.1.1:53"
+    prometheus:
+      servicemonitor:
+        enabled: true

@@ -1,0 +1,32 @@
+---
+apiVersion: kyverno.io/v2
+kind: PolicyException
+metadata:
+  name: metallb-speaker-pod-security-exception
+spec:
+  exceptions:
+    - policyName: disallow-host-path
+      ruleNames:
+        - host-path
+        - autogen-host-path
+    - policyName: disallow-host-namespaces
+      ruleNames:
+        - host-namespaces
+        - autogen-host-namespaces
+    - policyName: disallow-capabilities
+      ruleNames:
+        - adding-capabilities
+        - autogen-adding-capabilities
+    - policyName: disallow-host-ports
+      ruleNames:
+        - host-ports-none
+  match:
+    any:
+      - resources:
+          kinds:
+            - Pod
+            - DaemonSet
+          namespaces:
+            - metallb-system
+          names:
+            - metallb-speaker*
