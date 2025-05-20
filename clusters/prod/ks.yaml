@@ -11,13 +11,17 @@ spec:
   path: ./apps/prod
   prune: false
   wait: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
   decryption:
     provider: sops
     secretRef:
       name: sops-age
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
+  postBuild:
+    substituteFrom:
+      - kind: Secret
+        name: post-build-substitutions
   patches:
     - # Add Sops decryption & substitutions to child Kustomizations
       patch: |-
@@ -34,7 +38,3 @@ spec:
             substituteFrom:
               - kind: Secret
                 name: post-build-substitutions
-  postBuild:
-    substituteFrom:
-      - kind: Secret
-        name: post-build-substitutions
