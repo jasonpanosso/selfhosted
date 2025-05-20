@@ -6,10 +6,6 @@ resources:
   - ks.yaml
 
 secretGenerator:
-  - name: post-build-substitutions
-    namespace: flux-system
-    envs:
-      - substitutions.sops.env
   - name: github-app
     namespace: flux-system
     envs:
