@@ -6,10 +6,5 @@ resources:
   - imageupdateautomation.yaml
   - ../base
 
-patches:
-  - path: cephcluster-patch.yaml
-    target:
-      kind: CephCluster
-
 configurations:
   - nameReference.yaml
