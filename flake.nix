@@ -21,6 +21,7 @@
             kubectl
             kubernetes-helm
             kube-linter
+            kustomize
             sops
             talosctl
             terraform

@@ -2,13 +2,10 @@
 # yaml-language-server: $schema=https://json.schemastore.org/kustomization
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-namespace: kube-system
+namespace: db
 
 components:
   - ../../components/common
 
 resources:
-  - ./generic-device-plugins/ks.yaml
-  - ./metrics-server/ks.yaml
-  - ./reloader/ks.yaml
-  - ./descheduler/ks.yaml
+  - ./ks.yaml
