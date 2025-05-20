@@ -1,7 +1,0 @@
-nameReference:
-  - kind: Secret
-    fieldSpecs:
-      - kind: Cluster
-        path: spec/managed/roles/passwordSecret/name
-      - kind: Cluster
-        path: spec/superuserSecret/name

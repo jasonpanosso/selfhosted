@@ -8,6 +8,3 @@ resources:
   - cluster.yaml
   - databases.yaml
   - backup.yaml
-
-configurations:
-  - nameReference.yaml
