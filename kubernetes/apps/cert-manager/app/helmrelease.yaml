@@ -30,13 +30,6 @@ spec:
     cleanupOnFail: true
     remediation:
       retries: 3
-  values:
-    crds:
-      enabled: true
-    extraArgs:
-      - "--enable-certificate-owner-ref=true"
-      - "--dns01-recursive-nameservers-only"
-      - "--dns01-recursive-nameservers=8.8.8.8:53,1.1.1.1:53"
-    prometheus:
-      servicemonitor:
-        enabled: true
+  valuesFrom:
+    - kind: ConfigMap
+      name: cert-manager-values

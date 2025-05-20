@@ -1,0 +1,31 @@
+---
+serviceMonitor:
+  enabled: true
+  namespace: monitoring
+grafana:
+  enabled: true
+  namespace: monitoring
+features:
+  policyExceptions:
+    enabled: true
+    namespace: "*"
+cleanupController:
+  replicas: 3
+  rbac:
+    clusterRole:
+      extraResources:
+        - apiGroups:
+            - apps
+          resources:
+            - replicasets
+          verbs:
+            - get
+            - list
+            - watch
+            - delete
+admissionController:
+  replicas: 3
+backgroundController:
+  replicas: 2
+reportsController:
+  replicas: 2

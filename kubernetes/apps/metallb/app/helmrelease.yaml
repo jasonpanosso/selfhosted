@@ -24,19 +24,6 @@ spec:
         kind: HelmRepository
         name: bitnami
       interval: 12h
-  values:
-    speaker:
-      frr:
-        enabled: false
-      secretName: memberlist
-      metrics:
-        enabled: true
-        serviceMonitor:
-          enabled: true
-          namespace: observability
-    controller:
-      metrics:
-        enabled: true
-        serviceMonitor:
-          enabled: true
-          namespace: observability
+  valuesFrom:
+    - kind: ConfigMap
+      name: metallb-values

@@ -7,3 +7,11 @@ resources:
   - ./helmrelease.yaml
   - ./ipaddresspool.yaml
   - ./l2advertisement.yaml
+
+configMapGenerator:
+  - name: metallb-values
+    files:
+      - values.yaml=./helm/values.yaml
+
+configurations:
+  - ./helm/kustomizeconfig.yaml

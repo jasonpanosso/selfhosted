@@ -30,13 +30,6 @@ spec:
     cleanupOnFail: true
     remediation:
       retries: 3
-  values:
-    fullnameOverride: reloader
-    reloader:
-      enableHA: true
-      deployment:
-        replicas: 1
-      readOnlyRootFileSystem: true
-      podMonitor:
-        enabled: true
-        namespace: "{{ .Release.Namespace }}"
+  valuesFrom:
+    - kind: ConfigMap
+      name: reloader-values

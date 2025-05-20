@@ -28,13 +28,6 @@ spec:
         kind: GitRepository
         name: local-path-provisioner
   interval: 10m0s
-  values:
-    storageClass:
-      create: true
-      defaultClass: false
-      name: local-path
-      reclaimPolicy: Retain
-    nodePathMap:
-      - node: DEFAULT_PATH_FOR_NON_LISTED_NODES
-        paths:
-          - /var/local-path-provisioner
+  valuesFrom:
+    - kind: ConfigMap
+      name: local-path-provisioner-values

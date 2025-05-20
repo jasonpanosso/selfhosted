@@ -21,6 +21,6 @@ spec:
         kind: HelmRepository
         name: cnpg
       interval: 12h
-  values:
-    monitoring:
-      podMonitorEnabled: true
+  valuesFrom:
+    - kind: ConfigMap
+      name: cnpg-values
