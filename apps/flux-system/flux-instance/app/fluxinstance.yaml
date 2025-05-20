@@ -1,0 +1,81 @@
+---
+apiVersion: fluxcd.controlplane.io/v1
+kind: FluxInstance
+metadata:
+  name: flux
+  annotations:
+    fluxcd.controlplane.io/reconcile: "enabled"
+    fluxcd.controlplane.io/reconcileEvery: "1hr"
+    fluxcd.controlplane.io/reconcileArtifactEvery: "10m"
+    fluxcd.controlplane.io/reconcileTimeout: "20m"
+spec:
+  distribution:
+    version: "2.x"
+    registry: "ghcr.io/fluxcd"
+  components:
+    - source-controller
+    - kustomize-controller
+    - helm-controller
+    - notification-controller
+    - image-reflector-controller
+    - image-automation-controller
+  cluster:
+    type: kubernetes
+    multitenant: false
+    networkPolicy: false
+    domain: "cluster.local"
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: flux
+  kustomize:
+    patches:
+      - # Add Sops decryption to 'flux-system' Kustomization
+        target:
+          group: kustomize.toolkit.fluxcd.io
+          kind: Kustomization
+        patch: |
+          - op: add
+            path: /spec/decryption
+            value:
+              provider: sops
+              secretRef:
+                name: sops-age
+      - # Increase the number of workers
+        target:
+          kind: Deployment
+          name: (kustomize-controller|helm-controller|source-controller)
+        patch: |
+          - op: add
+            path: /spec/template/spec/containers/0/args/-
+            value: --concurrent=10
+          - op: add
+            path: /spec/template/spec/containers/0/args/-
+            value: --requeue-dependency=5s
+      - # Enable Helm repositories caching
+        target:
+          kind: Deployment
+          name: source-controller
+        patch: |
+          - op: add
+            path: /spec/template/spec/containers/0/args/-
+            value: --helm-cache-max-size=10
+          - op: add
+            path: /spec/template/spec/containers/0/args/-
+            value: --helm-cache-ttl=60m
+          - op: add
+            path: /spec/template/spec/containers/0/args/-
+            value: --helm-cache-purge-interval=5m
+      - # Flux near OOM detection for Helm
+        target:
+          kind: Deployment
+          name: helm-controller
+        patch: |
+          - op: add
+            path: /spec/template/spec/containers/0/args/-
+            value: --feature-gates=OOMWatch=true
+          - op: add
+            path: /spec/template/spec/containers/0/args/-
+            value: --oom-watch-memory-threshold=95
+          - op: add
+            path: /spec/template/spec/containers/0/args/-
+            value: --oom-watch-interval=500ms

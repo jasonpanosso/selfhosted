@@ -1,0 +1,38 @@
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: GitRepository
+metadata:
+  name: flux-system
+spec:
+  interval: 5m
+  url: https://github.com/jasonpanosso/selfhosted
+  provider: github
+  secretRef:
+    name: github-app
+  ref:
+    branch: main
+  ignore: |
+    # exclude all
+    /*
+    !/apps
+    !/clusters
+    !/kubernetes
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: flux-system
+spec:
+  interval: 1hr
+  retryInterval: 2m
+  timeout: 20m
+  path: ./clusters/prod
+  prune: true
+  wait: true
+  decryption:
+    provider: sops
+    secretRef:
+      name: sops-age
+  sourceRef:
+    kind: GitRepository
+    name: flux-system

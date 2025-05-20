@@ -18,11 +18,8 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
-  dependsOn:
-    - name: infra-config
-    - name: infra-controllers
   patches:
-    - # Add Sops decryption to child Kustomizations
+    - # Add Sops decryption & substitutions to child Kustomizations
       patch: |-
         apiVersion: kustomize.toolkit.fluxcd.io/v1
         kind: Kustomization
