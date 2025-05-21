@@ -14,7 +14,7 @@ kind: HelmRelease
 metadata:
   name: cloudnative-pg
 spec:
-  interval: 1hr
+  interval: 1h
   chart:
     spec:
       chart: cloudnative-pg

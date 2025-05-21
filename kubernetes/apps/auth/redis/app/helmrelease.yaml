@@ -15,7 +15,7 @@ kind: HelmRelease
 metadata:
   name: redis
 spec:
-  interval: 1hr
+  interval: 1h
   chart:
     spec:
       chart: redis

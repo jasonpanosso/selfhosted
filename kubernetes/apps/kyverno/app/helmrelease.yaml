@@ -15,7 +15,7 @@ metadata:
   name: kyverno
   namespace: kyverno
 spec:
-  interval: 1hr
+  interval: 1h
   chart:
     spec:
       chart: kyverno

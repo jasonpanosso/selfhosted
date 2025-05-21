@@ -15,7 +15,7 @@ kind: HelmRelease
 metadata:
   name: lldap
 spec:
-  interval: 1hr
+  interval: 1h
   timeout: 20m
   chart:
     spec:

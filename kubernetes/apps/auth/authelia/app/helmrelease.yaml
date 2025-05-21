@@ -14,7 +14,7 @@ kind: HelmRelease
 metadata:
   name: authelia
 spec:
-  interval: 1hr
+  interval: 1h
   chart:
     spec:
       chart: authelia
