@@ -4,21 +4,21 @@ kind: Service
 metadata:
   name: calibre-web-automated
   labels:
-    app.kubernetes.io/name: calibre-web-automated
+    app.kubernetes.io/name: *app
 spec:
   ports:
     - port: 8083
   selector:
-    app.kubernetes.io/name: calibre-web-automated
+    app.kubernetes.io/name: *app
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: calibre-web-automated-book-downloader
   labels:
-    app.kubernetes.io/name: calibre-web-automated
+    app.kubernetes.io/name: *app
 spec:
   ports:
     - port: 8084
   selector:
-    app.kubernetes.io/name: calibre-web-automated
+    app.kubernetes.io/name: *app
