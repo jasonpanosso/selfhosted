@@ -19,7 +19,7 @@ spec:
         secretAccessKey:
           name: s3
           key: ACCESS_SECRET_KEY
-    retentionPolicy: "30d"
+    retentionPolicy: 30d
   instances: 3
   storage:
     size: 20Gi

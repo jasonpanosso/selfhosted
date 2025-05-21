@@ -3,14 +3,14 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app cnpg-db
+  name: &app db
   namespace: &namespace db
 spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
   interval: 1h
-  path: ./kubernetes/apps/postgres-db/app
+  path: ./kubernetes/apps/db/app
   prune: true
   retryInterval: 2m
   sourceRef:
@@ -23,3 +23,5 @@ spec:
   dependsOn:
     - name: cnpg
       namespace: cnpg-system
+    - name: external-secrets
+      namespace: external-secrets
