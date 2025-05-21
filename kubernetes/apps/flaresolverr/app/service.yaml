@@ -11,8 +11,7 @@ spec:
     - name: http
       port: 80
       targetPort: http
-    - name: flaresolverr
+    - name: *app
       port: 8191
-      targetPort: http
   selector:
     app.kubernetes.io/name: *app
