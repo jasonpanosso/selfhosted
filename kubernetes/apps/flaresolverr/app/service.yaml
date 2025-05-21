@@ -2,9 +2,9 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: flaresolverr
+  name: &app flaresolverr
   labels:
-    app.kubernetes.io/name: flaresolverr
+    app.kubernetes.io/name: *app
 spec:
   ports:
     - name: http
@@ -14,4 +14,4 @@ spec:
       port: 8191
       targetPort: http
   selector:
-    app.kubernetes.io/name: flaresolverr
+    app.kubernetes.io/name: *app
