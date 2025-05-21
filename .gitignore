@@ -28,3 +28,4 @@ talos/**
 !talos/**/*patch.yaml
 # allow kustomization.yaml in secrets dirs
 !**/secrets/kustomization.yaml
+terraform/.bitwarden

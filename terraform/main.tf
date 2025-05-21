@@ -16,3 +16,26 @@ resource "digitalocean_spaces_key" "this" {
     permission = "readwrite"
   }
 }
+
+module "bitwarden_secrets" {
+  source       = "./bitwarden_secrets"
+  project_name = "selfhosted_secrets"
+
+  organization_id             = var.bitwarden_organization_id
+  cloudflare_api_token        = var.cloudflare_api_token
+  vpn_service_provider        = var.vpn_service_provider
+  vpn_wireguard_addresses     = var.vpn_wireguard_addresses
+  vpn_firewall_input_ports    = var.vpn_firewall_input_ports
+  vpn_wireguard_private_key   = var.vpn_wireguard_private_key
+  vpn_wireguard_preshared_key = var.vpn_wireguard_preshared_key
+
+  s3_access_key_id     = digitalocean_spaces_key.this.access_key
+  s3_secret_access_key = digitalocean_spaces_key.this.secret_key
+
+  # how can I generate these zz
+  authelia_oidc_jwks_private_key = var.authelia_oidc_jwks_private_key
+  authelia_oidc_test_secret      = var.authelia_oidc_test_secret
+
+  smtp_username = var.smtp_username
+  smtp_password = var.smtp_password
+}
