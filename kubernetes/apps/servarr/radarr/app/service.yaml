@@ -1,0 +1,17 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/master-standalone/service-v1.json
+apiVersion: v1
+kind: Service
+metadata:
+  name: &app radarr
+  labels:
+    app.kubernetes.io/name: *app
+spec:
+  ports:
+    - name: http
+      port: 80
+      targetPort: http
+    - name: *app
+      port: 7878
+  selector:
+    app.kubernetes.io/name: *app

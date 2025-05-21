@@ -1,0 +1,101 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/master-standalone/statefulset-apps-v1.json
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: &app radarr
+  labels:
+    app.kubernetes.io/name: *app
+  annotations:
+    reloader.stakater.com/auto: "true"
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: *app
+  serviceName: radarr
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: *app
+    spec:
+      securityContext:
+        runAsUser: 65534
+        runAsGroup: 65534
+        fsGroup: 65534
+        fsGroupChangePolicy: OnRootMismatch
+      containers:
+        - image: ghcr.io/home-operations/radarr:5.23.3 # {"$imagepolicy": "flux-system:radarr"}
+          imagePullPolicy: Always
+          name: *app
+          env:
+            - name: RADARR__POSTGRES__USER
+              valueFrom:
+                secretKeyRef:
+                  name: radarr-db
+                  key: username
+            - name: RADARR__POSTGRES__PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: radarr-db
+                  key: password
+            - name: RADARR__AUTH__APIKEY
+              valueFrom:
+                secretKeyRef:
+                  name: radarr
+                  key: token
+            - name: RADARR__LOG__DBENABLED
+              value: "False"
+            - name: RADARR__APP__INSTANCENAME
+              value: Radarr
+            - name: RADARR__AUTH__METHOD
+              value: External
+            - name: RADARR__AUTH__REQUIRED
+              value: DisabledForLocalAddresses
+            - name: RADARR__SERVER__BINDADDRESS
+              value: "*"
+            - name: RADARR__UPDATE__MECHANISM
+              value: Docker
+            - name: RADARR__UPDATE__BRANCH
+              value: master
+            - name: RADARR__POSTGRES__HOST
+              value: pgcluster-rw.db.svc.cluster.local
+            - name: RADARR__POSTGRES__MAINDB
+              value: radarr
+            - name: TZ
+              value: Etc/UTC
+          ports:
+            - containerPort: 7878
+              name: http
+          readinessProbe:
+            httpGet:
+              path: /ping
+              port: 7878
+            initialDelaySeconds: 10
+            periodSeconds: 15
+          resources:
+            requests:
+              cpu: 500m
+              memory: 512Mi
+            limits:
+              cpu: 1500m
+              memory: 2048Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+          volumeMounts:
+            - name: config
+              mountPath: /config
+            - name: media
+              mountPath: /data
+      volumes:
+        - name: media
+          persistentVolumeClaim:
+            claimName: media
+  volumeClaimTemplates:
+    - metadata:
+        name: config
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 5Gi
+        storageClassName: rook-ceph-block

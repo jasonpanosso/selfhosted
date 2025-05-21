@@ -1,0 +1,100 @@
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: &app sonarr
+  labels:
+    app.kubernetes.io/name: *app
+  annotations:
+    reloader.stakater.com/auto: "true"
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: *app
+  serviceName: *app
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: *app
+    spec:
+      securityContext:
+        runAsUser: 65534
+        runAsGroup: 65534
+        fsGroup: 65534
+        fsGroupChangePolicy: OnRootMismatch
+      containers:
+        - image: ghcr.io/home-operations/sonarr:4.0.14 # {"$imagepolicy": "flux-system:sonarr"}
+          imagePullPolicy: Always
+          name: *app
+          env:
+            - name: SONARR__POSTGRES__USER
+              valueFrom:
+                secretKeyRef:
+                  name: sonarr-db
+                  key: username
+            - name: SONARR__POSTGRES__PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: sonarr-db
+                  key: password
+            - name: SONARR__AUTH__APIKEY
+              valueFrom:
+                secretKeyRef:
+                  name: sonarr
+                  key: token
+            - name: SONARR__LOG__DBENABLED
+              value: "False"
+            - name: SONARR__APP__INSTANCENAME
+              value: Sonarr
+            - name: SONARR__AUTH__METHOD
+              value: External
+            - name: SONARR__AUTH__REQUIRED
+              value: DisabledForLocalAddresses
+            - name: SONARR__SERVER__BINDADDRESS
+              value: "*"
+            - name: SONARR__UPDATE__MECHANISM
+              value: Docker
+            - name: SONARR__UPDATE__BRANCH
+              value: develop
+            - name: SONARR__POSTGRES__HOST
+              value: pgcluster-rw.db.svc.cluster.local
+            - name: SONARR__POSTGRES__MAINDB
+              value: sonarr
+            - name: TZ
+              value: Etc/UTC
+          ports:
+            - containerPort: 8989
+              name: http
+          readinessProbe:
+            httpGet:
+              path: /ping
+              port: 8989
+            initialDelaySeconds: 10
+            periodSeconds: 15
+          resources:
+            requests:
+              cpu: 500m
+              memory: 512Mi
+            limits:
+              cpu: 1500m
+              memory: 2048Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+          volumeMounts:
+            - name: config
+              mountPath: /config
+            - name: media
+              mountPath: /data
+      volumes:
+        - name: media
+          persistentVolumeClaim:
+            claimName: media
+  volumeClaimTemplates:
+    - metadata:
+        name: config
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 5Gi
+        storageClassName: rook-ceph-block

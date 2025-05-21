@@ -1,0 +1,95 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/master-standalone/statefulset-apps-v1.json
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: &app prowlarr
+  labels:
+    app.kubernetes.io/name: *app
+  annotations:
+    reloader.stakater.com/auto: "true"
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: *app
+  serviceName: *app
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: *app
+    spec:
+      securityContext:
+        runAsUser: 65534
+        runAsGroup: 65534
+        fsGroup: 65534
+        fsGroupChangePolicy: OnRootMismatch
+      containers:
+        - image: ghcr.io/home-operations/prowlarr:1.36.2 # {"$imagepolicy": "flux-system:prowlarr"}
+          imagePullPolicy: Always
+          name: *app
+          env:
+            - name: PROWLARR__POSTGRES__USER
+              valueFrom:
+                secretKeyRef:
+                  name: prowlarr-db
+                  key: username
+            - name: PROWLARR__POSTGRES__PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: prowlarr-db
+                  key: password
+            - name: PROWLARR__AUTH__APIKEY
+              valueFrom:
+                secretKeyRef:
+                  name: prowlarr
+                  key: token
+            - name: PROWLARR__LOG__DBENABLED
+              value: "False"
+            - name: PROWLARR__APP__INSTANCENAME
+              value: Prowlarr
+            - name: PROWLARR__AUTH__METHOD
+              value: External
+            - name: PROWLARR__AUTH__REQUIRED
+              value: DisabledForLocalAddresses
+            - name: PROWLARR__SERVER__BINDADDRESS
+              value: "*"
+            - name: PROWLARR__UPDATE__MECHANISM
+              value: Docker
+            - name: PROWLARR__UPDATE__BRANCH
+              value: master
+            - name: PROWLARR__POSTGRES__HOST
+              value: pgcluster-rw.db.svc.cluster.local
+            - name: PROWLARR__POSTGRES__MAINDB
+              value: prowlarr
+            - name: TZ
+              value: Etc/UTC
+          ports:
+            - containerPort: 9696
+              name: http
+          readinessProbe:
+            httpGet:
+              path: /ping
+              port: 9696
+            initialDelaySeconds: 10
+            periodSeconds: 15
+          resources:
+            requests:
+              cpu: 50m
+              memory: 256Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+          volumeMounts:
+            - name: config
+              mountPath: /config
+  volumeClaimTemplates:
+    - metadata:
+        name: config
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 5Gi
+        storageClassName: rook-ceph-block

@@ -1,0 +1,67 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/master-standalone/deployment-apps-v1.json
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: &app unpackerr
+  labels:
+    app.kubernetes.io/name: *app
+  annotations:
+    reloader.stakater.com/auto: "true"
+spec:
+  replicas: 1
+  revisionHistoryLimit: 3
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: *app
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: *app
+    spec:
+      securityContext:
+        runAsUser: 65534
+        runAsGroup: 65534
+        fsGroup: 65534
+        fsGroupChangePolicy: OnRootMismatch
+      containers:
+        - image: ghcr.io/unpackerr/unpackerr:v0.14.5 # {"$imagepolicy": "flux-system:unpackerr"}
+          imagePullPolicy: Always
+          name: *app
+          env:
+            - name: TZ
+              value: Etc/UTC
+            - name: UN_RADARR_0_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: radarr
+                  key: token
+            - name: UN_SONARR_0_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: sonarr
+                  key: token
+          resources:
+            requests:
+              cpu: 250m
+              memory: 256Mi
+            limits:
+              cpu: 1
+              memory: 2048Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+          volumeMounts:
+            - name: media
+              mountPath: /data/downloads
+              subPath: downloads
+            - name: config
+              mountPath: /config
+      volumes:
+        - name: media
+          persistentVolumeClaim:
+            claimName: media
+        - name: config
+          configMap:
+            name: unpackerr

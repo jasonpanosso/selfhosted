@@ -1,0 +1,87 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/master-standalone/statefulset-apps-v1.json
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: &app jellyfin
+  labels:
+    app.kubernetes.io/name: *app
+  annotations:
+    reloader.stakater.com/auto: "true"
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: *app
+  serviceName: *app
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: *app
+    spec:
+      securityContext:
+        runAsUser: 65534
+        runAsGroup: 65534
+        fsGroup: 65534
+        fsGroupChangePolicy: OnRootMismatch
+      containers:
+        - image: ghcr.io/jellyfin/jellyfin:10.10.7 # {"$imagepolicy": "flux-system:jellyfin"}
+          name: *app
+          ports:
+            - containerPort: 8096
+              name: http
+          readinessProbe:
+            httpGet:
+              path: /web/index.html
+              port: 8096
+            failureThreshold: 5
+            initialDelaySeconds: 15
+            periodSeconds: 10
+            timeoutSeconds: 3
+          resources:
+            requests:
+              cpu: 1000m
+              memory: 2Gi
+            limits:
+              cpu: 3000m
+              memory: 8Gi
+              squat.ai/drm: "1"
+          securityContext:
+            allowPrivilegeEscalation: false
+          volumeMounts:
+            - name: media
+              mountPath: /movies
+              subPath: movies
+              readOnly: true
+            - name: media
+              mountPath: /shows
+              subPath: shows
+              readOnly: true
+            - name: cache
+              mountPath: /cache
+            - name: config
+              mountPath: /config
+            - name: metadata
+              mountPath: /config/metadata
+      volumes:
+        - name: media
+          persistentVolumeClaim:
+            claimName: media
+        - name: cache
+          emptyDir: {}
+  volumeClaimTemplates:
+    - metadata:
+        name: config
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 5Gi
+        storageClassName: rook-ceph-block
+    - metadata:
+        name: metadata
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 100Gi
+        storageClassName: rook-ceph-block-hdd

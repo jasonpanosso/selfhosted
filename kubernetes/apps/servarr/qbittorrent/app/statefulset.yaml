@@ -1,0 +1,149 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/master-standalone/statefulset-apps-v1.json
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: &app qbittorrent
+  labels:
+    app.kubernetes.io/name: *app
+  annotations:
+    reloader.stakater.com/auto: "true"
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: *app
+  serviceName: *app
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: *app
+    spec:
+      securityContext:
+        runAsUser: 65534
+        runAsGroup: 65534
+        fsGroup: 65534
+        fsGroupChangePolicy: OnRootMismatch
+      initContainers:
+        - image: docker.io/library/busybox:stable
+          imagePullPolicy: Always
+          name: init-files
+          command:
+            - "/bin/sh"
+            - "-c"
+            - |
+              mkdir -p /config/qBittorrent && \
+                cp -L /qbt-conf/qBittorrent.conf /config/qBittorrent
+          volumeMounts:
+            - name: qbittorrent-conf
+              mountPath: /qbt-conf
+            - name: config
+              mountPath: /config
+        # gluetun sidecar
+        - image: ghcr.io/qdm12/gluetun:v3.40.0 # {"$imagepolicy": "flux-system:gluetun"}
+          restartPolicy: Always
+          lifecycle:
+            postStart:
+              exec:
+                # https://github.com/qdm12/gluetun-wiki/blob/main/setup/advanced/kubernetes.md
+                command:
+                  [
+                    "/bin/sh",
+                    "-c",
+                    "(ip rule del table 51820; ip -6 rule del table 51820) || true",
+                  ]
+          readinessProbe:
+            exec:
+              command:
+                - /gluetun-entrypoint
+                - healthcheck
+            initialDelaySeconds: 10
+            periodSeconds: 15
+          name: gluetun
+          resources:
+            requests:
+              cpu: 250m
+              memory: 256Mi
+            limits:
+              cpu: 250m
+              memory: 256Mi
+              squat.ai/tun: "1"
+          ports:
+            - name: http
+              containerPort: 8080
+          env:
+            - name: TZ
+              value: Etc/UTC
+            - name: FIREWALL_DEBUG
+              value: "on"
+            - name: FIREWALL_INPUT_PORTS
+              value: "8080"
+            - name: VPN_TYPE
+              value: wireguard
+            - name: PUID
+              value: "65534"
+            - name: PGID
+              value: "65534"
+            # https://github.com/qdm12/gluetun/issues/2630
+            - name: DNS_ADDRESS
+              value: 1.1.1.1
+            - name: DOT
+              value: off
+          envFrom:
+            - secretRef:
+                name: vpn
+          securityContext:
+            runAsUser: 0
+            allowPrivilegeEscalation: false
+            capabilities:
+              add:
+                - NET_ADMIN
+      containers:
+        - image: ghcr.io/home-operations/qbittorrent:5.1.0 # {"$imagepolicy": "flux-system:qbittorrent"}
+          name: *app
+          env:
+            - name: TZ
+              value: Etc/UTC
+            - name: QBT_TORRENTING_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: vpn
+                  key: VPN_FIREWALL_INPUT_PORTS
+            - name: QBT_WEBUI_PORT
+              value: "8080"
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 15
+          resources:
+            requests:
+              cpu: 250m
+              memory: 1280Mi
+            limits:
+              cpu: 1000m
+              memory: 1280Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+          volumeMounts:
+            - name: config
+              mountPath: /config
+            - name: media
+              mountPath: /data/downloads
+              subPath: downloads
+      volumes:
+        - name: qbittorrent-conf
+          configMap:
+            name: qbittorrent-conf
+        - name: media
+          persistentVolumeClaim:
+            claimName: media
+  volumeClaimTemplates:
+    - metadata:
+        name: config
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 5Gi
+        storageClassName: rook-ceph-block
