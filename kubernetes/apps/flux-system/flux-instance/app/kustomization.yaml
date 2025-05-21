@@ -5,6 +5,17 @@ kind: Kustomization
 
 resources:
   - ./fluxinstance.yaml
+  - ./gitrepository.yaml
   - ./ks.yaml
   - ./imageupdateautomation.yaml
-  - ./imagepolicies.yaml
+  - ./imagepolicies
+
+secretGenerator:
+  - name: github-app
+    envs:
+      - ./secrets/github_app_ids.sops.env
+    files:
+      - githubAppPrivateKey=./secrets/github_app_private_key.sops.pem
+
+configurations:
+  - ./secrets/kustomizeconfig.yaml
