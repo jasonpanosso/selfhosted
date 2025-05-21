@@ -1,0 +1,250 @@
+---
+secret:
+  disabled: true
+configMap:
+  theme: dark
+  server:
+    endpoints:
+      automatic_authz_implementations:
+        - ForwardAuth
+        - AuthRequest
+
+  access_control:
+    default_policy: deny
+    rules:
+      - domain:
+          - calibre.${domain}.${tld}
+          - books.${domain}.${tld}
+        subject: group:calibre_users
+        policy: one_factor
+
+      # *arr has no support for custom auth, have to bypass for api routes
+      # /api routes are protected by API tokens
+      - domain:
+          - prowlarr.${domain}.${tld}
+          - radarr.${domain}.${tld}
+          - sonarr.${domain}.${tld}
+        resources:
+          - "^/api.*$"
+        policy: bypass
+
+      # do not block authelia
+      - domain: auth.${domain}.${tld}
+        policy: bypass
+
+      - domain: "*.${domain}.${tld}"
+        subject: group:admins
+        policy: two_factor
+
+  session:
+    encryption_key:
+      disabled: true
+    name: authelia
+    same_site: lax
+    expiration: 1h
+    inactivity: 5m
+    remember_me: 1M
+    cookies:
+      - domain: ${domain}.${tld}
+        subdomain: auth
+        default_redirection_url: https://www.${domain}.${tld}
+    redis:
+      enabled: true
+      high_availability:
+        enabled: true
+        sentinel_name: mymaster
+        nodes:
+          - host: redis-node-0.redis-headless.auth.svc.cluster.local
+            port: 26379
+          - host: redis-node-1.redis-headless.auth.svc.cluster.local
+            port: 26379
+          - host: redis-node-2.redis-headless.auth.svc.cluster.local
+            port: 26379
+        password:
+          disabled: true
+      password:
+        disabled: true
+
+  storage:
+    encryption_key:
+      disabled: true
+    postgres:
+      enabled: true
+      address: "tcp://pgcluster-rw.db:5432"
+      database: "authelia"
+      username: "authelia"
+      ssl:
+        mode: disable
+      password:
+        disabled: true
+
+  notifier:
+    disable_startup_check: true
+    smtp:
+      enabled: true
+      address: submission://smtp.gmail.com:587
+      identifier: "${domain}.${tld}"
+      subject: "[Authelia] {title}"
+      password:
+        disabled: true
+
+  authentication_backend:
+    password_reset:
+      disable: false
+    ldap:
+      enabled: true
+      implementation: lldap
+      address: ldap://lldap.auth.svc.cluster.local
+      base_dn: dc=${domain},dc=${tld}
+      additional_users_dn: ou=people
+      additional_groups_dn: ou=groups
+      user: cn=admin,ou=people,dc=${domain},dc=${tld}
+      users_filter: (&(|({username_attribute}={input})({mail_attribute}={input}))(objectClass=person))
+      groups_filter: (member={dn})
+      password:
+        disabled: true
+      attributes:
+        display_name: displayName
+        username: uid
+        group_name: cn
+        mail: mail
+
+  totp:
+    issuer: ${domain}.${tld}
+    skew: 1
+    secret_size: 32
+    algorithm: SHA1
+    digits: 6
+    period: 30
+    allowed_algorithms: ["SHA1"]
+    allowed_digits: [6]
+    allowed_periods: [30]
+
+  identity_validation:
+    reset_password:
+      jwt_lifespan: 5 minutes
+      jwt_algorithm: HS256
+      secret:
+        disabled: true
+
+  identity_providers:
+    oidc:
+      enabled: true
+      hmac_secret:
+        disabled: true
+      jwks:
+        - algorithm: "RS256"
+          key:
+            path: /config/secrets/OIDC_JWKS_PRIVATE_KEY
+      clients:
+        - client_id: "test"
+          client_secret:
+            path: /config/secrets/OIDC_TEST_SECRET
+      lifespans:
+        access_token: 1h
+        authorize_code: 1m
+        id_token: 1h
+      enable_client_debug_messages: false
+      enforce_pkce: public_clients_only
+      cors:
+        endpoints:
+          - authorization
+          - token
+          - revocation
+          - introspection
+          - userinfo
+        allowed_origins:
+          - "*"
+pod:
+  kind: Deployment
+  replicas: 3
+  resources:
+    requests:
+      cpu: 250m
+      memory: 512Mi
+    limits:
+      cpu: 250m
+      memory: 512Mi
+  selectors:
+    affinity:
+      podAntiAffinity:
+        preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                  - key: app.kubernetes.io/name
+                    operator: In
+                    values:
+                      - authelia
+              topologyKey: kubernetes.io/hostname
+
+  env:
+    - name: TZ
+      value: Etc/UTC
+    - name: AUTHELIA_IDENTITY_VALIDATION_RESET_PASSWORD_JWT_SECRET_FILE
+      value: /config/secrets/JWT_TOKEN
+    - name: AUTHELIA_SESSION_SECRET_FILE
+      value: /config/secrets/SESSION_KEY
+    - name: AUTHELIA_SESSION_REDIS_PASSWORD_FILE
+      value: /config/secrets/REDIS_PASSWORD
+    - name: AUTHELIA_SESSION_REDIS_HIGH_AVAILABILITY_SENTINEL_PASSWORD_FILE
+      value: /config/secrets/REDIS_PASSWORD
+    - name: AUTHELIA_AUTHENTICATION_BACKEND_LDAP_PASSWORD_FILE
+      value: /config/secrets/LDAP_PASSWORD
+    - name: AUTHELIA_STORAGE_ENCRYPTION_KEY_FILE
+      value: /config/secrets/ENCRYPTION_KEY
+    - name: AUTHELIA_STORAGE_POSTGRES_PASSWORD_FILE
+      value: /config/secrets/POSTGRES_PASSWORD
+    - name: AUTHELIA_IDENTITY_PROVIDERS_OIDC_HMAC_SECRET_FILE
+      value: /config/secrets/OIDC_HMAC_SECRET
+    - name: AUTHELIA_NOTIFIER_SMTP_PASSWORD_FILE
+      value: /config/secrets/SMTP_PASSWORD
+    - name: AUTHELIA_NOTIFIER_SMTP_USERNAME
+      valueFrom:
+        secretKeyRef:
+          name: smtp
+          key: username
+  extraVolumeMounts:
+    - name: secret
+      readOnly: true
+      mountPath: /config/secrets
+  extraVolumes:
+    - name: secret
+      projected:
+        sources:
+          - secret:
+              name: authelia
+              items:
+                - key: JWT_TOKEN
+                  path: JWT_TOKEN
+                - key: SESSION_KEY
+                  path: SESSION_KEY
+                - key: ENCRYPTION_KEY
+                  path: ENCRYPTION_KEY
+                - key: OIDC_HMAC_SECRET
+                  path: OIDC_HMAC_SECRET
+                - key: OIDC_JWKS_PRIVATE_KEY
+                  path: OIDC_JWKS_PRIVATE_KEY
+                - key: OIDC_TEST_SECRET
+                  path: OIDC_TEST_SECRET
+          - secret:
+              name: lldap
+              items:
+                - key: LLDAP_LDAP_USER_PASS
+                  path: LDAP_PASSWORD
+          - secret:
+              name: redis
+              items:
+                - key: password
+                  path: REDIS_PASSWORD
+          - secret:
+              name: authelia-db
+              items:
+                - key: password
+                  path: POSTGRES_PASSWORD
+          - secret:
+              name: smtp
+              items:
+                - key: password
+                  path: SMTP_PASSWORD

@@ -2,9 +2,9 @@
 apiVersion: traefik.io/v1alpha1
 kind: IngressRoute
 metadata:
-  name: lldap
+  name: &app lldap
   labels:
-    app.kubernetes.io/name: lldap
+    app.kubernetes.io/name: *app
 spec:
   entryPoints:
     - websecure
@@ -16,7 +16,7 @@ spec:
           namespace: traefik
       services:
         - kind: Service
-          name: lldap
+          name: *app
           port: 17170
           sticky:
             cookie:

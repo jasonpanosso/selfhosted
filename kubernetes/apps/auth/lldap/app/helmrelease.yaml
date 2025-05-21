@@ -1,0 +1,34 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/source.toolkit.fluxcd.io/helmrepository_v1.json
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
+metadata:
+  name: my-charts
+spec:
+  interval: 5m
+  type: oci
+  url: oci://ghcr.io/jasonpanosso/helm-charts
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/source.toolkit.fluxcd.io/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: lldap
+spec:
+  interval: 1hr
+  timeout: 20m
+  chart:
+    spec:
+      chart: lldap
+      version: "0.0.4"
+      sourceRef:
+        kind: HelmRepository
+        name: my-charts
+      interval: 12h
+  driftDetection:
+    mode: enabled
+  test:
+    enable: true
+  valuesFrom:
+    - kind: ConfigMap
+      name: lldap-values
