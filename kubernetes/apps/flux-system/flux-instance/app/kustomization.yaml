@@ -7,8 +7,6 @@ resources:
   - ./fluxinstance.yaml
   - ./gitrepository.yaml
   - ./ks.yaml
-  - ./imageupdateautomation.yaml
-  - ./imagepolicies
 
 secretGenerator:
   - name: github-app
