@@ -16,7 +16,7 @@ spec:
   wait: false
   prune: true
   healthChecks:
-    - apiVersion: apps/v1
+    - apiVersion: batch/v1
       kind: CronJob
       name: *app
       namespace: *namespace
