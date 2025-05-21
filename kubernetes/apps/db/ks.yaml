@@ -25,3 +25,5 @@ spec:
       namespace: cnpg-system
     - name: external-secrets
       namespace: external-secrets
+    - name: local-path-provisioner
+      namespace: local-path-storage
