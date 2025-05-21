@@ -10,10 +10,6 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   healthChecks:
-    - apiVersion: helm.toolkit.fluxcd.io/v2
-      kind: HelmRelease
-      name: rook-ceph-cluster
-      namespace: *namespace
     - apiVersion: ceph.rook.io/v1
       kind: CephCluster
       name: rook-ceph

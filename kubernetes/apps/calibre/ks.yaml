@@ -9,17 +9,22 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  interval: 1h
   path: ./kubernetes/apps/calibre/app
-  prune: true
+  interval: 1h
   retryInterval: 2m
+  timeout: 5m
+  wait: false
+  prune: true
+  healthChecks:
+    - apiVersion: apps/v1
+      kind: StatefulSet
+      name: *app
+      namespace: *namespace
   sourceRef:
     kind: GitRepository
     name: flux-system
     namespace: flux-system
   targetNamespace: *namespace
-  timeout: 5m
-  wait: false
   dependsOn:
     - name: rook-ceph
       namespace: rook-ceph

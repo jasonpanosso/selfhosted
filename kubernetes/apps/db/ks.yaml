@@ -9,17 +9,22 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  interval: 1h
   path: ./kubernetes/apps/db/app
-  prune: true
+  interval: 1h
+  timeout: 5m
   retryInterval: 2m
+  wait: false
+  prune: true
+  healthChecks:
+    - apiVersion: postgresql.cnpg.io/v1
+      kind: Cluster
+      name: pgcluster
+      namespace: *namespace
   sourceRef:
     kind: GitRepository
     name: flux-system
     namespace: flux-system
   targetNamespace: *namespace
-  timeout: 5m
-  wait: false
   dependsOn:
     - name: cnpg
       namespace: cnpg-system

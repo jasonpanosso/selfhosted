@@ -9,17 +9,24 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  interval: 1h
   path: ./kubernetes/apps/traefik/app
-  prune: true
+  interval: 1h
   retryInterval: 2m
+  timeout: 5m
+  wait: false
+  prune: true
+  healthChecks:
+    - apiVersion: helm.toolkit.fluxcd.io/v2
+      kind: HelmRelease
+      name: &app
+      namespace: *namespace
   sourceRef:
     kind: GitRepository
     name: flux-system
     namespace: flux-system
   targetNamespace: *namespace
-  timeout: 5m
-  wait: false
   dependsOn:
     - name: cert-manager
       namespace: cert-manager
+    - name: metallb
+      namespace: metallb-system
