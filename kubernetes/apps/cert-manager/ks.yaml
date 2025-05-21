@@ -10,16 +10,29 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   interval: 1h
+  timeout: 5m
+  retryInterval: 2m
   path: ./kubernetes/apps/cert-manager/app
   prune: true
-  retryInterval: 2m
+  wait: false
+  healthChecks:
+    - apiVersion: helm.toolkit.fluxcd.io/v2
+      kind: HelmRelease
+      name: *app
+      namespace: *namespace
+    - apiVersion: cert-manager.io/v1
+      kind: ClusterIssuer
+      name: letsencrypt
+  healthCheckExprs:
+    - apiVersion: cert-manager.io/v1
+      kind: ClusterIssuer
+      failed: status.conditions.filter(e, e.type == 'Ready').all(e, e.status == 'False')
+      current: status.conditions.filter(e, e.type == 'Ready').all(e, e.status == 'True')
   sourceRef:
     kind: GitRepository
     name: flux-system
     namespace: flux-system
   targetNamespace: *namespace
-  timeout: 5m
-  wait: false
   dependsOn:
     - name: external-secrets
       namespace: external-secrets
