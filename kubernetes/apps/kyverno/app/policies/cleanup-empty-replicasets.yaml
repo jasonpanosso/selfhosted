@@ -1,4 +1,5 @@
 ---
+# yaml-language-server: $schema=https://datreeio.github.io/CRDs-catalog/kyverno.io/clustercleanuppolicy_v2.json
 apiVersion: kyverno.io/v2
 kind: ClusterCleanupPolicy
 metadata:

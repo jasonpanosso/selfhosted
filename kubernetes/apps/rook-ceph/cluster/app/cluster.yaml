@@ -1,4 +1,5 @@
 ---
+# yaml-language-server: $schema=https://datreeio.github.io/CRDs-catalog/ceph.rook.io/cephcluster_v1.json
 apiVersion: ceph.rook.io/v1
 kind: CephCluster
 metadata:
@@ -96,13 +97,6 @@ spec:
     mon: system-node-critical
     osd: system-node-critical
     mgr: system-cluster-critical
-  storage: # cluster level storage configuration and selection
-    useAllNodes: false
-    useAllDevices: false
-    allowDeviceClassUpdate: true # whether to allow changing the device class of an OSD after it is created
-    allowOsdCrushWeightUpdate: true # whether to allow resizing the OSD crush weight after osd pvc is increased
-    scheduleAlways: false
-    onlyApplyOSDPlacement: false
   disruptionManagement:
     managePodBudgets: true
     osdMaintenanceTimeout: 30
@@ -137,7 +131,13 @@ spec:
       osd:
         disabled: false
 
-  storage:
+  storage: # cluster level storage configuration and selection
+    useAllNodes: false
+    useAllDevices: false
+    allowDeviceClassUpdate: true # whether to allow changing the device class of an OSD after it is created
+    allowOsdCrushWeightUpdate: true # whether to allow resizing the OSD crush weight after osd pvc is increased
+    scheduleAlways: false
+    onlyApplyOSDPlacement: false
     nodes:
       - name: worker-1
         deviceFilter: ^nvme

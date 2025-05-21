@@ -15,9 +15,14 @@ metadata:
   name: metrics-server
 spec:
   interval: 1h
-  chartRef:
-    kind: HelmRepository
-    name: metrics-server
+  chart:
+    spec:
+      chart: metrics-server
+      version: "*"
+      sourceRef:
+        kind: HelmRepository
+        name: metrics-server
+      interval: 5m
   install:
     remediation:
       retries: -1

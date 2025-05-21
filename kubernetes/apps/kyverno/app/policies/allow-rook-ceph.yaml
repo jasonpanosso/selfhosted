@@ -1,4 +1,5 @@
 ---
+# yaml-language-server: $schema=https://datreeio.github.io/CRDs-catalog/kyverno.io/policyexception_v2.json
 apiVersion: kyverno.io/v2
 kind: PolicyException
 metadata:
@@ -32,11 +33,11 @@ spec:
           names:
             - csi-cephfsplugin*
 ---
+# yaml-language-server: $schema=https://datreeio.github.io/CRDs-catalog/kyverno.io/policyexception_v2.json
 apiVersion: kyverno.io/v2
 kind: PolicyException
 metadata:
   name: csi-rbdplugin-exception
-  namespace: kyverno
 spec:
   exceptions:
     - policyName: disallow-host-path
@@ -66,11 +67,11 @@ spec:
           names:
             - csi-rbdplugin*
 ---
+# yaml-language-server: $schema=https://datreeio.github.io/CRDs-catalog/kyverno.io/policyexception_v2.json
 apiVersion: kyverno.io/v2
 kind: PolicyException
 metadata:
   name: rook-discover-exception
-  namespace: kyverno
 spec:
   exceptions:
     - policyName: disallow-host-path
@@ -92,11 +93,11 @@ spec:
           names:
             - rook-discover*
 ---
+# yaml-language-server: $schema=https://datreeio.github.io/CRDs-catalog/kyverno.io/policyexception_v2.json
 apiVersion: kyverno.io/v2
 kind: PolicyException
 metadata:
   name: csi-rbdplugin-provisioner-exception
-  namespace: kyverno
 spec:
   exceptions:
     - policyName: disallow-host-path
@@ -115,11 +116,11 @@ spec:
           names:
             - csi-rbdplugin-provisioner*
 ---
+# yaml-language-server: $schema=https://datreeio.github.io/CRDs-catalog/kyverno.io/policyexception_v2.json
 apiVersion: kyverno.io/v2
 kind: PolicyException
 metadata:
   name: csi-cephfsplugin-provisioner-exception
-  namespace: kyverno
 spec:
   exceptions:
     - policyName: disallow-host-path
@@ -138,11 +139,11 @@ spec:
           names:
             - csi-cephfsplugin-provisioner*
 ---
+# yaml-language-server: $schema=https://datreeio.github.io/CRDs-catalog/kyverno.io/policyexception_v2.json
 apiVersion: kyverno.io/v2
 kind: PolicyException
 metadata:
   name: rook-ceph-mon-exception
-  namespace: kyverno
 spec:
   exceptions:
     - policyName: disallow-host-path
@@ -161,11 +162,11 @@ spec:
           names:
             - rook-ceph-mon*
 ---
+# yaml-language-server: $schema=https://datreeio.github.io/CRDs-catalog/kyverno.io/policyexception_v2.json
 apiVersion: kyverno.io/v2
 kind: PolicyException
 metadata:
   name: rook-ceph-exporter-worker-exception
-  namespace: kyverno
 spec:
   exceptions:
     - policyName: disallow-host-path
@@ -184,11 +185,11 @@ spec:
           names:
             - rook-ceph-exporter-worker*
 ---
+# yaml-language-server: $schema=https://datreeio.github.io/CRDs-catalog/kyverno.io/policyexception_v2.json
 apiVersion: kyverno.io/v2
 kind: PolicyException
 metadata:
   name: rook-ceph-osd-prepare-worker-exception
-  namespace: kyverno
 spec:
   exceptions:
     - policyName: disallow-host-path
@@ -210,11 +211,11 @@ spec:
           names:
             - rook-ceph-osd-prepare-worker*
 ---
+# yaml-language-server: $schema=https://datreeio.github.io/CRDs-catalog/kyverno.io/policyexception_v2.json
 apiVersion: kyverno.io/v2
 kind: PolicyException
 metadata:
   name: rook-ceph-crashcollector-worker-exception
-  namespace: kyverno
 spec:
   exceptions:
     - policyName: disallow-host-path
@@ -233,11 +234,11 @@ spec:
           names:
             - rook-ceph-crashcollector-worker*
 ---
+# yaml-language-server: $schema=https://datreeio.github.io/CRDs-catalog/kyverno.io/policyexception_v2.json
 apiVersion: kyverno.io/v2
 kind: PolicyException
 metadata:
   name: rook-ceph-osd-exception
-  namespace: kyverno
 spec:
   exceptions:
     - policyName: disallow-host-path
@@ -260,11 +261,11 @@ spec:
           names:
             - rook-ceph-osd*
 ---
+# yaml-language-server: $schema=https://datreeio.github.io/CRDs-catalog/kyverno.io/policyexception_v2.json
 apiVersion: kyverno.io/v2
 kind: PolicyException
 metadata:
   name: rook-ceph-mgr-exception
-  namespace: kyverno
 spec:
   exceptions:
     - policyName: disallow-host-path
@@ -283,11 +284,11 @@ spec:
           names:
             - rook-ceph-mgr*
 ---
+# yaml-language-server: $schema=https://datreeio.github.io/CRDs-catalog/kyverno.io/policyexception_v2.json
 apiVersion: kyverno.io/v2
 kind: PolicyException
 metadata:
   name: rook-ceph-mds-exception
-  namespace: kyverno
 spec:
   exceptions:
     - policyName: disallow-host-path
@@ -306,11 +307,11 @@ spec:
           names:
             - rook-ceph-mds*
 ---
+# yaml-language-server: $schema=https://datreeio.github.io/CRDs-catalog/kyverno.io/policyexception_v2.json
 apiVersion: kyverno.io/v2
 kind: PolicyException
 metadata:
   name: rook-ceph-rgw-exception
-  namespace: kyverno
 spec:
   exceptions:
     - policyName: disallow-host-path
