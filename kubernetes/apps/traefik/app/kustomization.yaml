@@ -6,6 +6,7 @@ kind: Kustomization
 resources:
   - ./helmrelease.yaml
   - ./forward-auth-middleware.yaml
+  - ./certificate.yaml
   - ./tlsstore.yaml
 
 configMapGenerator:
