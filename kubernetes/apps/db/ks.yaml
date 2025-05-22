@@ -26,7 +26,7 @@ spec:
     namespace: flux-system
   targetNamespace: *namespace
   dependsOn:
-    - name: cnpg
+    - name: cloudnative-pg
       namespace: cnpg-system
     - name: external-secrets
       namespace: external-secrets

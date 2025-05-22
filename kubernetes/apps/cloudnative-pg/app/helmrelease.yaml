@@ -3,7 +3,7 @@
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: HelmRepository
 metadata:
-  name: cnpg
+  name: cloudnative-pg
 spec:
   interval: 5m
   url: https://cloudnative-pg.github.io/charts
@@ -21,7 +21,7 @@ spec:
       version: "0.23.*"
       sourceRef:
         kind: HelmRepository
-        name: cnpg
+        name: cloudnative-pg
       interval: 12h
   valuesFrom:
     - kind: ConfigMap

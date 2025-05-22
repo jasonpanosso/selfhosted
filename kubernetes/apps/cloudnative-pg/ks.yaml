@@ -3,14 +3,14 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app cnpg
+  name: &app cloudnative-pg
   namespace: &namespace cnpg-system
 spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
   interval: 1h
-  path: ./kubernetes/apps/cnpg/app
+  path: ./kubernetes/apps/cloudnative-pg/app
   prune: true
   retryInterval: 2m
   healthChecks:
