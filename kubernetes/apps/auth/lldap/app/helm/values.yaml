@@ -27,9 +27,9 @@ lldap:
     encryption: STARTTLS
     user:
       secret:
-        name: smtp
-        usernameKey: username
-        passwordKey: password
+        name: lldap
+        usernameKey: SMTP_USERNAME
+        passwordKey: SMTP_PASSWORD
 resources:
   requests:
     cpu: 250m

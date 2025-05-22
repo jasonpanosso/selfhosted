@@ -203,10 +203,7 @@ pod:
     - name: AUTHELIA_NOTIFIER_SMTP_PASSWORD_FILE
       value: /config/secrets/SMTP_PASSWORD
     - name: AUTHELIA_NOTIFIER_SMTP_USERNAME
-      valueFrom:
-        secretKeyRef:
-          name: smtp
-          key: username
+      value: /config/secrets/SMTP_USERNAME
   extraVolumeMounts:
     - name: secret
       readOnly: true
@@ -230,23 +227,16 @@ pod:
                   path: OIDC_JWKS_PRIVATE_KEY
                 - key: OIDC_TEST_SECRET
                   path: OIDC_TEST_SECRET
-          - secret:
-              name: lldap
-              items:
                 - key: LDAP_ADMIN_PASSWORD
                   path: LDAP_PASSWORD
-          - secret:
-              name: redis
-              items:
-                - key: password
+                - key: REDIS_PASSWORD
                   path: REDIS_PASSWORD
+                - key: SMTP_PASSWORD
+                  path: SMTP_PASSWORD
+                - key: SMTP_USERNAME
+                  path: SMTP_USERNAME
           - secret:
               name: authelia-db
               items:
                 - key: password
                   path: POSTGRES_PASSWORD
-          - secret:
-              name: smtp
-              items:
-                - key: password
-                  path: SMTP_PASSWORD
