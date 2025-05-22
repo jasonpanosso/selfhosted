@@ -21,6 +21,8 @@ auth:
   usePasswordFiles: false
   usePasswordFileFromSecret: false
 replica:
+  podAnnotations:
+    reloader.stakater.com/auto: "true"
   replicaCount: 3
   resources:
     requests:

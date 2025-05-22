@@ -157,6 +157,8 @@ configMap:
           - "*"
 pod:
   kind: Deployment
+  annotations:
+    reloader.stakater.com/auto: "true"
   replicas: 3
   resources:
     requests:

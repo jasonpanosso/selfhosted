@@ -48,6 +48,9 @@ pod:
     ldap: 3890
     webui: 17170
 
+podAnnotations:
+  reloader.stakater.com/auto: "true"
+
 env:
   - name: TZ
     value: Etc/UTC
