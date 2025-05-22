@@ -2,11 +2,8 @@
 # yaml-language-server: $schema=https://json.schemastore.org/kustomization
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-namespace: traefik
-
-components:
-  - ../../components/common
 
 resources:
-  - ./operator/ks.yaml
-  - ./config/ks.yaml
+  - certificate.yaml
+  - tlsstore.yaml
+  - forward-auth-middleware.yaml
