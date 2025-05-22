@@ -5,7 +5,7 @@ kind: Kustomization
 metadata:
   name: flux-system
 spec:
-  path: ./clusters/prod
+  path: ./kubernetes/clusters/prod
   interval: 1h
   retryInterval: 2m
   timeout: 20m
