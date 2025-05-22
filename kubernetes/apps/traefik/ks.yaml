@@ -26,6 +26,8 @@ spec:
     namespace: flux-system
   targetNamespace: *namespace
   dependsOn:
+    - name: clusterissuer
+      namespace: cert-manager
     - name: cert-manager
       namespace: cert-manager
     - name: metallb

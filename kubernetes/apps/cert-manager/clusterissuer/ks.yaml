@@ -3,21 +3,25 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app secret-store
-  namespace: &namespace external-secrets
+  name: &app clusterissuer
+  namespace: &namespace cert-manager
 spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  path: ./kubernetes/apps/external-secrets/secret-store/app
   interval: 1h
+  timeout: 5m
   retryInterval: 2m
-  timeout: 15m
+  path: ./kubernetes/apps/cert-manager/clusterissuer/app
   prune: true
   wait: false
+  healthChecks:
+    - apiVersion: cert-manager.io/v1
+      kind: ClusterIssuer
+      name: letsencrypt
   healthCheckExprs:
-    - apiVersion: external-secrets.io/v1
-      kind: ClusterSecretStore
+    - apiVersion: cert-manager.io/v1
+      kind: ClusterIssuer
       failed: status.conditions.filter(e, e.type == 'Ready').all(e, e.status == 'False')
       current: status.conditions.filter(e, e.type == 'Ready').all(e, e.status == 'True')
   sourceRef:
@@ -26,7 +30,7 @@ spec:
     namespace: flux-system
   targetNamespace: *namespace
   dependsOn:
-    - name: external-secrets
-      namespace: *namespace
     - name: cert-manager
-      namespace: cert-manager
+      namespace: *namespace
+    - name: secret-store
+      namespace: external-secrets

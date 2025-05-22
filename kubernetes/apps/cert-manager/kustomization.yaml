@@ -8,4 +8,5 @@ components:
   - ../../components/common
 
 resources:
-  - ./ks.yaml
+  - ./operator/ks.yaml
+  - ./clusterissuer/ks.yaml
