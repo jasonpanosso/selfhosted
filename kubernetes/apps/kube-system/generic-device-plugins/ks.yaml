@@ -9,14 +9,23 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  interval: 1h
   path: ./kubernetes/apps/kube-system/generic-device-plugins/app
-  prune: true
+  interval: 1h
   retryInterval: 2m
+  timeout: 5m
+  prune: true
+  wait: false
+  healthChecks:
+    - apiVersion: apps/v1
+      kind: DaemonSet
+      name: drm-generic-device-plugin
+      namespace: *namespace
+    - apiVersion: apps/v1
+      kind: DaemonSet
+      name: tun-generic-device-plugin
+      namespace: *namespace
   sourceRef:
     kind: GitRepository
     name: flux-system
     namespace: flux-system
   targetNamespace: *namespace
-  timeout: 5m
-  wait: false
