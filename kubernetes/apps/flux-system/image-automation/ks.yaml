@@ -15,6 +15,11 @@ spec:
   timeout: 5m
   prune: true
   wait: false
+  healthChecks:
+    - apiVersion: image.toolkit.fluxcd.io/v1beta2
+      kind: ImageUpdateAutomation
+      name: *app
+      namespace: *namespace
   sourceRef:
     kind: GitRepository
     name: flux-system

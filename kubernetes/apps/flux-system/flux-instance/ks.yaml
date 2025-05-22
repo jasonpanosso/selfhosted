@@ -15,6 +15,15 @@ spec:
   timeout: 5m
   prune: true
   wait: false
+  healthChecks:
+    - apiVersion: kustomize.toolkit.fluxcd.io/v1
+      kind: Kustomization
+      name: flux-system
+      namespace: *namespace
+    - apiVersion: fluxcd.controlplane.io/v1
+      kind: FluxInstance
+      name: flux
+      namespace: *namespace
   sourceRef:
     kind: GitRepository
     name: flux-system

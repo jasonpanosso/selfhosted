@@ -3,7 +3,7 @@
 apiVersion: image.toolkit.fluxcd.io/v1beta2
 kind: ImageUpdateAutomation
 metadata:
-  name: image-updater
+  name: image-automation
 spec:
   interval: 1h
   sourceRef:
