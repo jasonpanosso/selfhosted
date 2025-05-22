@@ -18,7 +18,7 @@ spec:
   healthChecks:
     - apiVersion: apps/v1
       kind: StatefulSet
-      name: *app
+      name: calibre-web-automated
       namespace: *namespace
   sourceRef:
     kind: GitRepository
