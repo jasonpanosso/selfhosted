@@ -214,7 +214,7 @@ pod:
       projected:
         sources:
           - secret:
-              name: authelia-config
+              name: authelia
               items:
                 - key: JWT_TOKEN
                   path: JWT_TOKEN
@@ -231,7 +231,7 @@ pod:
           - secret:
               name: lldap
               items:
-                - key: LLDAP_LDAP_USER_PASS
+                - key: LDAP_ADMIN_PASSWORD
                   path: LDAP_PASSWORD
           - secret:
               name: redis
