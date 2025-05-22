@@ -4,6 +4,9 @@ apiVersion: postgresql.cnpg.io/v1
 kind: Cluster
 metadata:
   name: pgcluster
+  annotations:
+    # https://github.com/cloudnative-pg/cloudnative-pg/issues/5778#issuecomment-2782198691
+    cnpg.io/skipEmptyWalArchiveCheck: "enabled"
 spec:
   backup:
     barmanObjectStore:
