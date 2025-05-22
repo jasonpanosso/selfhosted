@@ -5,7 +5,6 @@ kind: Kustomization
 
 resources:
   - ./helmrelease.yaml
-  - ./ingressroute.yaml
 
 configMapGenerator:
   - name: rook-ceph-operator-values
