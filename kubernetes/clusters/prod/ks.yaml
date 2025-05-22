@@ -21,6 +21,9 @@ spec:
       name: sops-age
   patches:
     - # Add Sops decryption & substitutions to child Kustomizations
+      target:
+        group: kustomize.toolkit.fluxcd.io
+        kind: Kustomization
       patch: |-
         apiVersion: kustomize.toolkit.fluxcd.io/v1
         kind: Kustomization
