@@ -24,6 +24,12 @@ spec:
               value: Etc/UTC
             - name: TRUSTED_PROXY
               value: 10.244.0.0/16
+          livenessProbe:
+            httpGet:
+              path: /i/
+              port: 80
+            initialDelaySeconds: 5
+            periodSeconds: 15
           readinessProbe:
             httpGet:
               path: /i/

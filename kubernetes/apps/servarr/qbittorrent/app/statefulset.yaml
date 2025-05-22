@@ -51,6 +51,13 @@ spec:
                     "-c",
                     "(ip rule del table 51820; ip -6 rule del table 51820) || true",
                   ]
+          livenessProbe:
+            exec:
+              command:
+                - /gluetun-entrypoint
+                - healthcheck
+            initialDelaySeconds: 10
+            periodSeconds: 15
           readinessProbe:
             exec:
               command:
@@ -110,6 +117,12 @@ spec:
                   key: VPN_FIREWALL_INPUT_PORTS
             - name: QBT_WEBUI_PORT
               value: "8080"
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 15
           readinessProbe:
             httpGet:
               path: /
