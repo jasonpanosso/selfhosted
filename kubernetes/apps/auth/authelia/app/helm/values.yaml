@@ -214,7 +214,7 @@ pod:
       projected:
         sources:
           - secret:
-              name: authelia
+              name: authelia-config
               items:
                 - key: JWT_TOKEN
                   path: JWT_TOKEN
