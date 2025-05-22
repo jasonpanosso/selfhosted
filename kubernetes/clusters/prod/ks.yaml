@@ -10,7 +10,7 @@ spec:
   interval: 1h
   retryInterval: 2m
   timeout: 20m
-  prune: false
+  prune: true
   wait: false
   sourceRef:
     kind: GitRepository
