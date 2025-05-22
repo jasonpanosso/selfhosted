@@ -1,10 +1,10 @@
 ---
 serviceMonitor:
   enabled: true
-  namespace: monitoring
+  namespace: observability
 grafana:
   enabled: true
-  namespace: monitoring
+  namespace: observability
 features:
   policyExceptions:
     enabled: true

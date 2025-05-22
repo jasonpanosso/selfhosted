@@ -24,7 +24,7 @@ spec:
             - Pod
             - DaemonSet
           namespaces:
-            - monitoring
+            - observability
           names:
             - prometheus-node-exporter*
             - kube-prometheus-stack-prometheus-node-exporter*
