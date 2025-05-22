@@ -27,4 +27,4 @@ spec:
   targetNamespace: *namespace
   dependsOn:
     - name: local-path-provisioner
-      namespace: local-path-storage
+      namespace: local-path-provisioner

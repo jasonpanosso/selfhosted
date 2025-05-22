@@ -31,4 +31,4 @@ spec:
     - name: external-secrets
       namespace: external-secrets
     - name: local-path-provisioner
-      namespace: local-path-storage
+      namespace: local-path-provisioner
