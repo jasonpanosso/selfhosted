@@ -3,29 +3,30 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app lldap
-  namespace: &namespace auth
+  name: &app external-secrets
+  namespace: &namespace external-secrets
 spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
+  path: ./kubernetes/apps/external-secrets/operator/app
   interval: 1h
   retryInterval: 2m
   timeout: 15m
-  path: ./kubernetes/apps/auth/lldap/app
   prune: true
+  wait: false
   healthChecks:
     - apiVersion: helm.toolkit.fluxcd.io/v2
       kind: HelmRelease
       name: *app
       namespace: *namespace
+  healthCheckExprs:
+    - apiVersion: external-secrets.io/v1
+      kind: ClusterSecretStore
+      failed: status.conditions.filter(e, e.type == 'Ready').all(e, e.status == 'False')
+      current: status.conditions.filter(e, e.type == 'Ready').all(e, e.status == 'True')
   sourceRef:
     kind: GitRepository
     name: flux-system
     namespace: flux-system
   targetNamespace: *namespace
-  dependsOn:
-    - name: secret-store
-      namespace: external-secrets
-    - name: db
-      namespace: db

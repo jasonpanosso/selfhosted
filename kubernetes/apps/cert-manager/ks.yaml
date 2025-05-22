@@ -34,5 +34,5 @@ spec:
     namespace: flux-system
   targetNamespace: *namespace
   dependsOn:
-    - name: external-secrets
+    - name: secret-store
       namespace: external-secrets

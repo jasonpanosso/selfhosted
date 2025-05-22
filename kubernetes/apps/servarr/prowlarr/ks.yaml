@@ -30,5 +30,5 @@ spec:
       namespace: db
     - name: rook-ceph
       namespace: rook-ceph
-    - name: external-secrets
+    - name: secret-store
       namespace: external-secrets
