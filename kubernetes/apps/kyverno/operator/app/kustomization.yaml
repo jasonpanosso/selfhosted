@@ -5,7 +5,6 @@ kind: Kustomization
 
 resources:
   - ./helmrelease.yaml
-  - ./policies
 
 configMapGenerator:
   - name: kyverno-values

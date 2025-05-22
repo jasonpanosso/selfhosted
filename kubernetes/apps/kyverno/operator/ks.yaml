@@ -9,7 +9,7 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  path: ./kubernetes/apps/kyverno/app
+  path: ./kubernetes/apps/kyverno/operator/app
   interval: 1h
   retryInterval: 2m
   timeout: 5m
