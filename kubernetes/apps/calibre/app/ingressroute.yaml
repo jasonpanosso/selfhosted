@@ -19,18 +19,6 @@ spec:
         - kind: Service
           name: *app
           port: 8083
----
-# yaml-language-server: $schema=https://datreeio.github.io/CRDs-catalog/traefik.io/ingressroute_v1alpha1.json
-apiVersion: traefik.io/v1alpha1
-kind: IngressRoute
-metadata:
-  name: &app calibre-web-automated-book-downloader
-  labels:
-    app.kubernetes.io/name: *app
-spec:
-  entryPoints:
-    - websecure
-  routes:
     - match: Host(`books.${domain}.${tld}`)
       kind: Rule
       middlewares:
