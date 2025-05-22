@@ -10,7 +10,7 @@ spec:
   retryInterval: 2m
   timeout: 20m
   prune: false
-  wait: true
+  wait: false
   decryption:
     provider: sops
     secretRef:

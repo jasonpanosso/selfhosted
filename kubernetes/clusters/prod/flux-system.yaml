@@ -5,12 +5,12 @@ metadata:
   name: flux-system
   namespace: flux-system
 spec:
+  path: ./clusters/prod
   interval: 10m
   retryInterval: 1m
   timeout: 20m
-  path: ./clusters/prod
   prune: false
-  wait: true
+  wait: false
   decryption:
     provider: sops
     secretRef:

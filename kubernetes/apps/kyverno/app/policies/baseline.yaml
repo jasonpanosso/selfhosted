@@ -5,13 +5,13 @@ kind: Kustomization
 metadata:
   name: baseline-policies
 spec:
-  targetNamespace: kyverno
+  path: "./pod-security/baseline"
   interval: 1h
   retryInterval: 2m
   timeout: 5m
-  wait: true
+  wait: false
   prune: true
-  path: "./pod-security/baseline"
+  targetNamespace: kyverno
   sourceRef:
     kind: GitRepository
     name: policies
