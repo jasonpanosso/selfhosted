@@ -9,7 +9,7 @@ spec:
   interval: 1h
   retryInterval: 2m
   timeout: 20m
-  prune: true
+  prune: false
   wait: true
   decryption:
     provider: sops

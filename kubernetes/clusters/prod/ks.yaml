@@ -11,7 +11,7 @@ spec:
   retryInterval: 2m
   timeout: 20m
   prune: false
-  wait: true
+  wait: false
   sourceRef:
     kind: GitRepository
     name: flux-system
