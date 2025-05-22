@@ -14,11 +14,11 @@ spec:
   retryInterval: 2m
   timeout: 5m
   wait: false
-  prune: true
+  prune: false
   healthChecks:
     - apiVersion: v1
       kind: PersistentVolumeClaim
-      name: *app
+      name: media
       namespace: *namespace
   sourceRef:
     kind: GitRepository
