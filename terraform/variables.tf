@@ -14,7 +14,6 @@ variable "digitalocean_spaces_secret_key" {
   description = "DigitalOcean Spaces secret key"
   type        = string
   sensitive   = true
-
 }
 
 variable "spaces_name" {
