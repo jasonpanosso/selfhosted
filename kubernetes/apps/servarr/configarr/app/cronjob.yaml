@@ -13,30 +13,9 @@ spec:
       ttlSecondsAfterFinished: 600
       template:
         spec:
-          initContainers:
-            - name: wait-for-services
-              image: curlimages/curl:8.13.0
-              command: ["/bin/sh", "-c"]
-              args:
-                - |
-                  set -e
-                  for svc in prowlarr radarr sonarr; do
-                    echo "Waiting for $svc to be online..."
-                    until curl -sf "http://$svc/ping"; do
-                      echo "Service $svc not ready yet. Retrying in 5 seconds..."
-                      sleep 5
-                    done
-                    echo "$svc ready!"
-                  done
-              securityContext:
-                allowPrivilegeEscalation: false
-                capabilities:
-                  drop: [ALL]
-                seccompProfile:
-                  type: RuntimeDefault
           containers:
             - name: *app
-              image: ghcr.io/raydak-labs/configarr:1.13.5 # {"$imagepolicy": "flux-system:configarr"}
+              image: ghcr.io/raydak-labs/configarr:1.13.5
               imagePullPolicy: Always
               env:
                 - name: TZ
@@ -44,13 +23,13 @@ spec:
                 - name: RADARR_API_KEY
                   valueFrom:
                     secretKeyRef:
-                      name: servarr-api-keys
-                      key: radarr
+                      name: radarr
+                      key: token
                 - name: SONARR_API_KEY
                   valueFrom:
                     secretKeyRef:
-                      name: servarr-api-keys
-                      key: sonarr
+                      name: sonarr
+                      key: token
               volumeMounts:
                 - name: cache
                   mountPath: /app/repos
