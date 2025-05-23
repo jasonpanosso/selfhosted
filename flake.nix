@@ -1,5 +1,5 @@
 {
-  description = "kubernetes in docker devshell flake";
+  description = "kubernetes cluster utils devshell";
 
   inputs.nixpkgs.url = "https://flakehub.com/f/NixOS/nixpkgs/0.1.*.tar.gz";
   inputs.flake-utils.url = "github:numtide/flake-utils";
