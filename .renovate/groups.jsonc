@@ -1,0 +1,77 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "packageRules": [
+    {
+      "description": "Cert-Manager Group",
+      "groupName": "Cert-Manager",
+      "matchDatasources": ["docker"],
+      "matchPackageNames": ["/cert-manager/"],
+      "group": {
+        "commitMessageTopic": "{{{groupName}}} group"
+      }
+    },
+    {
+      "description": "External Secrets Operator Group",
+      "groupName": "External Secrets Operator",
+      "matchDatasources": ["docker"],
+      "matchPackageNames": ["/external-secrets/"],
+      "group": {
+        "commitMessageTopic": "{{{groupName}}} group"
+      }
+    },
+    {
+      "description": "Flux Operator Group",
+      "groupName": "Flux Operator",
+      "matchDatasources": ["docker"],
+      "matchPackageNames": ["/flux-operator/", "/flux-instance/"],
+      "group": {
+        "commitMessageTopic": "{{{groupName}}} group"
+      }
+    },
+    {
+      "description": "Rook-Ceph Group",
+      "groupName": "Rook-Ceph",
+      "matchDatasources": ["docker"],
+      "matchPackageNames": ["/rook-ceph/", "/rook-ceph-cluster/"],
+      "group": {
+        "commitMessageTopic": "{{{groupName}}} group"
+      }
+    },
+    {
+      "description": "CloudNativePG Group",
+      "groupName": "CloudNativePG",
+      "matchDatasources": ["docker"],
+      "matchPackageNames": ["/cloudnative-pg/", "/db/"],
+      "group": {
+        "commitMessageTopic": "{{{groupName}}} group"
+      }
+    },
+    {
+      "description": "Kyverno Group",
+      "groupName": "Kyverno",
+      "matchDatasources": ["docker"],
+      "matchPackageNames": ["/kyverno/", "/kyverno-policies/"],
+      "group": {
+        "commitMessageTopic": "{{{groupName}}} group"
+      }
+    },
+    {
+      "description": "Kube-Prometheus-Stack Group",
+      "groupName": "Kube-Prometheus-Stack",
+      "matchDatasources": ["docker"],
+      "matchPackageNames": ["/kube-prometheus-stack/"],
+      "group": {
+        "commitMessageTopic": "{{{groupName}}} group"
+      }
+    },
+    {
+      "description": "Grafana Group",
+      "groupName": "Grafana",
+      "matchDatasources": ["docker"],
+      "matchPackageNames": ["/grafana/"],
+      "group": {
+        "commitMessageTopic": "{{{groupName}}} group"
+      }
+    }
+  ]
+}
