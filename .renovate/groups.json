@@ -72,6 +72,15 @@
       "group": {
         "commitMessageTopic": "{{{groupName}}} group"
       }
+    },
+    {
+      "description": "Traefik Group",
+      "groupName": "Traefik",
+      "matchDatasources": ["docker"],
+      "matchPackageNames": ["/traefik/", "/traefik-config/"],
+      "group": {
+        "commitMessageTopic": "{{{groupName}}} group"
+      }
     }
   ]
 }
