@@ -21,13 +21,13 @@ kind: HelmRelease
 metadata:
   name: local-path-provisioner
 spec:
+  interval: 1h
   chart:
     spec:
       chart: ./deploy/chart/local-path-provisioner
       sourceRef:
         kind: GitRepository
         name: local-path-provisioner
-  interval: 10m0s
   valuesFrom:
     - kind: ConfigMap
       name: local-path-provisioner-values
