@@ -10,4 +10,3 @@ components:
 resources:
   - ./flux-operator/ks.yaml
   - ./flux-instance/ks.yaml
-  - ./image-automation/ks.yaml
