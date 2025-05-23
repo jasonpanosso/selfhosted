@@ -27,8 +27,8 @@ spec:
   targetNamespace: *namespace
   dependsOn:
     - name: prowlarr
-      namespace: servarr
+      namespace: *namespace
     - name: radarr
-      namespace: servarr
+      namespace: *namespace
     - name: sonarr
-      namespace: servarr
+      namespace: *namespace
