@@ -1,0 +1,25 @@
+---
+area/docs:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "README.md"
+area/github:
+  - changed-files:
+      - any-glob-to-any-file: ".github/**/*"
+area/kubernetes:
+  - changed-files:
+      - any-glob-to-any-file: "kubernetes/**/*"
+area/renovate:
+  - changed-files:
+      - any-glob-to-any-file:
+          - ".renovate/**/*"
+          - ".renovaterc.jsonc"
+area/scripts:
+  - changed-files:
+      - any-glob-to-any-file: "scripts/**/*"
+area/talos:
+  - changed-files:
+      - any-glob-to-any-file: "talos/**/*"
+area/terraform:
+  - changed-files:
+      - any-glob-to-any-file: "terraform/**/*"
