@@ -16,7 +16,7 @@ spec:
         app.kubernetes.io/name: *app
     spec:
       containers:
-        - image: docker.io/crocodilestick/calibre-web-automated:V3.0.4 # {"$imagepolicy": "flux-system:calibre-web-automated"}
+        - image: docker.io/crocodilestick/calibre-web-automated:V3.0.4
           name: *app
           ports:
             - containerPort: 8083

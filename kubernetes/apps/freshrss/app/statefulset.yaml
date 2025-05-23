@@ -15,7 +15,7 @@ spec:
         app.kubernetes.io/name: *app
     spec:
       containers:
-        - image: docker.io/freshrss/freshrss:1.26.2 # {"$imagepolicy": "flux-system:freshrss"}
+        - image: docker.io/freshrss/freshrss:1.26.2
           name: *app
           env:
             - name: CRON_MIN

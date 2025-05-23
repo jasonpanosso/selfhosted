@@ -24,7 +24,7 @@ spec:
         fsGroup: 65534
         fsGroupChangePolicy: OnRootMismatch
       containers:
-        - image: ghcr.io/jellyfin/jellyfin:10.10.7 # {"$imagepolicy": "flux-system:jellyfin"}
+        - image: ghcr.io/jellyfin/jellyfin:10.10.7
           name: *app
           ports:
             - containerPort: 8096

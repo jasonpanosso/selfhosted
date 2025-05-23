@@ -24,7 +24,7 @@ spec:
         fsGroup: 65534
         fsGroupChangePolicy: OnRootMismatch
       containers:
-        - image: ghcr.io/home-operations/radarr:5.23.3 # {"$imagepolicy": "flux-system:radarr"}
+        - image: ghcr.io/home-operations/radarr:5.23.3
           imagePullPolicy: Always
           name: *app
           env:

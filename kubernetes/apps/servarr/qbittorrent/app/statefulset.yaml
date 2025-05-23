@@ -39,7 +39,7 @@ spec:
             - name: config
               mountPath: /config
         # gluetun sidecar
-        - image: ghcr.io/qdm12/gluetun:v3.40.0 # {"$imagepolicy": "flux-system:gluetun"}
+        - image: ghcr.io/qdm12/gluetun:v3.40.0
           restartPolicy: Always
           lifecycle:
             postStart:
@@ -105,7 +105,7 @@ spec:
               add:
                 - NET_ADMIN
       containers:
-        - image: ghcr.io/home-operations/qbittorrent:5.1.0 # {"$imagepolicy": "flux-system:qbittorrent"}
+        - image: ghcr.io/home-operations/qbittorrent:5.1.0
           name: *app
           env:
             - name: TZ
