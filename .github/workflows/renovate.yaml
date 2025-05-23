@@ -9,7 +9,7 @@ on:
       - .renovaterc.jsonc
       - .renovate/**.jsonc
   schedule:
-    - cron: "0 * * * *"
+    - cron: "0 * * * *" # hourly
   workflow_dispatch:
     inputs:
       dryRun:
