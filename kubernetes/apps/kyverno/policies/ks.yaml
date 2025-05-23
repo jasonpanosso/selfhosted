@@ -3,7 +3,7 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app policies
+  name: &app kyverno-policies
   namespace: &namespace kyverno
 spec:
   commonMetadata:
