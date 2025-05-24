@@ -7,36 +7,31 @@ crds:
 
 cleanPrometheusOperatorObjectNames: true
 
-prometheus:
-  prometheusSpec:
-    securityContext:
-      runAsNonRoot: true
-      runAsUser: 65534
-      runAsGroup: 65534
-      fsGroup: 65534
-    serviceMonitorSelector:
-      matchLabels: null
-    podMonitorSelector:
-      matchLabels: null
-    ruleSelector:
-      matchLabels: null
-    retention: 7d
-    resources:
-      requests:
-        cpu: 500m
-        memory: 1Gi
-      limits:
-        cpu: 500m
-        memory: 2Gi
-    storageSpec:
-      volumeClaimTemplate:
-        spec:
-          storageClassName: local-path
-          accessModes: ["ReadWriteOnce"]
-          resources:
-            requests:
-              storage: 10Gi
+kubernetesServiceMonitors:
+  enabled: true
 
+prometheusOperator:
+  enabled: false
+prometheus:
+  enabled: false
+alertManager:
+  enabled: false
+  forceDeployDashboards: true
+kubeApiServer:
+  enabled: false
+kubelet:
+  enabled: false
+kubeletService:
+  enabled: false
+kubeStateMetrics:
+  enabled: false
+kubeControllerManager:
+  enabled: false
+coreDns:
+  enabled: false
+nodeExporter:
+  enabled: false
+  forceDeployDashboards: true
 grafana:
   enabled: false
   forceDeployDashboards: true
