@@ -362,6 +362,8 @@ spec:
             - debug
             # - otlphttp/loki
           processors:
+            - resourcedetection/env
+            - k8sattributes
             - batch
           receivers:
             - otlp
@@ -370,6 +372,8 @@ spec:
             - debug
             - otlphttp/prometheus
           processors:
+            - resourcedetection/env
+            - k8sattributes
             - batch
           receivers:
             - otlp
