@@ -7,3 +7,4 @@ resources:
   - ./fluxinstance.yaml
   - ./gitrepository.yaml
   - ./ks.yaml
+  - ./prometheusrule.yaml
