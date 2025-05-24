@@ -5,6 +5,7 @@ kind: Kustomization
 
 resources:
   - ./helmrelease.yaml
+  - ./servicemonitor.yaml
 
 configMapGenerator:
   - name: prometheus-values
