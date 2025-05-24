@@ -13,6 +13,10 @@ spec:
     requests:
       cpu: 100m
       memory: 250Mi
+  tolerations:
+    - key: node-role.kubernetes.io/control-plane
+      operator: Exists
+      effect: NoSchedule
   targetAllocator:
     enabled: true
     allocationStrategy: per-node
