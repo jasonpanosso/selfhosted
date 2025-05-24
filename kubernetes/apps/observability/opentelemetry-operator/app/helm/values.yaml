@@ -1,0 +1,57 @@
+---
+replicaCount: 1
+crds:
+  create: true
+
+manager:
+  resources:
+    limits:
+      cpu: 100m
+      memory: 128Mi
+      ephemeral-storage: 50Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
+      ephemeral-storage: 50Mi
+  extraEnvs:
+    - name: GOMEMLIMIT
+      valueFrom:
+        resourceFieldRef:
+          containerName: manager
+          resource: limits.memory
+  serviceMonitor:
+    enabled: true
+  createRbacPermissions: false
+  leaderElection:
+    enabled: true
+  securityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - ALL
+    runAsNonRoot: true
+    seccompProfile:
+      type: RuntimeDefault
+
+kubeRBACProxy:
+  enabled: true
+  image:
+    repository: quay.io/brancz/kube-rbac-proxy
+    tag: v0.19.1
+  ports:
+    proxyPort: 8443
+  resources:
+    limits:
+      cpu: 100m
+      memory: 128Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
+  securityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - ALL
+    runAsNonRoot: true
+    seccompProfile:
+      type: RuntimeDefault
