@@ -242,7 +242,7 @@ spec:
         logs:
           exporters:
             - debug/logs
-            # - otlp
+            - otlp
           processors:
             - k8sattributes
             - resourcedetection/env
@@ -253,7 +253,7 @@ spec:
         metrics:
           exporters:
             - debug/metrics
-            # - otlp
+            - otlp
           processors:
             - k8sattributes
             - resourcedetection/env
