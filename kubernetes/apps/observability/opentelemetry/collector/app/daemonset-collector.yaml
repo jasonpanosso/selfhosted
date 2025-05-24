@@ -9,6 +9,7 @@ spec:
   targetAllocator:
     enabled: true
     allocationStrategy: per-node
+    serviceAccount: opentelemetry-targetallocator
     prometheusCR:
       enabled: true
       scrapeInterval: 30s
