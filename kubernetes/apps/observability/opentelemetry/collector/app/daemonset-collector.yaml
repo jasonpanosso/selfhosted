@@ -259,9 +259,6 @@ spec:
       mountPropagation: HostToContainer
       name: hostfs
       readOnly: true
-    - name: ca
-      mountPath: /etc/otel/ca
-      readOnly: true
   volumes:
     - hostPath:
         path: /var/log/pods
@@ -272,9 +269,6 @@ spec:
     - hostPath:
         path: /
       name: hostfs
-    - name: ca
-      configMap:
-        name: cluster-root-bundle
   env:
     - name: OTEL_K8S_NODE_NAME
       valueFrom:
