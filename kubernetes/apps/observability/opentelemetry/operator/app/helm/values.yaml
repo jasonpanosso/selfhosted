@@ -22,12 +22,6 @@ manager:
       cpu: 100m
       memory: 128Mi
       ephemeral-storage: 50Mi
-  extraEnvs:
-    - name: GOMEMLIMIT
-      valueFrom:
-        resourceFieldRef:
-          containerName: manager
-          resource: limits.memory
   serviceMonitor:
     enabled: true
   createRbacPermissions: false
@@ -45,6 +39,8 @@ manager:
     operator.targetallocator.mtls: true
     operator.targetallocator.fallbackstrategy: true
     operator.collector.targetallocatorcr: true
+    operator.golang.flags: true
+    operator.sidecarcontainers.native: true
 
 kubeRBACProxy:
   enabled: true
