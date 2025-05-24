@@ -10,4 +10,5 @@ components:
 resources:
   - ./grafana/ks.yaml
   - ./kube-prometheus-stack/ks.yaml
-  - ./opentelemetry-operator/ks.yaml
+  - ./opentelemetry/operator/ks.yaml
+  - ./opentelemetry/collector/ks.yaml

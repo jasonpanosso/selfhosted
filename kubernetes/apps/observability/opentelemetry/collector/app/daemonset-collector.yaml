@@ -1,0 +1,302 @@
+---
+apiVersion: opentelemetry.io/v1beta1
+kind: OpenTelemetryCollector
+metadata:
+  name: daemonset-collector
+spec:
+  mode: daemonset
+  serviceAccount: otel-collector-opentelemetry-collector
+  targetAllocator:
+    enabled: true
+    allocationStrategy: per-node
+    prometheusCR:
+      enabled: true
+      scrapeInterval: 30s
+      podMonitorSelector: {}
+      serviceMonitorSelector: {}
+  config:
+    exporters:
+      debug/metrics: {}
+      debug/logs: {}
+      debug/traces: {}
+      otlp:
+        endpoint: gateway-collector.observability.svc.cluster.local:4317
+
+    processors:
+      batch:
+        send_batch_max_size: 1500
+        send_batch_size: 1000
+        timeout: 1s
+      resourcedetection/env:
+        detectors:
+          - env
+        override: false
+        timeout: 2s
+      k8sattributes:
+        extract:
+          labels:
+            - from: pod
+              key: app.kubernetes.io/name
+              tag_name: service.name
+            - from: pod
+              key: k8s-app
+              tag_name: service.name
+            - from: pod
+              key: app.kubernetes.io/instance
+              tag_name: k8s.app.instance
+            - from: pod
+              key: app.kubernetes.io/version
+              tag_name: service.version
+            - from: pod
+              key: app.kubernetes.io/component
+              tag_name: k8s.app.component
+          metadata:
+            - k8s.namespace.name
+            - k8s.pod.name
+            - k8s.pod.uid
+            - k8s.node.name
+            - k8s.pod.start_time
+            - k8s.deployment.name
+            - k8s.replicaset.name
+            - k8s.replicaset.uid
+            - k8s.daemonset.name
+            - k8s.daemonset.uid
+            - k8s.job.name
+            - k8s.job.uid
+            - k8s.container.name
+            - k8s.cronjob.name
+            - k8s.statefulset.name
+            - k8s.statefulset.uid
+            - container.image.tag
+            - container.image.name
+            - k8s.cluster.uid
+        passthrough: false
+        pod_association:
+          - sources:
+              - from: resource_attribute
+                name: k8s.pod.uid
+          - sources:
+              - from: resource_attribute
+                name: k8s.pod.name
+              - from: resource_attribute
+                name: k8s.namespace.name
+              - from: resource_attribute
+                name: k8s.node.name
+          - sources:
+              - from: resource_attribute
+                name: k8s.pod.ip
+          - sources:
+              - from: resource_attribute
+                name: k8s.pod.name
+              - from: resource_attribute
+                name: k8s.namespace.name
+          - sources:
+              - from: connection
+            # filter:
+            #   node_from_env_var: OTEL_K8S_NODE_NAME
+
+    receivers:
+      prometheus:
+        config:
+          # auto via TargetAllocator
+          scrape_configs: []
+      filelog:
+        exclude: []
+        include:
+          - /var/log/pods/*/*/*.log
+        include_file_name: false
+        include_file_path: true
+        operators:
+          - id: container-parser
+            max_log_size: 102400
+            type: container
+        retry_on_failure:
+          enabled: true
+        start_at: end
+
+      hostmetrics:
+        collection_interval: 10s
+        root_path: /hostfs
+        scrapers:
+          cpu:
+            metrics:
+              system.cpu.utilization:
+                enabled: true
+          disk: {}
+          filesystem:
+            exclude_fs_types:
+              fs_types:
+                - autofs
+                - binfmt_misc
+                - bpf
+                - cgroup2
+                - configfs
+                - debugfs
+                - devpts
+                - devtmpfs
+                - fusectl
+                - hugetlbfs
+                - iso9660
+                - mqueue
+                - nsfs
+                - overlay
+                - proc
+                - procfs
+                - pstore
+                - rpc_pipefs
+                - securityfs
+                - selinuxfs
+                - squashfs
+                - sysfs
+                - tracefs
+              match_type: strict
+            exclude_mount_points:
+              match_type: regexp
+              mount_points:
+                - /dev/*
+                - /proc/*
+                - /sys/*
+                - /run/k3s/containerd/*
+                - /var/lib/docker/*
+                - /var/lib/kubelet/*
+                - /snap/*
+            metrics:
+              system.filesystem.utilization:
+                enabled: true
+          load: {}
+          memory:
+            metrics:
+              system.memory.utilization:
+                enabled: true
+          network: {}
+
+      kubeletstats:
+        auth_type: serviceAccount
+        collection_interval: 15s
+        endpoint: https://${env:OTEL_K8S_NODE_IP}:10250
+        extra_metadata_labels:
+          - container.id
+          - k8s.volume.type
+        insecure_skip_verify: true
+        k8s_api_config:
+          auth_type: serviceAccount
+        metric_groups:
+          - node
+          - pod
+          - volume
+          - container
+        metrics:
+          container.cpu.usage:
+            enabled: true
+          k8s.node.cpu.usage:
+            enabled: true
+          k8s.node.uptime:
+            enabled: true
+          k8s.pod.cpu.usage:
+            enabled: true
+          k8s.pod.uptime:
+            enabled: true
+
+      k8s_cluster:
+        auth_type: serviceAccount
+        collection_interval: 10s
+        k8s_leader_elector: k8s_leader_elector
+        allocatable_types_to_report:
+          - cpu
+          - memory
+          - storage
+        node_conditions_to_report:
+          - Ready
+          - MemoryPressure
+          - DiskPressure
+          - NetworkUnavailable
+
+      k8sobjects:
+        k8s_leader_elector: k8s_leader_elector
+        auth_type: serviceAccount
+        objects:
+          - name: events
+            group: events.k8s.io
+            mode: watch
+            exclude_watch_type:
+              - DELETED
+
+    service:
+      pipelines:
+        logs:
+          exporters:
+            - debug/logs
+            # - otlp
+          processors:
+            - k8sattributes
+            - resourcedetection/env
+            - batch
+          receivers:
+            - filelog
+            - k8sobjects
+        metrics:
+          exporters:
+            - debug/metrics
+            # - otlp
+          processors:
+            - k8sattributes
+            - resourcedetection/env
+            - batch
+          receivers:
+            - hostmetrics
+            - kubeletstats
+            - prometheus
+            - k8s_cluster
+  volumeMounts:
+    - mountPath: /var/log/pods
+      name: varlogpods
+      readOnly: true
+    - mountPath: /var/lib/docker/containers
+      name: varlibdockercontainers
+      readOnly: true
+    - mountPath: /hostfs
+      mountPropagation: HostToContainer
+      name: hostfs
+      readOnly: true
+    - name: ca
+      mountPath: /etc/otel/ca
+      readOnly: true
+  volumes:
+    - hostPath:
+        path: /var/log/pods
+      name: varlogpods
+    - hostPath:
+        path: /var/lib/docker/containers
+      name: varlibdockercontainers
+    - hostPath:
+        path: /
+      name: hostfs
+    - name: ca
+      configMap:
+        name: cluster-root-bundle
+  env:
+    - name: OTEL_K8S_NODE_NAME
+      valueFrom:
+        fieldRef:
+          fieldPath: spec.nodeName
+    - name: OTEL_K8S_NODE_IP
+      valueFrom:
+        fieldRef:
+          fieldPath: status.hostIP
+    - name: OTEL_K8S_NAMESPACE
+      valueFrom:
+        fieldRef:
+          apiVersion: v1
+          fieldPath: metadata.namespace
+    - name: OTEL_K8S_POD_NAME
+      valueFrom:
+        fieldRef:
+          apiVersion: v1
+          fieldPath: metadata.name
+    - name: OTEL_K8S_POD_IP
+      valueFrom:
+        fieldRef:
+          apiVersion: v1
+          fieldPath: status.podIP
+    # - name: OTEL_RESOURCE_ATTRIBUTES
+    #   value: k8s.cluster.name={{ .Values.clusterName }}
