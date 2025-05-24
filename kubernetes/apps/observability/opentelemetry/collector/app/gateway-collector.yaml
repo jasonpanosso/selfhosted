@@ -10,7 +10,7 @@ spec:
     exporters:
       debug: {}
       otlphttp/prometheus:
-        endpoint: http://prometheus-operated.observability.svc.cluster.local/api/v1/otlp
+        endpoint: http://prometheus.observability.svc.cluster.local/api/v1/otlp
         tls:
           insecure: true
       otlphttp/loki:
@@ -45,7 +45,7 @@ spec:
         metrics:
           exporters:
             - debug
-            # - otlphttp/prometheus
+            - otlphttp/prometheus
           processors:
             - batch
           receivers:
