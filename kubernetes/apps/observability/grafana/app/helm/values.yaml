@@ -89,7 +89,7 @@ dashboards:
     cloudnative-pg:
       # renovate: depName="CloudnativePG"
       gnetId: 20417
-      revision: 3
+      revision: 4
       datasource:
         - {name: DS_PROMETHEUS, value: Prometheus}
     Traefik:
