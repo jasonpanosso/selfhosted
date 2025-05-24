@@ -7,9 +7,7 @@ metadata:
 spec:
   endpoints:
     - path: /metrics
-      port: http-web
-    - path: /metrics
-      port: reloader-web
+      port: http
   namespaceSelector:
     matchNames:
       - observability
