@@ -18,7 +18,6 @@ server:
     - web.enable-lifecycle
     - web.enable-otlp-receiver
     - enable-feature=exemplar-storage
-    - enable-feature=remote-write-receiver
 
   otlp:
     keep_identifying_resource_attributes: true
