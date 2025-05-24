@@ -50,13 +50,13 @@ datasources:
         type: prometheus
         uid: prometheus
         access: proxy
-        url: http://prometheus-operated.observability.svc.cluster.local:9090
+        url: http://prometheus.observability.svc.cluster.local
         isDefault: true
       - name: Alertmanager
         type: alertmanager
         uid: alertmanager
         access: proxy
-        url: http://alertmanager-operated.observability.svc.cluster.local:9093
+        url: http://alertmanager.observability.svc.cluster.local:9093
         jsonData:
           implementation: prometheus
 
