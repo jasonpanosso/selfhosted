@@ -39,6 +39,8 @@ spec:
       debug/traces: {}
       otlp:
         endpoint: gateway-collector.observability.svc.cluster.local:4317
+        tls:
+          insecure: true
 
     processors:
       batch:
