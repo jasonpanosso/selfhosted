@@ -2,10 +2,17 @@
 apiVersion: opentelemetry.io/v1beta1
 kind: OpenTelemetryCollector
 metadata:
-  name: daemonset
+  name: cluster
 spec:
   mode: daemonset
   serviceAccount: otel-collector-opentelemetry-collector
+  resources:
+    limits:
+      cpu: 200m
+      memory: 500Mi
+    requests:
+      cpu: 100m
+      memory: 250Mi
   targetAllocator:
     enabled: true
     allocationStrategy: per-node
@@ -303,3 +310,60 @@ spec:
           fieldPath: status.podIP
     # - name: OTEL_RESOURCE_ATTRIBUTES
     #   value: k8s.cluster.name={{ .Values.clusterName }}
+---
+apiVersion: opentelemetry.io/v1beta1
+kind: OpenTelemetryCollector
+metadata:
+  name: gateway
+spec:
+  mode: deployment
+  replicas: 2
+  config:
+    exporters:
+      debug: {}
+      otlphttp/prometheus:
+        endpoint: http://prometheus.observability.svc.cluster.local/api/v1/otlp
+        tls:
+          insecure: true
+      otlphttp/loki:
+        endpoint: http://loki-gateway.observability.svc.cluster.local/otlp
+        tls:
+          insecure: true
+
+    processors:
+      batch:
+        send_batch_max_size: 1500
+        send_batch_size: 1000
+        timeout: 1s
+      resourcedetection/env:
+        detectors:
+          - env
+        override: false
+        timeout: 2s
+      k8sattributes:
+        passthrough: true
+
+    receivers:
+      otlp:
+        protocols:
+          grpc:
+            endpoint: 0.0.0.0:4317
+
+    service:
+      pipelines:
+        logs:
+          exporters:
+            - debug
+            # - otlphttp/loki
+          processors:
+            - batch
+          receivers:
+            - otlp
+        metrics:
+          exporters:
+            - debug
+            - otlphttp/prometheus
+          processors:
+            - batch
+          receivers:
+            - otlp
