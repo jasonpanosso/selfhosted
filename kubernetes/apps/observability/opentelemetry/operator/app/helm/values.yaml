@@ -41,6 +41,10 @@ manager:
     runAsNonRoot: true
     seccompProfile:
       type: RuntimeDefault
+  featureGatesMap:
+    operator.targetallocator.mtls: true
+    operator.targetallocator.fallbackstrategy: true
+    operator.collector.targetallocatorcr: true
 
 kubeRBACProxy:
   enabled: true
