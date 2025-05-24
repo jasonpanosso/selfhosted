@@ -2,7 +2,7 @@
 apiVersion: opentelemetry.io/v1beta1
 kind: OpenTelemetryCollector
 metadata:
-  name: daemonset-collector
+  name: daemonset
 spec:
   mode: daemonset
   serviceAccount: otel-collector-opentelemetry-collector
