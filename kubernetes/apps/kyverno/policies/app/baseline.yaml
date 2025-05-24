@@ -1,4 +1,16 @@
 ---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/source.toolkit.fluxcd.io/gitrepository_v1.json
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: GitRepository
+metadata:
+  name: policies
+spec:
+  interval: 1h
+  ref:
+    branch: main
+  timeout: 60s
+  url: https://github.com/kyverno/policies
+---
 # yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -15,4 +27,4 @@ spec:
   sourceRef:
     kind: GitRepository
     name: policies
-    namespace: flux-system
+    namespace: kyverno
