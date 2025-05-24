@@ -53,6 +53,8 @@ spec:
         override: false
         timeout: 2s
       k8sattributes:
+        filter:
+          node_from_env_var: OTEL_K8S_NODE_NAME
         extract:
           labels:
             - from: pod
@@ -112,8 +114,6 @@ spec:
                 name: k8s.namespace.name
           - sources:
               - from: connection
-            # filter:
-            #   node_from_env_var: OTEL_K8S_NODE_NAME
 
     receivers:
       prometheus:
