@@ -5,10 +5,8 @@ crds:
     enabled: true
     forceConflicts: true
 
-cleanPrometheusOperatorObjectNames: true
-
 kubernetesServiceMonitors:
-  enabled: true
+  enabled: false
 
 prometheusOperator:
   enabled: false
@@ -31,7 +29,7 @@ coreDns:
   enabled: false
 nodeExporter:
   enabled: false
-  forceDeployDashboards: true
+  forceDeployDashboards: false
 grafana:
   enabled: false
-  forceDeployDashboards: true
+  forceDeployDashboards: false
