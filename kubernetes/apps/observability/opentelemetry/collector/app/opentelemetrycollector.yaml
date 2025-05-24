@@ -362,7 +362,6 @@ spec:
           exporters:
             - debug
             - otlphttp/prometheus
-          processors:
-            - batch
+          processors: []
           receivers:
             - otlp
