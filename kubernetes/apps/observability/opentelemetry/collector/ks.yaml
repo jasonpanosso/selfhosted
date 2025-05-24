@@ -16,9 +16,13 @@ spec:
   prune: true
   wait: false
   healthChecks:
-    - apiVersion: helm.toolkit.fluxcd.io/v2
-      kind: HelmRelease
-      name: *app
+    - apiVersion: opentelemetry.io/v1beta1
+      kind: OpenTelemetryCollector
+      name: cluster
+      namespace: *namespace
+    - apiVersion: opentelemetry.io/v1beta1
+      kind: OpenTelemetryCollector
+      name: gateway
       namespace: *namespace
   sourceRef:
     kind: GitRepository
