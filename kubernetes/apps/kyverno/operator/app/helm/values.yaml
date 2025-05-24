@@ -1,7 +1,4 @@
 ---
-serviceMonitor:
-  enabled: true
-  namespace: observability
 grafana:
   enabled: true
   namespace: observability
@@ -10,6 +7,9 @@ features:
     enabled: true
     namespace: "*"
 cleanupController:
+  serviceMonitor:
+    enabled: true
+    namespace: observability
   replicas: 3
   rbac:
     clusterRole:
@@ -24,8 +24,17 @@ cleanupController:
             - watch
             - delete
 admissionController:
+  serviceMonitor:
+    enabled: true
+    namespace: observability
   replicas: 3
 backgroundController:
+  serviceMonitor:
+    enabled: true
+    namespace: observability
   replicas: 2
 reportsController:
+  serviceMonitor:
+    enabled: true
+    namespace: observability
   replicas: 2
