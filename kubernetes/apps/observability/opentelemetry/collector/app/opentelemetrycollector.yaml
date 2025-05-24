@@ -187,12 +187,11 @@ spec:
       kubeletstats:
         auth_type: serviceAccount
         collection_interval: 15s
-        endpoint: "${env:OTEL_K8S_NODE_IP}:10250"
+        endpoint: https://$${env:OTEL_K8S_NODE_IP}:10250
         extra_metadata_labels:
           - container.id
           - k8s.volume.type
         insecure_skip_verify: true
-        node: "${env:OTEL_K8S_NODE_NAME}"
         k8s_api_config:
           auth_type: serviceAccount
         metric_groups:
@@ -201,13 +200,13 @@ spec:
           - volume
           - container
         metrics:
+          k8s.pod.cpu.usage:
+            enabled: true
           container.cpu.usage:
             enabled: true
           k8s.node.cpu.usage:
             enabled: true
           k8s.node.uptime:
-            enabled: true
-          k8s.pod.cpu.usage:
             enabled: true
           k8s.pod.uptime:
             enabled: true
