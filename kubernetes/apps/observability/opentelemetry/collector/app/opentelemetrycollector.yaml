@@ -341,13 +341,6 @@ spec:
         send_batch_max_size: 1500
         send_batch_size: 1000
         timeout: 1s
-      resourcedetection/env:
-        detectors:
-          - env
-        override: false
-        timeout: 2s
-      k8sattributes:
-        passthrough: true
 
     receivers:
       otlp:
@@ -362,8 +355,6 @@ spec:
             - debug
             # - otlphttp/loki
           processors:
-            - resourcedetection/env
-            - k8sattributes
             - batch
           receivers:
             - otlp
@@ -372,8 +363,6 @@ spec:
             - debug
             - otlphttp/prometheus
           processors:
-            - resourcedetection/env
-            - k8sattributes
             - batch
           receivers:
             - otlp
