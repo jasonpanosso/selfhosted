@@ -5,6 +5,7 @@ kind: Kustomization
 
 resources:
   - ./helmrelease.yaml
+  - ./ks.yaml
 
 configMapGenerator:
   - name: cnpg-values
