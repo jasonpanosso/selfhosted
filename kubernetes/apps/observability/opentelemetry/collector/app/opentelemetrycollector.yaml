@@ -6,6 +6,15 @@ metadata:
 spec:
   mode: daemonset
   serviceAccount: otel-collector-opentelemetry-collector
+  targetAllocator:
+    enabled: true
+    allocationStrategy: per-node
+    serviceAccount: opentelemetry-targetallocator
+    prometheusCR:
+      enabled: true
+      scrapeInterval: 30s
+      podMonitorSelector: {}
+      serviceMonitorSelector: {}
   resources:
     limits:
       cpu: 200m
@@ -477,7 +486,7 @@ spec:
           apiVersion: v1
           fieldPath: status.podIP
     - name: OTEL_RESOURCE_ATTRIBUTES
-      value: k8s.cluster.name=prod
+      value: k8s.cluster.name=prod,cluster=prod
 ---
 apiVersion: opentelemetry.io/v1beta1
 kind: OpenTelemetryCollector
