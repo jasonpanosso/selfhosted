@@ -1,4 +1,8 @@
 ---
+podLabels:
+  jobLabel: node-exporter
+service:
+  portName: http-metrics
 releaseLabel: true
 extraArgs:
   - --collector.filesystem.mount-points-exclude=^/(dev|proc|sys|var/lib/docker/.+|var/lib/kubelet/.+)($|/)
@@ -9,3 +13,4 @@ rbac:
 prometheus:
   monitor:
     enabled: true
+    jobLabel: jobLabel
