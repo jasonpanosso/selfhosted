@@ -1,7 +1,8 @@
 ---
 rbac:
   create: true
-releaseLabel: true
 prometheus:
   monitor:
     enabled: true
+    http:
+      honorLabels: true
