@@ -17,7 +17,7 @@ kind: Kustomization
 metadata:
   name: baseline-policies
 spec:
-  path: "./pod-security/baseline"
+  path: ./pod-security/baseline
   interval: 1h
   retryInterval: 2m
   timeout: 5m
