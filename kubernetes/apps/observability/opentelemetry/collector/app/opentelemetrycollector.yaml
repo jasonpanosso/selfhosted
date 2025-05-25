@@ -488,7 +488,7 @@ spec:
           apiVersion: v1
           fieldPath: status.podIP
     - name: OTEL_RESOURCE_ATTRIBUTES
-      value: k8s.cluster.name=prod
+      value: k8s.cluster.name=prod,cluster=prod
 ---
 apiVersion: opentelemetry.io/v1beta1
 kind: OpenTelemetryCollector
