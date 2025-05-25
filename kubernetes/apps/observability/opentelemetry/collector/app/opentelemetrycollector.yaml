@@ -367,14 +367,12 @@ spec:
         endpoint: https://$${env:OTEL_K8S_NODE_IP}:10250
         extra_metadata_labels:
           - container.id
-          - k8s.volume.type
         insecure_skip_verify: true
         k8s_api_config:
           auth_type: serviceAccount
         metric_groups:
           - node
           - pod
-          - volume
           - container
         metrics:
           k8s.pod.cpu.usage:
