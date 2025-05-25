@@ -23,13 +23,16 @@ spec:
         runAsGroup: 65534
         fsGroup: 65534
         fsGroupChangePolicy: OnRootMismatch
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
       containers:
         - image: ghcr.io/jellyfin/jellyfin:10.10.7
           name: *app
           ports:
             - containerPort: 8096
               name: http
-          livenessProbe:
+          livenessProbe: &probes
             httpGet:
               path: /web/index.html
               port: 8096
@@ -37,14 +40,7 @@ spec:
             initialDelaySeconds: 15
             periodSeconds: 10
             timeoutSeconds: 3
-          readinessProbe:
-            httpGet:
-              path: /web/index.html
-              port: 8096
-            failureThreshold: 5
-            initialDelaySeconds: 15
-            periodSeconds: 10
-            timeoutSeconds: 3
+          readinessProbe: *probes
           resources:
             requests:
               cpu: 1000m
@@ -55,6 +51,9 @@ spec:
               squat.ai/drm: "1"
           securityContext:
             allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: [ALL]
           volumeMounts:
             - name: media
               mountPath: /movies

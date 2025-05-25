@@ -18,10 +18,25 @@ spec:
       labels:
         app.kubernetes.io/name: *app
     spec:
+      securityContext:
+        runAsUser: 65534
+        runAsGroup: 65534
+        fsGroup: 65534
+        fsGroupChangePolicy: OnRootMismatch
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
       containers:
         - image: ghcr.io/fallenbagel/jellyseerr:2.5.2
           imagePullPolicy: Always
           name: *app
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              cpu: 1
+              memory: 2Gi
           env:
             - name: TZ
               value: Etc/UTC
@@ -57,18 +72,20 @@ spec:
           ports:
             - containerPort: 5055
               name: http
-          readinessProbe:
+          readinessProbe: &probes
             httpGet:
-              path: /
+              path: /api/v1/status
               port: 5055
             initialDelaySeconds: 10
-            periodSeconds: 15
-          livenessProbe:
-            httpGet:
-              path: /
-              port: http
+            periodSeconds: 10
+            timeoutSeconds: 1
+            failureThreshold: 3
+          livenessProbe: *probes
           securityContext:
             allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: [ALL]
           volumeMounts:
             - name: config
               mountPath: /app/config

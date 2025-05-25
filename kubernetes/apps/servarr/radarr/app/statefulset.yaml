@@ -23,6 +23,9 @@ spec:
         runAsGroup: 65534
         fsGroup: 65534
         fsGroupChangePolicy: OnRootMismatch
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
       containers:
         - image: ghcr.io/home-operations/radarr:5.23.3
           imagePullPolicy: Always
@@ -66,7 +69,7 @@ spec:
           ports:
             - containerPort: 7878
               name: http
-          livenessProbe:
+          livenessProbe: &probes
             httpGet:
               path: /ping
               port: 7878
@@ -74,14 +77,7 @@ spec:
             periodSeconds: 15
             timeoutSeconds: 1
             failureThreshold: 3
-          readinessProbe:
-            httpGet:
-              path: /ping
-              port: 7878
-            initialDelaySeconds: 10
-            periodSeconds: 15
-            timeoutSeconds: 1
-            failureThreshold: 3
+          readinessProbe: *probes
           resources:
             requests:
               cpu: 500m
@@ -91,6 +87,9 @@ spec:
               memory: 2048Mi
           securityContext:
             allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: [ALL]
           volumeMounts:
             - name: config
               mountPath: /config

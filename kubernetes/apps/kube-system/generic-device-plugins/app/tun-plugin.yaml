@@ -1,4 +1,5 @@
 ---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/master-standalone/daemonset-apps-v1.json
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
@@ -21,7 +22,7 @@ spec:
         - operator: "Exists"
           effect: "NoSchedule"
       containers:
-        - image: squat/generic-device-plugin
+        - image: squat/generic-device-plugin:6475ff5d0927c0f25b3a39a661aa657ca190d0ef
           args:
             - --device
             - |
@@ -43,6 +44,8 @@ spec:
               name: http
           securityContext:
             privileged: true
+            allowPrivilegeEscalation: true
+            readOnlyRootFilesystem: true
           volumeMounts:
             - name: device-plugin
               mountPath: /var/lib/kubelet/device-plugins

@@ -13,7 +13,7 @@ spec:
       app.kubernetes.io/name: *app
   namespaceSelector:
     matchNames:
-      - "kube-system"
+      - kube-system
   endpoints:
     - port: http-metrics
       bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token

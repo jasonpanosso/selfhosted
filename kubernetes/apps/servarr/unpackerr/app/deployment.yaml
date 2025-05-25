@@ -26,6 +26,9 @@ spec:
         runAsGroup: 65534
         fsGroup: 65534
         fsGroupChangePolicy: OnRootMismatch
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
       containers:
         - image: ghcr.io/unpackerr/unpackerr:v0.14.5
           imagePullPolicy: Always
@@ -52,6 +55,9 @@ spec:
               memory: 2048Mi
           securityContext:
             allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: [ALL]
           volumeMounts:
             - name: media
               mountPath: /data/downloads

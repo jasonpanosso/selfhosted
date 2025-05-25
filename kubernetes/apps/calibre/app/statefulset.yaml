@@ -1,4 +1,5 @@
 ---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/master-standalone/statefulset-apps-v1.json
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -15,13 +16,22 @@ spec:
       labels:
         app.kubernetes.io/name: *app
     spec:
+      # requires root(??)
+      securityContext:
+        runAsUser: 0
+        runAsGroup: 0
+        fsGroup: 0
+        fsGroupChangePolicy: OnRootMismatch
+        runAsNonRoot: false
+        seccompProfile:
+          type: RuntimeDefault
       containers:
         - image: docker.io/crocodilestick/calibre-web-automated:V3.0.4
           name: *app
           ports:
             - containerPort: 8083
-              name: http
-          livenessProbe:
+              name: http-cwa
+          livenessProbe: &probes
             httpGet:
               path: /login
               port: 8083
@@ -29,21 +39,14 @@ spec:
             initialDelaySeconds: 15
             periodSeconds: 10
             timeoutSeconds: 3
-          readinessProbe:
-            httpGet:
-              path: /login
-              port: 8083
-            failureThreshold: 5
-            initialDelaySeconds: 15
-            periodSeconds: 10
-            timeoutSeconds: 3
-          # resources:
-          #   requests:
-          #     cpu: 1000m
-          #     memory: 1Gi
-          #   limits:
-          #     cpu: 4000m
-          #     memory: 8Gi
+          readinessProbe: *probes
+          resources:
+            requests:
+              cpu: 1000m
+              memory: 1Gi
+            # limits:
+            #   cpu: 4000m
+            #   memory: 8Gi
           securityContext:
             allowPrivilegeEscalation: false
           volumeMounts:
@@ -61,13 +64,16 @@ spec:
               value: http://flaresolverr.flaresolverr.svc.cluster.local
           ports:
             - containerPort: 8084
-              name: http
-          readinessProbe:
+              name: http-cwabd
+          readinessProbe: &probes
             httpGet:
               path: /
               port: 8084
-            initialDelaySeconds: 10
-            periodSeconds: 15
+            failureThreshold: 5
+            initialDelaySeconds: 15
+            periodSeconds: 10
+            timeoutSeconds: 3
+          livenessProbe: *probes
           # resources:
           #   requests:
           #     cpu: 50m

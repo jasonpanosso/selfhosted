@@ -14,9 +14,21 @@ spec:
       labels:
         app.kubernetes.io/name: *app
     spec:
+      # requires root(??)
+      securityContext:
+        runAsUser: 0
+        runAsGroup: 0
+        fsGroup: 0
+        fsGroupChangePolicy: OnRootMismatch
+        runAsNonRoot: false
+        seccompProfile:
+          type: RuntimeDefault
       containers:
         - image: docker.io/freshrss/freshrss:1.26.2
           name: *app
+          ports:
+            - containerPort: 80
+              name: http
           env:
             - name: CRON_MIN
               value: "*/5"
@@ -24,18 +36,13 @@ spec:
               value: Etc/UTC
             - name: TRUSTED_PROXY
               value: 10.244.0.0/16
-          livenessProbe:
+          livenessProbe: &probes
             httpGet:
               path: /i/
               port: 80
             initialDelaySeconds: 5
             periodSeconds: 15
-          readinessProbe:
-            httpGet:
-              path: /i/
-              port: 80
-            initialDelaySeconds: 5
-            periodSeconds: 15
+          readinessProbe: *probes
           resources:
             requests:
               cpu: 50m
@@ -45,6 +52,8 @@ spec:
               memory: 512Mi
           securityContext:
             allowPrivilegeEscalation: false
+            # chmods everything
+            readOnlyRootFilesystem: false
           volumeMounts:
             - name: data
               mountPath: /var/www/FreshRSS/data

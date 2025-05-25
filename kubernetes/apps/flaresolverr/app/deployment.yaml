@@ -17,6 +17,14 @@ spec:
       labels:
         app.kubernetes.io/name: *app
     spec:
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
       containers:
         - name: *app
           image: ghcr.io/flaresolverr/flaresolverr:v3.3.21
@@ -26,22 +34,15 @@ spec:
           ports:
             - containerPort: 8191
               name: http
-          livenessProbe:
+          livenessProbe: &probes
             httpGet:
               path: /health
               port: 8191
             failureThreshold: 3
-            initialDelaySeconds: 10
-            periodSeconds: 5
-            timeoutSeconds: 2
-          readinessProbe:
-            httpGet:
-              path: /health
-              port: 8191
-            failureThreshold: 3
-            initialDelaySeconds: 10
-            periodSeconds: 5
-            timeoutSeconds: 2
+            initialDelaySeconds: 0
+            periodSeconds: 10
+            timeoutSeconds: 1
+          readinessProbe: *probes
           resources:
             requests:
               cpu: 50m
@@ -51,3 +52,7 @@ spec:
               memory: 2Gi
           securityContext:
             allowPrivilegeEscalation: false
+            # requires access to root filesystem?
+            readOnlyRootFilesystem: false
+            capabilities:
+              drop: [ALL]
