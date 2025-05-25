@@ -27,7 +27,7 @@ spec:
         seccompProfile:
           type: RuntimeDefault
       containers:
-        - image: ghcr.io/home-operations/radarr:5.23.3
+        - image: ghcr.io/home-operations/radarr:5.24.0
           imagePullPolicy: Always
           name: *app
           env:
