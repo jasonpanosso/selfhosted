@@ -6,5 +6,6 @@ kind: Kustomization
 resources:
   - ./externalsecret.yaml
   - ./cluster.yaml
+  - ./objectstore.yaml
   - ./database.yaml
-  - ./backup.yaml
+  - ./scheduledbackup.yaml

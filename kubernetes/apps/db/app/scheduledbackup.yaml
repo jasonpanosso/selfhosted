@@ -9,5 +9,8 @@ spec:
   schedule: "0 0 0 * * *"
   immediate: true
   backupOwnerReference: cluster
+  pluginConfiguration:
+    name: barman-cloud.cloudnative-pg.io
+  method: plugin
   cluster:
     name: pgcluster

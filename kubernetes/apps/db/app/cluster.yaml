@@ -8,26 +8,15 @@ metadata:
     # https://github.com/cloudnative-pg/cloudnative-pg/issues/5778#issuecomment-2782198691
     cnpg.io/skipEmptyWalArchiveCheck: "enabled"
 spec:
-  backup:
-    barmanObjectStore:
-      destinationPath: s3://cnpg-backups/
-      endpointURL: https://${s3_backup_domain_name}
-      data:
-        compression: gzip
-      wal:
-        compression: gzip
-      s3Credentials:
-        accessKeyId:
-          name: s3
-          key: ACCESS_KEY_ID
-        secretAccessKey:
-          name: s3
-          key: ACCESS_SECRET_KEY
-    retentionPolicy: 30d
   instances: 3
   storage:
     size: 20Gi
     storageClass: local-path
+  plugins:
+    - name: barman-cloud.cloudnative-pg.io
+      isWALArchiver: true
+      parameters:
+        barmanObjectName: s3-store
   managed:
     roles:
       - name: authelia

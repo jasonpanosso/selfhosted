@@ -1,0 +1,30 @@
+---
+apiVersion: barmancloud.cnpg.io/v1
+kind: ObjectStore
+metadata:
+  name: s3-store
+spec:
+  retentionPolicy: 30d
+  configuration:
+    destinationPath: s3://cnpg-backups/
+    endpointURL: https://${s3_backup_domain_name}
+    # data:
+    #   compression: gzip
+    wal:
+      compression: gzip
+    s3Credentials:
+      accessKeyId:
+        name: s3
+        key: ACCESS_KEY_ID
+      secretAccessKey:
+        name: s3
+        key: ACCESS_SECRET_KEY
+  instanceSidecarConfiguration:
+    retentionPolicyIntervalSeconds: 1800
+    resources:
+      requests:
+        memory: 256Mi
+        cpu: 125m
+      limits:
+        memory: 512Mi
+        cpu: 250m
