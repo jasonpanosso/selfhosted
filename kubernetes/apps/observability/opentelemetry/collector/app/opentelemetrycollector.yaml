@@ -61,9 +61,6 @@ spec:
           - action: insert
             key: k8s.cluster.name
             value: prod
-          - action: insert
-            key: cluster
-            value: prod
       k8sattributes:
         # filter:
         #   node_from_env_var: OTEL_K8S_NODE_NAME
@@ -247,7 +244,7 @@ spec:
           apiVersion: v1
           fieldPath: status.podIP
     - name: OTEL_RESOURCE_ATTRIBUTES
-      value: k8s.cluster.name=prod,cluster=prod
+      value: k8s.cluster.name=prod
 ---
 apiVersion: opentelemetry.io/v1beta1
 kind: OpenTelemetryCollector
