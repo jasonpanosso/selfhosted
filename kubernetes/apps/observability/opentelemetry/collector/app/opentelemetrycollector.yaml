@@ -66,6 +66,7 @@ spec:
         #   node_from_env_var: OTEL_K8S_NODE_NAME
         passthrough: false
         extract:
+          otel_annotations: true
           labels:
             - from: pod
               key: app.kubernetes.io/name
