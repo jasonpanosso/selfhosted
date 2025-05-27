@@ -42,6 +42,11 @@ prometheus:
       outOfOrderTimeWindow: 30m
     exemplars:
       max_exemplars: 100000
+    podMonitorSelectorNilUsesHelmValues: false
+    probeSelectorNilUsesHelmValues: false
+    ruleSelectorNilUsesHelmValues: false
+    scrapeConfigSelectorNilUsesHelmValues: false
+    serviceMonitorSelectorNilUsesHelmValues: false
   server:
     otlp:
       keepIdentifyingResourceAttributes: true
