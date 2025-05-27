@@ -12,7 +12,6 @@ resources:
   - ./kube-prometheus-stack/ks.yaml
   - ./kube-state-metrics/ks.yaml
   - ./prometheus-node-exporter/ks.yaml
-  - ./prometheus/ks.yaml
   - ./alertmanager/ks.yaml
   - ./opentelemetry/operator/ks.yaml
   - ./opentelemetry/collector/ks.yaml
