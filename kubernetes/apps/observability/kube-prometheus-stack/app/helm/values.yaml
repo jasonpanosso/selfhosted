@@ -4,10 +4,8 @@ crds:
   upgradeJob:
     enabled: true
     forceConflicts: true
-
 cleanPrometheusOperatorObjectNames: true
-kubernetesServiceMonitors:
-  enabled: false
+
 prometheusOperator:
   enabled: true
 prometheus:
@@ -61,23 +59,26 @@ prometheus:
         - k8s.replicaset.name
         - k8s.statefulset.name
 
+kubernetesServiceMonitors:
+  enabled: true
+
 alertManager:
   enabled: false
   forceDeployDashboards: true
 kubeApiServer:
-  enabled: false
+  enabled: true
 kubelet:
-  enabled: false
+  enabled: true
 kubeletService:
-  enabled: false
+  enabled: true
 kubeStateMetrics:
-  enabled: false
+  enabled: true
 kubeControllerManager:
-  enabled: false
+  enabled: true
 coreDns:
-  enabled: false
+  enabled: true
 nodeExporter:
-  enabled: false
+  enabled: true
   forceDeployDashboards: false
 grafana:
   enabled: false

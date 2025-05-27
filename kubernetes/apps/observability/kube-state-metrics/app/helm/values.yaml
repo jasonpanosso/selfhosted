@@ -1,8 +1,0 @@
----
-rbac:
-  create: true
-prometheus:
-  monitor:
-    enabled: true
-    http:
-      honorLabels: true
