@@ -27,4 +27,4 @@ spec:
         cpu: 125m
       limits:
         memory: 512Mi
-        cpu: 250m
+        cpu: 500m
