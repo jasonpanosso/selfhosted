@@ -75,8 +75,21 @@ prometheus:
 kubernetesServiceMonitors:
   enabled: true
 
-alertManager:
+alertmanager:
   enabled: true
+  alertmanagerSpec:
+    alertmanagerConfiguration:
+      name: alertmanager
+      global:
+        resolveTimeout: 5m
+    storage:
+      volumeClaimTemplate:
+        spec:
+          storageClassName: rook-ceph-block
+          resources:
+            requests:
+              storage: 1Gi
+
 kubeEtcd:
   service:
     selector:
