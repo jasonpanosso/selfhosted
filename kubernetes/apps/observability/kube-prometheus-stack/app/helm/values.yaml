@@ -78,10 +78,6 @@ kubernetesServiceMonitors:
 alertmanager:
   enabled: true
   alertmanagerSpec:
-    alertmanagerConfiguration:
-      name: alertmanager
-      global:
-        resolveTimeout: 5m
     storage:
       volumeClaimTemplate:
         spec:
