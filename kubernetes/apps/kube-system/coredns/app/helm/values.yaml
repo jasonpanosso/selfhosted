@@ -24,10 +24,6 @@ env:
   - name: GOMEMLIMIT
     value: 120MiB
 
-prometheus:
-  service:
-    enabled: true
-
 servers:
   - zones:
       - zone: .
