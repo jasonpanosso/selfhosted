@@ -155,9 +155,7 @@ rules:
       - probes
       - scrapeconfigs
     verbs:
-      - get
-      - list
-      - watch
+      - "*"
   - apiGroups: [""]
     resources:
       - namespaces
