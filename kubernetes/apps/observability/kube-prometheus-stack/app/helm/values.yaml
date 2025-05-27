@@ -20,12 +20,18 @@ prometheus:
       - exemplar-storage
     retention: 14d
     retentionSize: ""
-    # handle rules, have otlp handle scraping & probing
-    ruleSelectorNilUsesHelmValues: true
-    serviceMonitorSelectorNilUsesHelmValues: false
-    podMonitorSelectorNilUsesHelmValues: false
-    scrapeConfigSelectorNilUsesHelmValues: false
-    probeSelectorNilUsesHelmValues: false
+    serviceMonitorSelector:
+      matchLabels:
+        none: none
+    podMonitorSelector:
+      matchLabels:
+        none: none
+    probeSelector:
+      matchLabels:
+        none: none
+    scrapeConfigSelector:
+      matchLabels:
+        none: none
     tsdb:
       outOfOrderTimeWindow: 30m
     exemplars:
