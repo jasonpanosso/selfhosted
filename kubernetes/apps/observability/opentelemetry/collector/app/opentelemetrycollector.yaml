@@ -17,6 +17,8 @@ spec:
       scrapeInterval: 30s
       podMonitorSelector: {}
       serviceMonitorSelector: {}
+      probeSelector: {}
+      scrapeConfigSelector: {}
   resources:
     limits:
       cpu: 200m
