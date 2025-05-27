@@ -71,8 +71,7 @@ kubernetesServiceMonitors:
   enabled: true
 
 alertManager:
-  enabled: false
-  forceDeployDashboards: true
+  enabled: true
 kubeApiServer:
   enabled: true
 kubelet:
@@ -87,7 +86,6 @@ coreDns:
   enabled: true
 nodeExporter:
   enabled: true
-  forceDeployDashboards: false
 grafana:
   enabled: false
   forceDeployDashboards: true
