@@ -116,11 +116,15 @@ prometheus-node-exporter:
     monitor:
       enabled: true
       relabelings:
+        - action: labelmap
+          regex: __meta_kubernetes_node_label_(.+)
         - action: replace
           regex: (.*)
           replacement: $1
-          sourceLabels: ["__meta_kubernetes_pod_node_name"]
-          targetLabel: kubernetes_node
+          separator: ;
+          source_labels:
+            - job
+          target_label: __tmp_prometheus_job_name
 
 kubeStateMetrics:
   enabled: true
