@@ -94,8 +94,6 @@ kubeApiServer:
   enabled: true
 kubelet:
   enabled: true
-kubeletService:
-  enabled: true
 kubeControllerManager:
   enabled: true
 coreDns:

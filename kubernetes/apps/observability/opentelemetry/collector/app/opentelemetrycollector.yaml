@@ -139,87 +139,6 @@ spec:
           enabled: true
         start_at: end
 
-      hostmetrics:
-        collection_interval: 10s
-        root_path: /hostfs
-        scrapers:
-          cpu:
-            metrics:
-              system.cpu.utilization:
-                enabled: true
-          disk: {}
-          filesystem:
-            exclude_fs_types:
-              fs_types:
-                - autofs
-                - binfmt_misc
-                - bpf
-                - cgroup2
-                - configfs
-                - debugfs
-                - devpts
-                - devtmpfs
-                - fusectl
-                - hugetlbfs
-                - iso9660
-                - mqueue
-                - nsfs
-                - overlay
-                - proc
-                - procfs
-                - pstore
-                - rpc_pipefs
-                - securityfs
-                - selinuxfs
-                - squashfs
-                - sysfs
-                - tracefs
-              match_type: strict
-            exclude_mount_points:
-              match_type: regexp
-              mount_points:
-                - /dev/*
-                - /proc/*
-                - /sys/*
-                - /run/k3s/containerd/*
-                - /var/lib/docker/*
-                - /var/lib/kubelet/*
-                - /snap/*
-            metrics:
-              system.filesystem.utilization:
-                enabled: true
-          load: {}
-          memory:
-            metrics:
-              system.memory.utilization:
-                enabled: true
-          network: {}
-
-      kubeletstats:
-        auth_type: serviceAccount
-        collection_interval: 15s
-        endpoint: https://${env:OTEL_K8S_NODE_IP}:10250
-        extra_metadata_labels:
-          - container.id
-        insecure_skip_verify: true
-        k8s_api_config:
-          auth_type: serviceAccount
-        metric_groups:
-          - node
-          - pod
-          - container
-        metrics:
-          k8s.pod.cpu.usage:
-            enabled: true
-          container.cpu.usage:
-            enabled: true
-          k8s.node.cpu.usage:
-            enabled: true
-          k8s.node.uptime:
-            enabled: true
-          k8s.pod.uptime:
-            enabled: true
-
       k8s_cluster:
         auth_type: serviceAccount
         collection_interval: 10s
@@ -268,8 +187,6 @@ spec:
             - resourcedetection/env
             - batch
           receivers:
-            - hostmetrics
-            - kubeletstats
             - prometheus
             - k8s_cluster
   volumeMounts:
