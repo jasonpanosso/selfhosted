@@ -111,6 +111,7 @@ kubeProxy:
 nodeExporter:
   enabled: true
 prometheus-node-exporter:
+  nameOverride: node-exporter
   fullnameOverride: node-exporter
   prometheus:
     monitor:
