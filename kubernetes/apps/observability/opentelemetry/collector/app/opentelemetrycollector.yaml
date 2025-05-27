@@ -56,6 +56,14 @@ spec:
           - env
         override: false
         timeout: 2s
+      resource/add_cluster:
+        attributes:
+          - action: insert
+            key: k8s.cluster.name
+            value: prod
+          - action: insert
+            key: cluster
+            value: prod
       k8sattributes:
         # filter:
         #   node_from_env_var: OTEL_K8S_NODE_NAME
@@ -174,6 +182,7 @@ spec:
           processors:
             - k8sattributes
             - resourcedetection/env
+            - resource/add_cluster
             - batch
           receivers:
             - filelog
@@ -185,6 +194,7 @@ spec:
           processors:
             - k8sattributes
             - resourcedetection/env
+            - resource/add_cluster
             - batch
           receivers:
             - prometheus
