@@ -134,7 +134,7 @@ rules:
   - apiGroups: [""]
     resources:
       - configmaps
-    verbs: ["get"]
+    verbs: ["get", "update"]
   - apiGroups:
       - discovery.k8s.io
     resources:
