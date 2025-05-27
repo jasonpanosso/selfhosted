@@ -121,21 +121,6 @@ spec:
       prometheus:
         config:
           scrape_configs:
-            - job_name: node-exporter
-              relabel_configs:
-                - action: labelmap
-                  regex: __meta_kubernetes_node_label_(.+)
-                - action: replace
-                  regex: (.*)
-                  replacement: $$1
-                  separator: ;
-                  source_labels:
-                    - job
-                  target_label: __tmp_prometheus_job_name
-              scrape_interval: 30s
-              static_configs:
-                - targets:
-                    - ${env:OTEL_K8S_NODE_IP}:9100
             - job_name: kubernetes-pods
               kubernetes_sd_configs:
                 - role: pod
