@@ -72,6 +72,10 @@ kubernetesServiceMonitors:
 
 alertManager:
   enabled: true
+kubeEtcd:
+  service:
+    selector:
+      component: kube-apiserver # etcd runs on control plane nodes
 kubeApiServer:
   enabled: true
 kubelet:
