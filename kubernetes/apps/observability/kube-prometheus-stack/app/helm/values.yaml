@@ -11,6 +11,14 @@ prometheusOperator:
 prometheus:
   enabled: true
   prometheusSpec:
+    storageSpec:
+      volumeClaimTemplate:
+        spec:
+          storageClassName: rook-ceph-block
+          accessModes: ["ReadWriteOnce"]
+          resources:
+            requests:
+              storage: 10Gi
     additionalArgs:
       - name: web.enable-otlp-receiver
         value: ""
