@@ -1,0 +1,22 @@
+---
+manageCRDs: true
+replicaCount: 2
+metrics:
+  disableAuth: true
+podSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 1000
+  runAsGroup: 1000
+image:
+  # arm64 support
+  tag: 0.13.0-rc.1
+rclone:
+  tag: 0.13.0-rc.1
+restic:
+  tag: 0.13.0-rc.1
+rsync:
+  tag: 0.13.0-rc.1
+rsync-tls:
+  tag: 0.13.0-rc.1
+syncthing:
+  tag: 0.13.0-rc.1
