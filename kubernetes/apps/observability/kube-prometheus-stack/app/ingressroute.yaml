@@ -17,5 +17,26 @@ spec:
           namespace: traefik
       services:
         - kind: Service
-          name: kube-prometheus-stack-alertmanager
+          name: alertmanager-operated
           port: 9093
+---
+# yaml-language-server: $schema=https://datreeio.github.io/CRDs-catalog/traefik.io/ingressroute_v1alpha1.json
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: prometheus
+  labels:
+    app.kubernetes.io/name: prometheus
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`prometheus.${domain}.${tld}`)
+      kind: Rule
+      middlewares:
+        - name: forward-auth
+          namespace: traefik
+      services:
+        - kind: Service
+          name: prometheus-operated
+          port: 9090
