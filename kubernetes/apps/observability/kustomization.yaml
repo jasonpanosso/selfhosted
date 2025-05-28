@@ -8,6 +8,7 @@ components:
   - ../../components/common
 
 resources:
+  - ./prometheus-operator-crds/ks.yaml
   - ./grafana/ks.yaml
   - ./kube-prometheus-stack/ks.yaml
   - ./opentelemetry/operator/ks.yaml
