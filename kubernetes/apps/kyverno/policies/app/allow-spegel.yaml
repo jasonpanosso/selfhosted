@@ -1,0 +1,26 @@
+---
+# yaml-language-server: $schema=https://datreeio.github.io/CRDs-catalog/kyverno.io/policyexception_v2.json
+apiVersion: kyverno.io/v2
+kind: PolicyException
+metadata:
+  name: spegel-exception
+spec:
+  exceptions:
+    - policyName: disallow-host-path
+      ruleNames:
+        - host-path
+        - autogen-host-path
+    - policyName: disallow-host-ports
+      ruleNames:
+        - host-ports-none
+        - autogen-host-ports-none
+  match:
+    any:
+      - resources:
+          kinds:
+            - Pod
+            - DaemonSet
+          namespaces:
+            - kube-system
+          names:
+            - spegel*

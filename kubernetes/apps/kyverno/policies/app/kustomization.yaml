@@ -13,6 +13,7 @@ resources:
   - ./allow-kube-flannel.yaml
   - ./allow-kube-controller-manager.yaml
   - ./allow-rook-ceph.yaml
+  - ./allow-spegel.yaml
   - ./allow-local-path-provisioner.yaml
   - ./allow-generic-device-plugin.yaml
   - ./allow-otel-collector.yaml
