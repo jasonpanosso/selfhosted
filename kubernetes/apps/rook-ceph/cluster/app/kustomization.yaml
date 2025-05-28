@@ -4,11 +4,14 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 resources:
-  - ./cluster.yaml
+  - ./cephcluster.yaml
+  - ./cephfilesystem.yaml
+  - ./cephobjectstore.yaml
+  - ./cephobjectstoreuser.yaml
+  - ./externalsecret.yaml
   - ./mgr-pool.yaml
   - ./replica-pool.yaml
-  - ./hddfs.yaml
   - ./hdd-replica-pool.yaml
-  - ./object-store.yaml
   - ./ingressroute.yaml
+  - ./objectbucketclaim.yaml
   - ./volumesnapshotclass.yaml

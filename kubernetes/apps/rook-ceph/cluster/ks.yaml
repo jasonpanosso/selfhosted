@@ -32,6 +32,8 @@ spec:
   dependsOn:
     - name: rook-ceph
       namespace: *namespace
+    - name: secret-store
+      namespace: external-secrets
     - name: traefik
       namespace: traefik
     - name: snapshot-controller
