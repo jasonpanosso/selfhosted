@@ -9,6 +9,15 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
+  components:
+    - ./../../../components/volsync
+  postBuild:
+    substitute:
+      APP: *app
+      VOLSYNC_CACHE_CAPACITY: 50Gi
+      VOLSYNC_CAPACITY: 100Gi
+      VOLSYNC_STORAGECLASS: rook-ceph-block-hdd
+      VOLSYNC_CACHE_STORAGECLASS: rook-ceph-block-hdd
   path: ./kubernetes/apps/calibre/app
   interval: 1h
   retryInterval: 2m
@@ -28,3 +37,5 @@ spec:
   dependsOn:
     - name: rook-ceph
       namespace: rook-ceph
+    - name: secret-store
+      namespace: external-secrets
