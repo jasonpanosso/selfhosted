@@ -4,10 +4,11 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 resources:
-  - cluster.yaml
-  - mgr-pool.yaml
-  - replica-pool.yaml
-  - hddfs.yaml
-  - hdd-replica-pool.yaml
-  - object-store.yaml
-  - ingressroute.yaml
+  - ./cluster.yaml
+  - ./mgr-pool.yaml
+  - ./replica-pool.yaml
+  - ./hddfs.yaml
+  - ./hdd-replica-pool.yaml
+  - ./object-store.yaml
+  - ./ingressroute.yaml
+  - ./volumesnapshotclass.yaml

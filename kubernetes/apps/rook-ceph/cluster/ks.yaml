@@ -32,3 +32,7 @@ spec:
   dependsOn:
     - name: rook-ceph
       namespace: *namespace
+    - name: traefik
+      namespace: traefik
+    - name: snapshot-controller
+      namespace: kube-system
