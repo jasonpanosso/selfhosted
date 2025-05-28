@@ -3,35 +3,35 @@
 apiVersion: source.toolkit.fluxcd.io/v1beta2
 kind: OCIRepository
 metadata:
-  name: kube-prometheus-stack
+  name: prometheus-operator-crds
 spec:
   interval: 5m
   layerSelector:
     mediaType: application/vnd.cncf.helm.chart.content.v1.tar+gzip
     operation: copy
   ref:
-    tag: 72.6.2
-  url: oci://ghcr.io/prometheus-community/charts/kube-prometheus-stack
+    tag: 20.0.0
+  url: oci://ghcr.io/prometheus-community/charts/prometheus-operator-crds
 ---
 # yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/helm.toolkit.fluxcd.io/helmrelease_v2.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: kube-prometheus-stack
+  name: prometheus-operator-crds
 spec:
   interval: 1h
   chartRef:
     kind: OCIRepository
-    name: kube-prometheus-stack
+    name: prometheus-operator-crds
   install:
-    crds: Skip
+    crds: CreateReplace
     remediation:
       retries: -1
   upgrade:
-    crds: Skip
+    crds: CreateReplace
     cleanupOnFail: true
     remediation:
       retries: 3
   valuesFrom:
     - kind: ConfigMap
-      name: kube-prometheus-stack-values
+      name: prometheus-operator-crds-values

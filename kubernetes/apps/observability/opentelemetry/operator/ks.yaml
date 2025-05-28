@@ -26,5 +26,5 @@ spec:
     namespace: flux-system
   targetNamespace: *namespace
   dependsOn:
-    - name: kube-prometheus-stack
+    - name: prometheus-operator-crds
       namespace: *namespace

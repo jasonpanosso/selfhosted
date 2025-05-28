@@ -1,8 +1,8 @@
 ---
 crds:
-  enabled: true
+  enabled: false
   upgradeJob:
-    enabled: true
+    enabled: false
     forceConflicts: true
 cleanPrometheusOperatorObjectNames: true
 

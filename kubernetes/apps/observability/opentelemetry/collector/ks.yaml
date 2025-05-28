@@ -30,6 +30,8 @@ spec:
     namespace: flux-system
   targetNamespace: *namespace
   dependsOn:
+    - name: prometheus-operator-crds
+      namespace: *namespace
     - name: kube-prometheus-stack
       namespace: *namespace
     - name: opentelemetry-operator

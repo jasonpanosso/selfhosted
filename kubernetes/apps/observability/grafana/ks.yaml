@@ -26,7 +26,7 @@ spec:
     namespace: flux-system
   targetNamespace: *namespace
   dependsOn:
-    - name: kube-prometheus-stack
-      namespace: observability
+    - name: prometheus-operator-crds
+      namespace: *namespace
     - name: traefik
       namespace: traefik
