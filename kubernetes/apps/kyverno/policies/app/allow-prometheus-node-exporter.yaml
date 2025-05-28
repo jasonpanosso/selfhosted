@@ -28,3 +28,4 @@ spec:
           names:
             - prometheus-node-exporter*
             - kube-prometheus-stack-prometheus-node-exporter*
+            - node-exporter*
