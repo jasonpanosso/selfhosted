@@ -7,3 +7,4 @@ resources:
   - ./externalsecret.yaml
   - ./replicationsource.yaml
   - ./replicationdestination.yaml
+  - ./objectbucketclaim.yaml

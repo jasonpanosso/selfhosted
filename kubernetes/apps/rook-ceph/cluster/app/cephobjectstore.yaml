@@ -25,11 +25,12 @@ spec:
     instances: 1
   hosting:
     advertiseEndpoint:
-      dnsName: rook-ceph-rgw-my-store.rook-ceph.svc
+      dnsName: rook-ceph-rgw-my-store.rook-ceph.svc.cluster.local
       port: 80
       useTls: false
     dnsNames:
       - s3.${domain}.${tld}
+      - rook-ceph-rgw-my-store.rook-ceph.svc.cluster.local
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/master-standalone/storageclass.json
 apiVersion: storage.k8s.io/v1
