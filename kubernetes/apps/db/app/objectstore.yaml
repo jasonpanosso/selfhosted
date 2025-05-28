@@ -6,7 +6,7 @@ metadata:
 spec:
   retentionPolicy: 30d
   configuration:
-    destinationPath: s3://selfhosted-backups/cnpg-backups
+    destinationPath: s3://${s3_backup_bucket_name}/cnpg-backups
     endpointURL: https://${s3_backup_domain_name}
     data:
       compression: gzip
