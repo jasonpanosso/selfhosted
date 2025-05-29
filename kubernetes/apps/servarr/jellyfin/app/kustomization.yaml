@@ -5,6 +5,6 @@ kind: Kustomization
 
 resources:
   - ./pvc.yaml
-  - ./statefulset.yaml
+  - ./deployment.yaml
   - ./service.yaml
   - ./ingressroute.yaml
