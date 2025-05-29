@@ -3,7 +3,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: &app calibre-web-automated-deploy
+  name: &app calibre-web-automated
   labels:
     app.kubernetes.io/name: *app
 spec:
