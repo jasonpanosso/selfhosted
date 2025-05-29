@@ -11,8 +11,9 @@ metadata:
     fluxcd.controlplane.io/reconcileTimeout: "20m"
 spec:
   distribution:
-    version: "2.x"
-    registry: "ghcr.io/fluxcd"
+    # renovate: datasource=github-releases depName=controlplaneio-fluxcd/distribution
+    version: 2.5.1
+    registry: ghcr.io/fluxcd
   components:
     - source-controller
     - kustomize-controller
@@ -22,7 +23,7 @@ spec:
     type: kubernetes
     multitenant: false
     networkPolicy: false
-    domain: "cluster.local"
+    domain: cluster.local
   commonMetadata:
     labels:
       app.kubernetes.io/name: flux
