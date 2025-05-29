@@ -1,0 +1,80 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/master-standalone/cronjob-batch-v1.json
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: qbtools
+spec:
+  schedule: 0 * * * *
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      ttlSecondsAfterFinished: 600
+      template:
+        spec:
+          restartPolicy: Never
+          securityContext:
+            runAsUser: 65534
+            runAsGroup: 65534
+            fsGroup: 65534
+            fsGroupChangePolicy: OnRootMismatch
+            runAsNonRoot: true
+            seccompProfile:
+              type: RuntimeDefault
+          initContainers:
+            - &container
+              name: tag
+              image: ghcr.io/buroa/qbtools:v0.21.0@sha256:3a60f001c3f5fd068ff38960fbf9db726fa59edf135b18cd50294230366c284e
+              env:
+                - name: QBITTORRENT_HOST
+                  value: qbittorrent.servarr.svc.cluster.local
+                - name: QBITTORRENT_PORT
+                  value: "80"
+              args:
+                - tagging
+                - --added-on
+                - --expired
+                - --last-activity
+                - --not-working
+                - --sites
+                - --unregistered
+                - --tracker-down
+                - --not-linked
+                - --config
+                - /config/config.yaml
+              securityContext:
+                allowPrivilegeEscalation: false
+                readOnlyRootFilesystem: true
+                capabilities: {drop: ["ALL"]}
+              resources:
+                requests:
+                  cpu: 25m
+                limits:
+                  memory: 256M
+              volumeMounts:
+                - name: config
+                  mountPath: /config
+                - name: media
+                  mountPath: /data/downloads
+                  subPath: downloads
+          containers:
+            - <<: *container
+              name: orphaned
+              args:
+                - orphaned
+                - --exclude-pattern
+                - "*_unpackerred*"
+                # - --dry-run
+            - <<: *container
+              name: reannounce
+              args:
+                - reannounce
+                - --process-seeding
+          volumes:
+            - name: config
+              configMap:
+                name: qbtools
+            - name: media
+              persistentVolumeClaim:
+                claimName: media

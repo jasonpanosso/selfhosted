@@ -15,5 +15,6 @@ resources:
   - ./unpackerr/ks.yaml
   - ./configarr/ks.yaml
   - ./qbittorrent/ks.yaml
+  - ./qbtools/ks.yaml
   - ./jellyfin/ks.yaml
   - ./jellyseerr/ks.yaml
