@@ -16,7 +16,7 @@ spec:
   prune: true
   wait: false
   healthChecks:
-    - apiVersion: kustomize.toolkit.fluxcd.io/v1
+    - apiVersion: helm.toolkit.fluxcd.io/v2
       kind: HelmRelease
       name: *app
       namespace: *namespace
