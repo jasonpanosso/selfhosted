@@ -9,6 +9,11 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
+  components:
+    - ./../../../../components/volsync
+  postBuild:
+    substitute:
+      APP: *app
   path: ./kubernetes/apps/servarr/jellyseerr/app
   interval: 1h
   retryInterval: 2m
@@ -30,9 +35,11 @@ spec:
       namespace: db
     - name: rook-ceph-cluster
       namespace: rook-ceph
+    - name: volsync
+      namespace: volsync-system
     - name: secret-store
       namespace: external-secrets
     - name: radarr
-      namespace: servarr
+      namespace: *namespace
     - name: sonarr
-      namespace: servarr
+      namespace: *namespace
