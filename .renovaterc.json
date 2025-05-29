@@ -5,6 +5,7 @@
     "docker:enableMajor",
     "helpers:pinGitHubActionDigests",
     "github>jasonpanosso/selfhosted//.renovate/autoMerge.json",
+    "github>jasonpanosso/selfhosted//.renovate/customManagers.json",
     "github>jasonpanosso/selfhosted//.renovate/grafanaDashboards.json",
     "github>jasonpanosso/selfhosted//.renovate/groups.json",
     "github>jasonpanosso/selfhosted//.renovate/labels.json",
