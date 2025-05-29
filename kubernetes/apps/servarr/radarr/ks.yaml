@@ -9,6 +9,11 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
+  components:
+    - ./../../../../components/volsync
+  postBuild:
+    substitute:
+      APP: *app
   path: ./kubernetes/apps/servarr/radarr/app
   interval: 1h
   retryInterval: 2m
