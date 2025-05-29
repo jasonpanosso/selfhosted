@@ -4,18 +4,14 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 resources:
-  - ./allow-prometheus-node-exporter.yaml
-  - ./allow-qbittorrent-net-admin.yaml
-  - ./allow-metallb-speaker.yaml
-  - ./allow-kube-apiserver.yaml
-  - ./allow-kube-proxy.yaml
-  - ./allow-kube-scheduler.yaml
-  - ./allow-kube-flannel.yaml
-  - ./allow-kube-controller-manager.yaml
-  - ./allow-rook-ceph.yaml
-  - ./allow-spegel.yaml
-  - ./allow-local-path-provisioner.yaml
-  - ./allow-generic-device-plugin.yaml
-  - ./allow-otel-collector.yaml
-  - ./cleanup-empty-replicasets.yaml
-  - ./baseline.yaml
+  - ./helmrelease.yaml
+  - ./clustercleanuppolicy.yaml
+  - ./exceptions
+
+configMapGenerator:
+  - name: kyverno-policies-values
+    files:
+      - values.yaml=./helm/values.yaml
+
+configurations:
+  - ./helm/kustomizeconfig.yaml

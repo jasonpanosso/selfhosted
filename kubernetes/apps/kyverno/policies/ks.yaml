@@ -17,11 +17,14 @@ spec:
   wait: false
   healthChecks:
     - apiVersion: kustomize.toolkit.fluxcd.io/v1
-      kind: Kustomization
-      name: baseline-policies
+      kind: HelmRelease
+      name: *app
       namespace: *namespace
   sourceRef:
     kind: GitRepository
     name: flux-system
     namespace: flux-system
   targetNamespace: *namespace
+  dependsOn:
+    - name: kyverno
+      namespace: *namespace
