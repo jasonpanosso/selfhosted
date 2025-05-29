@@ -6,6 +6,6 @@ kind: Kustomization
 resources:
   - ./externalsecret.yaml
   - ./pvc.yaml
-  - ./statefulset.yaml
+  - ./deployment.yaml
   - ./service.yaml
   - ./ingressroute.yaml

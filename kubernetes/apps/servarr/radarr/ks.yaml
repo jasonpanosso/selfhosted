@@ -22,7 +22,7 @@ spec:
   prune: true
   healthChecks:
     - apiVersion: apps/v1
-      kind: StatefulSet
+      kind: Deployment
       name: *app
       namespace: *namespace
   sourceRef:
@@ -35,6 +35,8 @@ spec:
       namespace: db
     - name: rook-ceph-cluster
       namespace: rook-ceph
+    - name: volsync
+      namespace: volsync-system
     - name: secret-store
       namespace: external-secrets
     - name: storage

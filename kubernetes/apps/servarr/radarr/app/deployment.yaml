@@ -100,18 +100,9 @@ spec:
         - name: media
           persistentVolumeClaim:
             claimName: media
-        - name: *app
+        - name: config
           persistentVolumeClaim:
             claimName: *app
         - name: cache
           persistentVolumeClaim:
             claimName: radarr-cache
-  volumeClaimTemplates:
-    - metadata:
-        name: config
-      spec:
-        accessModes: ["ReadWriteOnce"]
-        resources:
-          requests:
-            storage: 5Gi
-        storageClassName: rook-ceph-block
