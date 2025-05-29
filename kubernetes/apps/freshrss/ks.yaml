@@ -9,6 +9,11 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
+  components:
+    - ./../../../components/volsync
+  postBuild:
+    substitute:
+      APP: *app
   path: ./kubernetes/apps/freshrss/app
   interval: 1h
   retryInterval: 2m
@@ -28,3 +33,7 @@ spec:
   dependsOn:
     - name: rook-ceph-cluster
       namespace: rook-ceph
+    - name: secret-store
+      namespace: external-secrets
+    - name: volsync
+      namespace: volsync-system

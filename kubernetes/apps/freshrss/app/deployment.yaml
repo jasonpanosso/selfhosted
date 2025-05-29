@@ -1,11 +1,10 @@
 ---
-# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/master-standalone/statefulset-apps-v1.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/master-standalone/deployment-apps-v1.json
 apiVersion: apps/v1
-kind: StatefulSet
+kind: Deployment
 metadata:
   name: &app freshrss
 spec:
-  replicas: 0
   selector:
     matchLabels:
       app.kubernetes.io/name: *app
@@ -56,14 +55,9 @@ spec:
             # chmods everything
             readOnlyRootFilesystem: false
           volumeMounts:
-            - name: data
+            - name: config
               mountPath: /var/www/FreshRSS/data
-  volumeClaimTemplates:
-    - metadata:
-        name: data
-      spec:
-        accessModes: ["ReadWriteOnce"]
-        resources:
-          requests:
-            storage: 1Gi
-        storageClassName: rook-ceph-block
+      volumes:
+        - name: config
+          persistentVolumeClaim:
+            claimName: *app
