@@ -5,7 +5,7 @@ kind: CronJob
 metadata:
   name: &app configarr
 spec:
-  schedule: "0 7 * * *" # 7 AM
+  schedule: 0 * * * *
   successfulJobsHistoryLimit: 1
   failedJobsHistoryLimit: 1
   jobTemplate:
