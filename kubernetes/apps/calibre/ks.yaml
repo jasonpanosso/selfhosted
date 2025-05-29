@@ -37,7 +37,7 @@ spec:
     namespace: flux-system
   targetNamespace: *namespace
   dependsOn:
-    - name: rook-ceph
+    - name: rook-ceph-cluster
       namespace: rook-ceph
     - name: secret-store
       namespace: external-secrets

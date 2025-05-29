@@ -28,7 +28,7 @@ spec:
   dependsOn:
     - name: db
       namespace: db
-    - name: rook-ceph
+    - name: rook-ceph-cluster
       namespace: rook-ceph
     - name: secret-store
       namespace: external-secrets

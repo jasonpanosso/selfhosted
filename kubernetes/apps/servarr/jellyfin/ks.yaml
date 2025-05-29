@@ -30,7 +30,7 @@ spec:
       namespace: db
     - name: lldap
       namespace: auth
-    - name: rook-ceph
+    - name: rook-ceph-cluster
       namespace: rook-ceph
     - name: secret-store
       namespace: external-secrets
