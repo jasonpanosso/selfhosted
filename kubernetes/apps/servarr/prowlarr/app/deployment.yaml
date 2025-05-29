@@ -1,7 +1,7 @@
 ---
-# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/master-standalone/statefulset-apps-v1.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/master-standalone/deployment-apps-v1.json
 apiVersion: apps/v1
-kind: StatefulSet
+kind: Deployment
 metadata:
   name: &app prowlarr
   labels:
@@ -9,11 +9,9 @@ metadata:
   annotations:
     reloader.stakater.com/auto: "true"
 spec:
-  replicas: 0
   selector:
     matchLabels:
       app.kubernetes.io/name: *app
-  serviceName: *app
   template:
     metadata:
       labels:
@@ -94,12 +92,7 @@ spec:
           volumeMounts:
             - name: config
               mountPath: /config
-  volumeClaimTemplates:
-    - metadata:
-        name: config
-      spec:
-        accessModes: ["ReadWriteOnce"]
-        resources:
-          requests:
-            storage: 5Gi
-        storageClassName: rook-ceph-block
+      volumes:
+        - name: config
+          persistentVolumeClaim:
+            claimName: *app
