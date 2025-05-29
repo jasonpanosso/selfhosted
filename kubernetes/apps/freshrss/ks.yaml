@@ -22,7 +22,7 @@ spec:
   prune: true
   healthChecks:
     - apiVersion: apps/v1
-      kind: StatefulSet
+      kind: Deployment
       name: *app
       namespace: *namespace
   sourceRef:
