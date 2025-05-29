@@ -5,7 +5,7 @@ kind: Kustomization
 
 resources:
   - ./externalsecret.yaml
-  - ./statefulset.yaml
+  - ./deployment.yaml
   - ./service.yaml
   - ./ingressroute.yaml
 
