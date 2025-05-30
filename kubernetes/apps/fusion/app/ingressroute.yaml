@@ -3,14 +3,14 @@
 apiVersion: traefik.io/v1alpha1
 kind: IngressRoute
 metadata:
-  name: &app freshrss
+  name: &app fusion
   labels:
     app.kubernetes.io/name: *app
 spec:
   entryPoints:
     - websecure
   routes:
-    - match: Host(`freshrss.${domain}.${tld}`)
+    - match: Host(`rss.${domain}.${tld}`)
       kind: Rule
       middlewares:
         - name: forward-auth
