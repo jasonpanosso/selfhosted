@@ -25,7 +25,7 @@ spec:
           initContainers:
             - &container
               name: tag
-              image: ghcr.io/buroa/qbtools:v0.21.0
+              image: ghcr.io/buroa/qbtools:v0.21.0@sha256:3a60f001c3f5fd068ff38960fbf9db726fa59edf135b18cd50294230366c284e
               env:
                 - name: QBITTORRENT_HOST
                   value: qbittorrent.servarr.svc.cluster.local
