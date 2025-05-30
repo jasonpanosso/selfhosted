@@ -19,11 +19,13 @@ spec:
         - apparmor
     - policyName: disallow-selinux
       ruleNames:
+        - autogen-selinux-type
         - selinux-user-role
         - selinux-type
     - policyName: disallow-host-ports
       ruleNames:
         - host-ports-none
+        - autogen-host-ports-none
     - policyName: disallow-capabilities
       ruleNames:
         - adding-capabilities
