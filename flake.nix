@@ -16,6 +16,7 @@
         devShells.default = pkgs.mkShell {
           buildInputs = with pkgs; [
             age
+            cilium-cli
             docker
             fluxcd
             kubectl
@@ -25,7 +26,6 @@
             sops
             talosctl
             terraform
-            velero
           ];
         };
       });

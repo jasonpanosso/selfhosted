@@ -1,0 +1,46 @@
+---
+# yaml-language-server: $schema=https://datreeio.github.io/CRDs-catalog/kyverno.io/policyexception_v2.json
+apiVersion: kyverno.io/v2
+kind: PolicyException
+metadata:
+  name: cilium-exception
+spec:
+  exceptions:
+    - policyName: disallow-host-path
+      ruleNames:
+        - host-path
+        - autogen-host-path
+    - policyName: disallow-privileged-containers
+      ruleNames:
+        - privileged-containers
+        - autogen-privileged-containers
+    - policyName: restrict-apparmor-profiles
+      ruleNames:
+        - apparmor
+    - policyName: disallow-selinux
+      ruleNames:
+        - selinux-user-role
+        - selinux-type
+    - policyName: disallow-host-ports
+      ruleNames:
+        - host-ports-none
+    - policyName: disallow-capabilities
+      ruleNames:
+        - adding-capabilities
+        - autogen-adding-capabilities
+    - policyName: disallow-host-namespaces
+      ruleNames:
+        - host-namespaces
+        - autogen-host-namespaces
+  match:
+    any:
+      - resources:
+          kinds:
+            - Pod
+            - DaemonSet
+            - Deployment
+            - ReplicaSet
+          namespaces:
+            - kube-system
+          names:
+            - "cilium*"
