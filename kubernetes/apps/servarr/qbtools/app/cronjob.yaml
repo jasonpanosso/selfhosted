@@ -66,11 +66,11 @@ spec:
                 - --exclude-pattern
                 - "*_unpackerred*"
                 # - --dry-run
-            - <<: *container
-              name: reannounce
-              args:
-                - reannounce
-                - --process-seeding
+            # - <<: *container
+            #   name: reannounce
+            #   args:
+            #     - reannounce
+            #     - --process-seeding
           volumes:
             - name: config
               configMap:
