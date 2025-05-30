@@ -80,12 +80,6 @@ dashboards:
       gnetId: 16714
       revision: 1
       datasource: Prometheus
-    metallb:
-      # renovate: depName="Metallb"
-      gnetId: 20162
-      revision: 6
-      datasource:
-        - {name: DS_PROMETHEUS, value: Prometheus}
     cloudnative-pg:
       # renovate: depName="CloudnativePG"
       gnetId: 20417

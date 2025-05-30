@@ -10,6 +10,10 @@ ports:
 providers:
   kubernetesCRD:
     allowCrossNamespace: true
+service:
+  enabled: true
+  annotations:
+    lbipam.cilium.io/ips: 192.168.20.10
 metrics:
   prometheus:
     service:

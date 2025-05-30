@@ -26,7 +26,7 @@ spec:
     namespace: flux-system
   targetNamespace: *namespace
   dependsOn:
-    - name: metallb
-      namespace: metallb-system
+    - name: cilium
+      namespace: kube-system
     - name: prometheus-operator-crds
       namespace: observability
