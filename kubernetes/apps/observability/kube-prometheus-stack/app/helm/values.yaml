@@ -11,6 +11,16 @@ prometheusOperator:
 prometheus:
   enabled: true
   prometheusSpec:
+    # migrate to prompp upon 2.55 (otlp support)
+    # image:
+    #   registry: docker.io
+    #   repository: prompp/prompp
+    #   tag: 2.53.2-0.2.5
+    securityContext:
+      runAsNonRoot: true
+      runAsUser: 64535
+      runAsGroup: 64535
+      fsGroup: 64535
     storageSpec:
       volumeClaimTemplate:
         spec:
@@ -108,6 +118,12 @@ prometheus-node-exporter:
   prometheus:
     monitor:
       enabled: true
+      relabelings:
+        - action: replace
+          regex: (.*)
+          replacement: $1
+          sourceLabels: ["__meta_kubernetes_pod_node_name"]
+          targetLabel: kubernetes_node
 
 kubeStateMetrics:
   enabled: true
