@@ -21,12 +21,12 @@ spec:
       codingChunks: 1
   preservePoolsOnDelete: true
   gateway:
-    port: 80
+    port: 8080
     instances: 1
   hosting:
     advertiseEndpoint:
       dnsName: rook-ceph-rgw-my-store.rook-ceph.svc.cluster.local
-      port: 80
+      port: 8080
       useTls: false
     dnsNames:
       - s3.${domain}.${tld}
