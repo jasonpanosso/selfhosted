@@ -17,6 +17,7 @@
           buildInputs = with pkgs; [
             age
             cilium-cli
+            crane
             docker
             fluxcd
             kubectl
