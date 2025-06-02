@@ -43,9 +43,9 @@ spec:
             timeoutSeconds: 3
           readinessProbe: *probes
           resources:
-            requests:
-              # cpu: 1000m
-              memory: 2Gi
+            #  requests:
+            #    cpu: 1000m
+            #    memory: 2Gi
             limits:
               cpu: 3000m
               memory: 8Gi
