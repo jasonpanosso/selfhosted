@@ -141,6 +141,8 @@ spec:
     nodes:
       - name: worker-1
         deviceFilter: ^nvme
+      - name: worker-2
+        deviceFilter: ^nvme
       - name: worker-3
         deviceFilter: ^nvme
       - name: worker-4
@@ -150,5 +152,3 @@ spec:
           - name: /dev/disk/by-id/ata-HGST_HDN724040ALE640_PK1334PEJSXBUS
           - name: /dev/disk/by-id/ata-HGST_HDN724040ALE640_PK1334PEJPGEBS
           - name: /dev/disk/by-id/ata-HGST_HDN724040ALE640_PK2338P4H4X3MC
-      - name: worker-6
-        deviceFilter: ^nvme
