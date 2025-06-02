@@ -44,11 +44,12 @@ spec:
           readinessProbe: *probes
           resources:
             requests:
-              cpu: 1000m
-              memory: 2Gi
+              cpu: 0m
+              memory: 0Gi
+              squat.ai/drm: "1"
             limits:
-              cpu: 3000m
-              memory: 8Gi
+              cpu: 2500m
+              memory: 6Gi
               squat.ai/drm: "1"
           securityContext:
             allowPrivilegeEscalation: false
