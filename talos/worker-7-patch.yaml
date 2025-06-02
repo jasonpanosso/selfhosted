@@ -1,7 +1,7 @@
 # orange pi 5 plus
 machine:
   install:
-    image: factory.talos.dev/metal-installer/42a8c82f893fd2208240bbcfef122e6d6a91388c399ffcfc1df0ef7f43066f7a:v1.10.2
+    image: factory.talos.dev/metal-installer/cd43705d2a80207de2b6bf3e26135b832c7c96c3e3a70f96c0f65879dc52b8be:v1.10.3
     wipe: false
     disk: /dev/mmcblk1
   network:

@@ -1,10 +1,9 @@
 # orange pi 5
 machine:
   install:
-    image: factory.talos.dev/metal-installer/f2cc7c4f0bba2ba38ac71b9bfc527af63b5b9603158981e13cbf9fbcb637aa89:v1.10.2
+    # panfrost
+    image: factory.talos.dev/metal-installer/da3e63ccfd4b88e9fea8b5192d609ea82530e6a4b2d9c82f6de16391112a771f:v1.10.3
     wipe: false
-    extraKernelArgs:
-      - talos.platform=metal
     disk: /dev/mmcblk0
   network:
     hostname: worker-6
