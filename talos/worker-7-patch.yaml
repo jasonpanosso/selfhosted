@@ -1,8 +1,8 @@
 # orange pi 5 plus
 machine:
   install:
-    image: factory.talos.dev/metal-installer/cd43705d2a80207de2b6bf3e26135b832c7c96c3e3a70f96c0f65879dc52b8be:v1.10.3
-    wipe: false
-    disk: /dev/mmcblk1
+    # bare-metal arm64 + panfrost
+    image: factory.talos.dev/metal-installer/9557a43ed46345a996ab0f954bd1f916c0b070d463ea3d7178b5c9732801938a:v1.10.3
+    disk: /dev/disk/by-id/nvme-TEAM_TM8FP6256G_TPBF2408060090100615
   network:
     hostname: worker-7
