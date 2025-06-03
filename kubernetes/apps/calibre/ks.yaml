@@ -27,7 +27,7 @@ spec:
   healthChecks:
     - apiVersion: apps/v1
       kind: Deployment
-      name: calibre-web-automated
+      name: *app
       namespace: *namespace
   sourceRef:
     kind: GitRepository

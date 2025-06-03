@@ -3,7 +3,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: &app calibre-web-automated
+  name: &app calibre
   labels:
     app.kubernetes.io/name: *app
 spec:
@@ -29,7 +29,7 @@ spec:
           type: RuntimeDefault
       containers:
         - image: docker.io/crocodilestick/calibre-web-automated:V3.0.4
-          name: *app
+          name: calibre-web-automated
           ports:
             - containerPort: 8083
               name: http-cwa
@@ -102,8 +102,8 @@ spec:
             - name: ingest
               mountPath: /cwa-book-ingest
       volumes:
+        - name: *app
+          persistentVolumeClaim:
+            claimName: *app
         - name: ingest
           emptyDir: {}
-        - name: calibre
-          persistentVolumeClaim:
-            claimName: calibre
