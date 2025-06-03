@@ -14,10 +14,10 @@ spec:
   postBuild:
     substitute:
       APP: *app
-      VOLSYNC_CACHE_CAPACITY: 50Gi
-      VOLSYNC_CAPACITY: 100Gi
-      VOLSYNC_STORAGECLASS: rook-ceph-block-hdd
-      VOLSYNC_CACHE_STORAGECLASS: rook-ceph-block-hdd
+      VOLSYNC_CACHE_CAPACITY: 25Gi
+      VOLSYNC_CAPACITY: 50Gi
+      VOLSYNC_STORAGECLASS: rook-ceph-block
+      VOLSYNC_CACHE_STORAGECLASS: rook-ceph-block
   path: ./kubernetes/apps/calibre/app
   interval: 1h
   retryInterval: 2m
