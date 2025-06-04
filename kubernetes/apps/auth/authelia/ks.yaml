@@ -30,7 +30,7 @@ spec:
       namespace: external-secrets
     - name: db
       namespace: db
-    - name: redis
-      namespace: auth
+    - name: valkey
+      namespace: *namespace
     - name: lldap
-      namespace: auth
+      namespace: *namespace
