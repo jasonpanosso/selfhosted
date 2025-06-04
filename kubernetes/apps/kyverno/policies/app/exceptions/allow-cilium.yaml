@@ -16,7 +16,7 @@ spec:
         - autogen-privileged-containers
     - policyName: restrict-apparmor-profiles
       ruleNames:
-        - apparmor
+        - app-armor
     - policyName: disallow-selinux
       ruleNames:
         - autogen-selinux-type
