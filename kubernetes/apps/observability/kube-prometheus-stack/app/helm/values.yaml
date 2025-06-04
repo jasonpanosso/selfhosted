@@ -28,7 +28,7 @@ prometheus:
           accessModes: ["ReadWriteOnce"]
           resources:
             requests:
-              storage: 10Gi
+              storage: 40Gi
     enableFeatures:
       - exemplar-storage
     retention: 14d
