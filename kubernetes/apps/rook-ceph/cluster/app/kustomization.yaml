@@ -13,3 +13,4 @@ resources:
   - ./hdd-replica-pool.yaml
   - ./ingressroute.yaml
   - ./volumesnapshotclass.yaml
+  - ./prometheusrule.yaml
