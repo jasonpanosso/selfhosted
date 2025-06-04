@@ -5,4 +5,4 @@ spegel:
 serviceMonitor:
   enabled: true
 grafanaDashboard:
-  enabled: true
+  enabled: false
