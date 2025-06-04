@@ -1,6 +1,6 @@
 ---
 deploymentStrategy:
-  type: Recreate
+  type: RollingUpdate
 persistence:
   enabled: false
   type: pvc
