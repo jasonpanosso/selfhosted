@@ -2,6 +2,15 @@
 fullnameOverride: smartctl-exporter
 serviceMonitor:
   enabled: true
+  relabelings:
+    - action: labeldrop
+      regex: (pod)
+    - sourceLabels: [__meta_kubernetes_pod_node_name]
+      separator: ;
+      regex: ^(.*)$
+      targetLabel: instance
+      replacement: $1
+      action: replace
 prometheusRules:
   enabled: false
 image:
