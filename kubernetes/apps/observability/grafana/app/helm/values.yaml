@@ -210,11 +210,14 @@ dashboards:
       gnetId: 15758
       revision: 42
       datasource: Prometheus
-    kubernetes-nodes:
-      # renovate: depName="Kubernetes / Views / Nodes"
-      gnetId: 15759
-      revision: 35
-      datasource: Prometheus
+    # kubernetes-nodes:
+    #   # renovate: depName="Kubernetes / Views / Nodes"
+    #   gnetId: 15759
+    #   revision: 35
+    #   datasource: Prometheus
+    k8s-views-nodes:
+      url: https://raw.githubusercontent.com/dotdc/grafana-dashboards-kubernetes/master/dashboards/k8s-views-nodes.json
+      token: ""
     kubernetes-pods:
       # renovate: depName="Kubernetes / Views / Pods"
       gnetId: 15760
