@@ -2,7 +2,7 @@
 deploymentStrategy:
   type: Recreate
 persistence:
-  enabled: true
+  enabled: false
   type: pvc
   storageClassName: rook-ceph-block
   accessModes:
