@@ -81,6 +81,19 @@
       "group": {
         "commitMessageTopic": "{{{groupName}}} group"
       }
+    },
+    {
+      "description": "OpenTelemetry Group",
+      "groupName": "OpenTelemetry",
+      "matchDatasources": ["docker"],
+      "matchPackageNames": [
+        "/target-allocator/",
+        "/opentelemetry-operator/",
+        "/opentelemetry-collector-k8s/"
+      ],
+      "group": {
+        "commitMessageTopic": "{{{groupName}}} group"
+      }
     }
   ]
 }
