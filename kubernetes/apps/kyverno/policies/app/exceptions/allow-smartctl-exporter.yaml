@@ -1,0 +1,22 @@
+---
+# yaml-language-server: $schema=https://datreeio.github.io/CRDs-catalog/kyverno.io/policyexception_v2.json
+apiVersion: kyverno.io/v2
+kind: PolicyException
+metadata:
+  name: smartctl-exporter-exception
+spec:
+  exceptions:
+    - policyName: disallow-host-path
+      ruleNames:
+        - host-path
+        - autogen-host-path
+  match:
+    any:
+      - resources:
+          kinds:
+            - Pod
+            - DaemonSet
+          namespaces:
+            - observability
+          names:
+            - smartctl-exporter*

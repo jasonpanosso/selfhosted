@@ -15,3 +15,4 @@ resources:
   - ./allow-generic-device-plugin.yaml
   - ./allow-otel-collector.yaml
   - ./allow-cilium.yaml
+  - ./allow-smartctl-exporter.yaml
