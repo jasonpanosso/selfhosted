@@ -52,13 +52,13 @@ configMap:
       enabled: true
       high_availability:
         enabled: true
-        sentinel_name: mymaster
+        sentinel_name: myprimary
         nodes:
-          - host: redis-node-0.redis-headless.auth.svc.cluster.local
+          - host: valkey-node-0.valkey-headless.auth.svc.cluster.local
             port: 26379
-          - host: redis-node-1.redis-headless.auth.svc.cluster.local
+          - host: valkey-node-1.valkey-headless.auth.svc.cluster.local
             port: 26379
-          - host: redis-node-2.redis-headless.auth.svc.cluster.local
+          - host: valkey-node-2.valkey-headless.auth.svc.cluster.local
             port: 26379
         password:
           disabled: true
