@@ -9,5 +9,6 @@ components:
 
 resources:
   - ./redis/ks.yaml
+  - ./valkey/ks.yaml
   - ./lldap/ks.yaml
   - ./authelia/ks.yaml
