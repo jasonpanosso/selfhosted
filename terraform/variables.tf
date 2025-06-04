@@ -96,3 +96,21 @@ variable "authelia_oidc_test_secret" {
   type        = string
   sensitive   = true
 }
+
+variable "pushover_user_key" {
+  description = "User key for Pushover(push notifications)"
+  type        = string
+  sensitive   = true
+}
+
+variable "pushover_api_token" {
+  description = "API token for Pushover(push notifications)"
+  type        = string
+  sensitive   = true
+}
+
+variable "healthchecksio_heartbeat_url" {
+  description = "URL for healthchecks.io heartbeats(Alertmanager dead mans snitch)"
+  type        = string
+  sensitive   = true
+}

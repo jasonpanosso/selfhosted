@@ -86,6 +86,11 @@ kubernetesServiceMonitors:
 alertmanager:
   enabled: true
   alertmanagerSpec:
+    alertmanagerConfiguration:
+      name: alertmanager
+      global:
+        resolveTimeout: 5m
+    externalUrl: https://alerts.${domain}.${tld}
     storage:
       volumeClaimTemplate:
         spec:

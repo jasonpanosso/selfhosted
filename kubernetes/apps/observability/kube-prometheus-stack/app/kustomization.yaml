@@ -5,6 +5,8 @@ kind: Kustomization
 
 resources:
   - ./helmrelease.yaml
+  - ./externalsecret.yaml
+  - ./alertmanagerconfig.yaml
   - ./ingressroute.yaml
 
 configMapGenerator:

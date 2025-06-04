@@ -38,4 +38,8 @@ module "bitwarden_secrets" {
 
   smtp_username = var.smtp_username
   smtp_password = var.smtp_password
+
+  pushover_user_key            = var.pushover_user_key
+  pushover_api_token           = var.pushover_api_token
+  healthchecksio_heartbeat_url = var.healthchecksio_heartbeat_url
 }

@@ -27,6 +27,8 @@ spec:
   targetNamespace: *namespace
   dependsOn:
     - name: prometheus-operator-crds
-      namespace: observability
+      namespace: *namespace
     - name: rook-ceph-cluster
       namespace: rook-ceph
+    - name: secret-store
+      namespace: external-secrets
