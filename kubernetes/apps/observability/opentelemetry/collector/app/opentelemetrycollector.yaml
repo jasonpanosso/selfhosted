@@ -25,6 +25,9 @@ spec:
     requests:
       cpu: 100m
       memory: 256Mi
+  env:
+    - name: GOMEMLIMIT
+      value: 400MiB
   tolerations:
     - operator: Exists
       effect: NoSchedule
@@ -51,6 +54,10 @@ spec:
         send_batch_max_size: 1500
         send_batch_size: 1000
         timeout: 1s
+      memory_limiter:
+        check_interval: 1s
+        limit_percentage: 80
+        spike_limit_percentage: 15
       resource/add_cluster:
         attributes:
           - action: insert
@@ -119,6 +126,7 @@ spec:
             - debug/logs
             - otlp
           processors:
+            - memory_limiter
             - k8sattributes
             - resource/add_cluster
             - resourcedetection/system
@@ -131,6 +139,7 @@ spec:
             - debug/metrics
             - otlp
           processors:
+            - memory_limiter
             - k8sattributes
             - resource/add_cluster
             - resourcedetection/system
@@ -177,6 +186,9 @@ spec:
     requests:
       cpu: 250m
       memory: 512Mi
+  env:
+    - name: GOMEMLIMIT
+      value: 900MiB
   config:
     exporters:
       debug: {}
@@ -194,6 +206,10 @@ spec:
         send_batch_max_size: 1500
         send_batch_size: 1000
         timeout: 1s
+      memory_limiter:
+        check_interval: 1s
+        limit_percentage: 80
+        spike_limit_percentage: 15
       k8sattributes:
         passthrough: false
         extract:
@@ -269,6 +285,7 @@ spec:
             - debug
             # - otlphttp/loki
           processors:
+            - memory_limiter
             - k8sattributes
             - batch
           receivers:
@@ -278,6 +295,7 @@ spec:
             # - debug
             - otlphttp/prometheus
           processors:
+            - memory_limiter
             - k8sattributes
             - batch
           receivers:
