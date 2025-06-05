@@ -4,6 +4,12 @@ apiVersion: ceph.rook.io/v1
 kind: CephCluster
 metadata:
   name: rook-ceph
+  annotations:
+    kustomize.toolkit.fluxcd.io/prune: disabled
+    meta.helm.sh/release-name: rook-ceph-cluster
+    meta.helm.sh/release-namespace: rook-ceph
+  labels:
+    app.kubernetes.io/managed-by: Helm
 spec:
   cephVersion:
     image: quay.io/ceph/ceph:v19.2.2

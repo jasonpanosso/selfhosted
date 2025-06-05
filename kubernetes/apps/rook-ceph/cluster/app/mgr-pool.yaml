@@ -4,6 +4,8 @@ apiVersion: ceph.rook.io/v1
 kind: CephBlockPool
 metadata:
   name: builtin-mgr
+  annotations:
+    kustomize.toolkit.fluxcd.io/prune: disabled
 spec:
   name: .mgr
   failureDomain: host

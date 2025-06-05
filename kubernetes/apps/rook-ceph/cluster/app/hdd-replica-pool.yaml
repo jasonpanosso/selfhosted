@@ -4,6 +4,8 @@ apiVersion: ceph.rook.io/v1
 kind: CephBlockPool
 metadata:
   name: hdd-replica-pool
+  annotations:
+    kustomize.toolkit.fluxcd.io/prune: disabled
 spec:
   failureDomain: osd
   deviceClass: hdd
@@ -21,6 +23,8 @@ apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
   name: rook-ceph-block-hdd
+  annotations:
+    kustomize.toolkit.fluxcd.io/prune: disabled
 provisioner: rook-ceph.rbd.csi.ceph.com
 parameters:
   clusterID: rook-ceph
