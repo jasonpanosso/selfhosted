@@ -73,7 +73,7 @@ cephClusterSpec:
         enabled: false
       compression:
         enabled: false
-      requireMsgr2: true
+      requireMsgr2: false
   removeOSDsIfOutAndSafeToRemove: true
 
   storage: # cluster level storage configuration and selection
