@@ -6,6 +6,7 @@ metadata:
 spec:
   mode: daemonset
   serviceAccount: otel-collector-opentelemetry-collector
+  priorityClassName: system-node-critical
   targetAllocator:
     enabled: true
     allocationStrategy: per-node
@@ -165,6 +166,7 @@ metadata:
   name: gateway
 spec:
   mode: deployment
+  priorityClassName: system-cluster-critical
   replicas: 2
   serviceAccount: otel-collector-opentelemetry-collector
   resources:
