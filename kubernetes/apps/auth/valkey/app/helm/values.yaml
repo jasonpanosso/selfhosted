@@ -11,6 +11,13 @@ sentinel:
   livenessProbe:
     enabled: true
     initialDelaySeconds: 120
+  resources:
+    limits:
+      cpu: 250m
+      memory: 192Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
 auth:
   enabled: true
   enableReplicaAuth: true

@@ -19,7 +19,6 @@ resources:
     cpu: 500m
     memory: 1Gi
   limits:
-    cpu: 500m
     memory: 1Gi
 
 env:

@@ -74,8 +74,8 @@ spec:
             requests:
               cpu: 250m
               memory: 256Mi
+              squat.ai/tun: "1"
             limits:
-              cpu: 250m
               memory: 256Mi
               squat.ai/tun: "1"
           ports:
@@ -137,7 +137,6 @@ spec:
               cpu: 250m
               memory: 1280Mi
             limits:
-              cpu: 1000m
               memory: 1280Mi
           securityContext:
             runAsUser: 65534

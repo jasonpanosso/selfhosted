@@ -20,10 +20,9 @@ spec:
       scrapeConfigSelector: {}
   resources:
     limits:
-      cpu: 500m
       memory: 512Mi
     requests:
-      cpu: 100m
+      cpu: 200m
       memory: 256Mi
   env:
     - name: GOMEMLIMIT
