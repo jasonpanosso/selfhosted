@@ -26,9 +26,10 @@ spec:
       cpu: 100m
       memory: 256Mi
   tolerations:
-    - key: node-role.kubernetes.io/control-plane
-      operator: Exists
+    - operator: Exists
       effect: NoSchedule
+  nodeSelector:
+    kubernetes.io/os: linux
   config:
     extensions:
       k8s_leader_elector:
