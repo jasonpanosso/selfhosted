@@ -4,13 +4,14 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 resources:
-  - ./cephcluster.yaml
-  - ./cephfilesystem.yaml
-  - ./cephobjectstore.yaml
   - ./externalsecret.yaml
-  - ./mgr-pool.yaml
-  - ./replica-pool.yaml
-  - ./hdd-replica-pool.yaml
+  - ./helmrelease.yaml
   - ./ingressroute.yaml
-  - ./volumesnapshotclass.yaml
-  - ./prometheusrule.yaml
+
+configMapGenerator:
+  - name: rook-ceph-cluster-values
+    files:
+      - values.yaml=./helm/values.yaml
+
+configurations:
+  - ./helm/kustomizeconfig.yaml
