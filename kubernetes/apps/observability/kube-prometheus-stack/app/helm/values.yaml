@@ -21,6 +21,14 @@ prometheus:
       runAsUser: 64535
       runAsGroup: 64535
       fsGroup: 64535
+    priorityClassName: system-cluster-critical
+    resources:
+      requests:
+        cpu: 1000m
+        memory: 2Gi
+      limits:
+        cpu: 2000m
+        memory: 4Gi
     storageSpec:
       volumeClaimTemplate:
         spec:
@@ -86,6 +94,13 @@ kubernetesServiceMonitors:
 alertmanager:
   enabled: true
   alertmanagerSpec:
+    resources:
+      requests:
+        cpu: 100m
+        memory: 256Mi
+      limits:
+        cpu: 100m
+        memory: 256Mi
     alertmanagerConfiguration:
       name: alertmanager
       global:
@@ -120,6 +135,14 @@ nodeExporter:
 prometheus-node-exporter:
   nameOverride: node-exporter
   fullnameOverride: node-exporter
+  priorityClassName: system-node-critical
+  resources:
+    limits:
+      cpu: 100m
+      memory: 128Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
   prometheus:
     monitor:
       enabled: true
@@ -139,6 +162,14 @@ kubeStateMetrics:
   enabled: true
 kube-state-metrics:
   fullnameOverride: kube-state-metrics
+  priorityClassName: system-cluster-critical
+  resources:
+    limits:
+      cpu: 100m
+      memory: 256Mi
+    requests:
+      cpu: 100m
+      memory: 256Mi
   prometheus:
     monitor:
       enabled: true
