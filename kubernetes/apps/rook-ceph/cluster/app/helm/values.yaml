@@ -54,6 +54,13 @@ cephClusterSpec:
       limits:
         cpu: 500m
         memory: 3Gi
+  priorityClassNames:
+    mon: system-node-critical
+    osd: system-node-critical
+    mgr: system-cluster-critical
+    api: system-cluster-critical
+    exporter: system-node-critical
+    crashcollector: system-node-critical
   dashboard:
     enabled: true
     urlPrefix: /
