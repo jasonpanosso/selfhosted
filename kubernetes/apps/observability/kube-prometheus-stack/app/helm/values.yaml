@@ -24,11 +24,10 @@ prometheus:
     priorityClassName: system-cluster-critical
     resources:
       requests:
-        cpu: 1000m
-        memory: 2Gi
+        cpu: 1500m
+        memory: 3Gi
       limits:
-        cpu: 2000m
-        memory: 4Gi
+        memory: 3Gi
     storageSpec:
       volumeClaimTemplate:
         spec:
@@ -100,7 +99,6 @@ alertmanager:
         cpu: 100m
         memory: 256Mi
       limits:
-        cpu: 100m
         memory: 256Mi
     alertmanagerConfiguration:
       name: alertmanager
@@ -165,7 +163,6 @@ kube-state-metrics:
   priorityClassName: system-cluster-critical
   resources:
     limits:
-      cpu: 100m
       memory: 256Mi
     requests:
       cpu: 100m

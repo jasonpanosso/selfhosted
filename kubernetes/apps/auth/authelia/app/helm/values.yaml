@@ -165,7 +165,6 @@ pod:
       cpu: 250m
       memory: 512Mi
     limits:
-      cpu: 250m
       memory: 512Mi
   selectors:
     affinity:

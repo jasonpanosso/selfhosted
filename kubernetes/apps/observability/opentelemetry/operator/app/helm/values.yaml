@@ -15,7 +15,6 @@ manager:
     tag: "v0.127.0"
   resources:
     limits:
-      cpu: 100m
       memory: 128Mi
       ephemeral-storage: 50Mi
     requests:
@@ -51,7 +50,6 @@ kubeRBACProxy:
     proxyPort: 8443
   resources:
     limits:
-      cpu: 100m
       memory: 128Mi
     requests:
       cpu: 100m

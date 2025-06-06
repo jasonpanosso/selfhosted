@@ -19,6 +19,7 @@ spec:
       labels:
         app.kubernetes.io/name: *app
     spec:
+      priorityClassName: system-node-critical
       securityContext:
         runAsUser: 65534
         runAsGroup: 65534
@@ -44,11 +45,10 @@ spec:
           readinessProbe: *probes
           resources:
             requests:
-              cpu: 0m
-              memory: 0Gi
+              cpu: 100m
+              memory: 2Gi
               squat.ai/drm: "1"
             limits:
-              cpu: 2500m
               memory: 6Gi
               squat.ai/drm: "1"
           securityContext:

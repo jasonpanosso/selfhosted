@@ -48,12 +48,11 @@ spec:
             timeoutSeconds: 3
           readinessProbe: *probes
           resources:
-            # requests:
-            #   cpu: 1000m
-            #   memory: 1Gi
-            # limits:
-            #   cpu: 4000m
-            #   memory: 8Gi
+            requests:
+              cpu: 500m
+              memory: 1Gi
+            limits:
+              memory: 4Gi
           securityContext:
             allowPrivilegeEscalation: false
           volumeMounts:
@@ -89,13 +88,12 @@ spec:
             periodSeconds: 10
             timeoutSeconds: 3
           livenessProbe: *probes
-          # resources:
-          #   requests:
-          #     cpu: 50m
-          #     memory: 256Mi
-          #   limits:
-          #     cpu: 500m
-          #     memory: 512Mi
+          resources:
+            requests:
+              cpu: 100m
+              memory: 512Mi
+            limits:
+              memory: 512Mi
           securityContext:
             allowPrivilegeEscalation: false
           volumeMounts:

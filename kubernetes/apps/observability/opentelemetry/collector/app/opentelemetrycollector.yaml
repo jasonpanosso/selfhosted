@@ -23,7 +23,7 @@ spec:
       memory: 512Mi
     requests:
       cpu: 200m
-      memory: 256Mi
+      memory: 512Mi
   env:
     - name: GOMEMLIMIT
       value: 500MiB
@@ -193,7 +193,7 @@ spec:
       memory: 512Mi
     requests:
       cpu: 200m
-      memory: 256Mi
+      memory: 512Mi
   env:
     - name: GOMEMLIMIT
       value: 500MiB
@@ -354,7 +354,7 @@ spec:
       memory: 1Gi
     requests:
       cpu: 500m
-      memory: 512Mi
+      memory: 1Gi
   env:
     - name: GOMEMLIMIT
       value: 1000MiB
