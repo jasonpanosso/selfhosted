@@ -180,9 +180,6 @@ dashboards:
       revision: 1
       datasource:
         - {name: DS_VICTORIAMETRICS, value: Prometheus}
-    host-overview:
-      url: https://raw.githubusercontent.com/ceph/ceph/main/monitoring/ceph-mixin/dashboards_out/hosts-overview.json
-      datasource: Prometheus
     kubernetes-pvc:
       # renovate: depName="Kubernetes PVC Stats"
       gnetId: 23233
