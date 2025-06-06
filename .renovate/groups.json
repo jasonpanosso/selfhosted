@@ -89,7 +89,8 @@
       "matchPackageNames": [
         "/target-allocator/",
         "/opentelemetry-operator/",
-        "/opentelemetry-collector-k8s/"
+        "/opentelemetry-collector-k8s/",
+        "/opentelemetry-collector-contrib/"
       ],
       "group": {
         "commitMessageTopic": "{{{groupName}}} group"
