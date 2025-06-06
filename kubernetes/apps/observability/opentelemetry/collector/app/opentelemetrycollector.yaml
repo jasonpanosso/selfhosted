@@ -13,7 +13,7 @@ spec:
     serviceAccount: opentelemetry-targetallocator
     prometheusCR:
       enabled: true
-      scrapeInterval: 30s
+      scrapeInterval: 15s
       podMonitorSelector: {}
       serviceMonitorSelector: {}
       probeSelector: {}
@@ -27,18 +27,16 @@ spec:
   env:
     - name: GOMEMLIMIT
       value: 400MiB
+    - name: OTEL_K8S_NODE_NAME
+      valueFrom:
+        fieldRef:
+          fieldPath: spec.nodeName
   tolerations:
     - operator: Exists
       effect: NoSchedule
   nodeSelector:
     kubernetes.io/os: linux
   config:
-    extensions:
-      k8s_leader_elector:
-        auth_type: serviceAccount
-        lease_name: otel-collector-daemonset-leader
-        lease_namespace: observability
-
     exporters:
       debug/metrics: {}
       debug/logs: {}
@@ -57,159 +55,13 @@ spec:
         check_interval: 1s
         limit_percentage: 80
         spike_limit_percentage: 15
-      resource/add_cluster:
-        attributes:
-          - action: insert
-            key: k8s.cluster.name
-            value: prod
-          - action: insert
-            key: cluster
-            value: prod
-      resourcedetection/system:
-        detectors: ["system"]
-        system:
-          hostname_sources: ["os"]
+      resourcedetection/env:
+        detectors: [env]
+        timeout: 2s
+        override: false
       k8sattributes:
-        passthrough: true
-
-    receivers:
-      prometheus:
-        config:
-          # target allocator
-          scrape_configs: []
-
-      filelog:
-        exclude: []
-        include:
-          - /var/log/pods/*/*/*.log
-        include_file_name: false
-        include_file_path: true
-        operators:
-          - id: container-parser
-            max_log_size: 102400
-            type: container
-        retry_on_failure:
-          enabled: true
-        start_at: end
-
-      k8s_cluster:
-        auth_type: serviceAccount
-        collection_interval: 10s
-        k8s_leader_elector: k8s_leader_elector
-        allocatable_types_to_report:
-          - cpu
-          - memory
-          - storage
-        node_conditions_to_report:
-          - Ready
-          - MemoryPressure
-          - DiskPressure
-          - NetworkUnavailable
-
-      k8sobjects:
-        k8s_leader_elector: k8s_leader_elector
-        auth_type: serviceAccount
-        objects:
-          - name: events
-            group: events.k8s.io
-            mode: watch
-            exclude_watch_type:
-              - DELETED
-
-    service:
-      extensions:
-        - k8s_leader_elector
-      pipelines:
-        logs:
-          exporters:
-            - debug/logs
-            - otlp
-          processors:
-            - memory_limiter
-            - k8sattributes
-            - resource/add_cluster
-            - resourcedetection/system
-            - batch
-          receivers:
-            - filelog
-            - k8sobjects
-        metrics:
-          exporters:
-            - debug/metrics
-            - otlp
-          processors:
-            - memory_limiter
-            - k8sattributes
-            - resource/add_cluster
-            - resourcedetection/system
-            - batch
-          receivers:
-            - prometheus
-            - k8s_cluster
-  volumeMounts:
-    - mountPath: /var/log/pods
-      name: varlogpods
-      readOnly: true
-    - mountPath: /var/lib/docker/containers
-      name: varlibdockercontainers
-      readOnly: true
-    - mountPath: /hostfs
-      mountPropagation: HostToContainer
-      name: hostfs
-      readOnly: true
-
-  volumes:
-    - hostPath:
-        path: /var/log/pods
-      name: varlogpods
-    - hostPath:
-        path: /var/lib/docker/containers
-      name: varlibdockercontainers
-    - hostPath:
-        path: /
-      name: hostfs
----
-apiVersion: opentelemetry.io/v1beta1
-kind: OpenTelemetryCollector
-metadata:
-  name: gateway
-spec:
-  mode: deployment
-  priorityClassName: system-cluster-critical
-  replicas: 2
-  serviceAccount: otel-collector-opentelemetry-collector
-  resources:
-    limits:
-      cpu: 500m
-      memory: 1Gi
-    requests:
-      cpu: 250m
-      memory: 512Mi
-  env:
-    - name: GOMEMLIMIT
-      value: 900MiB
-  config:
-    exporters:
-      debug: {}
-      otlphttp/prometheus:
-        endpoint: http://prometheus-operated.observability.svc.cluster.local:9090/api/v1/otlp
-        tls:
-          insecure: true
-      otlphttp/loki:
-        endpoint: http://loki-gateway.observability.svc.cluster.local/otlp
-        tls:
-          insecure: true
-
-    processors:
-      batch:
-        send_batch_max_size: 1500
-        send_batch_size: 1000
-        timeout: 1s
-      memory_limiter:
-        check_interval: 1s
-        limit_percentage: 80
-        spike_limit_percentage: 15
-      k8sattributes:
+        filter:
+          node_from_env_var: OTEL_K8S_NODE_NAME
         passthrough: false
         extract:
           otel_annotations: true
@@ -272,12 +124,161 @@ spec:
               - from: connection
 
     receivers:
+      prometheus:
+        config:
+          # target allocator
+          scrape_configs: []
+
+      filelog:
+        exclude: []
+        include:
+          - /var/log/pods/*/*/*.log
+        include_file_name: false
+        include_file_path: true
+        operators:
+          - id: container-parser
+            max_log_size: 102400
+            type: container
+        retry_on_failure:
+          enabled: true
+        start_at: end
+
+    service:
+      pipelines:
+        logs:
+          exporters:
+            # - debug/logs
+            - otlp
+          processors:
+            - memory_limiter
+            - k8sattributes
+            - resourcedetection/env
+            - batch
+          receivers:
+            - filelog
+        metrics:
+          exporters:
+            # - debug/metrics
+            - otlp
+          processors:
+            - memory_limiter
+            - k8sattributes
+            - resourcedetection/env
+            - batch
+          receivers:
+            - prometheus
+  volumeMounts:
+    - mountPath: /var/log/pods
+      name: varlogpods
+      readOnly: true
+    - mountPath: /var/lib/docker/containers
+      name: varlibdockercontainers
+      readOnly: true
+    - mountPath: /hostfs
+      mountPropagation: HostToContainer
+      name: hostfs
+      readOnly: true
+
+  volumes:
+    - hostPath:
+        path: /var/log/pods
+      name: varlogpods
+    - hostPath:
+        path: /var/lib/docker/containers
+      name: varlibdockercontainers
+    - hostPath:
+        path: /
+      name: hostfs
+---
+apiVersion: opentelemetry.io/v1beta1
+kind: OpenTelemetryCollector
+metadata:
+  name: gateway
+spec:
+  mode: deployment
+  priorityClassName: system-cluster-critical
+  replicas: 2
+  serviceAccount: otel-collector-opentelemetry-collector
+  resources:
+    limits:
+      cpu: 500m
+      memory: 1Gi
+    requests:
+      cpu: 250m
+      memory: 512Mi
+  env:
+    - name: GOMEMLIMIT
+      value: 900MiB
+    - name: OTEL_RESOURCE_ATTRIBUTES
+      value: "k8s.cluster.name=prod,cluster=prod"
+    - name: OTEL_K8S_NODE_NAME
+      valueFrom:
+        fieldRef:
+          fieldPath: spec.nodeName
+  config:
+    extensions:
+      k8s_leader_elector:
+        auth_type: serviceAccount
+        lease_name: otel-collector-daemonset-leader
+        lease_namespace: observability
+
+    exporters:
+      debug: {}
+      otlphttp/prometheus:
+        endpoint: http://prometheus-operated.observability.svc.cluster.local:9090/api/v1/otlp
+        tls:
+          insecure: true
+      otlphttp/loki:
+        endpoint: http://loki-gateway.observability.svc.cluster.local/otlp
+        tls:
+          insecure: true
+
+    processors:
+      batch:
+        send_batch_max_size: 1500
+        send_batch_size: 1000
+        timeout: 1s
+      memory_limiter:
+        check_interval: 1s
+        limit_percentage: 80
+        spike_limit_percentage: 15
+      resourcedetection/env:
+        detectors: [env]
+        timeout: 2s
+        override: false
+
+    receivers:
       otlp:
         protocols:
           grpc:
             endpoint: 0.0.0.0:4317
+      k8s_cluster:
+        auth_type: serviceAccount
+        collection_interval: 10s
+        k8s_leader_elector: k8s_leader_elector
+        allocatable_types_to_report:
+          - cpu
+          - memory
+          - storage
+        node_conditions_to_report:
+          - Ready
+          - MemoryPressure
+          - DiskPressure
+          - NetworkUnavailable
+
+      k8sobjects:
+        k8s_leader_elector: k8s_leader_elector
+        auth_type: serviceAccount
+        objects:
+          - name: events
+            group: events.k8s.io
+            mode: watch
+            exclude_watch_type:
+              - DELETED
 
     service:
+      extensions:
+        - k8s_leader_elector
       pipelines:
         logs:
           exporters:
@@ -285,7 +286,7 @@ spec:
             # - otlphttp/loki
           processors:
             - memory_limiter
-            - k8sattributes
+            - resourcedetection/env
             - batch
           receivers:
             - otlp
@@ -295,7 +296,7 @@ spec:
             - otlphttp/prometheus
           processors:
             - memory_limiter
-            - k8sattributes
+            - resourcedetection/env
             - batch
           receivers:
             - otlp
