@@ -196,6 +196,7 @@ metadata:
   name: gateway
 spec:
   mode: deployment
+  image: ghcr.io/open-telemetry/opentelemetry-collector-releases/opentelemetry-collector-contrib:0.127.0
   priorityClassName: system-cluster-critical
   replicas: 2
   serviceAccount: otel-collector-opentelemetry-collector
@@ -224,10 +225,17 @@ spec:
 
     exporters:
       debug: {}
-      otlphttp/prometheus:
-        endpoint: http://prometheus-operated.observability.svc.cluster.local:9090/api/v1/otlp
+      prometheusremotewrite:
+        endpoint: http://prometheus-operated.observability.svc.cluster.local:9090/api/v1/write
+        add_metric_suffixes: false
+        resource_to_telemetry_conversion:
+          enabled: true
         tls:
           insecure: true
+      # otlphttp/prometheus:
+      #   endpoint: http://prometheus-operated.observability.svc.cluster.local:9090/api/v1/otlp
+      #   tls:
+      #     insecure: true
       otlphttp/loki:
         endpoint: http://loki-gateway.observability.svc.cluster.local/otlp
         tls:
@@ -293,7 +301,7 @@ spec:
         metrics:
           exporters:
             # - debug
-            - otlphttp/prometheus
+            - prometheusremotewrite
           processors:
             - memory_limiter
             - resourcedetection/env

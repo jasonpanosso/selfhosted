@@ -55,7 +55,7 @@ prometheus:
       matchLabels:
         none: none
     tsdb:
-      outOfOrderTimeWindow: 30m
+      outOfOrderTimeWindow: 10m
     exemplars:
       maxSize: 100000
     podMonitorSelectorNilUsesHelmValues: false
