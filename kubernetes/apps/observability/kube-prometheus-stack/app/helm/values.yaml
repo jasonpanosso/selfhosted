@@ -57,7 +57,7 @@ prometheus:
     tsdb:
       outOfOrderTimeWindow: 30m
     exemplars:
-      max_exemplars: 100000
+      maxSize: 100000
     podMonitorSelectorNilUsesHelmValues: false
     probeSelectorNilUsesHelmValues: false
     ruleSelectorNilUsesHelmValues: false
