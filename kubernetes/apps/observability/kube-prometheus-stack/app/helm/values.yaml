@@ -41,7 +41,7 @@ prometheus:
       - exemplar-storage
     enableRemoteWriteReceiver: true
     retention: 10d
-    retentionSize: 40Gi
+    retentionSize: 40GiB
     serviceMonitorSelector:
       matchLabels:
         none: none
