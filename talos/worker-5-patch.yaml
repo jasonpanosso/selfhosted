@@ -1,9 +1,8 @@
 # Topton N100
 machine:
   install:
-    disk: /dev/disk/by-id/nvme-Patriot_M.2_P300_256GB_P300IDBB24110706005
     # intel i915 extension
     image: factory.talos.dev/metal-installer/dc8730aa8cc7bfa5ef7e2b3284248f2631135b2faf4ae11aa997a0c1987b0eee:v1.10.3
-    wipe: false
+    disk: /dev/disk/by-id/nvme-TEAM_TM8FP6256G_TPBF2408060090100857
   network:
     hostname: worker-5

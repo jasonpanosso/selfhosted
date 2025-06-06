@@ -4,7 +4,6 @@ machine:
     # bare-metal arm64 + panfrost
     image: factory.talos.dev/metal-installer/9557a43ed46345a996ab0f954bd1f916c0b070d463ea3d7178b5c9732801938a:v1.10.3
     disk: /dev/disk/by-id/nvme-BC501A_NVMe_SK_hynix_128GB_FD05N9132133Y627H
-    wipe: true
   # inconsistent MAC?
   network:
     hostname: worker-6
