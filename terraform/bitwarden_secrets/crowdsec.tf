@@ -1,6 +1,6 @@
 resource "random_password" "crowdsec_lapi_token" {
   length  = 64
-  special = true
+  special = false
 }
 
 resource "bitwarden_secret" "crowdsec_lapi_token" {
@@ -12,7 +12,7 @@ resource "bitwarden_secret" "crowdsec_lapi_token" {
 
 resource "random_password" "crowdsec_registration_token" {
   length  = 64
-  special = true
+  special = false
 }
 
 resource "bitwarden_secret" "crowdsec_registration_token" {
