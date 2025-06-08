@@ -13,6 +13,8 @@ spec:
     - match: Host(`rss.${domain}.${tld}`)
       kind: Rule
       middlewares:
+        - name: bouncer
+          namespace: traefik
         - name: forward-auth
           namespace: traefik
       services:

@@ -10,6 +10,9 @@ spec:
   routes:
     - match: Host(`s3.${domain}.${tld}`) || HostRegexp(`^.+\.s3\.${domain}\.${tld}$`)
       kind: Rule
+      middlewares:
+        - name: bouncer
+          namespace: traefik
       services:
         - kind: Service
           name: rook-ceph-rgw-my-store
@@ -31,6 +34,8 @@ spec:
     - match: Host(`ceph.${domain}.${tld}`)
       kind: Rule
       middlewares:
+        - name: bouncer
+          namespace: traefik
         - name: forward-auth
           namespace: traefik
       services:

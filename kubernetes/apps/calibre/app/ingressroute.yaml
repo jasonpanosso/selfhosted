@@ -13,6 +13,8 @@ spec:
     - match: Host(`calibre.${domain}.${tld}`)
       kind: Rule
       middlewares:
+        - name: bouncer
+          namespace: traefik
         - name: forward-auth
           namespace: traefik
       services:
@@ -22,6 +24,8 @@ spec:
     - match: Host(`books.${domain}.${tld}`)
       kind: Rule
       middlewares:
+        - name: bouncer
+          namespace: traefik
         - name: forward-auth
           namespace: traefik
       services:
