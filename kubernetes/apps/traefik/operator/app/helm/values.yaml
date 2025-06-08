@@ -28,8 +28,9 @@ experimental:
       moduleName: github.com/maxlerebourg/crowdsec-bouncer-traefik-plugin
       version: v1.4.2
 
-annotations:
-  reloader.stakater.com/auto: "true"
+deployment:
+  annotations:
+    reloader.stakater.com/auto: "true"
 volumes:
   - name: crowdsec
     mountPath: /secrets
