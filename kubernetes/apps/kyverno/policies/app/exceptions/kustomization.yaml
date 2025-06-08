@@ -16,4 +16,3 @@ resources:
   - ./allow-otel-collector.yaml
   - ./allow-cilium.yaml
   - ./allow-smartctl-exporter.yaml
-  - ./allow-crowdsec-agent.yaml

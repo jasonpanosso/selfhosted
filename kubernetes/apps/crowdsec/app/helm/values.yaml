@@ -7,19 +7,26 @@ secrets:
     registrationTokenKey: CROWDSEC_REGISTRATION_TOKEN
 
 agent:
-  acquisition:
-    - namespace: traefik
-      podName: traefik-*
-      program: traefik
+  isDeployment: true
+  hostVarLog: false
+  additionalAcquisition:
+    - source: loki
+      log_level: info
+      url: http://loki.observability.svc.cluster.local:3100
+      limit: 1000
+      query: |
+        {service_name="traefik"}
+      labels:
+        type: apache2
   env:
     - name: COLLECTIONS
       value: "crowdsecurity/traefik"
   resources:
     limits:
-      memory: 256Mi
+      memory: 512Mi
     requests:
-      cpu: 100m
-      memory: 256Mi
+      cpu: 250m
+      memory: 512Mi
 
 lapi:
   dashboard:
