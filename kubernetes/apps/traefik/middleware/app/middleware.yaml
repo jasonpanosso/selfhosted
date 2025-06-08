@@ -22,7 +22,7 @@ metadata:
   name: bouncer
 spec:
   plugin:
-    bouncer:
+    crowdsec-bouncer:
       crowdsecLapiKey: ${CROWDSEC_LAPI_KEY}
       enabled: true
       crowdsecMode: stream
