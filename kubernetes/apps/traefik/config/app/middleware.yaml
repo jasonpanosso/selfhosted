@@ -25,7 +25,7 @@ spec:
   plugin:
     crowdsec-bouncer:
       enabled: true
-      crowdsecLapiKeyFile: /secrets/CROWDSEC_LAPI_TOKEN
+      crowdsecLapiKeyFile: /secrets/BOUNCER_KEY_TRAEFIK
       crowdsecMode: stream
       crowdsecLapiHost: crowdsec-service.crowdsec.svc.cluster.local:8080
       crowdsecLapiScheme: http

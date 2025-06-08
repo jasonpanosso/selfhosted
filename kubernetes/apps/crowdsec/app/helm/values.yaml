@@ -38,6 +38,11 @@ lapi:
   env:
     - name: DISABLE_ONLINE_API
       value: "true"
+    - name: BOUNCER_KEY_TRAEFIK
+      valueFrom:
+        secretKeyRef:
+          name: crowdsec
+          key: BOUNCER_KEY_TRAEFIK
   storeCAPICredentialsInSecret: true
   resources:
     limits:
