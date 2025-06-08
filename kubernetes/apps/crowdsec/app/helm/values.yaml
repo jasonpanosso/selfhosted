@@ -38,6 +38,7 @@ lapi:
   env:
     - name: DISABLE_ONLINE_API
       value: "true"
+  storeCAPICredentialsInSecret: true
   resources:
     limits:
       memory: 256Mi
