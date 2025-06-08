@@ -16,6 +16,7 @@ spec:
     tls:
       insecureSkipVerify: true
 ---
+# yaml-language-server: $schema=https://datreeio.github.io/CRDs-catalog/traefik.io/middleware_v1alpha1.json
 apiVersion: traefik.io/v1alpha1
 kind: Middleware
 metadata:
@@ -23,8 +24,13 @@ metadata:
 spec:
   plugin:
     crowdsec-bouncer:
-      crowdsecLapiKey: ${CROWDSEC_LAPI_KEY}
       enabled: true
+      crowdsecLapiKeyFile: /secrets/CROWDSEC_LAPI_TOKEN
       crowdsecMode: stream
       crowdsecLapiHost: crowdsec-service.crowdsec.svc.cluster.local:8080
       crowdsecLapiScheme: http
+      clientTrustedIPs:
+        - 192.168.10.0/24
+        - 192.168.20.0/24
+        - 10.96.0.0/16
+        - 10.244.0.0/16

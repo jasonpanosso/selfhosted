@@ -28,6 +28,11 @@ experimental:
       moduleName: github.com/maxlerebourg/crowdsec-bouncer-traefik-plugin
       version: v1.4.2
 
+volumes:
+  - name: crowdsec
+    mountPath: /secrets
+    type: secret
+
 metrics:
   prometheus:
     service:

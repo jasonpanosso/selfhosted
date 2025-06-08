@@ -28,5 +28,7 @@ spec:
   dependsOn:
     - name: cilium
       namespace: kube-system
+    - name: secret-store
+      namespace: external-secrets
     - name: prometheus-operator-crds
       namespace: observability

@@ -6,4 +6,4 @@ kind: Kustomization
 resources:
   - ./certificate.yaml
   - ./tlsstore.yaml
-  - ./externalsecret.yaml
+  - ./middleware.yaml
