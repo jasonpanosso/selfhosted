@@ -10,3 +10,4 @@ components:
 resources:
   - ./operator/ks.yaml
   - ./config/ks.yaml
+  - ./middleware/ks.yaml

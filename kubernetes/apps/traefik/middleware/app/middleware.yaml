@@ -15,3 +15,16 @@ spec:
       - Remote-Email
     tls:
       insecureSkipVerify: true
+---
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: bouncer
+spec:
+  plugin:
+    bouncer:
+      crowdsecLapiKey: ${CROWDSEC_LAPI_KEY}
+      enabled: true
+      crowdsecMode: stream
+      crowdsecLapiHost: crowdsec-service.crowdsec.svc.cluster.local:8080
+      crowdsecLapiScheme: http

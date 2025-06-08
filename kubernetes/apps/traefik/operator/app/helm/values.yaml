@@ -14,6 +14,20 @@ service:
   enabled: true
   annotations:
     lbipam.cilium.io/ips: 192.168.20.10
+
+# debug log for crowdsec
+logs:
+  general:
+    level: INFO
+  access:
+    enabled: true
+
+experimental:
+  plugins:
+    crowdsec:
+      moduleName: github.com/maxlerebourg/crowdsec-bouncer-traefik-plugin
+      version: v1.4.2
+
 metrics:
   prometheus:
     service:
