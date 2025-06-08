@@ -58,11 +58,7 @@ lapi:
       storageClassName: rook-ceph-block
       size: 1Gi
     config:
-      enabled: true
-      accessModes:
-        - ReadWriteOnce
-      storageClassName: rook-ceph-block
-      size: 100Mi
+      enabled: false
 
 config:
   parsers:
