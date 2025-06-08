@@ -21,6 +21,8 @@ agent:
   env:
     - name: COLLECTIONS
       value: "crowdsecurity/traefik"
+  deploymentAnnotations:
+    reloader.stakater.com/auto: "true"
   resources:
     limits:
       memory: 512Mi
@@ -29,6 +31,8 @@ agent:
       memory: 512Mi
 
 lapi:
+  deployAnnotations:
+    reloader.stakater.com/auto: "true"
   dashboard:
     enabled: false
   env:
