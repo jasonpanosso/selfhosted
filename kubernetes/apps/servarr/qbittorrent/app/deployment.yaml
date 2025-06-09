@@ -61,18 +61,19 @@ spec:
             - name: TZ
               value: Etc/UTC
             - name: FIREWALL_DEBUG
-              value: "on"
+              value: "off"
             - name: FIREWALL_INPUT_PORTS
               value: "8080"
+            - name: FIREWALL_OUTBOUND_SUBNETS
+              value: 10.96.0.0/16,10.244.0.0/16
             - name: VPN_TYPE
               value: wireguard
             - name: PUID
               value: "65534"
             - name: PGID
               value: "65534"
-            # https://github.com/qdm12/gluetun/issues/2630
-            - name: DNS_ADDRESS
-              value: 1.1.1.1
+            - name: DNS_KEEP_NAMESERVER
+              value: on
             - name: DOT
               value: off
           envFrom:
