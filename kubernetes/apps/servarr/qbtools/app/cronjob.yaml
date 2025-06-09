@@ -66,6 +66,8 @@ spec:
                 - orphaned
                 - --exclude-pattern
                 - "*_unpackerred*"
+                - --exclude-pattern
+                - "*/manual/*"
                 # - --dry-run
             # - <<: *container
             #   name: reannounce
