@@ -23,6 +23,8 @@ spec:
   dependsOn:
     - name: traefik
       namespace: *namespace
+    - name: crowdsec
+      namespace: crowdsec
     - name: clusterissuer
       namespace: cert-manager
     - name: cert-manager
