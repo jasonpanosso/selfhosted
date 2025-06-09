@@ -47,6 +47,8 @@ spec:
               value: "false"
             - name: AUTOBRR__LOG_LEVEL
               value: "INFO"
+            - name: AUTOBRR__DATABASE_TYPE
+              value: postgres
             - name: AUTOBRR__SESSION_SECRET
               valueFrom:
                 secretKeyRef:
@@ -69,7 +71,7 @@ spec:
                   name: *app
                   key: AUTOBRR_DB_PASSWORD
             - name: AUTOBRR__POSTGRES_SSLMODE
-              value: disabled
+              value: disable
             - name: AUTOBRR__OIDC_ENABLED
               value: "true"
             - name: AUTOBRR__OIDC_ISSUER
