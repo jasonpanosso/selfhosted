@@ -29,6 +29,7 @@ spec:
       crowdsecMode: stream
       crowdsecLapiHost: crowdsec-service.crowdsec.svc.cluster.local:8080
       crowdsecLapiScheme: http
+      updateIntervalSeconds: "30"
       clientTrustedIPs:
         - 192.168.10.0/24
         - 192.168.20.0/24
