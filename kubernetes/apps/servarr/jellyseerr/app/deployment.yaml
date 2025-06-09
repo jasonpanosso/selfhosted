@@ -29,7 +29,6 @@ spec:
           type: RuntimeDefault
       containers:
         - image: ghcr.io/fallenbagel/jellyseerr:2.5.2
-          imagePullPolicy: Always
           name: *app
           resources:
             requests:

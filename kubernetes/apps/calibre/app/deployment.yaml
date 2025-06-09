@@ -65,7 +65,6 @@ spec:
               subPath: library
               mountPath: /calibre-library
         - image: ghcr.io/calibrain/calibre-web-automated-book-downloader:sha-690c2b6
-          imagePullPolicy: Always
           name: calibre-web-automated-book-downloader
           env:
             - name: USE_CF_BYPASS
