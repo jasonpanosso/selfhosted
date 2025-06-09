@@ -16,4 +16,3 @@ resource "bitwarden_secret" "jellyfin_db_password" {
   project_id = bitwarden_project.this.id
   note       = "Postgres database password for the jellyfin user"
 }
-
