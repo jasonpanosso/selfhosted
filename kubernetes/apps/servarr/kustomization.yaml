@@ -18,3 +18,4 @@ resources:
   - ./qbtools/ks.yaml
   - ./jellyfin/ks.yaml
   - ./jellyseerr/ks.yaml
+  - ./cross-seed/ks.yaml
