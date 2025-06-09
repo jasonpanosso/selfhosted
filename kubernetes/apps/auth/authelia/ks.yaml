@@ -12,7 +12,7 @@ spec:
   path: ./kubernetes/apps/auth/authelia/app
   interval: 1h
   retryInterval: 2m
-  timeout: 15m
+  timeout: 5m
   prune: true
   wait: false
   healthChecks:

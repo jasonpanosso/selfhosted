@@ -20,7 +20,7 @@ metadata:
   name: rook-ceph-operator
 spec:
   interval: 1h
-  timeout: 20m
+  timeout: 5m
   chartRef:
     kind: OCIRepository
     name: rook-ceph
