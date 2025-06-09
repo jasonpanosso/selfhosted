@@ -28,3 +28,5 @@ spec:
   dependsOn:
     - name: loki
       namespace: observability
+    - name: db
+      namespace: db

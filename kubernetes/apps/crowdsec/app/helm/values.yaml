@@ -47,6 +47,16 @@ lapi:
         secretKeyRef:
           name: crowdsec
           key: BOUNCER_KEY_TRAEFIK
+    - name: DB_USERNAME
+      valueFrom:
+        secretKeyRef:
+          name: crowdsec
+          key: DB_USERNAME
+    - name: DB_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: crowdsec
+          key: DB_PASSWORD
   storeCAPICredentialsInSecret: true
   resources:
     limits:
@@ -56,11 +66,7 @@ lapi:
       memory: 256Mi
   persistentVolume:
     data:
-      enabled: true
-      accessModes:
-        - ReadWriteOnce
-      storageClassName: rook-ceph-block
-      size: 1Gi
+      enabled: false
     config:
       enabled: false
   metrics:
@@ -119,3 +125,11 @@ config:
             - "192.168.20.0/24"
             - "10.96.0.0/16"
             - "10.244.0.0/16"
+    db_config:
+      type: postgresql
+      user: "$${DB_USERNAME}"
+      password: "$${DB_PASSWORD}"
+      db_name: crowdsec
+      host: pgcluster-rw.db.svc.cluster.local
+      port: 5432
+      sslmode: disable

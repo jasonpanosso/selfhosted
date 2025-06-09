@@ -55,5 +55,10 @@ spec:
         login: true
         passwordSecret:
           name: jellyseerr-db
+      - name: crowdsec
+        ensure: present
+        login: true
+        passwordSecret:
+          name: crowdsec-db
   monitoring:
     enablePodMonitor: true

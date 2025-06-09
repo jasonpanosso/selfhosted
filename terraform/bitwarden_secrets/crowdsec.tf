@@ -33,3 +33,22 @@ resource "bitwarden_secret" "crowdsec_bouncer_key_traefik" {
   project_id = bitwarden_project.this.id
   note       = "Crowdsec API key for Traefik bouncer"
 }
+
+resource "bitwarden_secret" "crowdsec_db_username" {
+  key        = "CROWDSEC_DB_USERNAME"
+  value      = "crowdsec"
+  project_id = bitwarden_project.this.id
+  note       = "Postgres database username for the crowdsec user"
+}
+
+resource "random_password" "crowdsec_db_password" {
+  length  = 128
+  special = true
+}
+
+resource "bitwarden_secret" "crowdsec_db_password" {
+  key        = "CROWDSEC_DB_PASSWORD"
+  value      = random_password.crowdsec_db_password.result
+  project_id = bitwarden_project.this.id
+  note       = "Postgres database password for the crowdsec user"
+}
