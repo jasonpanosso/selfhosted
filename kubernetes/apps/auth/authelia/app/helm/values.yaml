@@ -127,6 +127,13 @@ configMap:
             path: /config/secrets/OIDC_JWKS_PRIVATE_KEY
       clients:
         - client_id: autobrr
+          redirect_uris:
+            - https://autobrr.${domain}.${tld}/api/auth/oidc/callback
+          scopes:
+            - openid
+            - groups
+            - email
+            - profile
           client_secret:
             path: /config/secrets/OIDC_AUTOBRR_HASHED_SECRET
       lifespans:
