@@ -26,9 +26,12 @@ spec:
     crowdsec-bouncer:
       enabled: true
       crowdsecLapiKeyFile: /secrets/BOUNCER_KEY_TRAEFIK
-      crowdsecMode: stream
+      crowdsecMode: live
       crowdsecLapiHost: crowdsec-service.crowdsec.svc.cluster.local:8080
       crowdsecLapiScheme: http
+      crowdsecAppsecEnabled: true
+      crowdsecAppsecHost: crowdsec-appsec-service.crowdsec.svc.cluster.local:7422
+      crowdsecAppsecUnreachableBlock: false
       updateIntervalSeconds: "30"
       clientTrustedIPs:
         - 192.168.10.0/24
