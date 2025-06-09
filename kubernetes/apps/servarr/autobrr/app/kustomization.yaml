@@ -1,0 +1,22 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/kustomization
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ./externalsecret.yaml
+  - ./deployment.yaml
+  - ./service.yaml
+  - ./servicemonitor.yaml
+  - ./ingressroute.yaml
+  - ./prometheusrule.yaml
+
+configMapGenerator:
+  - name: autobrr-loki-rules
+    files:
+      - autobrr.yaml=./resources/lokirule.yaml
+    options:
+      labels:
+        loki_rule: "true"
+      annotations:
+        kustomize.toolkit.fluxcd.io/substitute: disabled

@@ -60,5 +60,10 @@ spec:
         login: true
         passwordSecret:
           name: crowdsec-db
+      - name: autobrr
+        ensure: present
+        login: true
+        passwordSecret:
+          name: autobrr-db
   monitoring:
     enablePodMonitor: true

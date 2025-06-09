@@ -1,0 +1,119 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/master-standalone/deployment-apps-v1.json
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: &app autobrr
+  labels:
+    app.kubernetes.io/name: *app
+  annotations:
+    reloader.stakater.com/auto: "true"
+spec:
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: *app
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: *app
+    spec:
+      securityContext:
+        runAsUser: 65534
+        runAsGroup: 65534
+        fsGroup: 65534
+        fsGroupChangePolicy: OnRootMismatch
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - image: ghcr.io/autobrr/autobrr:v1.62.0@sha256:e9bf07f15c36555f4c7d28df44f137d420d6188bab0a53eb7dfbdcb62238caa4
+          name: *app
+          env:
+            - name: TZ
+              value: Etc/UTC
+            - name: AUTOBRR__HOST
+              value: 0.0.0.0
+            - name: AUTOBRR__PORT
+              value: "80"
+            - name: AUTOBRR__METRICS_ENABLED
+              value: "true"
+            - name: AUTOBRR__METRICS_HOST
+              value: 0.0.0.0
+            - name: AUTOBRR__METRICS_PORT
+              value: "9094"
+            - name: AUTOBRR__CHECK_FOR_UPDATES
+              value: "false"
+            - name: AUTOBRR__LOG_LEVEL
+              value: "INFO"
+            - name: AUTOBRR__SESSION_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: *app
+                  key: AUTOBRR_SESSION_SECRET
+            - name: AUTOBRR__POSTGRES_HOST
+              value: pgcluster-rw.db.svc.cluster.local
+            - name: AUTOBRR__POSTGRES_PORT
+              value: "5432"
+            - name: AUTOBRR__POSTGRES_DATABASE
+              value: autobrr
+            - name: AUTOBRR__POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: *app
+                  key: AUTOBRR_DB_USERNAME
+            - name: AUTOBRR__POSTGRES_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: *app
+                  key: AUTOBRR_DB_PASSWORD
+            - name: AUTOBRR__POSTGRES_SSLMODE
+              value: disabled
+            - name: AUTOBRR__OIDC_ENABLED
+              value: "true"
+            - name: AUTOBRR__OIDC_ISSUER
+              value: https://auth.needless.info
+            - name: AUTOBRR__OIDC_CLIENT_ID
+              value: "autobrr"
+            - name: AUTOBRR__OIDC_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: *app
+                  key: AUTOBRR_OIDC_PASSWORD
+            - name: AUTOBRR__OIDC_REDIRECT_URL
+              value: https://autobrr.${domain}.${tld}/api/auth/oidc/callback
+            - name: AUTOBRR__OIDC_DISABLE_BUILT_IN_LOGIN
+              value: "true"
+          ports:
+            - containerPort: 80
+              name: http
+            - containerPort: 9094
+              name: metrics
+          livenessProbe: &probes
+            httpGet:
+              path: /api/healthz/liveness
+              port: 80
+            initialDelaySeconds: 0
+            periodSeconds: 15
+            timeoutSeconds: 1
+            failureThreshold: 3
+          readinessProbe: *probes
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              memory: 256Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: [ALL]
+          volumeMounts:
+            - name: config
+              mountPath: /config
+      volumes:
+        - name: config
+          persistentVolumeClaim:
+            claimName: *app
