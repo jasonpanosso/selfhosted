@@ -24,30 +24,6 @@ spec:
         fsGroup: 65534
         fsGroupChangePolicy: OnRootMismatch
       initContainers:
-        - image: docker.io/library/busybox:stable
-          imagePullPolicy: Always
-          name: init-files
-          command:
-            - "/bin/sh"
-            - "-c"
-            - |
-              mkdir -p /config/qBittorrent && \
-                cp -L /qbt-conf/qBittorrent.conf /config/qBittorrent
-          securityContext:
-            runAsUser: 65534
-            runAsGroup: 65534
-            allowPrivilegeEscalation: false
-            readOnlyRootFilesystem: true
-            runAsNonRoot: true
-            seccompProfile:
-              type: RuntimeDefault
-            capabilities:
-              drop: [ALL]
-          volumeMounts:
-            - name: qbittorrent-conf
-              mountPath: /qbt-conf
-            - name: config
-              mountPath: /config
         # gluetun sidecar
         - image: ghcr.io/qdm12/gluetun:v3.40.0
           restartPolicy: Always
@@ -155,9 +131,6 @@ spec:
               mountPath: /data/downloads
               subPath: downloads
       volumes:
-        - name: qbittorrent-conf
-          configMap:
-            name: qbittorrent-conf
         - name: media
           persistentVolumeClaim:
             claimName: media
