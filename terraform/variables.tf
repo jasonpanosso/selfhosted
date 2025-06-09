@@ -91,12 +91,6 @@ variable "authelia_oidc_jwks_private_key" {
   sensitive   = true
 }
 
-variable "authelia_oidc_test_secret" {
-  description = "PBKDF2 hashed private key for Authelia OIDC test"
-  type        = string
-  sensitive   = true
-}
-
 variable "pushover_user_key" {
   description = "User key for Pushover(push notifications)"
   type        = string

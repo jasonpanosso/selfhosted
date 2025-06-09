@@ -32,9 +32,8 @@ module "bitwarden_secrets" {
   s3_access_key_id     = digitalocean_spaces_key.this.access_key
   s3_secret_access_key = digitalocean_spaces_key.this.secret_key
 
-  # how can I generate these zz
+  # how can I generate this zz
   authelia_oidc_jwks_private_key = var.authelia_oidc_jwks_private_key
-  authelia_oidc_test_secret      = var.authelia_oidc_test_secret
 
   smtp_username = var.smtp_username
   smtp_password = var.smtp_password

@@ -14,6 +14,11 @@ terraform {
       source  = "hashicorp/random"
       version = "3.7.2"
     }
+
+    htpasswd = {
+      source  = "loafoe/htpasswd"
+      version = "1.2.1"
+    }
   }
 }
 
@@ -32,3 +37,5 @@ provider "bitwarden" {
 }
 
 provider "random" {}
+
+provider "htpasswd" {}

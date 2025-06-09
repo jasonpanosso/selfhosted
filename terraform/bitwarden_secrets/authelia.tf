@@ -65,13 +65,6 @@ resource "bitwarden_secret" "authelia_oidc_hmac_secret" {
   note       = "OIDC HMAC secret for authelia"
 }
 
-resource "bitwarden_secret" "authelia_oidc_test_secret" {
-  key        = "AUTHELIA_OIDC_TEST_SECRET"
-  value      = var.authelia_oidc_test_secret
-  project_id = bitwarden_project.this.id
-  note       = "OIDC test secret for authelia"
-}
-
 resource "random_password" "redis_password" {
   length  = 32
   special = true

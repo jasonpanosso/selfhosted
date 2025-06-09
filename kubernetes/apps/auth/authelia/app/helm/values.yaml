@@ -12,12 +12,6 @@ configMap:
   access_control:
     default_policy: deny
     rules:
-      - domain:
-          - calibre.${domain}.${tld}
-          - books.${domain}.${tld}
-        subject: group:calibre_users
-        policy: one_factor
-
       # *arr has no support for custom auth, have to bypass for api routes
       # /api routes are protected by API tokens
       - domain:
@@ -26,10 +20,6 @@ configMap:
           - sonarr.${domain}.${tld}
         resources:
           - "^/api.*$"
-        policy: bypass
-
-      # do not block authelia
-      - domain: auth.${domain}.${tld}
         policy: bypass
 
       - domain: "*.${domain}.${tld}"
@@ -70,20 +60,19 @@ configMap:
       disabled: true
     postgres:
       enabled: true
-      address: "tcp://pgcluster-rw.db:5432"
-      database: "authelia"
-      username: "authelia"
+      address: tcp://pgcluster-rw.db.svc.cluster.local:5432
+      database: authelia
       ssl:
         mode: disable
       password:
         disabled: true
 
   notifier:
-    disable_startup_check: true
+    disable_startup_check: false
     smtp:
       enabled: true
       address: submission://smtp.gmail.com:587
-      identifier: "${domain}.${tld}"
+      identifier: ${domain}.${tld}
       subject: "[Authelia] {title}"
       password:
         disabled: true
@@ -133,13 +122,13 @@ configMap:
       hmac_secret:
         disabled: true
       jwks:
-        - algorithm: "RS256"
+        - algorithm: RS256
           key:
             path: /config/secrets/OIDC_JWKS_PRIVATE_KEY
       clients:
-        - client_id: "test"
+        - client_id: autobrr
           client_secret:
-            path: /config/secrets/OIDC_TEST_SECRET
+            path: /config/secrets/OIDC_AUTOBRR_HASHED_SECRET
       lifespans:
         access_token: 1h
         authorize_code: 1m
@@ -195,6 +184,11 @@ pod:
       value: /config/secrets/LDAP_PASSWORD
     - name: AUTHELIA_STORAGE_ENCRYPTION_KEY_FILE
       value: /config/secrets/ENCRYPTION_KEY
+    - name: AUTHELIA_STORAGE_POSTGRES_USERNAME
+      valueFrom:
+        secretKeyRef:
+          name: authelia
+          key: POSTGRES_USERNAME
     - name: AUTHELIA_STORAGE_POSTGRES_PASSWORD_FILE
       value: /config/secrets/POSTGRES_PASSWORD
     - name: AUTHELIA_IDENTITY_PROVIDERS_OIDC_HMAC_SECRET_FILE
@@ -202,40 +196,15 @@ pod:
     - name: AUTHELIA_NOTIFIER_SMTP_PASSWORD_FILE
       value: /config/secrets/SMTP_PASSWORD
     - name: AUTHELIA_NOTIFIER_SMTP_USERNAME
-      value: /config/secrets/SMTP_USERNAME
+      valueFrom:
+        secretKeyRef:
+          name: authelia
+          key: SMTP_USERNAME
   extraVolumeMounts:
     - name: secret
-      readOnly: true
       mountPath: /config/secrets
+      readOnly: true
   extraVolumes:
     - name: secret
-      projected:
-        sources:
-          - secret:
-              name: authelia
-              items:
-                - key: JWT_TOKEN
-                  path: JWT_TOKEN
-                - key: SESSION_KEY
-                  path: SESSION_KEY
-                - key: ENCRYPTION_KEY
-                  path: ENCRYPTION_KEY
-                - key: OIDC_HMAC_SECRET
-                  path: OIDC_HMAC_SECRET
-                - key: OIDC_JWKS_PRIVATE_KEY
-                  path: OIDC_JWKS_PRIVATE_KEY
-                - key: OIDC_TEST_SECRET
-                  path: OIDC_TEST_SECRET
-                - key: LDAP_ADMIN_PASSWORD
-                  path: LDAP_PASSWORD
-                - key: REDIS_PASSWORD
-                  path: REDIS_PASSWORD
-                - key: SMTP_PASSWORD
-                  path: SMTP_PASSWORD
-                - key: SMTP_USERNAME
-                  path: SMTP_USERNAME
-          - secret:
-              name: authelia-db
-              items:
-                - key: password
-                  path: POSTGRES_PASSWORD
+      secret:
+        secretName: authelia
