@@ -1,0 +1,23 @@
+---
+# yaml-language-server: $schema=https://datreeio.github.io/CRDs-catalog/traefik.io/ingressroute_v1alpha1.json
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: &app thelounge
+  labels:
+    app.kubernetes.io/name: *app
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`irc.${domain}.${tld}`)
+      kind: Rule
+      middlewares:
+        - name: bouncer
+          namespace: traefik
+        - name: forward-auth
+          namespace: traefik
+      services:
+        - kind: Service
+          name: *app
+          port: 80
