@@ -29,6 +29,7 @@ extraEnv:
   MODRINTH_DEFAULT_VERSION_TYPE: "release"
   MODRINTH_EXCLUDE_FILES: |
     freecam
+    simple-voice-chat
 persistence:
   dataDir:
     enabled: true
