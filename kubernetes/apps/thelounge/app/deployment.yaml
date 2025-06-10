@@ -30,7 +30,7 @@ spec:
         - image: ghcr.io/thelounge/thelounge:4.4.3@sha256:c2aa0916203b298ffaf3a36c4eb60ef73c1006448d430e218d37840472e84e50
           name: *app
           ports:
-            - containerPort: 9000
+            - containerPort: 80
               name: http
           env:
             - name: TZ
@@ -40,7 +40,7 @@ spec:
           livenessProbe: &probes
             httpGet:
               path: /
-              port: 9000
+              port: 80
             initialDelaySeconds: 5
             periodSeconds: 15
           readinessProbe: *probes
