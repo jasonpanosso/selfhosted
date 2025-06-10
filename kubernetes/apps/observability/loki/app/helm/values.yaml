@@ -16,6 +16,7 @@ loki:
     chunk_encoding: snappy
   limits_config:
     allow_structured_metadata: true
+    volume_enabled: true
     retention_period: 10d
   storage:
     type: filesystem
