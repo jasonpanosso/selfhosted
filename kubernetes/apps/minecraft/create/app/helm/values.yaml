@@ -25,6 +25,10 @@ startupProbe:
   enabled: true
 extraEnv:
   TZ: America/Detroit
+  MODRINTH_MODPACK: "https://modrinth.com/modpack/just-create-smp-re"
+  MODRINTH_DEFAULT_VERSION_TYPE: "release"
+  MODRINTH_EXCLUDE_FILES: |
+    freecam
 persistence:
   dataDir:
     enabled: true
@@ -32,10 +36,10 @@ persistence:
 minecraftServer:
   eula: true
   version: 1.21.1
-  type: AUTO_CURSEFORGE
+  type: MODRINTH
   overrideServerProperties: true
   jvmXXOpts: "-XX:MaxRAMPercentage=75"
-  memory: 4096M
+  memory: 4G
   difficulty: normal
   spawnProtection: 0
   gameMode: survival
@@ -46,13 +50,5 @@ minecraftServer:
   motd: "meep meep"
   worldSaveName: world
   viewDistance: 12
-  autoCurseForge:
-    apiKey:
-      existingSecret: *app
-      secretKey: CURSEFORGE_API_TOKEN
-    pageUrl: https://www.curseforge.com/minecraft/modpacks/just-create-smp
-    fileId: "6550347"
-    excludeMods:
-      - 416089 # simple voice chat
   rcon:
     enabled: true

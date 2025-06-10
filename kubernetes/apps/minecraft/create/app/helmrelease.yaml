@@ -20,6 +20,7 @@ metadata:
   name: &app minecraft-create
 spec:
   interval: 1h
+  timeout: 10m0s
   chartRef:
     kind: OCIRepository
     name: minecraft
