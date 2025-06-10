@@ -8,3 +8,6 @@ resources:
   - ./gitrepository.yaml
   - ./ks.yaml
   - ./prometheusrule.yaml
+  - ./externalsecret.yaml
+  - ./receiver.yaml
+  - ./ingressroute.yaml

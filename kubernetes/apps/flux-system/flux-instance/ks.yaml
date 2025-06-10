@@ -34,3 +34,5 @@ spec:
       namespace: *namespace
     - name: prometheus-operator-crds
       namespace: observability
+    - name: secret-store
+      namespace: external-secrets
