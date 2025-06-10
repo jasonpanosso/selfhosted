@@ -7,3 +7,10 @@ resources:
   - ./deployment.yaml
   - ./service.yaml
   - ./ingressroute.yaml
+
+configMapGenerator:
+  - name: thelounge
+    files:
+      - config.js=./resources/config.js
+    options:
+      disableNameSuffixHash: true

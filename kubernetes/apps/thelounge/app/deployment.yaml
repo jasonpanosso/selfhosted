@@ -57,7 +57,14 @@ spec:
           volumeMounts:
             - name: config
               mountPath: /config
+            - name: configjs
+              mountPath: /config/config.js
+              subPath: config.js
+              readOnly: true
       volumes:
         - name: config
           persistentVolumeClaim:
             claimName: *app
+        - name: configjs
+          configMap:
+            name: *app
