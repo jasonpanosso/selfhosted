@@ -32,6 +32,8 @@ module "bitwarden_secrets" {
   s3_access_key_id     = digitalocean_spaces_key.this.access_key
   s3_secret_access_key = digitalocean_spaces_key.this.secret_key
 
+  curseforge_api_token = var.curseforge_api_token
+
   # how can I generate this zz
   authelia_oidc_jwks_private_key = var.authelia_oidc_jwks_private_key
 
