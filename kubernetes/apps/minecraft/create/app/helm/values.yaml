@@ -42,6 +42,7 @@ minecraftServer:
   jvmXXOpts: "-XX:MaxRAMPercentage=75"
   memory: 4G
   difficulty: normal
+  levelType: normal
   spawnProtection: 0
   gameMode: survival
   pvp: false
