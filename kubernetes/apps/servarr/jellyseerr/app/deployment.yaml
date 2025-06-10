@@ -28,7 +28,7 @@ spec:
         seccompProfile:
           type: RuntimeDefault
       containers:
-        - image: ghcr.io/fallenbagel/jellyseerr:2.5.2
+        - image: ghcr.io/fallenbagel/jellyseerr:2.6.0
           name: *app
           resources:
             requests:
