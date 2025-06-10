@@ -6,6 +6,8 @@ metadata:
   name: &app thelounge
   labels:
     app.kubernetes.io/name: *app
+  annotations:
+    reloader.stakater.com/auto: "true"
 spec:
   strategy:
     type: Recreate
