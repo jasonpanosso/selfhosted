@@ -53,6 +53,7 @@ spec:
           securityContext:
             allowPrivilegeEscalation: false
             readOnlyRootFilesystem: true
+            capabilities: {drop: [ALL]}
           volumeMounts:
             - name: config
               mountPath: /data
