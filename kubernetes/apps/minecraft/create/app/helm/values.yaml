@@ -1,0 +1,58 @@
+---
+fullnameOverride: &app minecraft-create
+image:
+  repository: ghcr.io/itzg/minecraft-server
+  tag: 2025.5.1@sha256:85e861124ca87aeef059e2c8828e16fa106c1af263a82bb03a09b8895af81034
+resources:
+  requests:
+    cpu: 200m
+    memory: 4Gi
+  limits:
+    cpu: 2000m
+    memory: 4Gi
+securityContext:
+  runAsUser: 65534
+  runAsGroup: 65534
+  runAsNonRoot: true
+  fsGroup: 65534
+  seccompProfile:
+    type: RuntimeDefault
+livenessProbe:
+  initialDelaySeconds: 30
+readinessProbe:
+  initialDelaySeconds: 30
+startupProbe:
+  enabled: true
+extraEnv:
+  TZ: America/Detroit
+persistence:
+  dataDir:
+    enabled: true
+    existingClaim: *app
+minecraftServer:
+  eula: true
+  version: 1.21.1
+  type: AUTO_CURSEFORGE
+  overrideServerProperties: true
+  jvmXXOpts: "-XX:MaxRAMPercentage=75"
+  memory: 4096M
+  difficulty: normal
+  spawnProtection: 0
+  gameMode: survival
+  pvp: false
+  onlineMode: true
+  whitelist: "Jayce"
+  ops: "Jayce"
+  motd: "meep meep"
+  worldSaveName: world
+  viewDistance: 12
+  autoCurseForge:
+    apiKey:
+      existingSecret: *app
+      secretKey: CURSEFORGE_API_TOKEN
+    pageUrl: https://www.curseforge.com/minecraft/modpacks/just-create-smp
+    fileId: "6550347"
+    excludeMods:
+      - 416089 # simple voice chat
+  rcon:
+    enabled: true

@@ -7,6 +7,13 @@ ports:
         scheme: https
   websecure:
     asDefault: true
+  minecraft-tcp:
+    address: ":25565"
+    containerPort: 25565
+  minecraft-udp:
+    address: ":25565/udp"
+    containerPort: 25565
+    protocol: UDP
 providers:
   kubernetesCRD:
     allowCrossNamespace: true

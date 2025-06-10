@@ -1,0 +1,18 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/kustomization
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ./externalsecret.yaml
+  - ./helmrelease.yaml
+  - ./ingressroutetcp.yaml
+  - ./ingressrouteudp.yaml
+
+configMapGenerator:
+  - name: minecraft-create-values
+    files:
+      - values.yaml=./helm/values.yaml
+
+configurations:
+  - ./helm/kustomizeconfig.yaml
