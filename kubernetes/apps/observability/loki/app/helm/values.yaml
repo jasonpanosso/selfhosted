@@ -46,7 +46,7 @@ singleBinary:
     storageClass: rook-ceph-block
     size: 40Gi
 gateway:
-  replicas: 0
+  replicas: 1
 backend:
   replicas: 0
 read:
