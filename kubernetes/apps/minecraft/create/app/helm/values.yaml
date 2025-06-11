@@ -33,11 +33,14 @@ persistence:
   dataDir:
     enabled: true
     existingClaim: *app
+extraEnv:
+  USE_MEOWICE_FLAGS: "true"
 minecraftServer:
   eula: true
   version: 1.21.1
   type: MODRINTH
   overrideServerProperties: true
+  icon: https://i.imgur.com/xCwev3X.png
   jvmXXOpts: "-XX:MaxRAMPercentage=75"
   memory: ""
   serviceType: LoadBalancer
