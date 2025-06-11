@@ -61,13 +61,18 @@ spec:
         detectors: [env]
         timeout: 2s
         override: false
-      # have to set cluster as an attribute, not resource for kube-prometheus-stack
-      # rules/alerts/dashboards due to resource flattening to attributes upon
-      # export to prometheus, overwriting the cnpg cluster label
-      attributes/cluster_default:
+      attributes/defaults:
         actions:
+          # have to set cluster as an attribute, not resource for
+          # kube-prometheus-stack rules/alerts/dashboards due to resource
+          # flattening to attributes upon export to prometheus, overwriting the
+          # cnpg cluster label
           - key: cluster
             value: prod
+            action: insert
+          # prometheus operator default
+          - key: pod
+            from_attribute: __meta_kubernetes_pod_name
             action: insert
       k8sattributes:
         filter:
@@ -174,7 +179,7 @@ spec:
             - memory_limiter
             - k8sattributes
             - resourcedetection/env
-            - attributes/cluster_default
+            - attributes/defaults
             - batch
           receivers:
             - prometheus
