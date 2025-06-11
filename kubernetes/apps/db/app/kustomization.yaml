@@ -9,3 +9,4 @@ resources:
   - ./objectstore.yaml
   - ./database.yaml
   - ./scheduledbackup.yaml
+  - ./prometheusrule.yaml

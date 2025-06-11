@@ -8,6 +8,8 @@ metadata:
     # https://github.com/cloudnative-pg/cloudnative-pg/issues/5778#issuecomment-2782198691
     cnpg.io/skipEmptyWalArchiveCheck: "enabled"
 spec:
+  # https://github.com/cloudnative-pg/cloudnative-pg/issues/7658
+  backup: {}
   instances: 3
   storage:
     size: 20Gi
