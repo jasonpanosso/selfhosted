@@ -3,7 +3,7 @@
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: OCIRepository
 metadata:
-  name: minecraft
+  name: minecraft-create
 spec:
   interval: 5m
   layerSelector:
@@ -23,7 +23,7 @@ spec:
   timeout: 10m0s
   chartRef:
     kind: OCIRepository
-    name: minecraft
+    name: *app
   install:
     remediation:
       retries: -1
@@ -34,7 +34,3 @@ spec:
   valuesFrom:
     - kind: ConfigMap
       name: minecraft-create-values
-    - kind: Secret
-      name: *app
-      valuesKey: MINECRAFT_CREATE_RCON_PASSWORD
-      targetPath: minecraftServer.rcon.password

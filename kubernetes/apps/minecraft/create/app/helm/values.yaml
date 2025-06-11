@@ -40,6 +40,7 @@ minecraftServer:
   overrideServerProperties: true
   jvmXXOpts: "-XX:MaxRAMPercentage=75"
   memory: 4G
+  serviceType: LoadBalancer
   difficulty: normal
   levelType: normal
   spawnProtection: 0
@@ -53,7 +54,8 @@ minecraftServer:
   viewDistance: 12
   rcon:
     enabled: true
-  serviceType: LoadBalancer
+    existingSecret: *app
+    secretKey: MINECRAFT_CREATE_RCON_PASSWORD
 
 serviceAnnotations:
   lbipam.cilium.io/ips: 192.168.20.20
