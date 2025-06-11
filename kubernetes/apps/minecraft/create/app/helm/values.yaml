@@ -54,3 +54,9 @@ minecraftServer:
   viewDistance: 12
   rcon:
     enabled: true
+  serviceType: LoadBalancer
+
+serviceAnnotations:
+  lbipam.cilium.io/ips: 192.168.20.11
+deploymentAnnotations:
+  reloader.stakater.com/auto: "true"

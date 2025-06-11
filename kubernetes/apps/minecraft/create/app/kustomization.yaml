@@ -6,8 +6,6 @@ kind: Kustomization
 resources:
   - ./externalsecret.yaml
   - ./helmrelease.yaml
-  - ./ingressroutetcp.yaml
-  - ./ingressrouteudp.yaml
 
 configMapGenerator:
   - name: minecraft-create-values
