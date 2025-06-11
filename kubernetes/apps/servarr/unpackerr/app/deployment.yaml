@@ -47,8 +47,9 @@ spec:
                   key: token
           resources:
             requests:
-              cpu: 250m
-              memory: 256Mi
+              cpu: 10m
+              memory: 64Mi
+            # absurd memory spikes when unarchiving
             limits:
               memory: 2048Mi
           securityContext:

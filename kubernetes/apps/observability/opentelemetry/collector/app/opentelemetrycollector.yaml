@@ -190,13 +190,13 @@ spec:
   serviceAccount: otel-collector-opentelemetry-collector
   resources:
     limits:
-      memory: 512Mi
+      memory: 256Mi
     requests:
-      cpu: 200m
-      memory: 512Mi
+      cpu: 100m
+      memory: 256Mi
   env:
     - name: GOMEMLIMIT
-      value: 500MiB
+      value: 250MiB
     - name: OTEL_RESOURCE_ATTRIBUTES
       value: "k8s.cluster.name=prod,cluster=prod"
   config:
@@ -351,13 +351,13 @@ spec:
   serviceAccount: otel-collector-opentelemetry-collector
   resources:
     limits:
-      memory: 1Gi
+      memory: 512Mi
     requests:
       cpu: 500m
-      memory: 1Gi
+      memory: 512Mi
   env:
     - name: GOMEMLIMIT
-      value: 1000MiB
+      value: 500MiB
   config:
     exporters:
       debug: {}

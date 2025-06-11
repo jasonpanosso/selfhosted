@@ -32,10 +32,10 @@ lldap:
         passwordKey: SMTP_PASSWORD
 resources:
   requests:
-    cpu: 250m
-    memory: 512Mi
+    cpu: 100m
+    memory: 256Mi
   limits:
-    memory: 512Mi
+    memory: 256Mi
 
 service:
   ldap:
