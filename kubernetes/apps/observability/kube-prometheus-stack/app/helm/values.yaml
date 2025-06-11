@@ -16,6 +16,7 @@ prometheus:
     #   registry: docker.io
     #   repository: prompp/prompp
     #   tag: 2.53.2-0.2.5
+    externalUrl: https://prometheus.${domain}.${tld}
     securityContext:
       runAsNonRoot: true
       runAsUser: 64535
