@@ -39,7 +39,7 @@ minecraftServer:
   type: MODRINTH
   overrideServerProperties: true
   jvmXXOpts: "-XX:MaxRAMPercentage=75"
-  memory: 4G
+  memory: ""
   serviceType: LoadBalancer
   difficulty: normal
   levelType: normal
