@@ -19,4 +19,4 @@ spec:
           namespaces:
             - observability
           names:
-            - cluster-collector*
+            - node-collector*
