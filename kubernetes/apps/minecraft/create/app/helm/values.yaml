@@ -29,12 +29,11 @@ extraEnv:
   MODRINTH_EXCLUDE_FILES: |
     freecam
     voicechat
+  USE_MEOWICE_FLAGS: "true"
 persistence:
   dataDir:
     enabled: true
     existingClaim: *app
-extraEnv:
-  USE_MEOWICE_FLAGS: "true"
 minecraftServer:
   eula: true
   version: 1.21.1
