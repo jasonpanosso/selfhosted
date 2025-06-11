@@ -28,7 +28,7 @@ spec:
     - name: GOMEMLIMIT
       value: 500MiB
     - name: OTEL_RESOURCE_ATTRIBUTES
-      value: "k8s.cluster.name=prod,cluster=prod"
+      value: "k8s.cluster.name=prod"
     - name: OTEL_K8S_NODE_NAME
       valueFrom:
         fieldRef:
@@ -61,6 +61,14 @@ spec:
         detectors: [env]
         timeout: 2s
         override: false
+      # have to set cluster as an attribute, not resource for kube-prometheus-stack
+      # rules/alerts/dashboards due to resource flattening to attributes upon
+      # export to prometheus, overwriting the cnpg cluster label
+      attributes/cluster_default:
+        actions:
+          - key: cluster
+            value: prod
+            action: insert
       k8sattributes:
         filter:
           node_from_env_var: OTEL_K8S_NODE_NAME
@@ -166,6 +174,7 @@ spec:
             - memory_limiter
             - k8sattributes
             - resourcedetection/env
+            - attributes/cluster_default
             - batch
           receivers:
             - prometheus
@@ -198,7 +207,7 @@ spec:
     - name: GOMEMLIMIT
       value: 250MiB
     - name: OTEL_RESOURCE_ATTRIBUTES
-      value: "k8s.cluster.name=prod,cluster=prod"
+      value: "k8s.cluster.name=prod"
   config:
     extensions:
       k8s_leader_elector:
@@ -386,10 +395,6 @@ spec:
         check_interval: 1s
         limit_percentage: 80
         spike_limit_percentage: 15
-      resourcedetection/env:
-        detectors: [env]
-        timeout: 2s
-        override: false
 
     receivers:
       otlp:
