@@ -82,6 +82,9 @@ securityContext:
       - NET_ADMIN
       - SYS_ADMIN
       - SYS_RESOURCE
+socketLB:
+  hostNamespaceOnly: true
+  terminatePodConnections: true
 hubble:
   enabled: true
   metrics:
