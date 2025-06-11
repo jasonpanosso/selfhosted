@@ -5,10 +5,9 @@ image:
   tag: 2025.5.1@sha256:85e861124ca87aeef059e2c8828e16fa106c1af263a82bb03a09b8895af81034
 resources:
   requests:
-    cpu: 200m
+    cpu: 1000m
     memory: 4Gi
   limits:
-    cpu: 2000m
     memory: 4Gi
 securityContext:
   runAsUser: 65534
