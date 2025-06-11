@@ -359,7 +359,7 @@ metadata:
   name: gateway
 spec:
   mode: deployment
-  image: ghcr.io/open-telemetry/opentelemetry-collector-releases/opentelemetry-collector-contrib:0.127.0
+  image: ghcr.io/open-telemetry/opentelemetry-collector-releases/opentelemetry-collector-contrib:0.128.0
   priorityClassName: system-cluster-critical
   replicas: 2
   serviceAccount: otel-collector-opentelemetry-collector
