@@ -9,7 +9,7 @@ manager:
     tag: "v0.127.0"
   collectorImage:
     repository: ghcr.io/open-telemetry/opentelemetry-collector-releases/opentelemetry-collector-k8s
-    tag: "0.128.0"
+    tag: "0.127.0"
   targetAllocatorImage:
     repository: ghcr.io/open-telemetry/opentelemetry-operator/target-allocator
     tag: "v0.127.0"
