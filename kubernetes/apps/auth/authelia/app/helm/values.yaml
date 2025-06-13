@@ -21,6 +21,12 @@ configMap:
         resources:
           - "^/api.*$"
         policy: bypass
+      # prowlarr api smile
+      - domain:
+          - prowlarr.${domain}.${tld}
+        resources:
+          - "^/[0-9]+/api.*$"
+        policy: bypass
 
       - domain: "*.${domain}.${tld}"
         subject: group:admins
