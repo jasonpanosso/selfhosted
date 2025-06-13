@@ -7,6 +7,10 @@ toolbox:
   enabled: true
 
 cephClusterSpec:
+  cephConfig:
+    global:
+      bdev_enable_discard: "true"
+      bdev_async_discard_threads: "1"
   cephVersion:
     image: quay.io/ceph/ceph:v19.2.2
     allowUnsupported: false
