@@ -1,0 +1,87 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/master-standalone/deployment-apps-v1.json
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: &app seasonpackarr
+  labels:
+    app.kubernetes.io/name: *app
+  annotations:
+    reloader.stakater.com/auto: "true"
+spec:
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: *app
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: *app
+    spec:
+      securityContext:
+        runAsUser: 65534
+        runAsGroup: 65534
+        fsGroup: 65534
+        fsGroupChangePolicy: OnRootMismatch
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - image: ghcr.io/nuxencs/seasonpackarr:v0.12.1@sha256:c1356ad5ac8c0088277e9d932d9916e5f2161d78efabfd45029b731d2c4e6ff8
+          name: *app
+          env:
+            - name: SEASONPACKARR__DISABLE_CONFIG_FILE
+              value: "true"
+            - name: SEASONPACKARR__HOST
+              value: 0.0.0.0
+            - name: SEASONPACKARR__PORT
+              value: "80"
+            - name: SEASONPACKARR__PREIMPORTPATH
+              value: /data/downloads/complete/tv-sonarr
+            - name: SEASONPACKARR__PARSE_TORRENT_FILE
+              value: "true"
+            - name: SEASONPACKARR__SMART_MODE
+              value: "true"
+            - name: SEASONPACKARR__SMART_MODE_THRESHOLD
+              value: "0.80"
+            - name: SEASONPACKARR__FUZZY_MATCHING_SKIP_REPACK_COMPARE
+              value: "true"
+            - name: SEASONPACKARR__FUZZY_MATCHING_SIMPLIFY_HDR_COMPARE
+              value: "false"
+            - name: SEASONPACKARR__API_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: seasonpackarr
+                  key: SEASONPACKARR_API_TOKEN
+          ports:
+            - containerPort: 80
+              name: http
+          livenessProbe: &probes
+            httpGet:
+              path: /api/ping
+              port: 80
+            initialDelaySeconds: 0
+            periodSeconds: 15
+            timeoutSeconds: 1
+            failureThreshold: 3
+          readinessProbe: *probes
+          resources:
+            requests:
+              cpu: 50m
+              memory: 256Mi
+            limits:
+              memory: 256Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: [ALL]
+          volumeMounts:
+            - name: media
+              mountPath: /data/downloads
+              subPath: downloads
+      volumes:
+        - name: media
+          persistentVolumeClaim:
+            claimName: media

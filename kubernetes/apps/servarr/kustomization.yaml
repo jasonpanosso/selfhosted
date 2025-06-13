@@ -20,3 +20,4 @@ resources:
   - ./jellyseerr/ks.yaml
   - ./cross-seed/ks.yaml
   - ./autobrr/ks.yaml
+  - ./seasonpackarr/ks.yaml
