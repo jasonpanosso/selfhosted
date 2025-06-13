@@ -59,7 +59,10 @@
       "description": "Kube-Prometheus-Stack Group",
       "groupName": "Kube-Prometheus-Stack",
       "matchDatasources": ["docker"],
-      "matchPackageNames": ["/kube-prometheus-stack/"],
+      "matchPackageNames": [
+        "/kube-prometheus-stack/",
+        "/prometheus-operator-crds/"
+      ],
       "group": {
         "commitMessageTopic": "{{{groupName}}} group"
       }
