@@ -12,7 +12,6 @@ spec:
   selector:
     matchLabels:
       app.kubernetes.io/name: *app
-  serviceName: *app
   template:
     metadata:
       labels:
