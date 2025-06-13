@@ -59,7 +59,7 @@ spec:
               name: http
           livenessProbe: &probes
             httpGet:
-              path: /api/ping
+              path: /api/healthz/liveness
               port: 80
             initialDelaySeconds: 0
             periodSeconds: 15
