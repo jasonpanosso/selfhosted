@@ -17,3 +17,10 @@ configMapGenerator:
         loki_rule: "true"
       annotations:
         kustomize.toolkit.fluxcd.io/substitute: disabled
+  - name: cross-seed-configjs
+    files:
+      - config.js=./resources/config.js
+    options:
+      disableNameSuffixHash: true
+      annotations:
+        kustomize.toolkit.fluxcd.io/substitute: disabled
