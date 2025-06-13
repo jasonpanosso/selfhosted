@@ -365,13 +365,13 @@ spec:
   serviceAccount: otel-collector-opentelemetry-collector
   resources:
     limits:
-      memory: 512Mi
+      memory: 1Gi
     requests:
       cpu: 500m
-      memory: 512Mi
+      memory: 1Gi
   env:
     - name: GOMEMLIMIT
-      value: 500MiB
+      value: 1Gi
   config:
     exporters:
       debug: {}
