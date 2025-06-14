@@ -371,7 +371,7 @@ spec:
       memory: 1Gi
   env:
     - name: GOMEMLIMIT
-      value: 750Mi
+      value: 750MiB
   config:
     exporters:
       debug: {}
