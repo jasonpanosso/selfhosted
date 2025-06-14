@@ -26,7 +26,7 @@ spec:
       memory: 512Mi
   env:
     - name: GOMEMLIMIT
-      value: 500MiB
+      value: 450MiB
     - name: OTEL_RESOURCE_ATTRIBUTES
       value: "k8s.cluster.name=prod"
     - name: OTEL_K8S_NODE_NAME
@@ -210,7 +210,7 @@ spec:
       memory: 256Mi
   env:
     - name: GOMEMLIMIT
-      value: 250MiB
+      value: 200MiB
     - name: OTEL_RESOURCE_ATTRIBUTES
       value: "k8s.cluster.name=prod"
   config:
@@ -371,7 +371,7 @@ spec:
       memory: 1Gi
   env:
     - name: GOMEMLIMIT
-      value: 1Gi
+      value: 750Mi
   config:
     exporters:
       debug: {}
