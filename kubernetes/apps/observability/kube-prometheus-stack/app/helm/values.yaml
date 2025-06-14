@@ -64,7 +64,7 @@ prometheus:
     serviceMonitorSelectorNilUsesHelmValues: false
     additionalConfig:
       otlp:
-        keepIdentifyingResourceAttributes: true
+        keepIdentifyingResourceAttributes: false
         translationStrategy: UnderscoreEscapingWithSuffixes # dashboard compatibility
         promoteResourceAttributes:
           - service.instance.id
