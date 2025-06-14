@@ -26,7 +26,7 @@ spec:
       memory: 512Mi
   env:
     - name: GOMEMLIMIT
-      value: 450MiB
+      value: 400MiB
     - name: OTEL_RESOURCE_ATTRIBUTES
       value: "k8s.cluster.name=prod"
     - name: OTEL_K8S_NODE_NAME
@@ -382,6 +382,8 @@ spec:
           enabled: true
         tls:
           insecure: true
+        retry_on_failure:
+          enabled: false
       # otlphttp/prometheus:
       #   endpoint: http://prometheus-operated.observability.svc.cluster.local:9090/api/v1/otlp
       #   tls:
