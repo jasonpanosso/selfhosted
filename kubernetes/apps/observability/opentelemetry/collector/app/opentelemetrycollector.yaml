@@ -7,17 +7,6 @@ spec:
   mode: daemonset
   serviceAccount: otel-collector-opentelemetry-collector
   priorityClassName: system-node-critical
-  targetAllocator:
-    enabled: true
-    allocationStrategy: per-node
-    serviceAccount: opentelemetry-targetallocator
-    prometheusCR:
-      enabled: true
-      scrapeInterval: 15s
-      podMonitorSelector: {}
-      serviceMonitorSelector: {}
-      probeSelector: {}
-      scrapeConfigSelector: {}
   resources:
     limits:
       memory: 512Mi
@@ -43,8 +32,8 @@ spec:
       debug/metrics: {}
       debug/logs: {}
       debug/traces: {}
-      otlp:
-        endpoint: gateway-collector.observability.svc.cluster.local:4317
+      otlphttp/loki:
+        endpoint: http://loki-gateway.observability.svc.cluster.local/otlp
         tls:
           insecure: true
 
@@ -61,19 +50,6 @@ spec:
         detectors: [env]
         timeout: 2s
         override: false
-      attributes/defaults:
-        actions:
-          # have to set cluster as an attribute, not resource for
-          # kube-prometheus-stack rules/alerts/dashboards due to resource
-          # flattening to attributes upon export to prometheus, overwriting the
-          # cnpg cluster label
-          - key: cluster
-            value: prod
-            action: insert
-          # prometheus operator default
-          - key: pod
-            from_attribute: __meta_kubernetes_pod_name
-            action: insert
       k8sattributes:
         filter:
           node_from_env_var: OTEL_K8S_NODE_NAME
@@ -139,12 +115,6 @@ spec:
               - from: connection
 
     receivers:
-      prometheus:
-        trim_metric_suffixes: true
-        config:
-          # target allocator
-          scrape_configs: []
-
       filelog:
         exclude: []
         include:
@@ -171,24 +141,11 @@ spec:
             - batch
           exporters:
             # - debug/logs
-            - otlp
-        metrics:
-          receivers:
-            - prometheus
-          processors:
-            - memory_limiter
-            - k8sattributes
-            - resourcedetection/env
-            - attributes/defaults
-            - batch
-          exporters:
-            # - debug/metrics
-            - otlp
+            - otlphttp/loki
   volumeMounts:
     - mountPath: /var/log/pods
       name: varlogpods
       readOnly: true
-
   volumes:
     - hostPath:
         path: /var/log/pods
@@ -223,8 +180,8 @@ spec:
 
     exporters:
       debug: {}
-      otlp:
-        endpoint: gateway-collector.observability.svc.cluster.local:4317
+      otlphttp/loki:
+        endpoint: http://loki-gateway.observability.svc.cluster.local/otlp
         tls:
           insecure: true
 
@@ -304,19 +261,6 @@ spec:
               - from: connection
 
     receivers:
-      k8s_cluster:
-        auth_type: serviceAccount
-        collection_interval: 10s
-        k8s_leader_elector: k8s_leader_elector
-        allocatable_types_to_report:
-          - cpu
-          - memory
-          - storage
-        node_conditions_to_report:
-          - Ready
-          - MemoryPressure
-          - DiskPressure
-          - NetworkUnavailable
       k8sobjects:
         k8s_leader_elector: k8s_leader_elector
         auth_type: serviceAccount
@@ -341,82 +285,4 @@ spec:
             - batch
           exporters:
             # - debug
-            - otlp
-        metrics:
-          receivers:
-            - k8s_cluster
-          processors:
-            - memory_limiter
-            - k8sattributes
-            - resourcedetection/env
-            - batch
-          exporters:
-            # - debug
-            - otlp
----
-apiVersion: opentelemetry.io/v1beta1
-kind: OpenTelemetryCollector
-metadata:
-  name: gateway
-spec:
-  mode: deployment
-  priorityClassName: system-cluster-critical
-  replicas: 2
-  serviceAccount: otel-collector-opentelemetry-collector
-  resources:
-    limits:
-      memory: 1Gi
-    requests:
-      cpu: 500m
-      memory: 1Gi
-  env:
-    - name: GOMEMLIMIT
-      value: 750MiB
-  config:
-    exporters:
-      debug: {}
-      otlphttp/prometheus:
-        endpoint: http://prometheus-operated.observability.svc.cluster.local:9090/api/v1/otlp
-        tls:
-          insecure: true
-      otlphttp/loki:
-        endpoint: http://loki-gateway.observability.svc.cluster.local/otlp
-        tls:
-          insecure: true
-
-    processors:
-      batch:
-        send_batch_max_size: 1500
-        send_batch_size: 1000
-        timeout: 1s
-      memory_limiter:
-        check_interval: 1s
-        limit_percentage: 80
-        spike_limit_percentage: 15
-
-    receivers:
-      otlp:
-        protocols:
-          grpc:
-            endpoint: 0.0.0.0:4317
-
-    service:
-      pipelines:
-        logs:
-          receivers:
-            - otlp
-          processors:
-            - memory_limiter
-            - batch
-          exporters:
-            # - debug
             - otlphttp/loki
-        metrics:
-          receivers:
-            - otlp
-          processors:
-            - memory_limiter
-            - batch
-          exporters:
-            # - debug
-            - otlphttp/prometheus
