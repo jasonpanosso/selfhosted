@@ -11,10 +11,10 @@ prometheusOperator:
 prometheus:
   enabled: true
   prometheusSpec:
-    image:
-      registry: docker.io
-      repository: prompp/prompp
-      tag: 2.53.2-0.2.5
+    # image:
+    #   registry: docker.io
+    #   repository: prompp/prompp
+    #   tag: 2.53.2-0.2.5
     externalUrl: https://prometheus.${domain}.${tld}
     securityContext:
       runAsNonRoot: true
