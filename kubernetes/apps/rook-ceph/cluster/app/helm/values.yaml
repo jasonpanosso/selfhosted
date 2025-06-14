@@ -92,8 +92,8 @@ cephClusterSpec:
     nodes:
       - name: worker-1
         deviceFilter: ^nvme
-      - name: worker-2
-        deviceFilter: ^nvme
+      # - name: worker-2
+      #   deviceFilter: ^nvme
       - name: worker-3
         deviceFilter: ^nvme
       - name: worker-4
