@@ -22,7 +22,7 @@ spec:
       namespace: *namespace
     - apiVersion: opentelemetry.io/v1beta1
       kind: OpenTelemetryCollector
-      name: gateway
+      name: node
       namespace: *namespace
   sourceRef:
     kind: GitRepository
