@@ -140,6 +140,7 @@ spec:
 
     receivers:
       prometheus:
+        trim_metric_suffixes: true
         config:
           # target allocator
           scrape_configs: []
@@ -161,28 +162,28 @@ spec:
     service:
       pipelines:
         logs:
-          exporters:
-            # - debug/logs
-            - otlp
+          receivers:
+            - filelog
           processors:
             - memory_limiter
             - k8sattributes
             - resourcedetection/env
             - batch
-          receivers:
-            - filelog
-        metrics:
           exporters:
-            # - debug/metrics
+            # - debug/logs
             - otlp
+        metrics:
+          receivers:
+            - prometheus
           processors:
             - memory_limiter
             - k8sattributes
             - resourcedetection/env
             - attributes/defaults
             - batch
-          receivers:
-            - prometheus
+          exporters:
+            # - debug/metrics
+            - otlp
   volumeMounts:
     - mountPath: /var/log/pods
       name: varlogpods
@@ -331,27 +332,27 @@ spec:
         - k8s_leader_elector
       pipelines:
         logs:
-          exporters:
-            # - debug
-            - otlp
-          processors:
-            - memory_limiter
-            - k8sattributes
-            - resourcedetection/env
-            - batch
           receivers:
             - k8sobjects
-        metrics:
-          exporters:
-            # - debug
-            - otlp
           processors:
             - memory_limiter
             - k8sattributes
             - resourcedetection/env
             - batch
+          exporters:
+            # - debug
+            - otlp
+        metrics:
           receivers:
             - k8s_cluster
+          processors:
+            - memory_limiter
+            - k8sattributes
+            - resourcedetection/env
+            - batch
+          exporters:
+            # - debug
+            - otlp
 ---
 apiVersion: opentelemetry.io/v1beta1
 kind: OpenTelemetryCollector
@@ -359,7 +360,6 @@ metadata:
   name: gateway
 spec:
   mode: deployment
-  image: ghcr.io/open-telemetry/opentelemetry-collector-releases/opentelemetry-collector-contrib:0.127.0
   priorityClassName: system-cluster-critical
   replicas: 2
   serviceAccount: otel-collector-opentelemetry-collector
@@ -375,19 +375,10 @@ spec:
   config:
     exporters:
       debug: {}
-      prometheusremotewrite:
-        endpoint: http://prometheus-operated.observability.svc.cluster.local:9090/api/v1/write
-        add_metric_suffixes: false
-        resource_to_telemetry_conversion:
-          enabled: true
+      otlphttp/prometheus:
+        endpoint: http://prometheus-operated.observability.svc.cluster.local:9090/api/v1/otlp
         tls:
           insecure: true
-        retry_on_failure:
-          enabled: false
-      # otlphttp/prometheus:
-      #   endpoint: http://prometheus-operated.observability.svc.cluster.local:9090/api/v1/otlp
-      #   tls:
-      #     insecure: true
       otlphttp/loki:
         endpoint: http://loki-gateway.observability.svc.cluster.local/otlp
         tls:
@@ -412,20 +403,20 @@ spec:
     service:
       pipelines:
         logs:
+          receivers:
+            - otlp
+          processors:
+            - memory_limiter
+            - batch
           exporters:
             # - debug
             - otlphttp/loki
+        metrics:
+          receivers:
+            - otlp
           processors:
             - memory_limiter
             - batch
-          receivers:
-            - otlp
-        metrics:
           exporters:
             # - debug
-            - prometheusremotewrite
-          processors:
-            - memory_limiter
-            - batch
-          receivers:
-            - otlp
+            - otlphttp/prometheus

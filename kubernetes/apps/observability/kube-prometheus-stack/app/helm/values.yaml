@@ -39,7 +39,6 @@ prometheus:
               storage: 40Gi
     enableFeatures:
       - exemplar-storage
-    enableRemoteWriteReceiver: true
     retention: 10d
     retentionSize: 40GiB
     serviceMonitorSelector:
@@ -55,7 +54,7 @@ prometheus:
       matchLabels:
         none: none
     tsdb:
-      outOfOrderTimeWindow: 10m
+      outOfOrderTimeWindow: 30m
     exemplars:
       maxSize: 100000
     podMonitorSelectorNilUsesHelmValues: false
@@ -87,7 +86,6 @@ prometheus:
           - k8s.pod.name
           - k8s.replicaset.name
           - k8s.statefulset.name
-          - cluster
 
 kubernetesServiceMonitors:
   enabled: true
