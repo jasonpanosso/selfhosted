@@ -6,13 +6,13 @@ crds:
 manager:
   image:
     repository: ghcr.io/open-telemetry/opentelemetry-operator/opentelemetry-operator
-    tag: "v0.127.0"
+    tag: "0.127.0"
   collectorImage:
     repository: ghcr.io/open-telemetry/opentelemetry-collector-releases/opentelemetry-collector-k8s
     tag: "0.127.0"
   targetAllocatorImage:
     repository: ghcr.io/open-telemetry/opentelemetry-operator/target-allocator
-    tag: "v0.127.0"
+    tag: "0.127.0"
   resources:
     limits:
       memory: 128Mi
