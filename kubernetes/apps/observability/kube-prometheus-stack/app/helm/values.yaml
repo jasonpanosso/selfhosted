@@ -24,10 +24,10 @@ prometheus:
     priorityClassName: system-cluster-critical
     resources:
       requests:
-        cpu: 1000m
-        memory: 2Gi
+        cpu: 1500m
+        memory: 3Gi
       limits:
-        memory: 2Gi
+        memory: 3Gi
     storageSpec:
       volumeClaimTemplate:
         spec:
