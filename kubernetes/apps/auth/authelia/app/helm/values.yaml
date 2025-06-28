@@ -68,8 +68,6 @@ configMap:
       enabled: true
       address: tcp://pgcluster-rw.db.svc.cluster.local:5432
       database: authelia
-      ssl:
-        mode: disable
       password:
         disabled: true
 
