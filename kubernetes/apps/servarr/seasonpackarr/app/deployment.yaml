@@ -54,6 +54,16 @@ spec:
                 secretKeyRef:
                   name: seasonpackarr
                   key: SEASONPACKARR_API_TOKEN
+            - name: SEASONPACKARR__CLIENTS_DEFAULT_HOST
+              value: qbittorrent.servarr.svc.cluster.local
+            - name: SEASONPACKARR__CLIENTS_DEFAULT_PORT
+              value: "8080"
+            - name: SEASONPACKARR__CLIENTS_DEFAULT_USERNAME
+              value: admin
+            - name: SEASONPACKARR__CLIENTS_DEFAULT_PASSWORD
+              value: ""
+            - name: SEASONPACKARR__CLIENTS_DEFAULT_PREIMPORTPATH
+              value: /data/downloads/complete/tv-sonarr
           ports:
             - containerPort: 80
               name: http
