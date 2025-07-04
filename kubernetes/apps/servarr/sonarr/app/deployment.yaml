@@ -96,6 +96,8 @@ spec:
               mountPath: /config/MediaCover
             - name: media
               mountPath: /data
+            - name: scratch
+              mountPath: /tmp
       volumes:
         - name: media
           persistentVolumeClaim:
@@ -106,3 +108,5 @@ spec:
         - name: cache
           persistentVolumeClaim:
             claimName: sonarr-cache
+        - name: scratch
+          emptyDir: {}

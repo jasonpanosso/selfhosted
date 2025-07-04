@@ -90,6 +90,8 @@ spec:
               mountPath: /app/config
             - name: cache
               mountPath: /app/config/cache
+            - name: scratch
+              mountPath: /tmp
       volumes:
         - name: config
           persistentVolumeClaim:
@@ -97,3 +99,5 @@ spec:
         - name: cache
           persistentVolumeClaim:
             claimName: jellyseerr-cache
+        - name: scratch
+          emptyDir: {}

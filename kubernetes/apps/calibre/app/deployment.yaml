@@ -64,6 +64,8 @@ spec:
             - name: calibre
               subPath: library
               mountPath: /calibre-library
+            - name: scratch
+              mountPath: /tmp
         - image: ghcr.io/calibrain/calibre-web-automated-book-downloader:sha-690c2b6
           name: calibre-web-automated-book-downloader
           env:
@@ -98,9 +100,13 @@ spec:
           volumeMounts:
             - name: ingest
               mountPath: /cwa-book-ingest
+            - name: scratch
+              mountPath: /tmp
       volumes:
         - name: *app
           persistentVolumeClaim:
             claimName: *app
         - name: ingest
+          emptyDir: {}
+        - name: scratch
           emptyDir: {}

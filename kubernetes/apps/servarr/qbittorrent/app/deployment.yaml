@@ -130,6 +130,8 @@ spec:
             - name: media
               mountPath: /data/downloads
               subPath: downloads
+            - name: scratch
+              mountPath: /tmp
       volumes:
         - name: media
           persistentVolumeClaim:
@@ -137,3 +139,5 @@ spec:
         - name: config
           persistentVolumeClaim:
             claimName: *app
+        - name: scratch
+          emptyDir: {}

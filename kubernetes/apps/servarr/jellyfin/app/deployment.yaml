@@ -71,6 +71,8 @@ spec:
               mountPath: /config
             - name: cache
               mountPath: /config/metadata
+            - name: scratch
+              mountPath: /tmp
       volumes:
         - name: media
           persistentVolumeClaim:
@@ -82,4 +84,6 @@ spec:
           persistentVolumeClaim:
             claimName: jellyfin-cache
         - name: transcode-cache
+          emptyDir: {}
+        - name: scratch
           emptyDir: {}
