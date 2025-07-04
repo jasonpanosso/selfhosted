@@ -53,6 +53,9 @@ radarr:
       # HD Bluray + WEB https://github.com/TRaSH-Guides/Guides/blob/master/docs/json/radarr/quality-profiles/hd-bluray-web.json
       - template: d1d67249d3890e49bc12e275d989a7e9
         source: TRASH
+      # Remux Web 2160p https://github.com/TRaSH-Guides/Guides/blob/master/docs/json/radarr/quality-profiles/remux-web-2160p.json
+      - template: fd161a61e3ab826d3a22d53f935696dd
+        source: TRASH
 
     delete_old_custom_formats: true
     replace_existing_custom_formats: true
