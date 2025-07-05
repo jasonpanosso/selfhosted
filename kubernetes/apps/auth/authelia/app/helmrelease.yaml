@@ -18,7 +18,7 @@ spec:
   chart:
     spec:
       chart: authelia
-      version: 0.10.35
+      version: 0.10.36
       sourceRef:
         kind: HelmRepository
         name: authelia
