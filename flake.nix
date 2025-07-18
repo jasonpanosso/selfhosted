@@ -18,6 +18,7 @@
             age
             cilium-cli
             crane
+            cmctl
             docker
             fluxcd
             kubectl
