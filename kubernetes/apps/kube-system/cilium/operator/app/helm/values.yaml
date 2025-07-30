@@ -32,6 +32,8 @@ gatewayAPI:
   enabled: true
   enableAlpn: true
   xffNumTrustedHops: 1
+hubble:
+  enabled: false
 ipam:
   mode: kubernetes
 ipv4NativeRoutingCIDR: 10.96.0.0/16
@@ -46,7 +48,6 @@ loadBalancer:
   mode: dsr
 localRedirectPolicy: true
 operator:
-  tolerations: []
   dashboards:
     enabled: true
   prometheus:
@@ -85,27 +86,3 @@ securityContext:
 socketLB:
   hostNamespaceOnly: true
   terminatePodConnections: true
-hubble:
-  enabled: true
-  metrics:
-    enabled:
-      - dns:query
-      - drop
-      - tcp
-      - flow
-      - port-distribution
-      - icmp
-      - http
-    serviceMonitor:
-      enabled: true
-    dashboards:
-      enabled: true
-  relay:
-    enabled: true
-    rollOutPods: true
-    prometheus:
-      serviceMonitor:
-        enabled: true
-  ui:
-    enabled: true
-    rollOutPods: true
