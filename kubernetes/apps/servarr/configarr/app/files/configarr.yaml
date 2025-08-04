@@ -8,6 +8,9 @@ radarr:
     base_url: http://radarr:7878
     api_key: !env RADARR_API_KEY
 
+    root_folders:
+      - /data/movies
+
     media_naming:
       folder: jellyfin-tmdb
       movie:
@@ -67,6 +70,9 @@ sonarr:
   instance1:
     base_url: http://sonarr:8989
     api_key: !env SONARR_API_KEY
+
+    root_folders:
+      - /data/shows
 
     media_naming:
       season: default
