@@ -218,4 +218,4 @@ pod:
   extraVolumes:
     - name: secret
       secret:
-        secretName: authelia
+        secretName: authelia-secret
