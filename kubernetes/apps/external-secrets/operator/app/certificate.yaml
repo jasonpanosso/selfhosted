@@ -21,6 +21,7 @@ spec:
     algorithm: RSA
     encoding: PKCS8
     size: 2048
+    rotationPolicy: Always
   issuerRef:
     name: bitwarden-bootstrap-issuer
     kind: Issuer
@@ -44,6 +45,29 @@ spec:
     algorithm: RSA
     encoding: PKCS8
     size: 2048
+    rotationPolicy: Always
+  issuerRef:
+    name: bitwarden-certificate-issuer
+    kind: Issuer
+    group: cert-manager.io
+---
+# yaml-language-server: $schema=https://datreeio.github.io/CRDs-catalog/cert-manager.io/certificate_v1.json
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: bitwarden-css-certs
+spec:
+  secretName: bitwarden-css-certs
+  dnsNames:
+    - bitwarden-sdk-server.external-secrets.svc.cluster.local
+    - external-secrets-bitwarden-sdk-server.external-secrets.svc.cluster.local
+  privateKey:
+    algorithm: RSA
+    encoding: PKCS8
+    size: 2048
+    rotationPolicy: Always
+  usages:
+    - client auth
   issuerRef:
     name: bitwarden-certificate-issuer
     kind: Issuer

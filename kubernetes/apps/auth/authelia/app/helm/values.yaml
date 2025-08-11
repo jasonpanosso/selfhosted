@@ -198,7 +198,7 @@ pod:
     - name: AUTHELIA_STORAGE_POSTGRES_USERNAME
       valueFrom:
         secretKeyRef:
-          name: authelia
+          name: authelia-secret
           key: POSTGRES_USERNAME
     - name: AUTHELIA_STORAGE_POSTGRES_PASSWORD_FILE
       value: /config/secrets/POSTGRES_PASSWORD
@@ -209,7 +209,7 @@ pod:
     - name: AUTHELIA_NOTIFIER_SMTP_USERNAME
       valueFrom:
         secretKeyRef:
-          name: authelia
+          name: authelia-secret
           key: SMTP_USERNAME
   extraVolumeMounts:
     - name: secret
