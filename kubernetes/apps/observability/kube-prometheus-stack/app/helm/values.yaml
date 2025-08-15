@@ -119,10 +119,10 @@ kube-state-metrics:
   priorityClassName: system-cluster-critical
   resources:
     limits:
-      memory: 128Mi
+      memory: 256Mi
     requests:
       cpu: 10m
-      memory: 128Mi
+      memory: 256Mi
   prometheus:
     monitor:
       enabled: true
