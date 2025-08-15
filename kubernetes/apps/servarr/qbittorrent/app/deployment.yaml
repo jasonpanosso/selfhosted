@@ -132,6 +132,8 @@ spec:
               subPath: downloads
             - name: scratch
               mountPath: /tmp
+            - name: qbrr
+              mountPath: /qbrr
       volumes:
         - name: media
           persistentVolumeClaim:
@@ -139,5 +141,8 @@ spec:
         - name: config
           persistentVolumeClaim:
             claimName: *app
+        - name: qbrr
+          image:
+            reference: ghcr.io/buroa/qbrr:0.1.1@sha256:fe4a1d100ba896999253a5122d9c77cc4920779d618c23f765458cb6ec7383ca
         - name: scratch
           emptyDir: {}
