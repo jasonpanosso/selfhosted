@@ -2,7 +2,7 @@
 machine:
   install:
     # bare-metal arm64 + panfrost
-    image: factory.talos.dev/metal-installer/9557a43ed46345a996ab0f954bd1f916c0b070d463ea3d7178b5c9732801938a:v1.10.6
+    image: factory.talos.dev/metal-installer/9557a43ed46345a996ab0f954bd1f916c0b070d463ea3d7178b5c9732801938a:v1.11.0-beta.2
     disk: /dev/disk/by-id/nvme-Patriot_M.2_P300_256GB_P300IDBB24110706005
   network:
     hostname: worker-7
