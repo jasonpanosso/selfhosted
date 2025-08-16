@@ -28,7 +28,7 @@ spec:
         seccompProfile:
           type: RuntimeDefault
       containers:
-        - image: docker.io/crocodilestick/calibre-web-automated:V3.1.2
+        - image: docker.io/crocodilestick/calibre-web-automated:V3.1.4@sha256:577e846f104fd21453ef306eefb4a95dd95b3b9ddd2463a150944494284da0fd
           name: calibre-web-automated
           ports:
             - containerPort: 8083
@@ -66,7 +66,7 @@ spec:
               mountPath: /calibre-library
             - name: scratch
               mountPath: /tmp
-        - image: ghcr.io/calibrain/calibre-web-automated-book-downloader:sha-340aa3a
+        - image: ghcr.io/calibrain/calibre-web-automated-book-downloader:20250815@sha256:6b25a35de28e31e91f13a86d1be227ef9eb61c034c4d7edf27f09c5c07ab29c0
           name: calibre-web-automated-book-downloader
           env:
             - name: USE_CF_BYPASS

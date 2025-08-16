@@ -23,7 +23,7 @@ spec:
               type: RuntimeDefault
           containers:
             - name: *app
-              image: ghcr.io/raydak-labs/configarr:1.14.1
+              image: ghcr.io/raydak-labs/configarr:1.14.1@sha256:46812953e5dc686ca73714c47b01abbd47ea8d32137cfc22fe2dc4cd65561bd6
               env:
                 - name: TZ
                   value: Etc/UTC
