@@ -8,3 +8,18 @@ resources:
   - ./deployment.yaml
   - ./service.yaml
   - ./ingressroute.yaml
+  - ./cronjob.yaml
+
+configMapGenerator:
+  - name: script
+    files:
+      - script.sh=./resources/script.sh
+
+secretGenerator:
+  - name: jellyfin
+    envs:
+      - ./secrets/secret.sops.env
+
+configurations:
+  - ./resources/kustomizeconfig.yaml
+  - ./secrets/kustomizeconfig.yaml

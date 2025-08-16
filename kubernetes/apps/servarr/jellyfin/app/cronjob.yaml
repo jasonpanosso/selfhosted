@@ -1,0 +1,74 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/master-standalone/cronjob-batch-v1.json
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: jellyfin
+spec:
+  schedule: 0 8 * * * # daily
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      ttlSecondsAfterFinished: 600
+      template:
+        spec:
+          restartPolicy: Never
+          securityContext:
+            runAsUser: 65534
+            runAsGroup: 65534
+            fsGroup: 65534
+            fsGroupChangePolicy: OnRootMismatch
+            runAsNonRoot: true
+            seccompProfile:
+              type: RuntimeDefault
+          containers:
+            - name: refresh-images
+              image: quay.io/curl/curl:8.15.0@sha256:60f706e22d08217a29aba419095752d7def798567cc6c4005af2793e43b94d12
+              command:
+                - /bin/sh
+                - -c
+                - /bin/script.sh
+              resources:
+                requests:
+                  cpu: 10m
+                  memory: 128M
+                limits:
+                  memory: 128M
+              securityContext:
+                allowPrivilegeEscalation: false
+                readOnlyRootFilesystem: true
+                capabilities: {drop: ["ALL"]}
+              env:
+                - name: JELLYFIN_URL
+                  value: http://watch.${domain}.${tld}
+                - name: JELLYFIN_ADMIN_USERNAME
+                  valueFrom:
+                    secretKeyRef:
+                      name: jellyfin
+                      key: JELLYFIN_ADMIN_USERNAME
+                - name: JELLYFIN_ADMIN_USER_ID
+                  valueFrom:
+                    secretKeyRef:
+                      name: jellyfin
+                      key: JELLYFIN_ADMIN_USER_ID
+                - name: JELLYFIN_API_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      name: jellyfin
+                      key: JELLYFIN_API_KEY
+              volumeMounts:
+                - name: script
+                  mountPath: /bin/script.sh
+                  subPath: script.sh
+                  readOnly: true
+                - name: jq
+                  mountPath: /tools
+          volumes:
+            - name: script
+              configMap:
+                name: script
+                defaultMode: 0755
+            - name: jq
+              image:
+                reference: ghcr.io/jqlang/jq:1.8.1@sha256:4f34c6d23f4b1372ac789752cc955dc67c2ae177eb1b5860b75cdc5091ce6f91
