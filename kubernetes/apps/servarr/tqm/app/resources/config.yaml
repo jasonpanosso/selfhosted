@@ -1,0 +1,108 @@
+---
+clients:
+  qbt:
+    create_tags_upfront: false
+    download_path: /data/downloads/complete
+    enabled: true
+    filter: default
+    type: qbittorrent
+    url: http://qbittorrent.servarr.svc.cluster.local
+
+filters:
+  default:
+    MapHardlinksFor:
+      - retag
+      - clean
+
+    ignore:
+      - IsTrackerDown()
+      - Label in ["manual"]
+      - Label in ["permaseed"] && !IsUnregistered()
+      - SeedingHours < 36 && IsPrivate == true && !IsUnregistered()
+      - HardlinkedOutsideClient == true && !IsUnregistered()
+
+    remove:
+      - IsUnregistered()
+      - HasAllTags("site:anthelion") && Ratio > 1.05
+      - HasAllTags("site:alpharatio") && (Ratio > 1.05 || SeedingDays >= 7.5)
+      - HasAllTags("site:aither") && SeedingDays >= 5.5
+      - HasAllTags("site:beyondhd") && SeedingDays >= 30.5
+      - HasAllTags("site:blutopia") && SeedingDays >= 7.5
+      - HasAllTags("site:filelist") && (Ratio > 1.05 || SeedingDays >= 2.5)
+      - HasAllTags("site:hd-torrents") && (Ratio > 1.05 || SeedingDays >= 10.5)
+      - HasAllTags("site:iptorrents") && (Ratio > 1.05 || SeedingDays >= 14)
+      - HasAllTags("site:myanonamouse") && SeedingDays >= 3.5
+      - HasAllTags("site:morethantv") && (Ratio > 1.05 || SeedingDays >= 7.5)
+      - HasAllTags("site:nebulance") && SeedingDays >= 5.5
+      - HasAllTags("site:privatehd") && (Ratio > 1.05 || SeedingDays >= 10.5)
+      - HasAllTags("site:passthepopcorn") && Ratio > 1.05
+      - HasAllTags("site:torrentday") && (Ratio > 1.05 || SeedingDays >= 3.5)
+      - HasAllTags("site:torrentleech") && (Ratio > 1.05 || SeedingDays >= 10.5)
+      - HasAllTags("site:uhd") && (Ratio > 1.05 || SeedingDays >= 7.5)
+      - HasAnyTag("not-linked") && SeedingDays > 31
+
+    pause:
+      - Downloaded == true && IsPublic == true
+
+    orphan:
+      grace_period: 24h
+      ignore_paths:
+        - /data/downloads/complete/manual
+
+    tag:
+      - {name: added:1d, update: ["AddedDays < 7"]}
+      - {name: added:7d, update: ["AddedDays >= 7 && AddedDays < 14"]}
+      - {name: added:14d, update: ["AddedDays >= 14 && AddedDays < 30"]}
+      - {name: added:30d, update: ["AddedDays >= 30 && AddedDays < 180"]}
+      - {name: added:180d, update: ["AddedDays >= 180 && AddedDays < 365"]}
+      - {name: added:1y, update: ["AddedDays >= 365 && AddedDays < 730"]}
+      - {name: added:2y, update: ["AddedDays >= 730 && AddedDays < 1095"]}
+      - {name: added:3y, update: ["AddedDays >= 1095 && AddedDays < 1460"]}
+      - {name: added:4y, update: ["AddedDays >= 1460 && AddedDays < 1825"]}
+      - {name: added:5y, update: ["AddedDays >= 1825"]}
+      - {
+          name: not-linked,
+          update:
+            [
+              'HardlinkedOutsideClient == false && Label in ["tv-sonarr", "radarr"]',
+            ],
+        }
+      - {name: site:anthelion, update: ['TrackerName == "anthelion.me"']}
+      - {name: site:alpharatio, update: ['TrackerName == "alpharatio.cc"']}
+      - {name: site:aither, update: ['TrackerName == "aither.cc"']}
+      - {name: site:beyondhd, update: ['TrackerName == "beyond-hd.me"']}
+      - {
+          name: site:blutopia,
+          update: ['TrackerName in ["blutopia.cc", "blutopia.xyz"]'],
+        }
+      - {
+          name: site:filelist,
+          update: ['TrackerName in ["filelist.io", "thefl.org"]'],
+        }
+      - {name: site:hd-torrents, update: ['TrackerName == "hdts-announce.ru"']}
+      - {
+          name: site:iptorrents,
+          update:
+            [
+              'TrackerName in ["bgp.technology", "empirehost.me", "stackoverflow.tech"]',
+            ],
+        }
+      - {name: site:myanonamouse, update: ['TrackerName == "myanonamouse.net"']}
+      - {name: site:morethantv, update: ['TrackerName == "morethantv.me"']}
+      - {name: site:nebulance, update: ['TrackerName == "nebulance.io"']}
+      - {name: site:privatehd, update: ['TrackerName == "privatehd.to"']}
+      - {
+          name: site:passthepopcorn,
+          update: ['TrackerName == "passthepopcorn.me"'],
+        }
+      - {
+          name: site:torrentday,
+          update: ['TrackerName in ["jumbohostpro.eu", "td-peers.com"]'],
+        }
+      - {
+          name: site:torrentleech,
+          update: ['TrackerName in ["tleechreload.org", "torrentleech.org"]'],
+        }
+      - {name: site:uhd, update: ['TrackerName == "uhdbits.org"']}
+      - {name: tracker-down, update: ["IsTrackerDown()"]}
+      - {name: unregistered, update: ["IsUnregistered()"]}

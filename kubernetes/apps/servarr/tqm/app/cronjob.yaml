@@ -1,0 +1,75 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/master-standalone/cronjob-batch-v1.json
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: tqm
+spec:
+  schedule: 0 * * * * # hourly
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      ttlSecondsAfterFinished: 600
+      template:
+        spec:
+          restartPolicy: Never
+          securityContext:
+            runAsUser: 65534
+            runAsGroup: 65534
+            fsGroup: 65534
+            fsGroupChangePolicy: OnRootMismatch
+            runAsNonRoot: true
+            seccompProfile:
+              type: RuntimeDefault
+          initContainers:
+            - &container
+              name: retag
+              image: ghcr.io/home-operations/tqm:1.16.0@sha256:4b9fb56c43e1e5d82dec0be3b471af415e1d4092daff87354ad6d1008f756bba
+              args:
+                - retag
+                - qbt
+              resources:
+                requests:
+                  cpu: 10m
+                  memory: 128M
+                limits:
+                  memory: 128M
+              securityContext:
+                allowPrivilegeEscalation: false
+                readOnlyRootFilesystem: true
+                capabilities: {drop: ["ALL"]}
+              volumeMounts:
+                - name: scratch
+                  mountPath: /.config/tqm
+                - name: config
+                  mountPath: /.config/tqm/config.yaml
+                  subPath: config.yaml
+                  readOnly: true
+                - name: media
+                  mountPath: /data
+          containers:
+            - <<: *container
+              name: clean
+              args:
+                - clean
+                - qbt
+            - <<: *container
+              name: pause
+              args:
+                - pause
+                - qbt
+            - <<: *container
+              name: orphan
+              args:
+                - orphan
+                - qbt
+          volumes:
+            - name: scratch
+              emptyDir: {}
+            - name: config
+              configMap:
+                name: tqm
+            - name: media
+              persistentVolumeClaim:
+                claimName: media
