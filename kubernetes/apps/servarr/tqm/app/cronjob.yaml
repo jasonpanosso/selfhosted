@@ -59,11 +59,11 @@ spec:
               args:
                 - pause
                 - qbt
-            - <<: *container
-              name: orphan
-              args:
-                - orphan
-                - qbt
+            # - <<: *container
+            #   name: orphan
+            #   args:
+            #     - orphan
+            #     - qbt
           volumes:
             - name: scratch
               emptyDir: {}
