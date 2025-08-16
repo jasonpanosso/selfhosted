@@ -249,6 +249,10 @@ spec:
       ruleNames:
         - autogen-privileged-containers
         - privileged-containers
+    - policyName: disallow-host-namespaces
+      ruleNames:
+        - host-namespaces
+        - autogen-host-namespaces
   match:
     any:
       - resources:
@@ -272,6 +276,10 @@ spec:
       ruleNames:
         - host-path
         - autogen-host-path
+    - policyName: disallow-host-namespaces
+      ruleNames:
+        - host-namespaces
+        - autogen-host-namespaces
   match:
     any:
       - resources:
@@ -295,6 +303,10 @@ spec:
       ruleNames:
         - host-path
         - autogen-host-path
+    - policyName: disallow-host-namespaces
+      ruleNames:
+        - host-namespaces
+        - autogen-host-namespaces
   match:
     any:
       - resources:
@@ -329,3 +341,26 @@ spec:
             - rook-ceph
           names:
             - rook-ceph-rgw*
+---
+# yaml-language-server: $schema=https://datreeio.github.io/CRDs-catalog/kyverno.io/policyexception_v2.json
+apiVersion: kyverno.io/v2
+kind: PolicyException
+metadata:
+  name: rook-ceph-tools-exception
+spec:
+  exceptions:
+    - policyName: disallow-host-namespaces
+      ruleNames:
+        - host-namespaces
+        - autogen-host-namespaces
+  match:
+    any:
+      - resources:
+          kinds:
+            - Pod
+            - Deployment
+            - ReplicaSet
+          namespaces:
+            - rook-ceph
+          names:
+            - rook-ceph-tools*

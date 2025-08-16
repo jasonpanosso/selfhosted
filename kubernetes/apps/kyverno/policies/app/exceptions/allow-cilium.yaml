@@ -34,6 +34,10 @@ spec:
       ruleNames:
         - host-namespaces
         - autogen-host-namespaces
+    - policyName: restrict-seccomp
+      ruleNames:
+        - check-seccomp
+        - autogen-check-seccomp
   match:
     any:
       - resources:
