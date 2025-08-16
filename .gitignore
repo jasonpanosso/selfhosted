@@ -22,10 +22,11 @@ talos/**
 !talos/**/
 # allow sops files in secrets dirs
 !**/secrets/*.sops*
+!**/secrets/**/kustomizeconfig.yaml
 !**/secrets/**/*.sops*
 !talos/*.sops*
 !talos/**/*.sops*
 !talos/**/*patch.yaml
 # allow kustomization.yaml in secrets dirs
-!**/secrets/kustomization.yaml
+!**/secrets/**/kustomization.yaml
 terraform/.bitwarden
