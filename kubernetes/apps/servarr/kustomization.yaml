@@ -8,16 +8,16 @@ components:
   - ../../components/common
 
 resources:
-  - ./storage/ks.yaml
-  - ./radarr/ks.yaml
-  - ./sonarr/ks.yaml
-  - ./prowlarr/ks.yaml
-  - ./unpackerr/ks.yaml
+  - ./autobrr/ks.yaml
   - ./configarr/ks.yaml
-  - ./qbittorrent/ks.yaml
-  - ./qbtools/ks.yaml
+  - ./cross-seed/ks.yaml
   - ./jellyfin/ks.yaml
   - ./jellyseerr/ks.yaml
-  - ./cross-seed/ks.yaml
-  - ./autobrr/ks.yaml
+  - ./prowlarr/ks.yaml
+  - ./qbittorrent/ks.yaml
+  - ./radarr/ks.yaml
   - ./seasonpackarr/ks.yaml
+  - ./sonarr/ks.yaml
+  - ./storage/ks.yaml
+  - ./tqm/ks.yaml
+  - ./unpackerr/ks.yaml
