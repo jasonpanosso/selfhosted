@@ -24,21 +24,22 @@ filters:
     remove:
       - IsUnregistered()
       - HasAllTags("site:anthelion") && Ratio > 1.05
-      - HasAllTags("site:alpharatio") && (Ratio > 1.05 || SeedingDays >= 7.5)
-      - HasAllTags("site:aither") && SeedingDays >= 5.5
-      - HasAllTags("site:beyondhd") && SeedingDays >= 30.5
-      - HasAllTags("site:blutopia") && SeedingDays >= 7.5
-      - HasAllTags("site:filelist") && (Ratio > 1.05 || SeedingDays >= 2.5)
-      - HasAllTags("site:hd-torrents") && (Ratio > 1.05 || SeedingDays >= 10.5)
-      - HasAllTags("site:iptorrents") && (Ratio > 1.05 || SeedingDays >= 14)
+      - HasAllTags("site:alpharatio") && Ratio > 1.05 && SeedingDays >= 7.5
+      - HasAllTags("site:aither") && Ratio > 1.05 && SeedingDays >= 5.5
+      - HasAllTags("site:beyondhd") && Ratio > 1.05 && SeedingDays >= 30.5
+      - HasAllTags("site:blutopia") && Ratio > 1.05 && SeedingDays >= 7.5
+      - HasAllTags("site:filelist") && Ratio > 1.05 && SeedingDays >= 2.5
+      - HasAllTags("site:hd-torrents") && Ratio > 1.05 && SeedingDays >= 10.5
+      - HasAllTags("site:iptorrents") && Ratio > 1.05 && SeedingDays >= 14
       - HasAllTags("site:myanonamouse") && SeedingDays >= 3.5
-      - HasAllTags("site:morethantv") && (Ratio > 1.05 || SeedingDays >= 7.5)
+      - HasAllTags("site:morethantv") && Ratio > 1.05 && SeedingDays >= 7.5
       - HasAllTags("site:nebulance") && SeedingDays >= 5.5
-      - HasAllTags("site:privatehd") && (Ratio > 1.05 || SeedingDays >= 10.5)
+      - HasAllTags("site:privatehd") && Ratio > 1.05 && SeedingDays >= 10.5
       - HasAllTags("site:passthepopcorn") && Ratio > 1.05
-      - HasAllTags("site:torrentday") && (Ratio > 1.05 || SeedingDays >= 3.5)
-      - HasAllTags("site:torrentleech") && (Ratio > 1.05 || SeedingDays >= 10.5)
-      - HasAllTags("site:uhd") && (Ratio > 1.05 || SeedingDays >= 7.5)
+      - HasAllTags("site:seedpool") && Ratio > 1.05 && SeedingDays >= 10.5
+      - HasAllTags("site:torrentday") && Ratio > 1.05 && SeedingDays >= 3.5
+      - HasAllTags("site:torrentleech") && Ratio > 1.05 && SeedingDays >= 10.5
+      - HasAllTags("site:uhd") && Ratio > 1.05 && SeedingDays >= 7.5
       - HasAnyTag("not-linked") && SeedingDays > 31
 
     pause:
@@ -88,6 +89,7 @@ filters:
             ],
         }
       - {name: site:myanonamouse, update: ['TrackerName == "myanonamouse.net"']}
+      - {name: site:seedpool, update: ['TrackerName == "seedpool.org"']}
       - {name: site:morethantv, update: ['TrackerName == "morethantv.me"']}
       - {name: site:nebulance, update: ['TrackerName == "nebulance.io"']}
       - {name: site:privatehd, update: ['TrackerName == "privatehd.to"']}
