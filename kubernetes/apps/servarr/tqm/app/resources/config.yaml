@@ -18,7 +18,8 @@ filters:
       - IsTrackerDown()
       - Label in ["manual"]
       - Label in ["permaseed"] && !IsUnregistered()
-      - SeedingHours < 36 && IsPrivate == true && !IsUnregistered()
+      - SeedingHours < 36 && !IsUnregistered()
+      - AddedHours < 1
       - HardlinkedOutsideClient == true && !IsUnregistered()
 
     remove:
@@ -41,9 +42,6 @@ filters:
       - HasAllTags("site:torrentleech") && Ratio > 1.05 && SeedingDays >= 10.5
       - HasAllTags("site:uhd") && Ratio > 1.05 && SeedingDays >= 7.5
       - HasAnyTag("not-linked") && SeedingDays > 31
-
-    pause:
-      - Downloaded == true && IsPublic == true
 
     orphan:
       grace_period: 24h
