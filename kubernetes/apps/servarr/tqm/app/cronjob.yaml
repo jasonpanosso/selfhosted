@@ -54,11 +54,6 @@ spec:
               args:
                 - clean
                 - qbt
-            - <<: *container
-              name: pause
-              args:
-                - pause
-                - qbt
             # - <<: *container
             #   name: orphan
             #   args:
