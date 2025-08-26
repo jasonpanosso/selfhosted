@@ -15,20 +15,24 @@ function fetchIndexers(baseUrl, apiKey, tag) {
 module.exports = {
   action: "inject",
   apiKey: process.env.CROSS_SEED_API_TOKEN,
+  blockList: ["category:manual"],
+  dataDirs: [
+    "/data/downloads/complete/permaseed",
+    "/data/downloads/complete/radarr",
+    "/data/downloads/complete/tv-sonarr",
+  ],
+  excludeRecentSearch: '73 days',
+  excludeOlder: '365 days' ,
   linkCategory: "cross-seed",
   linkDirs: ["/data/downloads/complete/cross-seed"],
-  dataDirs: [
-    "/data/downloads/complete/tv-sonarr",
-    "/data/downloads/complete/radarr",
-    "/data/downloads/complete/manual",
-  ],
-  maxDataDepth: 2,
   linkType: "hardlink",
   matchMode: "partial",
+  maxDataDepth: 2,
   port: Number(process.env.CROSS_SEED_PORT),
   radarr: [
     `http://radarr.servarr.svc.cluster.local/?apikey=${process.env.RADARR_API_TOKEN}`,
   ],
+  rssCadence: '15min',
   sonarr: [
     `http://sonarr.servarr.svc.cluster.local/?apikey=${process.env.SONARR_API_TOKEN}`,
   ],
