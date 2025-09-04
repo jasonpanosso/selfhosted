@@ -13,7 +13,6 @@ resources:
   - ./loki/ks.yaml
   - ./opentelemetry/operator/ks.yaml
   - ./opentelemetry/collector/ks.yaml
-  # disable until arm64 support, or ability to set operator affinity
-  # - ./silence-operator/operator/ks.yaml
-  # - ./silence-operator/silences/ks.yaml
+  - ./silence-operator/operator/ks.yaml
+  - ./silence-operator/silences/ks.yaml
   - ./smartctl-exporter/ks.yaml

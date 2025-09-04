@@ -1,10 +1,13 @@
 ---
 alertmanagerAddress: http://alertmanager-operated.observability.svc.cluster.local:9093
+crds:
+  install: true
 image:
   registry: quay.io
 networkPolicy:
   enabled: false
 
+# https://github.com/giantswarm/silence-operator/issues/497
 operator:
   affinity:
     nodeAffinity:
@@ -15,10 +18,3 @@ operator:
                 operator: In
                 values:
                   - amd64
-resources:
-  requests:
-    cpu: 10m
-    memory: 64Mi
-  limits:
-    cpu: 10m
-    memory: 64Mi
