@@ -28,10 +28,14 @@ spec:
           kinds:
             - Pod
             - DaemonSet
+            - Deployment
+            - ReplicaSet
           namespaces:
             - rook-ceph
           names:
             - csi-cephfsplugin*
+            - rook-ceph.cephfs.csi.ceph.com-ctrlplugin*
+            - rook-ceph.cephfs.csi.ceph.com-nodeplugin*
 ---
 # yaml-language-server: $schema=https://datreeio.github.io/CRDs-catalog/kyverno.io/policyexception_v2.json
 apiVersion: kyverno.io/v2
@@ -62,10 +66,14 @@ spec:
           kinds:
             - Pod
             - DaemonSet
+            - Deployment
+            - ReplicaSet
           namespaces:
             - rook-ceph
           names:
             - csi-rbdplugin*
+            - rook-ceph.rbd.csi.ceph.com-ctrlplugin*
+            - rook-ceph.rbd.csi.ceph.com-nodeplugin*
 ---
 # yaml-language-server: $schema=https://datreeio.github.io/CRDs-catalog/kyverno.io/policyexception_v2.json
 apiVersion: kyverno.io/v2
