@@ -265,9 +265,6 @@ cephObjectStores:
             memory: 1Gi
           limits:
             memory: 2Gi
-      healthCheck:
-        bucket:
-          interval: 60s
       hosting:
         advertiseEndpoint:
           dnsName: rook-ceph-rgw-my-store.rook-ceph.svc.cluster.local
