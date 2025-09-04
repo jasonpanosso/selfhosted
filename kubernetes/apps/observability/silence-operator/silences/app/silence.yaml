@@ -9,5 +9,5 @@ spec:
     - name: alertname
       value: CephNodeDiskspaceWarning
     - name: device
-      value: /dev/nvme.*
+      value: /dev/(nvme|sd).*
       matchType: "=~"
