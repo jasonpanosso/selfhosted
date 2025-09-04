@@ -2,12 +2,12 @@ terraform {
   required_providers {
     digitalocean = {
       source  = "digitalocean/digitalocean"
-      version = "~> 2.50.0"
+      version = "~> 2.66.0"
     }
 
     bitwarden = {
       source  = "maxlaverse/bitwarden"
-      version = ">= 0.13.6"
+      version = ">= 0.16.0"
     }
 
     random = {
@@ -30,10 +30,6 @@ provider "digitalocean" {
 
 provider "bitwarden" {
   access_token = var.bitwarden_access_token
-
-  experimental {
-    embedded_client = true
-  }
 }
 
 provider "random" {}
