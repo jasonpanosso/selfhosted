@@ -1,3 +1,3 @@
 ---
 monitoring:
-  podMonitorEnabled: false
+  podMonitorEnabled: true

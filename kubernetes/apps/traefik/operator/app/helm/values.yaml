@@ -42,7 +42,7 @@ metrics:
       enabled: true
     disableAPICheck: true
     serviceMonitor:
-      enabled: false
+      enabled: true
       metricRelabelings:
         - sourceLabels: [__name__]
           separator: ;

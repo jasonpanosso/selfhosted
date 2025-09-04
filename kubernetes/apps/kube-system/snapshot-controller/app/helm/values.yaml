@@ -2,4 +2,4 @@
 controller:
   replicaCount: 2
   serviceMonitor:
-    create: false
+    create: true

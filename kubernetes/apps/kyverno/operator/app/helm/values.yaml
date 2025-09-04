@@ -8,7 +8,7 @@ features:
     namespace: "*"
 cleanupController:
   serviceMonitor:
-    enabled: false
+    enabled: true
     namespace: observability
   replicas: 3
   resources:
@@ -31,16 +31,16 @@ cleanupController:
             - delete
 admissionController:
   serviceMonitor:
-    enabled: false
+    enabled: true
     namespace: observability
   replicas: 3
 backgroundController:
   serviceMonitor:
-    enabled: false
+    enabled: true
     namespace: observability
   replicas: 3
 reportsController:
   serviceMonitor:
-    enabled: false
+    enabled: true
     namespace: observability
   replicas: 3

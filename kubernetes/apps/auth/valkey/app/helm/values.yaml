@@ -37,6 +37,6 @@ replica:
   persistence:
     size: 2Gi
 metrics:
-  enabled: false
+  enabled: true
   serviceMonitor:
-    enabled: false
+    enabled: true

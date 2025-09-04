@@ -1,7 +1,7 @@
 ---
 fullnameOverride: smartctl-exporter
 serviceMonitor:
-  enabled: false
+  enabled: true
   relabelings:
     - action: labeldrop
       regex: (pod)
