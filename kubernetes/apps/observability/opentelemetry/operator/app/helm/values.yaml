@@ -13,7 +13,7 @@ manager:
       memory: 128Mi
       ephemeral-storage: 50Mi
   serviceMonitor:
-    enabled: true
+    enabled: false
   createRbacPermissions: false
   leaderElection:
     enabled: true

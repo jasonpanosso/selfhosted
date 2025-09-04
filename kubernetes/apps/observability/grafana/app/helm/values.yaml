@@ -289,7 +289,7 @@ sidecar:
     searchNamespace: ALL
 
 serviceMonitor:
-  enabled: true
+  enabled: false
 testFramework:
   enabled: false
 

@@ -6,5 +6,5 @@ reloader:
     replicas: 1
   readOnlyRootFileSystem: true
   podMonitor:
-    enabled: true
+    enabled: false
     namespace: "{{ .Release.Namespace }}"
