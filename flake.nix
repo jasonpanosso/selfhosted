@@ -1,7 +1,7 @@
 {
   description = "kubernetes cluster utils devshell";
 
-  inputs.nixpkgs.url = "https://flakehub.com/f/NixOS/nixpkgs/0.1.*.tar.gz";
+  inputs.nixpkgs.url = "https://flakehub.com/f/NixOS/nixpkgs/0.1"; # unstable
   inputs.flake-utils.url = "github:numtide/flake-utils";
 
   outputs = { self, nixpkgs, flake-utils }:
@@ -16,6 +16,7 @@
         devShells.default = pkgs.mkShell {
           buildInputs = with pkgs; [
             age
+            bws
             cilium-cli
             crane
             cmctl
