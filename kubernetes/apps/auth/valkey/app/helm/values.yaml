@@ -37,12 +37,6 @@ replica:
   persistence:
     size: 2Gi
 metrics:
-  enabled: true
+  enabled: false
   serviceMonitor:
-    enabled: true
-  resources:
-    requests:
-      cpu: 100m
-      memory: 256Mi
-    limits:
-      memory: 256Mi
+    enabled: false
