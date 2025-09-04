@@ -111,10 +111,10 @@ cephBlockPools:
       deviceClass: nvme
       enableCrushUpdates: true
       replicated:
-        name: ".mgr"
         size: 3
         requireSafeReplicaSize: true
       enableRBDStats: true
+      name: ".mgr"
       parameters:
         compression_mode: none
       mirroring:
