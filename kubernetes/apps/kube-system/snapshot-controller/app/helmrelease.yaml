@@ -9,6 +9,8 @@ spec:
   chartRef:
     kind: OCIRepository
     name: snapshot-controller
+  driftDetection:
+    mode: enabled
   install:
     crds: CreateReplace
     remediation:

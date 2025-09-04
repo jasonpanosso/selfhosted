@@ -6,11 +6,11 @@ metadata:
   name: volsync
 spec:
   interval: 1h
-  driftDetection:
-    mode: enabled
   chartRef:
     kind: OCIRepository
     name: volsync
+  driftDetection:
+    mode: enabled
   install:
     remediation:
       retries: -1

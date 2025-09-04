@@ -9,6 +9,8 @@ spec:
   chartRef:
     kind: OCIRepository
     name: spegel
+  driftDetection:
+    mode: enabled
   install:
     remediation:
       retries: -1

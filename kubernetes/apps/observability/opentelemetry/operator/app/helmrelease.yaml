@@ -9,6 +9,8 @@ spec:
   chartRef:
     kind: OCIRepository
     name: opentelemetry-operator
+  driftDetection:
+    mode: enabled
   install:
     remediation:
       retries: -1

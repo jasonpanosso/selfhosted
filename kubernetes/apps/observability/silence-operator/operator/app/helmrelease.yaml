@@ -9,6 +9,8 @@ spec:
   chartRef:
     kind: OCIRepository
     name: silence-operator
+  driftDetection:
+    mode: enabled
   install:
     crds: CreateReplace
     remediation:
