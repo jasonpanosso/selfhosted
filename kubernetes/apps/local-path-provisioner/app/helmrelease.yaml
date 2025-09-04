@@ -1,13 +1,4 @@
 ---
-# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/source.toolkit.fluxcd.io/helmrepository_v1.json
-apiVersion: source.toolkit.fluxcd.io/v1
-kind: HelmRepository
-metadata:
-  name: containeroo
-spec:
-  interval: 1h
-  url: https://charts.containeroo.ch
----
 # yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/helm.toolkit.fluxcd.io/helmrelease_v2.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
@@ -15,14 +6,9 @@ metadata:
   name: local-path-provisioner
 spec:
   interval: 1h
-  chart:
-    spec:
-      chart: local-path-provisioner
-      version: 0.0.33
-      sourceRef:
-        kind: HelmRepository
-        name: containeroo
-      interval: 12h
+  chartRef:
+    kind: OCIRepository
+    name: local-path-provisioner
   install:
     remediation:
       retries: -1
