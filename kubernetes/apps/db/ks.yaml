@@ -32,5 +32,3 @@ spec:
       namespace: external-secrets
     - name: local-path-provisioner
       namespace: local-path-provisioner
-    - name: prometheus-operator-crds
-      namespace: observability

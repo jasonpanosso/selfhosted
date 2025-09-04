@@ -10,11 +10,11 @@ spec:
     kind: OCIRepository
     name: kube-prometheus-stack
   install:
-    crds: Skip
+    crds: CreateReplace
     remediation:
       retries: -1
   upgrade:
-    crds: Skip
+    crds: CreateReplace
     cleanupOnFail: true
     remediation:
       retries: 3
