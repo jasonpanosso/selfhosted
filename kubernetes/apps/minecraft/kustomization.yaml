@@ -8,4 +8,4 @@ components:
   - ../../components/common
 
 resources:
-  - ./create/ks.yaml
+  - ./cobblemon/ks.yaml

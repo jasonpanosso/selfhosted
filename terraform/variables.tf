@@ -108,3 +108,9 @@ variable "healthchecksio_heartbeat_url" {
   type        = string
   sensitive   = true
 }
+
+variable "curseforge_api_key" {
+  description = "Curseforge developer API key"
+  type        = string
+  sensitive   = true
+}

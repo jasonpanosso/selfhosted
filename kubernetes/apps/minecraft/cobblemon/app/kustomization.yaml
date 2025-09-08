@@ -9,7 +9,7 @@ resources:
   - ./ocirepository.yaml
 
 configMapGenerator:
-  - name: minecraft-create-values
+  - name: cobblemon-values
     files:
       - values.yaml=./helm/values.yaml
 

@@ -1,35 +1,26 @@
 ---
-fullnameOverride: &app minecraft-create
+fullnameOverride: &app cobblemon
 image:
   repository: ghcr.io/itzg/minecraft-server
-  tag: 2025.9.2@sha256:1de76802ab088730e40c9d1866b8b7d2b4d341b946342892a1dbb6f7f4feeb18
+  tag: 2025.9.2-java21-graalvm@sha256:99dae0021b873a4b33f8cf4685165cf9abb04fc993b219cad9eea885c8a226fd
 resources:
   requests:
     cpu: 1000m
-    memory: 4Gi
-  limits:
     memory: 4Gi
 securityContext:
   runAsUser: 65534
   runAsGroup: 65534
   runAsNonRoot: true
   fsGroup: 65534
+  readOnlyRootFilesystem: false
   seccompProfile:
     type: RuntimeDefault
-livenessProbe:
-  initialDelaySeconds: 30
-readinessProbe:
-  initialDelaySeconds: 30
 startupProbe:
   enabled: true
 extraEnv:
   TZ: America/Detroit
-  MODRINTH_MODPACK: "https://modrinth.com/modpack/just-create-smp-re"
-  MODRINTH_DEFAULT_VERSION_TYPE: "release"
-  MODRINTH_EXCLUDE_FILES: |
-    freecam
-    voicechat
   USE_MEOWICE_FLAGS: "true"
+  USE_MEOWICE_GRAALVM_FLAGS: "true"
 persistence:
   dataDir:
     enabled: true
@@ -37,11 +28,9 @@ persistence:
 minecraftServer:
   eula: true
   version: 1.21.1
-  type: MODRINTH
-  overrideServerProperties: true
+  type: AUTO_CURSEFORGE
   icon: https://i.imgur.com/xCwev3X.png
-  jvmXXOpts: "-XX:MaxRAMPercentage=75"
-  memory: ""
+  memory: 4G
   serviceType: LoadBalancer
   difficulty: normal
   levelType: normal
@@ -52,12 +41,17 @@ minecraftServer:
   whitelist: "Jayce"
   ops: "Jayce"
   motd: "meep meep"
-  worldSaveName: world
-  viewDistance: 12
   rcon:
     enabled: true
     existingSecret: *app
-    secretKey: MINECRAFT_CREATE_RCON_PASSWORD
+    secretKey: MINECRAFT_COBBLEMON_RCON_PASSWORD
+  autoCurseForge:
+    apiKey:
+      existingSecret: *app
+      secretKey: CURSEFORGE_API_KEY
+    slug: cobblemon-academy
+    includeMods:
+      - fancymenu
 
 serviceAnnotations:
   lbipam.cilium.io/ips: 192.168.20.20

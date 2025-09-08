@@ -41,4 +41,5 @@ module "bitwarden_secrets" {
   pushover_user_key            = var.pushover_user_key
   pushover_api_token           = var.pushover_api_token
   healthchecksio_heartbeat_url = var.healthchecksio_heartbeat_url
+  curseforge_api_key           = var.curseforge_api_key
 }
