@@ -45,6 +45,7 @@ minecraftServer:
     enabled: true
     existingSecret: *app
     secretKey: MINECRAFT_COBBLEMON_RCON_PASSWORD
+  forceReDownload: true
   autoCurseForge:
     apiKey:
       existingSecret: *app
