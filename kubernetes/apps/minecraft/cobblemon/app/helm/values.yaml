@@ -45,23 +45,22 @@ minecraftServer:
     enabled: true
     existingSecret: *app
     secretKey: MINECRAFT_COBBLEMON_RCON_PASSWORD
-  forceReDownload: true
+  pluginUrls:
+    - https://cdn.modrinth.com/data/fALzjamp/versions/RVFHfo1D/Chunky-Fabric-1.4.23.jar
   autoCurseForge:
     apiKey:
       existingSecret: *app
       secretKey: CURSEFORGE_API_KEY
     slug: cobblemon-academy
-    forceSynchronize: true
     includeMods:
       - fancymenu
-      - chunky-pregenerator
   extraPorts:
     - name: voicechat
       containerPort: 24454
       protocol: UDP
       service:
         enabled: true
-        embedded: false
+        embedded: true
         annotations: 
           lbipam.cilium.io/ips: 192.168.20.20
         type: ClusterIP
