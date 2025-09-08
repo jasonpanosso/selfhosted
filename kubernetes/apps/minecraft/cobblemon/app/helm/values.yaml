@@ -50,9 +50,21 @@ minecraftServer:
       existingSecret: *app
       secretKey: CURSEFORGE_API_KEY
     slug: cobblemon-academy
+    forceSynchronize: true
     includeMods:
       - fancymenu
       - chunky-pregenerator
+  extraPorts:
+    - name: voicechat
+      containerPort: 24454
+      protocol: UDP
+      service:
+        enabled: true
+        embedded: false
+        annotations: 
+          lbipam.cilium.io/ips: 192.168.20.20
+        type: ClusterIP
+        port: 24454
 
 serviceAnnotations:
   lbipam.cilium.io/ips: 192.168.20.20
