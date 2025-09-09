@@ -36,11 +36,12 @@ minecraftServer:
   levelType: normal
   spawnProtection: 0
   gameMode: survival
-  pvp: false
+  pvp: default
   onlineMode: true
   whitelist: "Jayce"
   ops: "Jayce"
   motd: "meep meep"
+  viewDistance: default
   rcon:
     enabled: true
     existingSecret: *app
@@ -52,6 +53,7 @@ minecraftServer:
       existingSecret: *app
       secretKey: CURSEFORGE_API_KEY
     slug: cobblemon-academy
+    filenameMatcher: 1.2.0
     includeMods:
       - fancymenu
   extraPorts:
@@ -61,8 +63,6 @@ minecraftServer:
       service:
         enabled: true
         embedded: true
-        annotations: 
-          lbipam.cilium.io/ips: 192.168.20.20
         type: ClusterIP
         port: 24454
 
