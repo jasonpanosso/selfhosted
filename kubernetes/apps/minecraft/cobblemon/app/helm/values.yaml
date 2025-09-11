@@ -46,8 +46,8 @@ minecraftServer:
     enabled: true
     existingSecret: *app
     secretKey: MINECRAFT_COBBLEMON_RCON_PASSWORD
-  pluginUrls:
-    - https://cdn.modrinth.com/data/fALzjamp/versions/RVFHfo1D/Chunky-Fabric-1.4.23.jar
+  modUrls:
+    - https://cdn.modrinth.com/data/abooMhox/versions/OtzwmSlR/treeharvester-1.21.1-9.1.jar
   autoCurseForge:
     apiKey:
       existingSecret: *app
