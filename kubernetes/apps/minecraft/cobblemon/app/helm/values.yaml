@@ -5,8 +5,8 @@ image:
   tag: 2025.9.2-java21-graalvm@sha256:99dae0021b873a4b33f8cf4685165cf9abb04fc993b219cad9eea885c8a226fd
 resources:
   requests:
-    cpu: 1000m
-    memory: 4Gi
+    cpu: 2000m
+    memory: 6Gi
 securityContext:
   runAsUser: 65534
   runAsGroup: 65534
@@ -30,7 +30,7 @@ minecraftServer:
   version: 1.21.1
   type: AUTO_CURSEFORGE
   icon: https://i.imgur.com/xCwev3X.png
-  memory: 4G
+  memory: 6G
   serviceType: LoadBalancer
   difficulty: normal
   levelType: normal
@@ -53,7 +53,7 @@ minecraftServer:
       existingSecret: *app
       secretKey: CURSEFORGE_API_KEY
     slug: cobblemon-academy
-    filenameMatcher: 1.2.0
+    filenameMatcher: 1.3.0
     includeMods:
       - fancymenu
   extraPorts:
