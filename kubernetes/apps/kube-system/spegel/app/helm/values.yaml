@@ -9,3 +9,5 @@ serviceMonitor:
   enabled: true
 grafanaDashboard:
   enabled: false
+livenessProbe:
+  enabled: true
