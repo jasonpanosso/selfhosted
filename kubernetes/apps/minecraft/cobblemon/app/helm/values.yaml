@@ -48,7 +48,6 @@ minecraftServer:
     secretKey: MINECRAFT_COBBLEMON_RCON_PASSWORD
   modUrls:
     - https://cdn.modrinth.com/data/abooMhox/versions/OtzwmSlR/treeharvester-1.21.1-9.1.jar
-    - https://cdn.modrinth.com/data/TQTTVgYE/versions/f2mvlGrg/fabric-carpet-1.21-1.4.147%2Bv240613.jar
   autoCurseForge:
     apiKey:
       existingSecret: *app
