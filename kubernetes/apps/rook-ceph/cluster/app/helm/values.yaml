@@ -100,6 +100,9 @@ cephClusterSpec:
           - name: /dev/disk/by-id/ata-HGST_HDN724040ALE640_PK1334PEJSXBUS
           - name: /dev/disk/by-id/ata-HGST_HDN724040ALE640_PK1334PEJPGEBS
           - name: /dev/disk/by-id/ata-HGST_HDN724040ALE640_PK2338P4H4X3MC
+      - name: worker-8
+        devices:
+          - name: /dev/disk/by-id/nvme-Samsung_SSD_990_PRO_with_Heatsink_2TB_S7HGNJ0Y701515Y
 
 cephBlockPools:
   - name: builtin-mgr
