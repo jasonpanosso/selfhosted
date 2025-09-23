@@ -15,7 +15,7 @@ affinity:
 resources:
   requests:
     cpu: 2000m
-    memory: 6Gi
+    memory: 8Gi
 securityContext:
   runAsUser: 65534
   runAsGroup: 65534
@@ -39,7 +39,7 @@ minecraftServer:
   version: 1.21.1
   type: AUTO_CURSEFORGE
   icon: https://i.imgur.com/xCwev3X.png
-  memory: 6G
+  memory: 8G
   serviceType: LoadBalancer
   difficulty: normal
   levelType: normal
