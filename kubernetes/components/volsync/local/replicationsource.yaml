@@ -18,7 +18,7 @@ spec:
     cacheAccessModes: [ReadWriteOnce]
     storageClassName: "${VOLSYNC_STORAGECLASS:=rook-ceph-block}"
     accessModes: [ReadWriteOnce]
-    unlock: "zzzz"
+    unlock: "zzz"
     moverSecurityContext:
       runAsUser: ${VOLSYNC_PUID:=65534}
       runAsGroup: ${VOLSYNC_PGID:=65534}
