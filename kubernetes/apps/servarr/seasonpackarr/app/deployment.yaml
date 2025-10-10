@@ -28,7 +28,7 @@ spec:
         seccompProfile:
           type: RuntimeDefault
       containers:
-        - image: ghcr.io/nuxencs/seasonpackarr:v0.12.1@sha256:c1356ad5ac8c0088277e9d932d9916e5f2161d78efabfd45029b731d2c4e6ff8
+        - image: ghcr.io/nuxencs/seasonpackarr:v0.13.0@sha256:3d42985ae5c1b91632305b21f09550a432df86086ea3759e2ebbfb13a6fbb077
           name: *app
           env:
             - name: SEASONPACKARR__DISABLE_CONFIG_FILE
