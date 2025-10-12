@@ -2,7 +2,7 @@
 fullnameOverride: &app cobblemon
 image:
   repository: ghcr.io/itzg/minecraft-server
-  tag: 2025.10.1-java21-graalvm@sha256:96ea541b3647726eb2007506217546bf63bd3240b410e3b8830780d89e2e30fd
+  tag: 2025.10.2-java21-graalvm@sha256:314592bbcdf70bcbe02909285647ca24206367cee061eebc2bbc61f7756a1909
 affinity:
   nodeAffinity:
     requiredDuringSchedulingIgnoredDuringExecution:
