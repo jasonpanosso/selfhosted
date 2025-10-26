@@ -3,23 +3,12 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: kyverno
+  name: &app kyverno
 spec:
-  interval: 1h
   chartRef:
     kind: OCIRepository
-    name: kyverno
-  driftDetection:
-    mode: enabled
-  install:
-    crds: CreateReplace
-    remediation:
-      retries: -1
-  upgrade:
-    crds: CreateReplace
-    cleanupOnFail: true
-    remediation:
-      retries: 3
+    name: *app
+  interval: 1h
   valuesFrom:
     - kind: ConfigMap
       name: kyverno-values

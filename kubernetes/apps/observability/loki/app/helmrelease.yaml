@@ -3,21 +3,12 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: loki
+  name: &app loki
 spec:
-  interval: 1h
   chartRef:
     kind: OCIRepository
-    name: loki
-  driftDetection:
-    mode: enabled
-  install:
-    remediation:
-      retries: -1
-  upgrade:
-    cleanupOnFail: true
-    remediation:
-      retries: 3
+    name: *app
+  interval: 1h
   valuesFrom:
     - kind: ConfigMap
       name: loki-values

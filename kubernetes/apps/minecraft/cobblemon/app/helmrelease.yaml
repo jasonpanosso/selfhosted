@@ -5,20 +5,11 @@ kind: HelmRelease
 metadata:
   name: &app cobblemon
 spec:
-  interval: 1h
-  timeout: 10m0s
   chartRef:
     kind: OCIRepository
     name: *app
-  driftDetection:
-    mode: enabled
-  install:
-    remediation:
-      retries: -1
-  upgrade:
-    cleanupOnFail: true
-    remediation:
-      retries: 3
+  interval: 1h
+  timeout: 10m0s
   valuesFrom:
     - kind: ConfigMap
       name: cobblemon-values

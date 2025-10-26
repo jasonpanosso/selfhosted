@@ -3,21 +3,12 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: rook-ceph-cluster
+  name: &app rook-ceph-cluster
 spec:
-  interval: 1h
   chartRef:
     kind: OCIRepository
-    name: rook-ceph-cluster
-  driftDetection:
-    mode: enabled
-  install:
-    remediation:
-      retries: -1
-  upgrade:
-    cleanupOnFail: false
-    remediation:
-      retries: 3
+    name: *app
+  interval: 1h
   valuesFrom:
     - kind: ConfigMap
       name: rook-ceph-cluster-values
