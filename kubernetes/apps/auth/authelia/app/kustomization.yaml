@@ -4,15 +4,15 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 resources:
+  - ./deployment.yaml
   - ./externalsecret.yaml
-  - ./helmrelease.yaml
-  - ./helmrepository.yaml
   - ./ingressroute.yaml
+  - ./service.yaml
+  - ./servicemonitor.yaml
 
 configMapGenerator:
-  - name: authelia-values
+  - name: authelia
+    options:
+      disableNameSuffixHash: true
     files:
-      - values.yaml=./helm/values.yaml
-
-configurations:
-  - ./helm/kustomizeconfig.yaml
+      - config.yaml=./resources/config.yaml

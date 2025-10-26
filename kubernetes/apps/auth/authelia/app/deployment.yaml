@@ -1,0 +1,115 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/master-standalone/deployment-apps-v1.json
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: &app authelia
+  labels:
+    app.kubernetes.io/name: *app
+  annotations:
+    reloader.stakater.com/auto: "true"
+spec:
+  strategy:
+    type: RollingUpdate
+  replicas: 3
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: *app
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: *app
+    spec:
+      # https://www.authelia.com/integration/kubernetes/introduction/#enable-service-links
+      enableServiceLinks: false
+      containers:
+        - image: ghcr.io/authelia/authelia:4.39.13@sha256:7adc2a95b6a4be9332f6a420fdf59c7031bff203d1046ab80d8fbd66f5b1095f
+          name: *app
+          ports:
+            - containerPort: 80
+          env:
+            - name: TZ
+              value: Etc/UTC
+            - name: X_AUTHELIA_CONFIG_FILTERS
+              value: template
+            - name: X_AUTHELIA_CONFIG
+              value: /config/config.yaml
+            - name: AUTHELIA_IDENTITY_VALIDATION_RESET_PASSWORD_JWT_SECRET_FILE
+              value: /secrets/JWT_TOKEN
+            - name: AUTHELIA_SESSION_SECRET_FILE
+              value: /secrets/SESSION_KEY
+            - name: AUTHELIA_SESSION_REDIS_PASSWORD_FILE
+              value: /secrets/REDIS_PASSWORD
+            - name: AUTHELIA_SESSION_REDIS_HIGH_AVAILABILITY_SENTINEL_PASSWORD_FILE
+              value: /secrets/REDIS_PASSWORD
+            - name: AUTHELIA_AUTHENTICATION_BACKEND_LDAP_PASSWORD_FILE
+              value: /secrets/LDAP_PASSWORD
+            - name: AUTHELIA_STORAGE_ENCRYPTION_KEY_FILE
+              value: /secrets/ENCRYPTION_KEY
+            - name: AUTHELIA_STORAGE_POSTGRES_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: authelia
+                  key: POSTGRES_USERNAME
+            - name: AUTHELIA_STORAGE_POSTGRES_PASSWORD_FILE
+              value: /secrets/POSTGRES_PASSWORD
+            - name: AUTHELIA_IDENTITY_PROVIDERS_OIDC_HMAC_SECRET_FILE
+              value: /secrets/OIDC_HMAC_SECRET
+            - name: AUTHELIA_NOTIFIER_SMTP_PASSWORD_FILE
+              value: /secrets/SMTP_PASSWORD
+            - name: AUTHELIA_NOTIFIER_SMTP_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: authelia
+                  key: SMTP_USERNAME
+          livenessProbe: &probes
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 5
+            periodSeconds: 15
+          readinessProbe: *probes
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              memory: 256Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities: {drop: [ALL]}
+          volumeMounts:
+            - name: config
+              mountPath: /config
+              readOnly: true
+            - name: secrets
+              mountPath: /secrets
+              readOnly: true
+      volumes:
+        - name: config
+          configMap:
+            name: authelia
+        - name: secrets
+          secret:
+            secretName: authelia
+      securityContext:
+        runAsUser: 65534
+        runAsGroup: 65534
+        fsGroup: 65534
+        fsGroupChangePolicy: OnRootMismatch
+        runAsNonRoot: false
+        seccompProfile:
+          type: RuntimeDefault
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                    - key: app.kubernetes.io/name
+                      operator: In
+                      values:
+                        - authelia
+                topologyKey: kubernetes.io/hostname

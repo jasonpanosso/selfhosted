@@ -1,0 +1,16 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/master-standalone/service-v1.json
+apiVersion: v1
+kind: Service
+metadata:
+  name: &app authelia
+  labels:
+    app.kubernetes.io/name: *app
+spec:
+  ports:
+    - port: 80
+      name: http
+    - port: 9959
+      name: metrics
+  selector:
+    app.kubernetes.io/name: *app

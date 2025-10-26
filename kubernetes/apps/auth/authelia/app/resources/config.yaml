@@ -1,0 +1,161 @@
+---
+theme: dark
+server:
+  address: tcp://0.0.0.0:80
+  disable_healthcheck: true
+  endpoints:
+    authz:
+      forward-auth:
+        implementation: ForwardAuth
+        authn_strategies:
+          - name: HeaderAuthorization
+            schemes:
+              - Bearer
+            scheme_basic_cache_lifespan: 0
+          - name: CookieSession
+      auth-request:
+        implementation: AuthRequest
+        authn_strategies:
+          - name: HeaderAuthorization
+            schemes:
+              - Bearer
+            scheme_basic_cache_lifespan: 0
+          - name: CookieSession
+
+access_control:
+  default_policy: deny
+  rules:
+    # *arr has no support for custom auth, have to bypass for api routes
+    # /api routes are protected by API tokens
+    - domain:
+        - prowlarr.${domain}.${tld}
+        - radarr.${domain}.${tld}
+        - sonarr.${domain}.${tld}
+      resources:
+        - "^/api.*$"
+      policy: bypass
+    # prowlarr api smile
+    - domain:
+        - prowlarr.${domain}.${tld}
+      resources:
+        - "^/[0-9]+/api.*$"
+      policy: bypass
+
+    - domain: "*.${domain}.${tld}"
+      subject: group:admins
+      policy: two_factor
+
+session:
+  name: authelia
+  same_site: lax
+  expiration: 1h
+  inactivity: 5m
+  remember_me: 1M
+  cookies:
+    - domain: ${domain}.${tld}
+      authelia_url: https://auth.${domain}.${tld}
+      default_redirection_url: https://www.${domain}.${tld}
+  redis:
+    high_availability:
+      sentinel_name: myprimary
+      nodes:
+        - host: valkey-node-0.valkey-headless.auth.svc.cluster.local
+          port: 26379
+        - host: valkey-node-1.valkey-headless.auth.svc.cluster.local
+          port: 26379
+        - host: valkey-node-2.valkey-headless.auth.svc.cluster.local
+          port: 26379
+
+storage:
+  postgres:
+    address: tcp://pgcluster-rw.db.svc.cluster.local:5432
+    database: authelia
+
+notifier:
+  disable_startup_check: false
+  smtp:
+    address: submission://smtp.gmail.com:587
+    identifier: ${domain}.${tld}
+    sender: admin@${domain}.${tld}
+    subject: "[Authelia] {title}"
+
+authentication_backend:
+  password_reset:
+    disable: true
+  password_change:
+    disable: true
+  ldap:
+    implementation: lldap
+    address: ldap://lldap.auth.svc.cluster.local
+    base_dn: dc=${domain},dc=${tld}
+    additional_users_dn: ou=people
+    additional_groups_dn: ou=groups
+    user: cn=admin,ou=people,dc=${domain},dc=${tld}
+    users_filter: (&(|({username_attribute}={input})({mail_attribute}={input}))(objectClass=person))
+    groups_filter: (member={dn})
+    attributes:
+      display_name: displayName
+      username: uid
+      group_name: cn
+      mail: mail
+
+totp:
+  issuer: ${domain}.${tld}
+  skew: 1
+  secret_size: 32
+  algorithm: SHA1
+  digits: 6
+  period: 30
+  allowed_algorithms: ["SHA1"]
+  allowed_digits: [6]
+  allowed_periods: [30]
+
+identity_validation:
+  reset_password:
+    jwt_lifespan: 5 minutes
+    jwt_algorithm: HS256
+
+identity_providers:
+  oidc:
+    jwks:
+      - algorithm: RS256
+        key: |
+          {{- secret "/secrets/OIDC_JWKS_PRIVATE_KEY" | nindent 10 }}
+    clients:
+      - client_id: autobrr
+        redirect_uris:
+          - https://autobrr.${domain}.${tld}/api/auth/oidc/callback
+        scopes:
+          - openid
+          - groups
+          - email
+          - profile
+        client_secret: |
+          {{- secret "/secrets/OIDC_AUTOBRR_HASHED_SECRET" | nindent 10 }}
+    lifespans:
+      access_token: 1h
+      authorize_code: 1m
+      id_token: 1h
+    enable_client_debug_messages: false
+    enforce_pkce: public_clients_only
+    cors:
+      endpoints:
+        - authorization
+        - token
+        - revocation
+        - introspection
+        - userinfo
+      allowed_origins:
+        - "*"
+
+telemetry:
+  metrics:
+    enabled: true
+    address: tcp://0.0.0.0:9959/metrics
+    buffers:
+      read: 4096
+      write: 4096
+    timeouts:
+      read: 6s
+      write: 6s
+      idle: 30s
