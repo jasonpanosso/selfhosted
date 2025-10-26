@@ -27,6 +27,7 @@ spec:
           name: *app
           ports:
             - containerPort: 80
+            - containerPort: 9959
           env:
             - name: TZ
               value: Etc/UTC
