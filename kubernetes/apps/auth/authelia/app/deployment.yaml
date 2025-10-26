@@ -40,8 +40,6 @@ spec:
               value: /secrets/SESSION_KEY
             - name: AUTHELIA_SESSION_REDIS_PASSWORD_FILE
               value: /secrets/REDIS_PASSWORD
-            - name: AUTHELIA_SESSION_REDIS_HIGH_AVAILABILITY_SENTINEL_PASSWORD_FILE
-              value: /secrets/REDIS_PASSWORD
             - name: AUTHELIA_AUTHENTICATION_BACKEND_LDAP_PASSWORD_FILE
               value: /secrets/LDAP_PASSWORD
             - name: AUTHELIA_STORAGE_ENCRYPTION_KEY_FILE
