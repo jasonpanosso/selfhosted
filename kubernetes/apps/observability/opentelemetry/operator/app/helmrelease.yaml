@@ -9,6 +9,57 @@ spec:
     kind: OCIRepository
     name: *app
   interval: 1h
-  valuesFrom:
-    - kind: ConfigMap
-      name: opentelemetry-operator-values
+  values:
+    replicaCount: 1
+    crds:
+      create: true
+    manager:
+      resources:
+        limits:
+          memory: 128Mi
+          ephemeral-storage: 50Mi
+        requests:
+          cpu: 100m
+          memory: 128Mi
+          ephemeral-storage: 50Mi
+      serviceMonitor:
+        enabled: true
+      createRbacPermissions: false
+      leaderElection:
+        enabled: true
+      securityContext:
+        allowPrivilegeEscalation: false
+        runAsNonRoot: true
+        readOnlyRootFilesystem: true
+        capabilities:
+          drop: [ALL]
+        seccompProfile:
+          type: RuntimeDefault
+      featureGatesMap:
+        operator.targetallocator.mtls: true
+        operator.targetallocator.fallbackstrategy: true
+        operator.collector.targetallocatorcr: true
+        operator.golang.flags: true
+        operator.sidecarcontainers.native: true
+
+    kubeRBACProxy:
+      enabled: true
+      image:
+        repository: quay.io/brancz/kube-rbac-proxy
+        tag: v0.20.0@sha256:147cb28fea35473b2cf8697892d375bbe0aec237c5740b0368719b4c0d71b290
+      ports:
+        proxyPort: 8443
+      resources:
+        limits:
+          memory: 128Mi
+        requests:
+          cpu: 100m
+          memory: 128Mi
+      securityContext:
+        allowPrivilegeEscalation: false
+        runAsNonRoot: true
+        readOnlyRootFilesystem: true
+        capabilities:
+          drop: [ALL]
+        seccompProfile:
+          type: RuntimeDefault

@@ -1,5 +1,0 @@
----
-policyKind: ClusterPolicy
-podSecurityStandard: baseline
-failurePolicy: Fail
-validationFailureAction: Audit

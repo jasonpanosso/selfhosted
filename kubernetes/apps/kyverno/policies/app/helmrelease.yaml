@@ -9,6 +9,8 @@ spec:
     kind: OCIRepository
     name: *app
   interval: 1h
-  valuesFrom:
-    - kind: ConfigMap
-      name: kyverno-policies-values
+  values:
+    policyKind: ClusterPolicy
+    podSecurityStandard: baseline
+    failurePolicy: Fail
+    validationFailureAction: Audit

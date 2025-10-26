@@ -9,7 +9,7 @@ resources:
 configMapGenerator:
   - name: unpackerr
     files:
-      - unpackerr.conf=./files/unpackerr.toml
+      - unpackerr.conf=./resources/unpackerr.toml
 
 configurations:
-  - ./files/kustomizeconfig.yaml
+  - ./resources/kustomizeconfig.yaml

@@ -9,6 +9,13 @@ spec:
     kind: OCIRepository
     name: *app
   interval: 1h
-  valuesFrom:
-    - kind: ConfigMap
-      name: local-path-provisioner-values
+  values:
+    storageClass:
+      create: true
+      defaultClass: false
+      name: local-path
+      reclaimPolicy: Retain
+    nodePathMap:
+      - node: DEFAULT_PATH_FOR_NON_LISTED_NODES
+        paths:
+          - /var/local-path-provisioner

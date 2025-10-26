@@ -9,6 +9,55 @@ spec:
     kind: OCIRepository
     name: *app
   interval: 1h
-  valuesFrom:
-    - kind: ConfigMap
-      name: kyverno-values
+  values:
+    grafana:
+      enabled: true
+      namespace: observability
+    features:
+      policyExceptions:
+        enabled: true
+        namespace: "*"
+    cleanupController:
+      serviceMonitor:
+        enabled: true
+        namespace: observability
+      replicas: 3
+      resources:
+        limits:
+          memory: 256Mi
+        requests:
+          cpu: 10m
+          memory: 128Mi
+      rbac:
+        clusterRole:
+          extraResources:
+            - apiGroups:
+                - apps
+              resources:
+                - replicasets
+              verbs:
+                - get
+                - list
+                - watch
+                - delete
+    admissionController:
+      serviceMonitor:
+        enabled: true
+        namespace: observability
+      replicas: 3
+    backgroundController:
+      serviceMonitor:
+        enabled: true
+        namespace: observability
+      replicas: 3
+    reportsController:
+      serviceMonitor:
+        enabled: true
+        namespace: observability
+      replicas: 3
+      resources:
+        limits:
+          memory: 256Mi
+        requests:
+          cpu: 10m
+          memory: 128Mi

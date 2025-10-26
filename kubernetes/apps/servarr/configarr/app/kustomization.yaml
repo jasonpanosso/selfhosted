@@ -9,7 +9,7 @@ resources:
 configMapGenerator:
   - name: configarr
     files:
-      - config.yml=./files/configarr.yaml
+      - config.yml=./resources/configarr.yaml
 
 configurations:
-  - ./files/kustomizeconfig.yaml
+  - ./resources/kustomizeconfig.yaml

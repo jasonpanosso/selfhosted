@@ -10,6 +10,84 @@ spec:
     name: *app
   interval: 1h
   timeout: 10m0s
-  valuesFrom:
-    - kind: ConfigMap
-      name: cobblemon-values
+  values:
+    fullnameOverride: *app
+    image:
+      repository: ghcr.io/itzg/minecraft-server
+      tag: 2025.10.2-java21-graalvm@sha256:314592bbcdf70bcbe02909285647ca24206367cee061eebc2bbc61f7756a1909
+    affinity:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+            - matchExpressions:
+                - key: kubernetes.io/arch
+                  operator: In
+                  values:
+                    - amd64
+    resources:
+      requests:
+        cpu: 2000m
+        memory: 8Gi
+    securityContext:
+      runAsUser: 65534
+      runAsGroup: 65534
+      runAsNonRoot: true
+      fsGroup: 65534
+      readOnlyRootFilesystem: false
+      seccompProfile:
+        type: RuntimeDefault
+    startupProbe:
+      enabled: true
+    extraEnv:
+      TZ: America/Detroit
+      USE_MEOWICE_FLAGS: "true"
+      USE_MEOWICE_GRAALVM_FLAGS: "true"
+    persistence:
+      dataDir:
+        enabled: true
+        existingClaim: *app
+    minecraftServer:
+      eula: true
+      version: 1.21.1
+      type: AUTO_CURSEFORGE
+      icon: https://i.imgur.com/xCwev3X.png
+      memory: 8G
+      serviceType: LoadBalancer
+      difficulty: normal
+      levelType: normal
+      spawnProtection: 0
+      gameMode: survival
+      pvp: default
+      onlineMode: true
+      whitelist: "Jayce"
+      ops: "Jayce"
+      motd: "meep meep"
+      viewDistance: default
+      rcon:
+        enabled: true
+        existingSecret: *app
+        secretKey: MINECRAFT_COBBLEMON_RCON_PASSWORD
+      modUrls:
+        - https://cdn.modrinth.com/data/abooMhox/versions/OtzwmSlR/treeharvester-1.21.1-9.1.jar
+      autoCurseForge:
+        apiKey:
+          existingSecret: *app
+          secretKey: CURSEFORGE_API_KEY
+        slug: cobblemon-academy
+        filenameMatcher: 1.3.0
+        includeMods:
+          - fancymenu
+      extraPorts:
+        - name: voicechat
+          containerPort: 24454
+          protocol: UDP
+          service:
+            enabled: true
+            embedded: true
+            type: ClusterIP
+            port: 24454
+
+    serviceAnnotations:
+      lbipam.cilium.io/ips: 192.168.20.20
+    deploymentAnnotations:
+      reloader.stakater.com/auto: "true"

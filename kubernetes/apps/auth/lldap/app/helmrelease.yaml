@@ -9,6 +9,67 @@ spec:
     kind: OCIRepository
     name: *app
   interval: 1h
-  valuesFrom:
-    - kind: ConfigMap
-      name: lldap-values
+  values:
+    replicaCount: 3
+    bootstrap:
+      enabled: false
+    lldap:
+      basedn: dc=${domain},dc=${tld}
+      keySeed:
+        secret:
+          name: lldap
+          key: LLDAP_KEY_SEED
+      jwt:
+        secret:
+          name: lldap
+          key: LLDAP_JWT_SECRET
+      admin:
+        password:
+          secret:
+            name: lldap
+            key: LLDAP_ADMIN_PASSWORD
+      httpURL: "https://account.${domain}.${tld}"
+      smtp:
+        enablePasswordReset: "true"
+        server:
+          address: smtp.gmail.com
+          port: 587
+        encryption: STARTTLS
+        user:
+          secret:
+            name: lldap
+            usernameKey: SMTP_USERNAME
+            passwordKey: SMTP_PASSWORD
+    resources:
+      requests:
+        cpu: 100m
+        memory: 256Mi
+      limits:
+        memory: 256Mi
+    service:
+      ldap:
+        port: 389
+      ldaps:
+        enabled: false
+    pod:
+      ports:
+        ldap: 3890
+        webui: 17170
+    podAnnotations:
+      reloader.stakater.com/auto: "true"
+    env:
+      - name: TZ
+        value: Etc/UTC
+      - name: PG_DATABASE_USERNAME
+        valueFrom:
+          secretKeyRef:
+            name: lldap-db
+            key: username
+      - name: PG_DATABASE_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: lldap-db
+            key: password
+      - name: LLDAP_DATABASE_URL
+        value: |
+          postgres://$(PG_DATABASE_USERNAME):$(PG_DATABASE_PASSWORD)@pgcluster-rw.db.svc.cluster.local/lldap

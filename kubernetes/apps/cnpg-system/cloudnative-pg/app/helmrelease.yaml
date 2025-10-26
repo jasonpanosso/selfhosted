@@ -9,6 +9,6 @@ spec:
     kind: OCIRepository
     name: *app
   interval: 1h
-  valuesFrom:
-    - kind: ConfigMap
-      name: cnpg-values
+  values:
+    monitoring:
+      podMonitorEnabled: true

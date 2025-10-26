@@ -9,6 +9,9 @@ spec:
     kind: OCIRepository
     name: *app
   interval: 1h
-  valuesFrom:
-    - kind: ConfigMap
-      name: rook-ceph-operator-values
+  values:
+    crds:
+      enabled: true # DO NOT CHANGE - WILL RESULT IN DATA LOSS
+    enableDiscoveryDaemon: true
+    monitoring:
+      enabled: true

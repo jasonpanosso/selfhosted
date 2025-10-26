@@ -14,6 +14,171 @@ spec:
         name: *app
       interval: 12h
   interval: 1h
-  valuesFrom:
-    - kind: ConfigMap
-      name: crowdsec-values
+  values:
+    container_runtime: containerd
+    secrets:
+      externalSecret:
+        name: crowdsec
+        csLapiSecretKey: CROWDSEC_LAPI_TOKEN
+        registrationTokenKey: CROWDSEC_REGISTRATION_TOKEN
+
+    agent:
+      isDeployment: true
+      hostVarLog: false
+      additionalAcquisition:
+        - source: loki
+          log_level: info
+          url: http://loki.observability.svc.cluster.local:3100
+          limit: 1000
+          query: |
+            {service_name="traefik"}
+          labels:
+            type: apache2
+      env:
+        - name: COLLECTIONS
+          value: "crowdsecurity/traefik"
+      strategy:
+        type: RollingUpdate
+      deploymentAnnotations:
+        reloader.stakater.com/auto: "true"
+      resources:
+        limits:
+          memory: 256Mi
+        requests:
+          cpu: 100m
+          memory: 256Mi
+      metrics:
+        enabled: true
+        serviceMonitor:
+          enabled: true
+
+    lapi:
+      deployAnnotations:
+        reloader.stakater.com/auto: "true"
+      strategy:
+        type: RollingUpdate
+      dashboard:
+        enabled: false
+      env:
+        - name: BOUNCER_KEY_TRAEFIK
+          valueFrom:
+            secretKeyRef:
+              name: crowdsec
+              key: BOUNCER_KEY_TRAEFIK
+        - name: DB_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: crowdsec
+              key: DB_USERNAME
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: crowdsec
+              key: DB_PASSWORD
+        - name: ENROLL_INSTANCE_NAME
+          value: prod
+        - name: ENROLL_TAGS
+          value: talos kubernetes
+      storeCAPICredentialsInSecret: true
+      resources:
+        limits:
+          memory: 256Mi
+        requests:
+          cpu: 100m
+          memory: 256Mi
+      persistentVolume:
+        data:
+          enabled: false
+        config:
+          enabled: false
+      metrics:
+        enabled: true
+        serviceMonitor:
+          enabled: true
+
+    appsec:
+      enabled: true
+      replicas: 1
+      strategy:
+        type: RollingUpdate
+      env:
+        - name: COLLECTIONS
+          value: crowdsecurity/appsec-virtual-patching crowdsecurity/appsec-generic-rules
+      acquisitions:
+        - source: appsec
+          listen_addr: "0.0.0.0:7422"
+          path: /
+          appsec_config: crowdsecurity/appsec-default
+          labels:
+            type: appsec
+      resources:
+        limits:
+          memory: 256Mi
+        requests:
+          cpu: 100m
+          memory: 256Mi
+      metrics:
+        enabled: true
+        serviceMonitor:
+          enabled: true
+
+    config:
+      parsers:
+        geoip.yaml: |
+          name: crowdsecurity/geoip-enrich
+          description: "Populate event with geoloc info : as, country, coords, source range."
+          filter: |
+            let ipv6Check = IsIPV6(evt.Meta.source_ip);
+            "source_ip" in evt.Meta &&
+            (
+              not ipv6Check &&
+              not (IpInRange(evt.Meta.source_ip, "127.0.0.0/8") || IpInRange(evt.Meta.source_ip, "192.168.0.0/16") || IpInRange(evt.Meta.source_ip, "172.16.0.0/12") || IpInRange(evt.Meta.source_ip, "10.0.0.0/8"))
+            ) ||
+            (
+              ipv6Check &&
+              not (IpInRange(evt.Meta.source_ip, "::1/128") || IpInRange(evt.Meta.source_ip, "fd00::/8") || IpInRange(evt.Meta.source_ip, "fc00::/7"))
+            )
+          data:
+            - source_url: https://hub-data.crowdsec.net/mmdb_update/GeoLite2-City.mmdb
+              dest_file: GeoLite2-City.mmdb
+            - source_url: https://hub-data.crowdsec.net/mmdb_update/GeoLite2-ASN.mmdb
+              dest_file: GeoLite2-ASN.mmdb
+          statics:
+            - method: GeoIpCity
+              expression: evt.Meta.source_ip
+            - meta: IsoCode
+              expression: evt.Enriched.IsoCode
+            - meta: IsInEU
+              expression: evt.Enriched.IsInEU
+            - meta: GeoCoords
+              expression: evt.Enriched.GeoCoords
+            - method: GeoIpASN
+              expression: evt.Meta.source_ip
+            - meta: ASNNumber
+              expression: evt.Enriched.ASNNumber
+            - meta: ASNOrg
+              expression: evt.Enriched.ASNOrg
+            - method: IpToRange
+              expression: evt.Meta.source_ip
+            - meta: SourceRange
+              expression: evt.Enriched.SourceRange
+      config.yaml.local: |
+        api:
+          server:
+            use_forwarded_for_headers: true
+            auto_registration:
+              enabled: true
+              token: "$${REGISTRATION_TOKEN}"
+              allowed_ranges:
+                - "127.0.0.1/32"
+                - "192.168.20.0/24"
+                - "10.96.0.0/16"
+                - "10.244.0.0/16"
+        db_config:
+          type: postgresql
+          user: "$${DB_USERNAME}"
+          password: "$${DB_PASSWORD}"
+          db_name: crowdsec
+          host: pgcluster-rw.db.svc.cluster.local
+          port: 5432
+          sslmode: disable

@@ -9,6 +9,13 @@ spec:
     kind: OCIRepository
     name: *app
   interval: 1h
-  valuesFrom:
-    - kind: ConfigMap
-      name: reloader-values
+  values:
+    fullnameOverride: reloader
+    reloader:
+      enableHA: true
+      deployment:
+        replicas: 1
+      readOnlyRootFileSystem: true
+      podMonitor:
+        enabled: true
+        namespace: "{{ .Release.Namespace }}"
