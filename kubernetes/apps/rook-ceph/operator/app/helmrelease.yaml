@@ -9,8 +9,6 @@ spec:
     kind: OCIRepository
     name: *app
   interval: 1h
-  uninstall:
-    deletionPropagation: orphan
   valuesFrom:
     - kind: ConfigMap
       name: rook-ceph-operator-values
