@@ -18,7 +18,6 @@
             age
             bws
             cilium-cli
-            crane
             cmctl
             docker
             fluxcd
