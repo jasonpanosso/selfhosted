@@ -8,6 +8,5 @@ components:
   - ../../components/common
 
 resources:
-  - ./valkey/ks.yaml
   - ./lldap/ks.yaml
   - ./authelia/ks.yaml

@@ -32,7 +32,5 @@ spec:
       namespace: db
     - name: dragonfly-operator
       namespace: dragonfly-operator-system
-    - name: valkey
-      namespace: *namespace
     - name: lldap
       namespace: *namespace
