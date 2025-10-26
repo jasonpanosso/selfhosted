@@ -1,0 +1,19 @@
+---
+apiVersion: dragonflydb.io/v1alpha1
+kind: Dragonfly
+metadata:
+  name: dragonfly
+spec:
+  args:
+    - --proactor_threads=1
+  authentication:
+    passwordFromSecret:
+      name: authelia
+      key: REDIS_PASSWORD
+  replicas: 2
+  resources:
+    requests:
+      cpu: 10m
+      memory: 320Mi
+    limits:
+      memory: 320Mi

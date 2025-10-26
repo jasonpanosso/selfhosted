@@ -5,6 +5,7 @@ kind: Kustomization
 
 resources:
   - ./deployment.yaml
+  - ./dragonfly.yaml
   - ./externalsecret.yaml
   - ./ingressroute.yaml
   - ./service.yaml

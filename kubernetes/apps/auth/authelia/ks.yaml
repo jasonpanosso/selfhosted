@@ -30,6 +30,8 @@ spec:
       namespace: external-secrets
     - name: db
       namespace: db
+    - name: dragonfly-operator
+      namespace: dragonfly-operator-system
     - name: valkey
       namespace: *namespace
     - name: lldap
