@@ -118,7 +118,10 @@ identity_providers:
         key: {{ secret "/secrets/OIDC_JWKS_PRIVATE_KEY" | mindent 10 "|" | msquote }}
     clients:
       - client_id: autobrr
+        client_secret: {{ secret "/secrets/OIDC_AUTOBRR_HASHED_SECRET" | mindent 10 "|" | msquote }}
         token_endpoint_auth_method: client_secret_post
+        authorization_policy: default
+        public: false
         redirect_uris:
           - https://autobrr.${domain}.${tld}/api/auth/oidc/callback
         scopes:
@@ -126,7 +129,6 @@ identity_providers:
           - groups
           - email
           - profile
-        client_secret: {{ secret "/secrets/OIDC_AUTOBRR_HASHED_SECRET" | mindent 10 "|" | msquote }}
     lifespans:
       access_token: 1h
       authorize_code: 1m
