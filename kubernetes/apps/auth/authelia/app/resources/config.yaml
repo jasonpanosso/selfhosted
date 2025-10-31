@@ -11,6 +11,7 @@ server:
           - name: HeaderAuthorization
             schemes:
               - Bearer
+              - Basic
             scheme_basic_cache_lifespan: 0
           - name: CookieSession
       auth-request:
@@ -19,6 +20,7 @@ server:
           - name: HeaderAuthorization
             schemes:
               - Bearer
+              - Basic
             scheme_basic_cache_lifespan: 0
           - name: CookieSession
 
