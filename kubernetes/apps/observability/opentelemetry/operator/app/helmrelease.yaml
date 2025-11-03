@@ -38,7 +38,6 @@ spec:
       featureGatesMap:
         operator.targetallocator.mtls: true
         operator.targetallocator.fallbackstrategy: true
-        operator.collector.targetallocatorcr: true
         operator.golang.flags: true
         operator.sidecarcontainers.native: true
 
