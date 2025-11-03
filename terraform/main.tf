@@ -43,3 +43,25 @@ module "bitwarden_secrets" {
   healthchecksio_heartbeat_url = var.healthchecksio_heartbeat_url
   curseforge_api_key           = var.curseforge_api_key
 }
+
+module "cluster_secrets" {
+  source          = "./cluster_secrets"
+  project_name    = "cluster_secrets"
+  organization_id = var.bitwarden_organization_id
+
+  cluster_id                          = var.cluster_id
+  cluster_token                       = var.cluster_token
+  cluster_secret                      = var.cluster_secret
+  cluster_ca_crt                      = var.cluster_ca_crt
+  cluster_ca_key                      = var.cluster_ca_key
+  cluster_etcd_ca_crt                 = var.cluster_etcd_ca_crt
+  cluster_etcd_ca_key                 = var.cluster_etcd_ca_key
+  cluster_aggregator_ca_crt           = var.cluster_aggregator_ca_crt
+  cluster_aggregator_ca_key           = var.cluster_aggregator_ca_key
+  cluster_service_account_key         = var.cluster_service_account_key
+  cluster_secretbox_encryption_secret = var.cluster_secretbox_encryption_secret
+
+  machine_token  = var.machine_token
+  machine_ca_crt = var.machine_ca_crt
+  machine_ca_key = var.machine_ca_key
+}
