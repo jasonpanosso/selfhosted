@@ -48,6 +48,7 @@ access_control:
         - calibre.${domain}.${tld}
       resources:
         - "^/opds.*$"
+      policy: bypass
 
     - domain: "*.${domain}.${tld}"
       subject: group:admins
