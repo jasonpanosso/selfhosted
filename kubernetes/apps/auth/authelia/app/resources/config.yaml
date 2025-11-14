@@ -43,9 +43,16 @@ access_control:
         - "^/[0-9]+/api.*$"
       policy: bypass
 
+    # opds auth for koreader
+    - domain:
+        - calibre.${domain}.${tld}
+      resources:
+        - "^/opds.*$"
+
     - domain: "*.${domain}.${tld}"
       subject: group:admins
       policy: two_factor
+
 
 session:
   name: authelia
