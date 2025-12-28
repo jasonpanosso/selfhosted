@@ -14,7 +14,7 @@ spec:
     fullnameOverride: *app
     image:
       repository: ghcr.io/itzg/minecraft-server
-      tag: 2025.12.0-java21-graalvm@sha256:ee2819d75577b639a4c15fb02e5cd2a5e6e217a873d5029dc2053fed44d83e85
+      tag: 2025.12.1-java21-graalvm@sha256:c10da6e39021da2215bcefb143c5d74c434f9d4e27ef1231fbbf7391aa1e38a4
     affinity:
       nodeAffinity:
         requiredDuringSchedulingIgnoredDuringExecution:
