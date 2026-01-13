@@ -74,6 +74,13 @@ spec:
           secretKey: CURSEFORGE_API_KEY
         slug: mayview
         filenameMatcher: 1.0.6
+        excludeMods:
+          - simpletms-tms-and-trs-for-cobblemon
+          - world-host
+      modUrls:
+        - https://cdn.modrinth.com/data/yFqR0DNc/versions/ibBTJFGh/SimpleTMs-neoforge-2.2.1.jar
+      extraEnv:
+        CF_OVERRIDES_EXCLUSIONS: mods/*world?host*.jar
       extraPorts:
         - name: voicechat
           containerPort: 24454
