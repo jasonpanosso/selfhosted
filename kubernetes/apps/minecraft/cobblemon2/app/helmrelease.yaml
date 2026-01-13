@@ -62,7 +62,7 @@ spec:
       onlineMode: true
       whitelist: "Jayce"
       ops: "Jayce"
-      motd: "meep meep"
+      motd: "pour one out for cobblemon academy"
       viewDistance: default
       rcon:
         enabled: true
@@ -72,8 +72,8 @@ spec:
         apiKey:
           existingSecret: *app
           secretKey: CURSEFORGE_API_KEY
-        slug: cobblemon-academy-2-0
-        filenameMatcher: 2.1.0
+        slug: mayview
+        filenameMatcher: 1.0.6
       extraPorts:
         - name: voicechat
           containerPort: 24454
