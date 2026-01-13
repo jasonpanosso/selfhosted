@@ -12,6 +12,7 @@ spec:
   timeout: 10m0s
   values:
     fullnameOverride: *app
+    replicaCount: 0
     image:
       repository: ghcr.io/itzg/minecraft-server
       tag: 2026.1.0-java21-graalvm@sha256:edd7b66781574ebb67c66f96635d7d1aa733f2886f6589fa4c4c1d8fdca96aac
