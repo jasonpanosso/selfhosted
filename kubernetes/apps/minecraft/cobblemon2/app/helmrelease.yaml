@@ -1,0 +1,97 @@
+---
+# yaml-language-server: $schema=https://kube-schemas.pages.dev/helm.toolkit.fluxcd.io/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &app cobblemon2
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: *app
+  interval: 1h
+  timeout: 10m0s
+  values:
+    fullnameOverride: *app
+    replicaCount: 1
+    image:
+      repository: ghcr.io/itzg/minecraft-server
+      tag: 2026.1.0-java21-graalvm@sha256:edd7b66781574ebb67c66f96635d7d1aa733f2886f6589fa4c4c1d8fdca96aac
+    affinity:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+            - matchExpressions:
+                - key: kubernetes.io/arch
+                  operator: In
+                  values:
+                    - amd64
+    resources:
+      requests:
+        cpu: 2000m
+        memory: 8Gi
+    securityContext:
+      runAsUser: 65534
+      runAsGroup: 65534
+      runAsNonRoot: true
+      fsGroup: 65534
+      readOnlyRootFilesystem: false
+      seccompProfile:
+        type: RuntimeDefault
+    startupProbe:
+      enabled: true
+    extraEnv:
+      TZ: America/Detroit
+      USE_MEOWICE_FLAGS: "true"
+      USE_MEOWICE_GRAALVM_FLAGS: "true"
+    persistence:
+      dataDir:
+        enabled: true
+        existingClaim: *app
+    minecraftServer:
+      eula: true
+      version: 1.21.1
+      type: AUTO_CURSEFORGE
+      icon: https://i.imgur.com/xCwev3X.png
+      memory: 8G
+      serviceType: LoadBalancer
+      difficulty: normal
+      levelType: normal
+      spawnProtection: 0
+      gameMode: survival
+      pvp: default
+      onlineMode: true
+      whitelist: "Jayce"
+      ops: "Jayce"
+      motd: "meep meep"
+      viewDistance: default
+      rcon:
+        enabled: true
+        existingSecret: *app
+        secretKey: MINECRAFT_COBBLEMON_RCON_PASSWORD
+      autoCurseForge:
+        apiKey:
+          existingSecret: *app
+          secretKey: CURSEFORGE_API_KEY
+        slug: cobblemon-academy-2-0
+        filenameMatcher: 2.1.0
+      extraPorts:
+        - name: voicechat
+          containerPort: 24454
+          protocol: UDP
+          service:
+            enabled: true
+            embedded: true
+            type: ClusterIP
+            port: 24454
+
+    mcbackup:
+      enabled: true
+      pauseIfNoPlayers: "true"
+      persistence:
+        backupDir:
+          existingClaim: cobblemon2-backup
+
+    serviceAnnotations:
+      lbipam.cilium.io/ips: 192.168.20.20
+    deploymentAnnotations:
+      reloader.stakater.com/auto: "true"
