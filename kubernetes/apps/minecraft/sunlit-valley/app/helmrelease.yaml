@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &app cobblemon2
+  name: &app sunlit-valley
 spec:
   chartRef:
     kind: OCIRepository
@@ -12,7 +12,7 @@ spec:
   timeout: 10m0s
   values:
     fullnameOverride: *app
-    replicaCount: 0
+    replicaCount: 1
     image:
       repository: ghcr.io/itzg/minecraft-server
       tag: 2026.1.0-java21-graalvm@sha256:edd7b66781574ebb67c66f96635d7d1aa733f2886f6589fa4c4c1d8fdca96aac
@@ -49,7 +49,7 @@ spec:
         existingClaim: *app
     minecraftServer:
       eula: true
-      version: 1.21.1
+      version: 1.20.1
       type: AUTO_CURSEFORGE
       icon: https://i.imgur.com/xCwev3X.png
       memory: 8G
@@ -72,33 +72,16 @@ spec:
         apiKey:
           existingSecret: *app
           secretKey: CURSEFORGE_API_KEY
-        slug: mayview
-        filenameMatcher: 1.0.6
-        excludeMods:
-          - simpletms-tms-and-trs-for-cobblemon
-          - world-host
-      modUrls:
-        - https://cdn.modrinth.com/data/yFqR0DNc/versions/ibBTJFGh/SimpleTMs-neoforge-2.2.1.jar
-      extraEnv:
-        CF_OVERRIDES_EXCLUSIONS: mods/*world?host*.jar
-      extraPorts:
-        - name: voicechat
-          containerPort: 24454
-          protocol: UDP
-          service:
-            enabled: true
-            embedded: true
-            type: ClusterIP
-            port: 24454
+        slug: society-sunlit-valley
+        filenameMatcher: 3.4.3
 
     mcbackup:
       enabled: true
-      pauseIfNoPlayers: "true"
       persistence:
         backupDir:
-          existingClaim: cobblemon2-backup
+          existingClaim: sunlit-valley-backup
 
     serviceAnnotations:
-      lbipam.cilium.io/ips: 192.168.20.30
+      lbipam.cilium.io/ips: 192.168.20.40
     deploymentAnnotations:
       reloader.stakater.com/auto: "true"
