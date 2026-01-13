@@ -92,6 +92,6 @@ spec:
           existingClaim: cobblemon2-backup
 
     serviceAnnotations:
-      lbipam.cilium.io/ips: 192.168.20.20
+      lbipam.cilium.io/ips: 192.168.20.30
     deploymentAnnotations:
       reloader.stakater.com/auto: "true"
