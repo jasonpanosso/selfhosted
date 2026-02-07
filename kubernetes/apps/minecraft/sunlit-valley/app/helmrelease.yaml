@@ -15,7 +15,7 @@ spec:
     replicaCount: 1
     image:
       repository: ghcr.io/itzg/minecraft-server
-      tag: 2026.1.1-java21@sha256:1b4c97e8065b85d6b62cdc89d45a616842c166fab517479f854e8d3476a95038
+      tag: 2026.2.0-java21@sha256:da3e492ad35a93a721603457036dbc4938a9dd3b232d5cf949f323d612518c12
     affinity:
       nodeAffinity:
         requiredDuringSchedulingIgnoredDuringExecution:
