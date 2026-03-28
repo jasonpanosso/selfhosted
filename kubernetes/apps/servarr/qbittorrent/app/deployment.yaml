@@ -143,6 +143,6 @@ spec:
             claimName: *app
         - name: qbrr
           image:
-            reference: ghcr.io/buroa/qbrr:0.1.1@sha256:fe4a1d100ba896999253a5122d9c77cc4920779d618c23f765458cb6ec7383ca
+            reference: ghcr.io/buroa/qbrr:0.1.4@sha256:35dce0dafb56f20d628b84eeb0e0214ee55fe18d452e27c850e62d163e239d8f
         - name: scratch
           emptyDir: {}
