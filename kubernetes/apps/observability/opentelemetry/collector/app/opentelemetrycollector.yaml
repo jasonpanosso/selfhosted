@@ -32,8 +32,8 @@ spec:
       debug/metrics: {}
       debug/logs: {}
       debug/traces: {}
-      otlphttp/loki:
-        endpoint: http://loki-gateway.observability.svc.cluster.local/otlp
+      otlphttp/victoria-logs:
+        endpoint: http://victoria-logs.observability.svc.cluster.local/insert/opentelemetry/v1/logs
         tls:
           insecure: true
 
@@ -141,7 +141,7 @@ spec:
             - batch
           exporters:
             # - debug/logs
-            - otlphttp/loki
+            - otlphttp/victoria-logs
   volumeMounts:
     - mountPath: /var/log/pods
       name: varlogpods
@@ -180,8 +180,8 @@ spec:
 
     exporters:
       debug: {}
-      otlphttp/loki:
-        endpoint: http://loki-gateway.observability.svc.cluster.local/otlp
+      otlphttp/victoria-logs:
+        endpoint: http://victoria-logs.observability.svc.cluster.local/insert/opentelemetry/v1/logs
         tls:
           insecure: true
 
@@ -285,4 +285,4 @@ spec:
             - batch
           exporters:
             # - debug
-            - otlphttp/loki
+            - otlphttp/victoria-logs
