@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: &app sunlit-valley
+  name: &app sunlit-valley-cobblemon
 spec:
   chartRef:
     kind: OCIRepository
@@ -12,7 +12,7 @@ spec:
   timeout: 10m0s
   values:
     fullnameOverride: *app
-    replicaCount: 0
+    replicaCount: 1
     image:
       repository: ghcr.io/itzg/minecraft-server
       tag: 2026.4.2-java21@sha256:55d2d31aed9848756c0051dea0b001a36ea0fa2afdce892f1aab0655a6dff87b
@@ -29,14 +29,13 @@ spec:
       requests:
         cpu: 2000m
         memory: 8Gi
-    securityContext:
+    podSecurityContext:
       runAsUser: 65534
       runAsGroup: 65534
-      runAsNonRoot: true
-      fsGroup: 65534
-      readOnlyRootFilesystem: false
-      seccompProfile:
-        type: RuntimeDefault
+    securityContext:
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop: [ALL]
     startupProbe:
       enabled: true
     extraEnv:
@@ -50,7 +49,7 @@ spec:
       eula: true
       version: 1.20.1
       type: AUTO_CURSEFORGE
-      icon: https://i.imgur.com/xCwev3X.png
+      icon: https://cdn2.steamgriddb.com/logo_thumb/804a8294a8f33203683b3e6ed46fe092.png
       memory: 8G
       serviceType: LoadBalancer
       difficulty: normal
@@ -61,8 +60,9 @@ spec:
       onlineMode: true
       whitelist: "Jayce"
       ops: "Jayce"
-      motd: "pour one out for cobblemon academy"
+      motd: "GULP im dead lock in"
       viewDistance: default
+      worldSaveName: sunlit-cobblemon
       rcon:
         enabled: true
         existingSecret: *app
@@ -71,16 +71,16 @@ spec:
         apiKey:
           existingSecret: *app
           secretKey: CURSEFORGE_API_KEY
-        slug: society-sunlit-valley
-        filenameMatcher: 3.4.3
+        slug: society-sunlit-cobblemon
+        filenameMatcher: "1.0.0-SSV4.0.6"
 
     mcbackup:
       enabled: true
       persistence:
         backupDir:
-          existingClaim: sunlit-valley-backup
+          existingClaim: sunlit-valley-cobblemon-backup
 
     serviceAnnotations:
-      lbipam.cilium.io/ips: 192.168.20.40
+      lbipam.cilium.io/ips: 192.168.20.42
     deploymentAnnotations:
       reloader.stakater.com/auto: "true"
