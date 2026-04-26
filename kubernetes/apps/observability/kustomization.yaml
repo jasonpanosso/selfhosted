@@ -11,6 +11,7 @@ resources:
   - ./grafana/ks.yaml
   - ./kube-prometheus-stack/ks.yaml
   - ./loki/ks.yaml
+  - ./victoria-logs/ks.yaml
   - ./opentelemetry/operator/ks.yaml
   - ./opentelemetry/collector/ks.yaml
   - ./silence-operator/operator/ks.yaml
