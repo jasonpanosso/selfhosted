@@ -9,14 +9,6 @@ resources:
   - ./service.yaml
 
 configMapGenerator:
-  - name: cross-seed-loki-rules
-    files:
-      - cross-seed.yaml=./resources/lokirule.yaml
-    options:
-      labels:
-        loki_rule: "true"
-      annotations:
-        kustomize.toolkit.fluxcd.io/substitute: disabled
   - name: cross-seed-configjs
     files:
       - config.js=./resources/config.js
