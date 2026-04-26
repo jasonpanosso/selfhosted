@@ -21,14 +21,3 @@ spec:
         - kind: Service
           name: *app
           port: 8083
-    - match: Host(`books.${domain}.${tld}`)
-      kind: Rule
-      middlewares:
-        - name: bouncer
-          namespace: traefik
-        - name: forward-auth
-          namespace: traefik
-      services:
-        - kind: Service
-          name: *app
-          port: 8084
