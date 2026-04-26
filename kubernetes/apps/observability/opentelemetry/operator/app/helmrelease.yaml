@@ -39,26 +39,3 @@ spec:
         operator.targetallocator.mtls: true
         operator.targetallocator.fallbackstrategy: true
         operator.golang.flags: true
-        operator.sidecarcontainers.native: true
-
-    kubeRBACProxy:
-      enabled: true
-      image:
-        repository: quay.io/brancz/kube-rbac-proxy
-        tag: v0.21.2@sha256:23bf4d4ddbb6827ede3a26d98814e3f3733b257e8b70de54c77e78eb7ed6d719
-      ports:
-        proxyPort: 8443
-      resources:
-        limits:
-          memory: 128Mi
-        requests:
-          cpu: 100m
-          memory: 128Mi
-      securityContext:
-        allowPrivilegeEscalation: false
-        runAsNonRoot: true
-        readOnlyRootFilesystem: true
-        capabilities:
-          drop: [ALL]
-        seccompProfile:
-          type: RuntimeDefault
