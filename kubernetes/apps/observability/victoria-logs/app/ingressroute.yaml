@@ -18,4 +18,4 @@ spec:
       services:
         - kind: Service
           name: *app
-          port: 8083
+          port: 9428
