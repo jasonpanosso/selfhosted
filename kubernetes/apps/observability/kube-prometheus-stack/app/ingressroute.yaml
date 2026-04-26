@@ -13,8 +13,6 @@ spec:
     - match: Host(`alerts.${domain}.${tld}`)
       kind: Rule
       middlewares:
-        - name: bouncer
-          namespace: traefik
         - name: forward-auth
           namespace: traefik
       services:
@@ -36,8 +34,6 @@ spec:
     - match: Host(`prometheus.${domain}.${tld}`)
       kind: Rule
       middlewares:
-        - name: bouncer
-          namespace: traefik
         - name: forward-auth
           namespace: traefik
       services:

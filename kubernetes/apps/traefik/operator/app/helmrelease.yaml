@@ -26,26 +26,9 @@ spec:
       annotations:
         lbipam.cilium.io/ips: 192.168.20.10
 
-    # debug log for crowdsec
-    logs:
-      general:
-        level: INFO
-      access:
-        enabled: true
-
-    experimental:
-      plugins:
-        crowdsec-bouncer:
-          moduleName: github.com/maxlerebourg/crowdsec-bouncer-traefik-plugin
-          version: v1.4.2
-
     deployment:
       annotations:
         reloader.stakater.com/auto: "true"
-    volumes:
-      - name: crowdsec
-        mountPath: /secrets
-        type: secret
 
     metrics:
       prometheus:

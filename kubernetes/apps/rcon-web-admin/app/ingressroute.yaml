@@ -13,8 +13,6 @@ spec:
     - match: Host(`rcon.${domain}.${tld}`)
       kind: Rule
       middlewares:
-        - name: bouncer
-          namespace: traefik
         - name: forward-auth
           namespace: traefik
       services:
@@ -24,8 +22,6 @@ spec:
     - match: Host(`rcon.${domain}.${tld}`) && PathPrefix(`/websocket`)
       kind: Rule
       middlewares:
-        - name: bouncer
-          namespace: traefik
         - name: forward-auth
           namespace: traefik
       services:

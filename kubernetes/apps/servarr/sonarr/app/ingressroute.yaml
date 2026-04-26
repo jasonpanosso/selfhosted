@@ -13,8 +13,6 @@ spec:
     - match: Host(`sonarr.${domain}.${tld}`)
       kind: Rule
       middlewares:
-        - name: bouncer
-          namespace: traefik
         - name: forward-auth
           namespace: traefik
       services:

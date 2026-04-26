@@ -57,11 +57,6 @@ spec:
         login: true
         passwordSecret:
           name: jellyseerr-db
-      - name: crowdsec
-        ensure: present
-        login: true
-        passwordSecret:
-          name: crowdsec-db
       - name: autobrr
         ensure: present
         login: true
