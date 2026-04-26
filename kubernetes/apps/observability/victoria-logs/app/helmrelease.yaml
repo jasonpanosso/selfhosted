@@ -21,5 +21,3 @@ spec:
       retentionPeriod: 30d
       serviceMonitor:
         enabled: true
-      service:
-        servicePort: 80
