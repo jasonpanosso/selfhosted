@@ -50,7 +50,7 @@ spec:
         detectors: [env]
         timeout: 2s
         override: false
-      k8sattributes:
+      k8s_attributes:
         filter:
           node_from_env_var: OTEL_K8S_NODE_NAME
         passthrough: false
@@ -136,7 +136,7 @@ spec:
             - filelog
           processors:
             - memory_limiter
-            - k8sattributes
+            - k8s_attributes
             - resourcedetection/env
             - batch
           exporters:
@@ -198,7 +198,7 @@ spec:
         detectors: [env]
         timeout: 2s
         override: false
-      k8sattributes:
+      k8s_attributes:
         passthrough: false
         extract:
           otel_annotations: true
@@ -280,7 +280,7 @@ spec:
             - k8sobjects
           processors:
             - memory_limiter
-            - k8sattributes
+            - k8s_attributes
             - resourcedetection/env
             - batch
           exporters:
