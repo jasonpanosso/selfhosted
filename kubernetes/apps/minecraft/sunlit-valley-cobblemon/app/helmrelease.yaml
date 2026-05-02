@@ -72,7 +72,7 @@ spec:
           existingSecret: *app
           secretKey: CURSEFORGE_API_KEY
         slug: society-sunlit-cobblemon
-        filenameMatcher: "1.0.0-SSV4.0.6"
+        filenameMatcher: "1.0.2-SSV4.0.6"
 
     mcbackup:
       enabled: true
