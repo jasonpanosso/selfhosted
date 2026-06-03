@@ -9,6 +9,9 @@ spec:
     kind: OCIRepository
     name: *app
   interval: 1h
+  upgrade:
+    strategy:
+      name: RetryOnFailure
   values:
     crds:
       enabled: true # DO NOT CHANGE - WILL RESULT IN DATA LOSS
