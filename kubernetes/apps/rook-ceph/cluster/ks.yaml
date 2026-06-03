@@ -36,6 +36,8 @@ spec:
   dependsOn:
     - name: rook-ceph
       namespace: *namespace
+    - name: ceph-csi-drivers
+      namespace: *namespace
     - name: secret-store
       namespace: external-secrets
     - name: traefik
