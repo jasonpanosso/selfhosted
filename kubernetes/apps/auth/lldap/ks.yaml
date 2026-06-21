@@ -15,8 +15,8 @@ spec:
   path: ./kubernetes/apps/auth/lldap/app
   prune: true
   healthChecks:
-    - apiVersion: helm.toolkit.fluxcd.io/v2
-      kind: HelmRelease
+    - apiVersion: apps/v1
+      kind: Deployment
       name: *app
       namespace: *namespace
   sourceRef:

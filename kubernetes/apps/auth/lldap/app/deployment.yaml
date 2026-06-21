@@ -1,0 +1,124 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/master-standalone/deployment-apps-v1.json
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: &app lldap
+  labels:
+    app.kubernetes.io/name: *app
+  annotations:
+    reloader.stakater.com/auto: "true"
+spec:
+  strategy:
+    type: RollingUpdate
+  replicas: 3
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: *app
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: *app
+    spec:
+      securityContext:
+        runAsUser: 65534
+        runAsGroup: 65534
+        fsGroup: 65534
+        fsGroupChangePolicy: OnRootMismatch
+        runAsNonRoot: false
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - image: ghcr.io/lldap/lldap:v0.6.3@sha256:2a8454b668c1aba7157e832eab0e242e1e7eb5fb7591d7e7774ba05286511ca8
+          command:
+            - /app/lldap
+            - run
+          name: *app
+          ports:
+            - name: ldap
+              containerPort: 3890
+              protocol: TCP
+            - name: webui
+              containerPort: 17170
+              protocol: TCP
+          env:
+            - name: TZ
+              value: Etc/UTC
+            - name: PG_DATABASE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: lldap-db
+                  key: username
+            - name: PG_DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: lldap-db
+                  key: password
+            - name: LLDAP_DATABASE_URL
+              value: |
+                postgres://$(PG_DATABASE_USERNAME):$(PG_DATABASE_PASSWORD)@pgcluster-rw.db.svc.cluster.local/lldap
+            - name: LLDAP_LDAP_BASE_DN
+              value: dc=${domain},dc=${tld}
+            - name: LLDAP_KEY_SEED
+              valueFrom:
+                secretKeyRef:
+                  name: lldap
+                  key: LLDAP_KEY_SEED
+            - name: LLDAP_JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: lldap
+                  key: LLDAP_JWT_SECRET
+            - name: LLDAP_LDAP_USER_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: lldap
+                  key: LLDAP_ADMIN_PASSWORD
+            - name: LLDAP_HTTP_URL
+              value: "https://account.${domain}.${tld}"
+            - name: LLDAP_SMTP_OPTIONS__ENABLE_PASSWORD_RESET
+              value: "true"
+            - name: LLDAP_SMTP_OPTIONS__SERVER
+              value: smtp.gmail.com
+            - name: LLDAP_SMTP_OPTIONS__PORT
+              value: "587"
+            - name: LLDAP_SMTP_OPTIONS__SMTP_ENCRYPTION
+              value: STARTTLS
+            - name: LLDAP_SMTP_OPTIONS__USER
+              valueFrom:
+                secretKeyRef:
+                  name: lldap
+                  key: SMTP_USERNAME
+            - name: LLDAP_SMTP_OPTIONS__PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: lldap
+                  key: SMTP_PASSWORD
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              memory: 256Mi
+          livenessProbe: &probes
+            exec:
+              command:
+                - /app/lldap
+                - healthcheck
+            initialDelaySeconds: 5
+            periodSeconds: 15
+          readinessProbe: *probes
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities: {drop: [ALL]}
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: kubernetes.io/arch
+                    operator: In
+                    values:
+                      - amd64
+          type: RuntimeDefault
