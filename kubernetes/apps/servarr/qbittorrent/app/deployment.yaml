@@ -65,6 +65,11 @@ spec:
               value: "off"
             - name: FIREWALL_INPUT_PORTS
               value: "8080,5010"
+            - name: FIREWALL_VPN_INPUT_PORTS
+              valueFrom:
+                secretKeyRef:
+                  name: vpn
+                  key: VPN_FIREWALL_INPUT_PORTS
             - name: FIREWALL_OUTBOUND_SUBNETS
               value: 10.96.0.0/16,10.244.0.0/16
             - name: VPN_TYPE
