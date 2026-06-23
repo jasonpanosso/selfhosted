@@ -16,13 +16,6 @@ server:
           - name: CookieSession
       auth-request:
         implementation: AuthRequest
-        authn_strategies:
-          - name: HeaderAuthorization
-            schemes:
-              - Bearer
-              - Basic
-            scheme_basic_cache_lifespan: 0
-          - name: CookieSession
 
 access_control:
   default_policy: deny
