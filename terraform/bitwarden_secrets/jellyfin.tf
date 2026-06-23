@@ -1,4 +1,4 @@
-resource "bitwarden_secret" "jellyfin_db_username" {
+resource "bitwarden-secrets_secret" "jellyfin_db_username" {
   key        = "JELLYFIN_DB_USERNAME"
   value      = "jellyfin"
   project_id = bitwarden_project.this.id
@@ -10,7 +10,7 @@ resource "random_password" "jellyfin_db_password" {
   special = true
 }
 
-resource "bitwarden_secret" "jellyfin_db_password" {
+resource "bitwarden-secrets_secret" "jellyfin_db_password" {
   key        = "JELLYFIN_DB_PASSWORD"
   value      = random_password.jellyfin_db_password.result
   project_id = bitwarden_project.this.id

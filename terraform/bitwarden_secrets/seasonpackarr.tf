@@ -3,7 +3,7 @@ resource "random_password" "seasonpackarr_api_token" {
   special = false
 }
 
-resource "bitwarden_secret" "seasonpackarr_api_token" {
+resource "bitwarden-secrets_secret" "seasonpackarr_api_token" {
   key        = "SEASONPACKARR_API_TOKEN"
   value      = random_password.seasonpackarr_api_token.result
   project_id = bitwarden_project.this.id

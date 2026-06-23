@@ -1,6 +1,20 @@
 # This file is maintained automatically by "terraform init".
 # Manual edits may be lost in future updates.
 
+provider "registry.terraform.io/bitwarden/bitwarden-secrets" {
+  version     = "1.0.0"
+  constraints = ">= 1.0.0"
+  hashes = [
+    "h1:JwVsAEAbIp1e8H5qHcT9CR+j5oZz7LAgCyJTuwczlrA=",
+    "zh:32fb9eb0672fe0b12b136abd932a5531fb163b4cc982cd477feea96d28021701",
+    "zh:3aabe5ab6809fce2ea6386a2164fa75736f6ed75189da91648b6129c72754ab8",
+    "zh:6ca7554c7a35c211ea5678696f246259a54a22b4e7022ab335168124b005f92a",
+    "zh:bb3bdb8bcd77941ade652e6a0df45a54591d1fc9d84306c11bee952c3fbb7b7d",
+    "zh:f809ab383cca0a5f83072981c64208cbd7fa67e986a86ee02dd2c82333221e32",
+    "zh:fddfa94fec6107a95151415bc69b8048e64f28b174af4f18f7733e7800f14cd6",
+  ]
+}
+
 provider "registry.terraform.io/digitalocean/digitalocean" {
   version     = "2.66.0"
   constraints = ">= 2.28.1, ~> 2.66.0"
@@ -47,7 +61,7 @@ provider "registry.terraform.io/hashicorp/random" {
 
 provider "registry.terraform.io/loafoe/htpasswd" {
   version     = "1.2.1"
-  constraints = "1.2.1"
+  constraints = ">= 1.2.1, 1.2.1"
   hashes = [
     "h1:W1euQGM6t+QlB6Rq4fDbRKRHmeCIyYdIYdHrxL97BeE=",
     "zh:14460c85ddc40a9ecadf583c22a7de91b83798a8ca4843949d50c3288c6f5bdd",
@@ -68,24 +82,23 @@ provider "registry.terraform.io/loafoe/htpasswd" {
 }
 
 provider "registry.terraform.io/maxlaverse/bitwarden" {
-  version     = "0.16.0"
+  version     = "0.17.6"
   constraints = ">= 0.16.0"
   hashes = [
-    "h1:myDU3D1qdmcupXF/WfexYhZ0zqghZqgSVlBd8qlgj10=",
-    "zh:49b383ae6edda2b6e0f321b6e7be8866ed26e31bfca6c7dbdf93f97600e25a9d",
-    "zh:5e78bae93e270eefedae0109bb049a70e971adc0f7a46fee06249f50419ea4c6",
-    "zh:65b492c19462222145ae9b06ae55dadf90247611045223e2ccfe621ca985eb07",
-    "zh:682b22c9b4008753b81a043db3774064557535a205204617c1c84e98a17b293d",
-    "zh:7684bb0b5e99edcf287e204ad9ea40484c9886111dc02506176c34e5b4ab7e38",
-    "zh:7c0d61fd1b9d27034c1ced73beddfa315baf0fa9c7c276ead20a78b1968e4063",
-    "zh:84a295364ab0e43df5b5b5cdef68bf9ad2fad890f6b3a6de3242cb242acf5d12",
-    "zh:aa1f7ff46e2c09b7b3f26fc1d52fbca0e839efedcca32fb24ee0fc17d3d20f68",
-    "zh:b137589f376dac262cf55d1451d9dc5e94e8e25e5046e4a27c574a369d9f275e",
-    "zh:b21214a883e2838f5e6377f0cad79d676c7839e9ee7a71a9d7f311e481822a09",
-    "zh:d690a0bc9781a05698aaff5056197963fd5c1f7b71c0c53539e5ff3073cdb8d9",
-    "zh:d780053bff8d65fa3b177c02122bba30b716970d6c8b6312b7fb5988d512fee2",
-    "zh:e034b2e7f6fba2489d02a57e763b83fd24a772358b6e7f63a4b5b0a43f0d4c30",
-    "zh:efd27fe06e643dfcfd2721312dbe8b1b6132e0aa6379f3e62d3e56d54c090aa8",
+    "h1:Rke+62Qj1g/4rR9HyyoR067z+dfPQaPTAgc7nZby+tI=",
+    "zh:01acd6e3da51973cb1327859ba61282711af92d2efa51bf4613bcdb9a15f2443",
+    "zh:375f1574dd11eca89e4ff9b99739af87b5f04d2cb6e99728c62c32ce24162556",
+    "zh:5b176aa6e86a16010c60b6e4d0e0717b50a3ea0f935f6763f9fe392ec5290fc9",
+    "zh:666548df75a345692b38cb302c1c065e23a535fb4f26b8fd426222d4fc49fff4",
+    "zh:743c1f310a78ef24d5abb39f8fd4fd92989336392a875d4dfa774338c759ec4a",
+    "zh:83c78ca7bbe5daff314823f389517fdba9f596aff5de7af3575dc83ccf908a2a",
+    "zh:8d2b75f76de03f718090e9e491f163e53fc62a6716237dd6dd7f1c428cbc34a3",
+    "zh:af7251eceffa37de97330852d6dece621921a182416e658c3055e398aa76ed4b",
+    "zh:d713b2bbe6973f4d2be015b1d8c3a3b73651924983b05e1b32ffcd2a68b94994",
+    "zh:d7187561fabbc54cc975802863b9b4485f45f0fbd827efe2565e5c471bce2db4",
+    "zh:f46396f560978889fe8bfc4fd28edf024447ef698a42f7d0bdfcb3f857243b49",
+    "zh:f5e72121ea16be4f8211e4be85afefcc437b3aad84473010d142d7fe0d5db181",
+    "zh:f7192bbf5192a79ccafc9ea8bade0be7015b556a90175058d497c36884ab9cc3",
     "zh:f809ab383cca0a5f83072981c64208cbd7fa67e986a86ee02dd2c82333221e32",
   ]
 }

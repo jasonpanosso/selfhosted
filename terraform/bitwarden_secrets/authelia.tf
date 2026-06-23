@@ -1,4 +1,4 @@
-resource "bitwarden_secret" "authelia_db_username" {
+resource "bitwarden-secrets_secret" "authelia_db_username" {
   key        = "AUTHELIA_DB_USERNAME"
   value      = "authelia"
   project_id = bitwarden_project.this.id
@@ -10,7 +10,7 @@ resource "random_password" "authelia_db_password" {
   special = true
 }
 
-resource "bitwarden_secret" "authelia_db_password" {
+resource "bitwarden-secrets_secret" "authelia_db_password" {
   key        = "AUTHELIA_DB_PASSWORD"
   value      = random_password.authelia_db_password.result
   project_id = bitwarden_project.this.id
@@ -22,7 +22,7 @@ resource "random_password" "authelia_jwt_token" {
   special = true
 }
 
-resource "bitwarden_secret" "authelia_jwt_token" {
+resource "bitwarden-secrets_secret" "authelia_jwt_token" {
   key        = "AUTHELIA_JWT_TOKEN"
   value      = random_password.authelia_jwt_token.result
   project_id = bitwarden_project.this.id
@@ -34,7 +34,7 @@ resource "random_password" "authelia_session_key" {
   special = true
 }
 
-resource "bitwarden_secret" "authelia_session_key" {
+resource "bitwarden-secrets_secret" "authelia_session_key" {
   key        = "AUTHELIA_SESSION_KEY"
   value      = random_password.authelia_session_key.result
   project_id = bitwarden_project.this.id
@@ -46,7 +46,7 @@ resource "random_password" "authelia_encryption_key" {
   special = true
 }
 
-resource "bitwarden_secret" "authelia_encryption_key" {
+resource "bitwarden-secrets_secret" "authelia_encryption_key" {
   key        = "AUTHELIA_ENCRYPTION_KEY"
   value      = random_password.authelia_encryption_key.result
   project_id = bitwarden_project.this.id
@@ -58,7 +58,7 @@ resource "random_password" "authelia_oidc_hmac_secret" {
   special = true
 }
 
-resource "bitwarden_secret" "authelia_oidc_hmac_secret" {
+resource "bitwarden-secrets_secret" "authelia_oidc_hmac_secret" {
   key        = "AUTHELIA_OIDC_HMAC_SECRET"
   value      = random_password.authelia_oidc_hmac_secret.result
   project_id = bitwarden_project.this.id
@@ -70,14 +70,14 @@ resource "random_password" "redis_password" {
   special = true
 }
 
-resource "bitwarden_secret" "redis_password" {
+resource "bitwarden-secrets_secret" "redis_password" {
   key        = "REDIS_PASSWORD"
   value      = random_password.redis_password.result
   project_id = bitwarden_project.this.id
   note       = "Redis backend password for authelia"
 }
 
-resource "bitwarden_secret" "authelia_oidc_jwks_private_key" {
+resource "bitwarden-secrets_secret" "authelia_oidc_jwks_private_key" {
   key        = "AUTHELIA_OIDC_JWKS_PRIVATE_KEY"
   value      = var.authelia_oidc_jwks_private_key
   project_id = bitwarden_project.this.id

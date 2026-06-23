@@ -1,4 +1,4 @@
-resource "bitwarden_secret" "lldap_db_username" {
+resource "bitwarden-secrets_secret" "lldap_db_username" {
   key        = "LLDAP_DB_USERNAME"
   value      = "lldap"
   project_id = bitwarden_project.this.id
@@ -10,7 +10,7 @@ resource "random_password" "lldap_db_password" {
   special = true
 }
 
-resource "bitwarden_secret" "lldap_db_password" {
+resource "bitwarden-secrets_secret" "lldap_db_password" {
   key        = "LLDAP_DB_PASSWORD"
   value      = random_password.lldap_db_password.result
   project_id = bitwarden_project.this.id
@@ -22,7 +22,7 @@ resource "random_password" "lldap_jwt_secret" {
   special = true
 }
 
-resource "bitwarden_secret" "lldap_jwt_secret" {
+resource "bitwarden-secrets_secret" "lldap_jwt_secret" {
   key        = "LLDAP_JWT_SECRET"
   value      = random_password.lldap_jwt_secret.result
   project_id = bitwarden_project.this.id
@@ -34,7 +34,7 @@ resource "random_password" "lldap_key_seed" {
   special = true
 }
 
-resource "bitwarden_secret" "lldap_key_seed" {
+resource "bitwarden-secrets_secret" "lldap_key_seed" {
   key        = "LLDAP_KEY_SEED"
   value      = random_password.lldap_key_seed.result
   project_id = bitwarden_project.this.id
@@ -46,7 +46,7 @@ resource "random_password" "lldap_admin_password" {
   special = true
 }
 
-resource "bitwarden_secret" "lldap_admin_password" {
+resource "bitwarden-secrets_secret" "lldap_admin_password" {
   key        = "LLDAP_ADMIN_PASSWORD"
   value      = random_password.lldap_admin_password.result
   project_id = bitwarden_project.this.id

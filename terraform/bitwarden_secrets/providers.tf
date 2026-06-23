@@ -5,6 +5,11 @@ terraform {
       version = ">= 0.16.0"
     }
 
+    bitwarden-secrets = {
+      source = "bitwarden/bitwarden-secrets"
+      version = ">= 1.0.0"
+    }
+
     htpasswd = {
       source  = "loafoe/htpasswd"
       version = ">= 1.2.1"

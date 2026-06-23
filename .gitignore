@@ -30,3 +30,4 @@ talos/**
 # allow kustomization.yaml in secrets dirs
 !**/secrets/**/kustomization.yaml
 terraform/.bitwarden
+terraform/.bw-provider-state

@@ -1,4 +1,4 @@
-resource "bitwarden_secret" "healthchecksio_heartbeat_url" {
+resource "bitwarden-secrets_secret" "healthchecksio_heartbeat_url" {
   key        = "HEALTHCHECKSIO_HEARTBEAT_URL"
   value      = var.healthchecksio_heartbeat_url
   project_id = bitwarden_project.this.id

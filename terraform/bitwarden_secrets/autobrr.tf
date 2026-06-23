@@ -1,4 +1,4 @@
-resource "bitwarden_secret" "autobrr_db_username" {
+resource "bitwarden-secrets_secret" "autobrr_db_username" {
   key        = "AUTOBRR_DB_USERNAME"
   value      = "autobrr"
   project_id = bitwarden_project.this.id
@@ -10,7 +10,7 @@ resource "random_password" "autobrr_db_password" {
   special = true
 }
 
-resource "bitwarden_secret" "autobrr_db_password" {
+resource "bitwarden-secrets_secret" "autobrr_db_password" {
   key        = "AUTOBRR_DB_PASSWORD"
   value      = random_password.autobrr_db_password.result
   project_id = bitwarden_project.this.id
@@ -22,7 +22,7 @@ resource "random_password" "autobrr_session_secret" {
   special = false
 }
 
-resource "bitwarden_secret" "autobrr_session_secret" {
+resource "bitwarden-secrets_secret" "autobrr_session_secret" {
   key        = "AUTOBRR_SESSION_SECRET"
   value      = random_password.autobrr_session_secret.result
   project_id = bitwarden_project.this.id
@@ -46,14 +46,14 @@ resource "htpasswd_password" "autobrr_oidc_hash" {
   salt     = random_password.autobrr_oidc_salt.result
 }
 
-resource "bitwarden_secret" "autobrr_oidc_password" {
+resource "bitwarden-secrets_secret" "autobrr_oidc_password" {
   key        = "AUTOBRR_OIDC_PASSWORD"
   value      = random_password.autobrr_oidc_password.result
   project_id = bitwarden_project.this.id
   note       = "Autobrr OIDC password"
 }
 
-resource "bitwarden_secret" "autobrr_oidc_hash" {
+resource "bitwarden-secrets_secret" "autobrr_oidc_hash" {
   key        = "AUTOBRR_OIDC_HASH"
   value      = htpasswd_password.autobrr_oidc_hash.sha512
   project_id = bitwarden_project.this.id

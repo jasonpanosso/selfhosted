@@ -1,4 +1,4 @@
-resource "bitwarden_secret" "radarr_db_username" {
+resource "bitwarden-secrets_secret" "radarr_db_username" {
   key        = "RADARR_DB_USERNAME"
   value      = "radarr"
   project_id = bitwarden_project.this.id
@@ -10,7 +10,7 @@ resource "random_password" "radarr_db_password" {
   special = true
 }
 
-resource "bitwarden_secret" "radarr_db_password" {
+resource "bitwarden-secrets_secret" "radarr_db_password" {
   key        = "RADARR_DB_PASSWORD"
   value      = random_password.radarr_db_password.result
   project_id = bitwarden_project.this.id
@@ -22,7 +22,7 @@ resource "random_password" "radarr_api_token" {
   special = true
 }
 
-resource "bitwarden_secret" "radarr_api_token" {
+resource "bitwarden-secrets_secret" "radarr_api_token" {
   key        = "RADARR_API_TOKEN"
   value      = random_password.radarr_api_token.result
   project_id = bitwarden_project.this.id

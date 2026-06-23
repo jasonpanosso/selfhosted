@@ -10,6 +10,10 @@ terraform {
       version = ">= 0.16.0"
     }
 
+    bitwarden-secrets = {
+      source = "registry.terraform.io/bitwarden/bitwarden-secrets"
+    }
+
     random = {
       source  = "hashicorp/random"
       version = "3.7.2"
@@ -30,6 +34,13 @@ provider "digitalocean" {
 
 provider "bitwarden" {
   access_token = var.bitwarden_access_token
+}
+
+provider "bitwarden-secrets" {
+  access_token    = var.bitwarden_access_token
+  organization_id = var.bitwarden_organization_id
+  api_url         = "https://api.bitwarden.com"
+  identity_url    = "https://identity.bitwarden.com"
 }
 
 provider "random" {}

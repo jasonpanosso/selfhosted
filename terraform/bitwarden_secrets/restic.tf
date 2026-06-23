@@ -3,7 +3,7 @@ resource "random_password" "restic_password" {
   special = true
 }
 
-resource "bitwarden_secret" "restic_password" {
+resource "bitwarden-secrets_secret" "restic_password" {
   key        = "RESTIC_PASSWORD"
   value      = random_password.restic_password.result
   project_id = bitwarden_project.this.id
