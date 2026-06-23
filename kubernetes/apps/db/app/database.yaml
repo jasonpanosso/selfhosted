@@ -58,10 +58,10 @@ spec:
 apiVersion: postgresql.cnpg.io/v1
 kind: Database
 metadata:
-  name: jellyseerr
+  name: seerr
 spec:
-  name: jellyseerr
-  owner: jellyseerr
+  name: seerr
+  owner: seerr
   cluster:
     name: pgcluster
 ---

@@ -3,7 +3,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: &app jellyseerr
+  name: &app seerr
   labels:
     app.kubernetes.io/name: *app
   annotations:
@@ -52,7 +52,7 @@ spec:
             - name: API_KEY
               valueFrom:
                 secretKeyRef:
-                  name: jellyseerr
+                  name: seerr
                   key: token
             - name: DB_TYPE
               value: postgres
@@ -61,12 +61,12 @@ spec:
             - name: DB_USER
               valueFrom:
                 secretKeyRef:
-                  name: jellyseerr-db
+                  name: seerr-db
                   key: username
             - name: DB_PASS
               valueFrom:
                 secretKeyRef:
-                  name: jellyseerr-db
+                  name: seerr-db
                   key: password
           ports:
             - containerPort: 5055
@@ -98,6 +98,6 @@ spec:
             claimName: *app
         - name: cache
           persistentVolumeClaim:
-            claimName: jellyseerr-cache
+            claimName: seerr-cache
         - name: scratch
           emptyDir: {}

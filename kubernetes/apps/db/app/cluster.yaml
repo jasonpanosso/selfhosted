@@ -52,11 +52,11 @@ spec:
         login: true
         passwordSecret:
           name: jellyfin-db
-      - name: jellyseerr
+      - name: seerr
         ensure: present
         login: true
         passwordSecret:
-          name: jellyseerr-db
+          name: seerr-db
       - name: autobrr
         ensure: present
         login: true

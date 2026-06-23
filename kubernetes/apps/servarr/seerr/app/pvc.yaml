@@ -3,7 +3,7 @@
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: jellyseerr-cache
+  name: seerr-cache
 spec:
   accessModes:
     - ReadWriteOnce

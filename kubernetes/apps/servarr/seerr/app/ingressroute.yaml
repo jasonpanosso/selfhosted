@@ -3,14 +3,14 @@
 apiVersion: traefik.io/v1alpha1
 kind: IngressRoute
 metadata:
-  name: &app jellyseerr
+  name: &app seerr
   labels:
     app.kubernetes.io/name: *app
 spec:
   entryPoints:
     - websecure
   routes:
-    - match: Host(`jellyseerr.${domain}.${tld}`)
+    - match: Host(`seerr.${domain}.${tld}`)
       kind: Rule
       services:
         - kind: Service
