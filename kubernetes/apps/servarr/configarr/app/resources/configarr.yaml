@@ -44,12 +44,10 @@ radarr:
       replaceIllegalCharacters: true
       colonReplacementFormat: "smart"
 
-    # this will eventually change to trash_id
-    quality_definition:
-      # https://github.com/TRaSH-Guides/Guides/blob/master/docs/json/radarr/quality-size/movie.json
-      type: movie
-
     include:
+      # movie qd https://github.com/TRaSH-Guides/Guides/blob/master/docs/json/radarr/quality-size/movie.json
+      - template: aed34b9f60ee115dfa7918b742336277
+        source: TRASH
       # Remux Web 1080p https://github.com/TRaSH-Guides/Guides/blob/master/docs/json/radarr/quality-profiles/remux-web-1080p.json
       - template: 9ca12ea80aa55ef916e3751f4b874151
         source: TRASH
@@ -113,12 +111,10 @@ sonarr:
       colonReplacementFormat: 4
       customColonReplacementFormat: Smart Replace
 
-    # this will eventually change to trash_id
-    quality_definition:
-      # https://github.com/TRaSH-Guides/Guides/blob/master/docs/json/sonarr/quality-size/series.json
-      type: series
-
     include:
+      # series qd https://github.com/TRaSH-Guides/Guides/blob/master/docs/json/sonarr/quality-size/series.json
+      - template: bef99584217af744e404ed44a33af589
+        source: TRASH
       # WEB-1080p https://github.com/TRaSH-Guides/Guides/blob/master/docs/json/sonarr/quality-profiles/web-1080p.json
       - template: 72dae194fc92bf828f32cde7744e51a1
         source: TRASH
