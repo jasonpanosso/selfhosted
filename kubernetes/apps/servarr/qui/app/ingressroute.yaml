@@ -16,3 +16,6 @@ spec:
         - kind: Service
           name: *app
           port: 80
+      middlewares:
+        - name: forward-auth
+          namespace: traefik

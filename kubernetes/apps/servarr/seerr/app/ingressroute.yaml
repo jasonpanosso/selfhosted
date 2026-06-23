@@ -16,9 +16,15 @@ spec:
         - kind: Service
           name: *app
           port: 5055
+      middlewares:
+        - name: forward-auth
+          namespace: traefik
     - match: Host(`requests.${domain}.${tld}`)
       kind: Rule
       services:
         - kind: Service
           name: *app
           port: 5055
+      middlewares:
+        - name: forward-auth
+          namespace: traefik
