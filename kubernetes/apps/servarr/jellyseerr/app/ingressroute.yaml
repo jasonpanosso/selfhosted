@@ -16,3 +16,9 @@ spec:
         - kind: Service
           name: *app
           port: 5055
+    - match: Host(`requests.${domain}.${tld}`)
+      kind: Rule
+      services:
+        - kind: Service
+          name: *app
+          port: 5055
