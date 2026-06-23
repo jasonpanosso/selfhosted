@@ -13,5 +13,8 @@ spec:
     - name: http
       port: 80
       targetPort: http
+    - name: mousehole
+      port: 5010
+      targetPort: mousehole
   selector:
     app.kubernetes.io/name: *app

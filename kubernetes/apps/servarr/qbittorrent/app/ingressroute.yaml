@@ -17,3 +17,12 @@ spec:
         - kind: Service
           name: qbittorrent
           port: 8080
+    - match: Host(`mousehole.${domain}.${tld}`)
+      kind: Rule
+      middlewares:
+        - name: forward-auth
+          namespace: traefik
+      services:
+        - kind: Service
+          name: qbittorrent
+          port: 5010
