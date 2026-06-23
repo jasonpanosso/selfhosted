@@ -10,15 +10,12 @@ components:
 resources:
   - ./autobrr/ks.yaml
   - ./configarr/ks.yaml
-  - ./cross-seed/ks.yaml
   - ./jellyfin/ks.yaml
   - ./jellyseerr/ks.yaml
   - ./prowlarr/ks.yaml
   - ./qbittorrent/ks.yaml
   - ./qui/ks.yaml
   - ./radarr/ks.yaml
-  - ./seasonpackarr/ks.yaml
   - ./sonarr/ks.yaml
   - ./storage/ks.yaml
-  - ./tqm/ks.yaml
   - ./unpackerr/ks.yaml
