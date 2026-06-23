@@ -75,7 +75,7 @@ spec:
             - name: AUTOBRR__OIDC_ENABLED
               value: "true"
             - name: AUTOBRR__OIDC_ISSUER
-              value: https://auth.needless.info
+              value: https://auth.${domain}.${tld}
             - name: AUTOBRR__OIDC_CLIENT_ID
               value: "autobrr"
             - name: AUTOBRR__OIDC_CLIENT_SECRET

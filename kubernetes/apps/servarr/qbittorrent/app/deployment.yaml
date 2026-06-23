@@ -141,6 +141,10 @@ spec:
           env:
             - name: MOUSEHOLE_INSECURE_ALLOW_NO_AUTH
               value: "true"
+            - name: MOUSEHOLE_ALLOWED_HOSTS
+              value: mousehole.${domain}.${tld}
+            - name: MOUSEHOLE_ALLOWED_ORIGINS
+              value: https://mousehole.${domain}.${tld}
             - name: MOUSEHOLE_STATE_DIR_PATH
               value: /data
           livenessProbe: &probes
