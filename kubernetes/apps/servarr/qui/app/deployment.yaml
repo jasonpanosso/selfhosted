@@ -1,0 +1,127 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/master-standalone/deployment-apps-v1.json
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: &app qui
+  labels:
+    app.kubernetes.io/name: *app
+  annotations:
+    reloader.stakater.com/auto: "true"
+spec:
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: *app
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: *app
+    spec:
+      securityContext:
+        runAsUser: 65534
+        runAsGroup: 65534
+        fsGroup: 65534
+        fsGroupChangePolicy: OnRootMismatch
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - image: ghcr.io/autobrr/qui:v1.20.0@sha256:946e96a158d847a01b5d0055aeadfc1998fff021974d0d5b1e61ccd7fb199450
+          name: *app
+          env:
+            - name: TZ
+              value: Etc/UTC
+            - name: QUI__HOST
+              value: 0.0.0.0
+            - name: QUI__PORT
+              value: "80"
+            - name: QUI__METRICS_ENABLED
+              value: "true"
+            - name: QUI__METRICS_HOST
+              value: 0.0.0.0
+            - name: QUI__METRICS_PORT
+              value: "9094"
+            - name: QUI__CHECK_FOR_UPDATES
+              value: "false"
+            - name: QUI__LOG_LEVEL
+              value: "INFO"
+            - name: QUI__DATABASE_TYPE
+              value: postgres
+            - name: QUI__SESSION_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: *app
+                  key: QUI_SESSION_SECRET
+            - name: QUI__POSTGRES_HOST
+              value: pgcluster-rw.db.svc.cluster.local
+            - name: QUI__POSTGRES_PORT
+              value: "5432"
+            - name: QUI__POSTGRES_DATABASE
+              value: autobrr
+            - name: QUI__POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: *app
+                  key: QUI_DB_USERNAME
+            - name: QUI__POSTGRES_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: *app
+                  key: QUI_DB_PASSWORD
+            - name: QUI__POSTGRES_SSLMODE
+              value: disable
+            - name: QUI__OIDC_ENABLED
+              value: "true"
+            - name: QUI__OIDC_ISSUER
+              value: https://auth.needless.info
+            - name: QUI__OIDC_CLIENT_ID
+              value: "qui"
+            - name: QUI__OIDC_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: *app
+                  key: QUI_OIDC_PASSWORD
+            - name: QUI__OIDC_REDIRECT_URL
+              value: https://qui.${domain}.${tld}/api/auth/oidc/callback
+            - name: QUI__OIDC_DISABLE_BUILT_IN_LOGIN
+              value: "true"
+          ports:
+            - containerPort: 80
+              name: http
+            - containerPort: 9094
+              name: metrics
+          livenessProbe: &probes
+            httpGet:
+              path: /health
+              port: 80
+            initialDelaySeconds: 0
+            periodSeconds: 15
+            timeoutSeconds: 1
+            failureThreshold: 3
+          readinessProbe: *probes
+          resources:
+            requests:
+              cpu: 500m
+              memory: 1Gi
+            limits:
+              memory: 1Gi
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: [ALL]
+          volumeMounts:
+            - name: config
+              mountPath: /config
+            - name: media
+              mountPath: /data/downloads
+              subPath: downloads
+      volumes:
+        - name: media
+          persistentVolumeClaim:
+            claimName: media
+        - name: config
+          persistentVolumeClaim:
+            claimName: *app

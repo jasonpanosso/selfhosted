@@ -62,5 +62,10 @@ spec:
         login: true
         passwordSecret:
           name: autobrr-db
+      - name: qui
+        ensure: present
+        login: true
+        passwordSecret:
+          name: qui-db
   monitoring:
     enablePodMonitor: true
