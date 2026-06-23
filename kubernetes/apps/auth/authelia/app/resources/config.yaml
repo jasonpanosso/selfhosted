@@ -20,22 +20,6 @@ server:
 access_control:
   default_policy: deny
   rules:
-    # *arr has no support for custom auth, have to bypass for api routes
-    # /api routes are protected by API tokens
-    - domain:
-        - prowlarr.${domain}.${tld}
-        - radarr.${domain}.${tld}
-        - sonarr.${domain}.${tld}
-      resources:
-        - "^/api.*$"
-      policy: bypass
-    # prowlarr api smile
-    - domain:
-        - prowlarr.${domain}.${tld}
-      resources:
-        - "^/[0-9]+/api.*$"
-      policy: bypass
-
     # opds auth for koreader
     - domain:
         - calibre.${domain}.${tld}
@@ -43,10 +27,18 @@ access_control:
         - "^/opds.*$"
       policy: bypass
 
+    # one factor for jellyfin clients to function
+    - domain:
+        - watch.${domain}.${tld}
+      subject:
+        - group:admins
+        - group:jellyfin_users
+        - group:jellyfin_admins
+      policy: one_factor
+
     - domain: "*.${domain}.${tld}"
       subject: group:admins
       policy: two_factor
-
 
 session:
   name: authelia
