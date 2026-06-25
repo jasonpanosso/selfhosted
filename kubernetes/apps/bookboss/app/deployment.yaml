@@ -46,6 +46,8 @@ spec:
             - name: BOOKBOSS__DATABASE__DATABASE_URL
               value: |
                 postgres://$(PG_DATABASE_USERNAME):$(PG_DATABASE_PASSWORD)@pgcluster-rw.db.svc.cluster.local/bookboss
+            - name: BOOKBOSS__FRONTEND__BASE_URL
+              value: https://books.${domain}.${tld}
             - name: BOOKBOSS__IMPORT__BOOKDROP_PATH
               value: /ingest
             - name: BOOKBOSS__LIBRARY__LIBRARY_PATH
