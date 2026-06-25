@@ -22,9 +22,10 @@ access_control:
   rules:
     # opds auth for koreader
     - domain:
-        - calibre.${domain}.${tld}
+        - books.${domain}.${tld}
       resources:
         - "^/opds.*$"
+        - "^/koreader.*$"
       policy: bypass
 
     # one factor for jellyfin clients to function
