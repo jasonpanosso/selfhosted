@@ -33,12 +33,23 @@ spec:
             - containerPort: &port 8080
               name: http
           env:
+            - name: PG_DATABASE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: bookboss
+                  key: BOOKBOSS_DB_USERNAME
+            - name: PG_DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: bookboss
+                  key: BOOKBOSS_DB_PASSWORD
+            - name: BOOKBOSS__DATABASE__DATABASE_URL
+              value: |
+                postgres://$(PG_DATABASE_USERNAME):$(PG_DATABASE_PASSWORD)@pgcluster-rw.db.svc.cluster.local/bookboss
             - name: BOOKBOSS__IMPORT__BOOKDROP_PATH
               value: /ingest
             - name: BOOKBOSS__LIBRARY__LIBRARY_PATH
               value: /data/library
-            - name: BOOKBOSS__DATABASE__DATABASE_URL
-              value: sqlite:///data/bookboss.db?mode=rwc
             - name: BOOKBOSS__ENCRYPTION_SECRET
               valueFrom:
                 secretKeyRef:

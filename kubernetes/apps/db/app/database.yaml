@@ -97,3 +97,14 @@ spec:
   owner: qui
   cluster:
     name: pgcluster
+---
+# yaml-language-server: $schema=https://datreeio.github.io/CRDs-catalog/postgresql.cnpg.io/database_v1.json
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
+  name: bookboss
+spec:
+  name: bookboss
+  owner: bookboss
+  cluster:
+    name: pgcluster

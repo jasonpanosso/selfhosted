@@ -67,5 +67,10 @@ spec:
         login: true
         passwordSecret:
           name: qui-db
+      - name: bookboss
+        ensure: present
+        login: true
+        passwordSecret:
+          name: bookboss-db
   monitoring:
     enablePodMonitor: true

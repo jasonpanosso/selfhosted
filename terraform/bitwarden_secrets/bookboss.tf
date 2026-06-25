@@ -1,3 +1,22 @@
+resource "bitwarden-secrets_secret" "bookboss_db_username" {
+  key        = "BOOKBOSS_DB_USERNAME"
+  value      = "bookboss"
+  project_id = bitwarden_project.this.id
+  note       = "Postgres database username for the bookboss user"
+}
+
+resource "random_password" "bookboss_db_password" {
+  length  = 128
+  special = false
+}
+
+resource "bitwarden-secrets_secret" "bookboss_db_password" {
+  key        = "BOOKBOSS_DB_PASSWORD"
+  value      = random_password.bookboss_db_password.result
+  project_id = bitwarden_project.this.id
+  note       = "Postgres database password for the bookboss user"
+}
+
 resource "random_password" "bookboss_encryption_secret" {
   length  = 64
   special = false
