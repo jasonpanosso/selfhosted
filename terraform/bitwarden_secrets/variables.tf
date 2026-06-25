@@ -96,3 +96,9 @@ variable "curseforge_api_key" {
   type        = string
   sensitive   = true
 }
+
+variable "hardcover_api_key" {
+  description = "API token for Hardcover"
+  type        = string
+  sensitive   = true
+}
