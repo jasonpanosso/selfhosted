@@ -1,7 +1,7 @@
 "use strict";
 
 module.exports = {
-  public: true,
+  public: false,
   host: undefined,
   port: 80,
   bind: undefined,
@@ -12,7 +12,7 @@ module.exports = {
   // and will honor the `X-Forwarded-For` header.
   //
   // This value is set to `false` by default.
-  reverseProxy: false,
+  reverseProxy: true,
   maxHistory: 10000,
   https: {
     enable: false,
@@ -33,7 +33,7 @@ module.exports = {
   // This has no effect if `prefetch` is set to `false`.
   //
   // This value is set to `false` by default.
-  disableMediaPreview: false,
+  disableMediaPreview: true,
   prefetchStorage: false,
   prefetchMaxImageSize: 2048,
   prefetchMaxSearchSize: 50,
@@ -44,7 +44,7 @@ module.exports = {
     baseUrl: null,
   },
   transports: ["polling", "websocket"],
-  leaveMessage: "The Lounge - https://thelounge.chat",
+  leaveMessage: "",
 
   // ## Default network
 
@@ -139,9 +139,9 @@ module.exports = {
   //     but keep actual messages from nicks. This keeps the DB size down while retaining "precious" messages.
   //   - `everything`: Delete everything, including messages from irc nicks
   storagePolicy: {
-    enabled: false,
+    enabled: true,
     maxAgeDays: 7,
-    deletionPolicy: "statusOnly",
+    deletionPolicy: "everything",
   },
   useHexIp: false,
   webirc: null,
