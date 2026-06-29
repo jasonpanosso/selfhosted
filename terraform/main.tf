@@ -28,6 +28,7 @@ module "bitwarden_secrets" {
   vpn_firewall_input_ports    = var.vpn_firewall_input_ports
   vpn_wireguard_private_key   = var.vpn_wireguard_private_key
   vpn_wireguard_preshared_key = var.vpn_wireguard_preshared_key
+  vpn_server_names            = var.vpn_server_names
 
   s3_access_key_id     = digitalocean_spaces_key.this.access_key
   s3_secret_access_key = digitalocean_spaces_key.this.secret_key

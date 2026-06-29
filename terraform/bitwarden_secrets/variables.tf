@@ -55,6 +55,11 @@ variable "vpn_service_provider" {
   type        = string
 }
 
+variable "vpn_server_names" {
+  description = "Comma-delimited list of VPN servers to use"
+  type        = string
+}
+
 variable "smtp_username" {
   description = "SMTP username"
   type        = string

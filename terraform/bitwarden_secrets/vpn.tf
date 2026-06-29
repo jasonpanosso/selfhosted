@@ -26,6 +26,13 @@ resource "bitwarden-secrets_secret" "vpn_service_provider" {
   note       = "VPN service provider"
 }
 
+resource "bitwarden-secrets_secret" "vpn_server_names" {
+  key        = "VPN_SERVER_NAMES"
+  value      = var.vpn_server_names
+  project_id = bitwarden_project.this.id
+  note       = "VPN server names"
+}
+
 resource "bitwarden-secrets_secret" "vpn_firewall_input_ports" {
   key        = "VPN_FIREWALL_INPUT_PORTS"
   value      = var.vpn_firewall_input_ports

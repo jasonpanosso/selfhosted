@@ -70,6 +70,11 @@ spec:
                 secretKeyRef:
                   name: vpn
                   key: VPN_FIREWALL_INPUT_PORTS
+            - name: SERVER_NAMES
+              valueFrom:
+                secretKeyRef:
+                  name: vpn
+                  key: VPN_SERVER_NAMES
             - name: FIREWALL_OUTBOUND_SUBNETS
               value: 10.96.0.0/16,10.244.0.0/16
             - name: VPN_TYPE
@@ -190,8 +195,5 @@ spec:
         - name: mousehole
           persistentVolumeClaim:
             claimName: mousehole
-        - name: qbrr
-          image:
-            reference: ghcr.io/buroa/qbrr:0.1.6@sha256:50baeb6633f144b7220777c56a8d501ea708d43043e28eb416d93e4e96efe06b
         - name: scratch
           emptyDir: {}
