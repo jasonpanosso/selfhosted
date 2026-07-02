@@ -140,6 +140,8 @@ spec:
               subPath: downloads
             - name: scratch
               mountPath: /tmp
+            - name: qbrr
+              mountPath: /qbrr
         - image: docker.io/tmmrtn/mousehole:0.5.0@sha256:2fc02b12362581e60bfd6adba788bda9eda93f8f31ed089581eeabcee4518b0d
           name: mousehole
           env:
@@ -191,3 +193,6 @@ spec:
             claimName: mousehole
         - name: scratch
           emptyDir: {}
+        - name: qbrr
+          image:
+            reference: ghcr.io/buroa/qbrr:0.1.6@sha256:50baeb6633f144b7220777c56a8d501ea708d43043e28eb416d93e4e96efe06b
