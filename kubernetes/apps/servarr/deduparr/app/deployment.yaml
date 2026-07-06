@@ -35,10 +35,6 @@ spec:
               value: Etc/UTC
             - name: DEDUPARR_LOG_LEVEL
               value: info
-            - name: DEDUPARR_RADARR_MOVIES_ENABLED
-              value: "true"
-            - name: DEDUPARR_RADARR_MOVIES_URL
-              value: http://radarr.servarr.svc.cluster.local
             - name: DEDUPARR_REMOVE_FROM_CLIENT
               value: "false"
             - name: DEDUPARR_SCHEDULE
@@ -46,23 +42,27 @@ spec:
             - name: DEDUPARR_SERVICE__INTERVAL
               value: 1m
             - name: DEDUPARR_SERVICE__PORT
-              value: &port 80
-            - name: DEDUPARR_SONARR_SERIES_ENABLED
+              value: "80"
+            - name: DEDUPARR_RADARR_MAIN_ENABLED
               value: "true"
-            - name: DEDUPARR_SONARR_SERIES_URL
-              value: http://sonarr.servarr.svc.cluster.local
-            - name: RADARR_API_KEY
+            - name: DEDUPARR_RADARR_MAIN_URL
+              value: http://radarr.servarr.svc.cluster.local
+            - name: DEDUPARR_RADARR_MAIN_API_KEY
               valueFrom:
                 secretKeyRef:
                   name: *app
                   key: RADARR_API_TOKEN
-            - name: SONARR_API_KEY
+            - name: DEDUPARR_SONARR_MAIN_ENABLED
+              value: "true"
+            - name: DEDUPARR_SONARR_MAIN_URL
+              value: http://sonarr.servarr.svc.cluster.local
+            - name: DEDUPARR_SONARR_MAIN_API_KEY
               valueFrom:
                 secretKeyRef:
                   name: *app
                   key: SONARR_API_TOKEN
           ports:
-            - containerPort: *port
+            - containerPort: &port 80
               name: http
           livenessProbe: &probes
             httpGet:
