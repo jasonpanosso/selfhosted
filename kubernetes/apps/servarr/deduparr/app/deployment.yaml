@@ -66,13 +66,20 @@ spec:
               name: http
           livenessProbe: &probes
             httpGet:
+              path: /health/live
+              port: *port
+            initialDelaySeconds: 0
+            periodSeconds: 15
+            timeoutSeconds: 1
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
               path: /health/ready
               port: *port
             initialDelaySeconds: 0
             periodSeconds: 15
             timeoutSeconds: 1
             failureThreshold: 3
-          readinessProbe: *probes
           resources:
             requests:
               cpu: 10m
