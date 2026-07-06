@@ -1,0 +1,86 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/master-standalone/deployment-apps-v1.json
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: &app deduparr
+  labels:
+    app.kubernetes.io/name: *app
+  annotations:
+    reloader.stakater.com/auto: "true"
+spec:
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: *app
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: *app
+    spec:
+      securityContext:
+        runAsUser: 65534
+        runAsGroup: 65534
+        fsGroup: 65534
+        fsGroupChangePolicy: OnRootMismatch
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - image: quay.io/kernald/deduparr:1.2.1@sha256:f7f5770664b53f7198b86a741afafdcae720eb89d339b3b4597b3960bbd59dea
+          name: *app
+          env:
+            - name: TZ
+              value: Etc/UTC
+            - name: DEDUPARR_LOG_LEVEL
+              value: info
+            - name: DEDUPARR_RADARR_MOVIES_ENABLED
+              value: "true"
+            - name: DEDUPARR_RADARR_MOVIES_URL
+              value: http://radarr.servarr.svc.cluster.local
+            - name: DEDUPARR_REMOVE_FROM_CLIENT
+              value: "false"
+            - name: DEDUPARR_SCHEDULE
+              value: service
+            - name: DEDUPARR_SERVICE__INTERVAL
+              value: 1m
+            - name: DEDUPARR_SERVICE__PORT
+              value: &port 80
+            - name: DEDUPARR_SONARR_SERIES_ENABLED
+              value: "true"
+            - name: DEDUPARR_SONARR_SERIES_URL
+              value: http://sonarr.servarr.svc.cluster.local
+            - name: RADARR_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: *app
+                  key: RADARR_API_TOKEN
+            - name: SONARR_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: *app
+                  key: SONARR_API_TOKEN
+          ports:
+            - containerPort: *port
+              name: http
+          livenessProbe: &probes
+            httpGet:
+              path: /health/ready
+              port: *port
+            initialDelaySeconds: 0
+            periodSeconds: 15
+            timeoutSeconds: 1
+            failureThreshold: 3
+          readinessProbe: *probes
+          resources:
+            requests:
+              cpu: 10m
+              memory: 128Mi
+            limits:
+              memory: 128Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: [ALL]

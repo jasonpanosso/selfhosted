@@ -10,6 +10,7 @@ components:
 resources:
   - ./autobrr/ks.yaml
   - ./configarr/ks.yaml
+  - ./deduparr/ks.yaml
   - ./jellyfin/ks.yaml
   - ./prowlarr/ks.yaml
   - ./qbittorrent/ks.yaml
