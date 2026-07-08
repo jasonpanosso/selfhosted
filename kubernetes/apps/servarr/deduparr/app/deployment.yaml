@@ -64,7 +64,7 @@ spec:
           ports:
             - containerPort: &port 80
               name: http
-          livenessProbe: &probes
+          livenessProbe:
             httpGet:
               path: /health/live
               port: *port
