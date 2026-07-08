@@ -50,11 +50,6 @@ spec:
                   upgrade:
                     cleanupOnFail: true
                     crds: CreateReplace
-                    strategy:
-                      name: RemediateOnFailure
-                    remediation:
-                      remediateLastFailure: true
-                      retries: 2
               target:
                 group: helm.toolkit.fluxcd.io
                 kind: HelmRelease

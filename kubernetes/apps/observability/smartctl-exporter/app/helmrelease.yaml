@@ -9,6 +9,12 @@ spec:
     kind: OCIRepository
     name: *app
   interval: 1h
+  upgrade:
+    strategy:
+      name: RemediateOnFailure
+    remediation:
+      remediateLastFailure: true
+      retries: 2
   values:
     fullnameOverride: smartctl-exporter
     serviceMonitor:
