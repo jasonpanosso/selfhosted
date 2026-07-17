@@ -19,3 +19,4 @@ resources:
   - ./seerr/ks.yaml
   - ./sonarr/ks.yaml
   - ./storage/ks.yaml
+  - ./upbrr/ks.yaml
