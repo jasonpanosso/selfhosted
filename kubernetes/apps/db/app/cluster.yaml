@@ -72,5 +72,10 @@ spec:
         login: true
         passwordSecret:
           name: bookboss-db
+      - name: tandoor
+        ensure: present
+        login: true
+        passwordSecret:
+          name: tandoor-db
   monitoring:
     enablePodMonitor: true

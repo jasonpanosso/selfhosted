@@ -1,0 +1,119 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/master-standalone/deployment-apps-v1.json
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: &app tandoor
+  labels:
+    app.kubernetes.io/name: *app
+spec:
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: *app
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: *app
+    # no arm64 support
+    affinity:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+            - matchExpressions:
+                - key: kubernetes.io/arch
+                  operator: In
+                  values:
+                    - amd64
+    spec:
+      securityContext:
+        runAsUser: 65534
+        runAsGroup: 65534
+        fsGroup: 65534
+        fsGroupChangePolicy: OnRootMismatch
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - image: ghcr.io/tandoorrecipes/recipes:v2.6.13@sha256:f6c58afdea7a721d079ebd6ee5483f2c9da77dd1e709e16d60a82c218e80a451
+          name: tandoor
+          ports:
+            - containerPort: &port 80
+              name: http
+          env:
+            - name: ALLOWED_HOSTS
+              value: "*"
+            - name: MEDIA_ROOT
+              value: /data/media
+            - name: STATIC_ROOT
+              value: /data/static
+            - name: ALLAUTH_TRUSTED_PROXY_COUNT
+              value: "2"
+            - name: REMOTE_USER_AUTH
+              value: "1"
+            - name: SPACE_AI_ENABLED
+              value: "0"
+            - name: DB_ENGINE
+              value: django.db.backends.postgresql
+            - name: POSTGRES_HOST
+              value: pgcluster-rw.db.svc.cluster.local
+            - name: POSTGRES_PORT
+              value: "5432"
+            - name: POSTGRES_DB
+              value: tandoor
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: tandoor
+                  key: TANDOOR_DB_USERNAME
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: tandoor
+                  key: TANDOOR_DB_PASSWORD
+            - name: SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: tandoor
+                  key: TANDOOR_ENCRYPTION_SECRET
+          livenessProbe: &probes
+            httpGet:
+              path: /
+              port: *port
+            failureThreshold: 5
+            initialDelaySeconds: 15
+            periodSeconds: 10
+            timeoutSeconds: 10
+          readinessProbe: *probes
+          resources:
+            requests:
+              cpu: 100m
+              memory: 1Gi
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities: {drop: [ALL]}
+          volumeMounts:
+            - name: *app
+              mountPath: /data
+            - name: *app
+              mountPath: /data/media
+              subPath: media
+            - name: *app
+              mountPath: /data/static
+              subPath: static
+            - name: tmp
+              mountPath: /tmp
+            - name: config
+              mountPath: /opt/recipes/http.d
+      volumes:
+        - name: *app
+          persistentVolumeClaim:
+            claimName: *app
+        - name: config
+          configMap:
+            name: config
+        - name: tmp
+          emptyDir: {}
