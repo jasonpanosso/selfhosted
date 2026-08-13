@@ -28,7 +28,7 @@ spec:
         seccompProfile:
           type: RuntimeDefault
       containers:
-        - image: ghcr.io/autobrr/upbrr:0.2.5@sha256:3d07db3e000c8a8fdf83fc00630bcef5cf9099adaa4dbac37e1a571e5e51ca41
+        - image: ghcr.io/autobrr/upbrr:0.3.0@sha256:42e36b6660c22b31712564bd0736891b0eece5819657a05b17efd8c4931d1330
           name: *app
           env:
             - name: TZ
