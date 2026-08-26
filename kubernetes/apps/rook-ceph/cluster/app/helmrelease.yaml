@@ -29,6 +29,11 @@ spec:
       continueUpgradeAfterChecksEvenIfNotHealthy: false
       waitTimeoutForHealthyOSDInMinutes: 10
       upgradeOSDRequiresHealthyPGs: false
+      security:
+        cephx:
+          daemon:
+            keyRotationPolicy: KeyGeneration
+            keyGeneration: 2
       logCollector:
         enabled: false
       mon:
