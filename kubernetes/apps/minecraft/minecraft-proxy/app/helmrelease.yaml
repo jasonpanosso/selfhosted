@@ -58,12 +58,12 @@ spec:
       extraPorts:
         - name: voicechat
           protocol: UDP
-          containerPort: 24454
+          containerPort: 25577
           service:
             enabled: true
             embedded: true
             type: LoadBalancer
-            port: 24454
+            port: 25577
           ingress:
             enabled: false
       jvmOpts: "-XX:+UseG1GC -XX:G1HeapRegionSize=4M -XX:+UnlockExperimentalVMOptions -XX:+ParallelRefProcEnabled -XX:+AlwaysPreTouch -XX:MaxInlineLevel=15"
@@ -159,16 +159,18 @@ spec:
         # Configure your servers here. Each key represents the server's name, and the value
         # represents the IP address of the server to connect to.
         sunlit-valley-cobblemon = "10.96.0.40:25565"
+        botc = "10.96.0.41:25565"
 
         # In what order we should try servers when a player logs in or is kicked from a server.
-        try = [
-            "sunlit-valley-cobblemon"
-        ]
+        try = []
 
         [forced-hosts]
         # Configure your forced hosts here.
         "cobblemon.${domain}.${tld}" = [
             "sunlit-valley-cobblemon"
+        ]
+        "botc.${domain}.${tld}" = [
+            "botc"
         ]
 
         [advanced]
