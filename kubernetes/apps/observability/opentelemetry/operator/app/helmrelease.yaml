@@ -31,6 +31,7 @@ spec:
       serviceMonitor:
         enabled: true
       createRbacPermissions: false
+
       leaderElection:
         enabled: true
       securityContext:
@@ -43,4 +44,3 @@ spec:
           type: RuntimeDefault
       featureGatesMap:
         operator.targetallocator.fallbackstrategy: true
-        operator.golang.flags: true
