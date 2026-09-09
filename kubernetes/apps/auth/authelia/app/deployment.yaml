@@ -23,7 +23,7 @@ spec:
       # https://www.authelia.com/integration/kubernetes/introduction/#enable-service-links
       enableServiceLinks: false
       containers:
-        - image: ghcr.io/authelia/authelia:4.39.22@sha256:936134132eaf01bfa2faf85055afbc1e0cc1cc5ca4547e9c06408fd0dd784646
+        - image: ghcr.io/authelia/authelia:4.39.24@sha256:8f428b06bb07bb978c10477527634f19ef3b049c9c87321fda14e24d8fc4c535
           name: *app
           ports:
             - containerPort: 80
