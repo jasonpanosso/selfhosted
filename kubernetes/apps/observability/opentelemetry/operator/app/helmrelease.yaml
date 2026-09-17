@@ -42,5 +42,3 @@ spec:
           drop: [ALL]
         seccompProfile:
           type: RuntimeDefault
-      featureGatesMap:
-        operator.targetallocator.fallbackstrategy: true
