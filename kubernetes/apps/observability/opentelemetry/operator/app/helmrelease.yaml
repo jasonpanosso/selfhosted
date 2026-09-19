@@ -31,7 +31,6 @@ spec:
       serviceMonitor:
         enabled: true
       createRbacPermissions: false
-      ignoreMissingCollectorCRDs: true
 
       leaderElection:
         enabled: true
@@ -43,3 +42,8 @@ spec:
           drop: [ALL]
         seccompProfile:
           type: RuntimeDefault
+
+      featureGatesMap:
+        operator.golang.flags: true
+        operator.networkpolicy: true
+        operand.networkpolicy: true
