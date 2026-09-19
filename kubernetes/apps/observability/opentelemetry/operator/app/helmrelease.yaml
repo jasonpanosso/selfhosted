@@ -44,6 +44,5 @@ spec:
           type: RuntimeDefault
 
       featureGatesMap:
-        operator.golang.flags: true
         operator.networkpolicy: true
         operand.networkpolicy: true
