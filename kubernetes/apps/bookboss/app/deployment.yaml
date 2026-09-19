@@ -17,6 +17,16 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: *app
+    # no arm64 support
+    affinity:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+            - matchExpressions:
+                - key: kubernetes.io/arch
+                  operator: In
+                  values:
+                    - amd64
     spec:
       securityContext:
         runAsUser: 65534
