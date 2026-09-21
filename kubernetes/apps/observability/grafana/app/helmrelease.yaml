@@ -181,7 +181,7 @@ spec:
         etcd-storage:
           # renovate: depName="etcd"
           gnetId: 22236
-          revision: 4
+          revision: 5
           datasource:
             - {name: DS_VICTORIAMETRICS, value: Prometheus}
         ceph-cluster:
