@@ -37,7 +37,7 @@ spec:
         seccompProfile:
           type: RuntimeDefault
       containers:
-        - image: ghcr.io/szinn/bookboss:v0.8.35@sha256:41f4693f3aad63b6b61d6d3b650d040e4022602e31351166602b26208d58aaab
+        - image: ghcr.io/szinn/bookboss:v0.8.37@sha256:ace89b676023c3ac72379f68dc988acdf3217ed5c8430fcacc6818e61f84564e
           name: bookboss
           ports:
             - containerPort: &port 8080
