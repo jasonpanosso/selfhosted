@@ -150,7 +150,7 @@ spec:
         qui:
           # renovate: depName="qBittorrent / QUI Overview"
           gnetId: 25156
-          revision: 3
+          revision: 4
           datasource:
             - {name: DS_PROMETHEUS, value: Prometheus}
       data:
