@@ -16,6 +16,7 @@
         devShells.default = pkgs.mkShell {
           buildInputs = with pkgs; [
             age
+            awscli2
             bws
             cilium-cli
             cmctl
