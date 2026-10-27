@@ -44,3 +44,5 @@ spec:
       namespace: traefik
     - name: snapshot-controller
       namespace: kube-system
+    - name: cilium-gateway
+      namespace: kube-system

@@ -1,0 +1,88 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/gateway.networking.k8s.io/httproute_v1.json
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: qbittorrent
+  labels:
+    app.kubernetes.io/name: qbittorrent
+spec:
+  parentRefs:
+    - name: cilium
+      namespace: kube-system
+      sectionName: https
+  hostnames:
+    - torrents.${domain}.${tld}
+  rules:
+    - filters:
+        - type: ExternalAuth
+          externalAuth:
+            protocol: HTTP
+            backendRef:
+              name: authelia
+              namespace: auth
+              port: 80
+            http:
+              # trailing slash is required: envoy appends the original path (with its leading slash)
+              path: /api/authz/ext-authz/
+              allowedHeaders:
+                - accept
+                - cookie
+                - proxy-authorization
+                - x-forwarded-for
+                - x-forwarded-proto
+                - x-requested-with
+              allowedResponseHeaders:
+                - Remote-User
+                - Remote-Name
+                - Remote-Groups
+                - Remote-Email
+      backendRefs:
+        - name: qbittorrent
+          port: 8080
+      timeouts:
+        request: 0s
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/gateway.networking.k8s.io/httproute_v1.json
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: mousehole
+  labels:
+    app.kubernetes.io/name: qbittorrent
+spec:
+  parentRefs:
+    - name: cilium
+      namespace: kube-system
+      sectionName: https
+  hostnames:
+    - mousehole.${domain}.${tld}
+  rules:
+    - filters:
+        - type: ExternalAuth
+          externalAuth:
+            protocol: HTTP
+            backendRef:
+              name: authelia
+              namespace: auth
+              port: 80
+            http:
+              # trailing slash is required: envoy appends the original path (with its leading slash)
+              path: /api/authz/ext-authz/
+              allowedHeaders:
+                - accept
+                - cookie
+                - proxy-authorization
+                - x-forwarded-for
+                - x-forwarded-proto
+                - x-requested-with
+              allowedResponseHeaders:
+                - Remote-User
+                - Remote-Name
+                - Remote-Groups
+                - Remote-Email
+      backendRefs:
+        - name: qbittorrent
+          port: 5010
+      timeouts:
+        request: 0s

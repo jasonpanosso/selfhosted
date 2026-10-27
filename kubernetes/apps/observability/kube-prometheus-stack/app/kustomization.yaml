@@ -7,5 +7,6 @@ resources:
   - ./alertmanagerconfig.yaml
   - ./externalsecret.yaml
   - ./helmrelease.yaml
+  - ./httproute.yaml
   - ./ingressroute.yaml
   - ./ocirepository.yaml

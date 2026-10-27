@@ -28,3 +28,5 @@ spec:
   dependsOn:
     - name: kopiur-repositories
       namespace: kopiur-system
+    - name: cilium-gateway
+      namespace: kube-system

@@ -8,4 +8,5 @@ resources:
   - ./deployment.yaml
   - ./service.yaml
   - ./servicemonitor.yaml
+  - ./httproute.yaml
   - ./ingressroute.yaml

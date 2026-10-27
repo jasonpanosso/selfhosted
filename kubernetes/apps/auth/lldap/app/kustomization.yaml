@@ -6,5 +6,6 @@ kind: Kustomization
 resources:
   - ./deployment.yaml
   - ./externalsecret.yaml
+  - ./httproute.yaml
   - ./ingressroute.yaml
   - ./service.yaml

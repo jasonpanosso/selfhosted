@@ -7,6 +7,7 @@ resources:
   - ./deployment.yaml
   - ./dragonfly.yaml
   - ./externalsecret.yaml
+  - ./httproute.yaml
   - ./ingressroute.yaml
   - ./referencegrant.yaml
   - ./service.yaml

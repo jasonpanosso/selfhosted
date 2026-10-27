@@ -10,4 +10,5 @@ resources:
   - ./prometheusrule.yaml
   - ./externalsecret.yaml
   - ./receiver.yaml
+  - ./httproute.yaml
   - ./ingressroute.yaml

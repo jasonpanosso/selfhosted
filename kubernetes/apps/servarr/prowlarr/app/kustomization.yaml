@@ -7,4 +7,5 @@ resources:
   - ./externalsecret.yaml
   - ./deployment.yaml
   - ./service.yaml
+  - ./httproute.yaml
   - ./ingressroute.yaml

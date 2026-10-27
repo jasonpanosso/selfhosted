@@ -33,6 +33,8 @@ spec:
       backendRefs:
         - name: *app
           port: 8080
+      timeouts:
+        request: 0s
     - filters:
         - type: ExternalAuth
           externalAuth:
@@ -59,3 +61,5 @@ spec:
       backendRefs:
         - name: *app
           port: 8080
+      timeouts:
+        request: 0s

@@ -29,3 +29,5 @@ spec:
       namespace: external-secrets
     - name: db
       namespace: db
+    - name: cilium-gateway
+      namespace: kube-system
