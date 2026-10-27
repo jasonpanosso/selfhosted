@@ -7,17 +7,7 @@ resources:
   - ./deployment.yaml
   - ./service.yaml
   - ./ingressroute.yaml
-
-# Opt the Volsync component's PVC into Kopiur backups during the dual-run.
-# Targets by kind because the PVC is still named "${APP}" at build time.
-patches:
-  - target:
-      kind: PersistentVolumeClaim
-    patch: |-
-      - op: add
-        path: /metadata/labels
-        value:
-          kopiur/policy: hourly
+  - ./pvc.yaml
 
 configMapGenerator:
   - name: thelounge

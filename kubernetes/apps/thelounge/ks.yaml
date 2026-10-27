@@ -9,11 +9,6 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  components:
-    - ./../../../components/volsync
-  postBuild:
-    substitute:
-      APP: *app
   path: ./kubernetes/apps/thelounge/app
   interval: 1h
   retryInterval: 2m
@@ -33,5 +28,5 @@ spec:
   dependsOn:
     - name: rook-ceph-cluster
       namespace: rook-ceph
-    - name: volsync
-      namespace: volsync-system
+    - name: kopiur-repositories
+      namespace: kopiur-system
