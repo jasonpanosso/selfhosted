@@ -241,7 +241,7 @@ spec:
           enabled: true
           isDefault: false
           name: rook-cephfs-hdd
-          pool: hddfs-replicated
+          pool: replicated
           reclaimPolicy: Delete
           allowVolumeExpansion: true
           volumeBindingMode: Immediate
