@@ -1,0 +1,29 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/monitoring.coreos.com/prometheusrule_v1.json
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: kopiur-extra
+spec:
+  groups:
+    - name: kopiur-extra.rules
+      rules:
+        - alert: KopiurControllerAbsent
+          expr: |-
+            absent(up{job="kopiur-controller-metrics"} == 1)
+          annotations:
+            summary: >-
+              Kopiur controller has disappeared from Prometheus target discovery
+          for: 5m
+          labels:
+            severity: critical
+
+        # no per-object labels, just a rough count
+        - alert: KopiurReplicationFailed
+          expr: |-
+            sum(increase(kopiur_replication_runs_total{outcome!="succeeded"}[1h])) > 0
+          annotations:
+            summary: >-
+              An offsite RepositoryReplication run failed; check `kubectl get repositoryreplication -A`
+          labels:
+            severity: warning
