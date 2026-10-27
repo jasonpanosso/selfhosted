@@ -23,35 +23,27 @@ spec:
     - namespace: servarr
       app: jellyfin
       capacity: 5Gi
-      bootstrap: true
     - namespace: servarr
       app: prowlarr
       capacity: 1Gi
-      bootstrap: true
     - namespace: servarr
       app: qbittorrent
       capacity: 1Gi
-      bootstrap: true
     - namespace: servarr
       app: qui
       capacity: 1Gi
-      bootstrap: true
     - namespace: servarr
       app: radarr
       capacity: 1Gi
-      bootstrap: true
     - namespace: servarr
       app: seerr
       capacity: 1Gi
-      bootstrap: true
     - namespace: servarr
       app: sonarr
       capacity: 1Gi
-      bootstrap: true
     - namespace: servarr
       app: upbrr
       capacity: 1Gi
-      bootstrap: true
   # Populator Restores stay unready until a PVC claims them, so health is
   # reported by Kopiur's own alerts rather than by waiting here.
   wait: false

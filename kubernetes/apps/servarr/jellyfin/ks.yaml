@@ -9,13 +9,6 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  components:
-    - ./../../../../components/volsync
-  postBuild:
-    substitute:
-      APP: *app
-      VOLSYNC_CAPACITY: 10Gi
-      VOLSYNC_CACHE_CAPACITY: 5Gi
   path: ./kubernetes/apps/servarr/jellyfin/app
   interval: 1h
   retryInterval: 2m
@@ -37,8 +30,8 @@ spec:
       namespace: db
     - name: lldap
       namespace: auth
-    - name: volsync
-      namespace: volsync-system
+    - name: kopiur-repositories
+      namespace: kopiur-system
     - name: rook-ceph-cluster
       namespace: rook-ceph
     - name: secret-store

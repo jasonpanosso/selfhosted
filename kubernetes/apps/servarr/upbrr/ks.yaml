@@ -9,11 +9,6 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  components:
-    - ./../../../../components/volsync
-  postBuild:
-    substitute:
-      APP: *app
   path: ./kubernetes/apps/servarr/upbrr/app
   interval: 1h
   retryInterval: 2m
@@ -31,6 +26,8 @@ spec:
     namespace: flux-system
   targetNamespace: *namespace
   dependsOn:
+    - name: kopiur-repositories
+      namespace: kopiur-system
     - name: rook-ceph-cluster
       namespace: rook-ceph
     - name: cilium-gateway
