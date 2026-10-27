@@ -26,8 +26,8 @@ spec:
     name: bitwarden-bootstrap-issuer
     kind: Issuer
     group: cert-manager.io
-  duration: 2160h # 90d
-  renewBefore: 360h # 15d
+  duration: 87600h # 10y
+  renewBefore: 720h # 30d
 ---
 # yaml-language-server: $schema=https://datreeio.github.io/CRDs-catalog/cert-manager.io/certificate_v1.json
 apiVersion: cert-manager.io/v1

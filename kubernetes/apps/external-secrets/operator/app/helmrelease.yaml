@@ -20,6 +20,8 @@ spec:
     replicaCount: 1
     bitwarden-sdk-server:
       enabled: true
+      deploymentAnnotations:
+        reloader.stakater.com/auto: "true"
     leaderElect: true
     image:
       repository: ghcr.io/external-secrets/external-secrets
