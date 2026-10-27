@@ -34,6 +34,16 @@ spec:
           daemon:
             keyRotationPolicy: KeyGeneration
             keyGeneration: 2
+          csi:
+            keyRotationPolicy: KeyGeneration
+            keyGeneration: 2
+            keyType: aes256k
+            # keep old key valid until existing mounts are remounted, then set to 0
+            keepPriorKeyCountMax: 1
+          rbdMirrorPeer:
+            keyRotationPolicy: KeyGeneration
+            keyGeneration: 2
+            keyType: aes256k
       logCollector:
         enabled: false
       mon:
