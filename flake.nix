@@ -22,6 +22,7 @@
             cmctl
             docker
             fluxcd
+            kopia
             kubectl
             kubernetes-helm
             kube-linter
