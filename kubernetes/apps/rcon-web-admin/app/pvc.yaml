@@ -4,14 +4,12 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: rcon-web-admin
-  labels:
-    kopiur/policy: hourly
 spec:
   accessModes: [ReadWriteOnce]
   dataSourceRef:
     apiGroup: kopiur.home-operations.com
     kind: Restore
-    name: hourly
+    name: rcon-web-admin
   resources:
     requests:
       storage: 5Gi

@@ -4,14 +4,12 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: tandoor
-  labels:
-    kopiur/policy: hourly
 spec:
   accessModes: [ReadWriteOnce]
   dataSourceRef:
     apiGroup: kopiur.home-operations.com
     kind: Restore
-    name: hourly
+    name: tandoor
   resources:
     requests:
       storage: 5Gi

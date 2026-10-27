@@ -5,20 +5,53 @@ kind: ResourceSet
 metadata:
   name: kopiur-repositories
 spec:
-  # One entry per namespace, matching kopia_repositories in
-  # terraform/bitwarden_secrets/kopia.tf. Repositories are seeded from their
-  # offsite mirror on first bootstrap (a no-op once initialized). A new
-  # namespace has no mirror yet: add bootstrap: true until its first offsite
-  # replication has succeeded, then remove it.
+  # one repository per app, matches terraform/bitwarden_secrets/kopia.tf.
+  # set bootstrap: true until first offsite replication has succeeded.
   inputs:
     - namespace: thelounge
+      app: thelounge
       capacity: 5Gi
     - namespace: rcon-web-admin
+      app: rcon-web-admin
       capacity: 1Gi
     - namespace: bookboss
+      app: bookboss
       capacity: 5Gi
     - namespace: tandoor
+      app: tandoor
       capacity: 1Gi
+    - namespace: servarr
+      app: jellyfin
+      capacity: 5Gi
+      bootstrap: true
+    - namespace: servarr
+      app: prowlarr
+      capacity: 1Gi
+      bootstrap: true
+    - namespace: servarr
+      app: qbittorrent
+      capacity: 1Gi
+      bootstrap: true
+    - namespace: servarr
+      app: qui
+      capacity: 1Gi
+      bootstrap: true
+    - namespace: servarr
+      app: radarr
+      capacity: 1Gi
+      bootstrap: true
+    - namespace: servarr
+      app: seerr
+      capacity: 1Gi
+      bootstrap: true
+    - namespace: servarr
+      app: sonarr
+      capacity: 1Gi
+      bootstrap: true
+    - namespace: servarr
+      app: upbrr
+      capacity: 1Gi
+      bootstrap: true
   # Populator Restores stay unready until a PVC claims them, so health is
   # reported by Kopiur's own alerts rather than by waiting here.
   wait: false
@@ -26,19 +59,20 @@ spec:
     - apiVersion: external-secrets.io/v1
       kind: ExternalSecret
       metadata:
-        name: kopiur-repository
+        name: kopiur-<< inputs.app >>
         namespace: << inputs.namespace >>
       spec:
         secretStoreRef:
           kind: ClusterSecretStore
           name: bitwarden
         target:
-          name: kopiur-repository
+          name: kopiur-<< inputs.app >>
         data:
           - secretKey: KOPIA_PASSWORD
             remoteRef:
-              key: KOPIA_PASSWORD_<< inputs.namespace | upper | replace "-" "_" >>
+              key: KOPIA_PASSWORD_<< inputs.app | upper | replace "-" "_" >>
 
+    # Identical for every app in a namespace; the ResourceSet keeps one copy.
     - apiVersion: external-secrets.io/v1
       kind: ExternalSecret
       metadata:
@@ -61,7 +95,7 @@ spec:
     - apiVersion: v1
       kind: PersistentVolumeClaim
       metadata:
-        name: kopiur-repository
+        name: kopiur-<< inputs.app >>
         namespace: << inputs.namespace >>
         annotations:
           fluxcd.controlplane.io/prune: disabled
@@ -77,7 +111,7 @@ spec:
     - apiVersion: kopiur.home-operations.com/v1alpha1
       kind: Repository
       metadata:
-        name: primary
+        name: << inputs.app >>
         namespace: << inputs.namespace >>
         annotations:
           fluxcd.controlplane.io/prune: disabled
@@ -88,10 +122,10 @@ spec:
             path: /repo
             volume:
               pvc:
-                name: kopiur-repository
+                name: kopiur-<< inputs.app >>
         encryption: &encryption
           passwordSecretRef:
-            name: kopiur-repository
+            name: kopiur-<< inputs.app >>
             key: KOPIA_PASSWORD
         create: &create
           enabled: true
@@ -110,7 +144,7 @@ spec:
     - apiVersion: kopiur.home-operations.com/v1alpha1
       kind: Repository
       metadata:
-        name: primary
+        name: << inputs.app >>
         namespace: << inputs.namespace >>
         annotations:
           fluxcd.controlplane.io/prune: disabled
@@ -127,7 +161,7 @@ spec:
                 bucket: "${s3_backup_bucket_name}"
                 endpoint: "${s3_backup_domain_name}"
                 region: nyc3
-                prefix: kopiur/<< inputs.namespace >>/
+                prefix: kopiur/<< inputs.app >>/
                 auth:
                   secretRef:
                     name: kopiur-offsite
@@ -137,12 +171,12 @@ spec:
     - apiVersion: kopiur.home-operations.com/v1alpha1
       kind: RepositoryReplication
       metadata:
-        name: offsite
+        name: << inputs.app >>
         namespace: << inputs.namespace >>
       spec:
         sourceRef:
           kind: Repository
-          name: primary
+          name: << inputs.app >>
         destination:
           s3: *offsite
         schedule:
@@ -154,18 +188,14 @@ spec:
     - apiVersion: kopiur.home-operations.com/v1alpha1
       kind: SnapshotPolicy
       metadata:
-        name: hourly
+        name: << inputs.app >>
         namespace: << inputs.namespace >>
       spec:
         repository:
-          name: primary
+          name: << inputs.app >>
         sources:
-          - pvcSelector:
-              labelSelector:
-                matchLabels:
-                  kopiur/policy: hourly
-            sourcePathStrategy: PvcName
-        groupBy: None
+          - pvc:
+              name: << inputs.app >>
         copyMethod: Snapshot
         volumeSnapshotClassName: csi-ceph-blockpool
         retention:
@@ -190,11 +220,11 @@ spec:
     - apiVersion: kopiur.home-operations.com/v1alpha1
       kind: SnapshotSchedule
       metadata:
-        name: hourly
+        name: << inputs.app >>
         namespace: << inputs.namespace >>
       spec:
         policyRef:
-          name: hourly
+          name: << inputs.app >>
         schedule:
           cron: "H * * * *"
           jitter: 10m
@@ -202,12 +232,12 @@ spec:
     - apiVersion: kopiur.home-operations.com/v1alpha1
       kind: Restore
       metadata:
-        name: hourly
+        name: << inputs.app >>
         namespace: << inputs.namespace >>
       spec:
         source:
           fromPolicy:
-            name: hourly
+            name: << inputs.app >>
         target:
           populator: {}
         policy:
