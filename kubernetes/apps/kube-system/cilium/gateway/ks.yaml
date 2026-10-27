@@ -23,5 +23,7 @@ spec:
   dependsOn:
     - name: cilium
       namespace: *namespace
+    - name: gateway-api-crds
+      namespace: *namespace
     - name: clusterissuer
       namespace: cert-manager

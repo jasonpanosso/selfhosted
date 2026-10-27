@@ -15,4 +15,5 @@ resources:
   - ./snapshot-controller/ks.yaml
   - ./descheduler/ks.yaml
   - ./spegel/ks.yaml
+  - ./gateway-api-crds/ks.yaml
   - ./cilium

@@ -8,6 +8,7 @@ resources:
   - ./dragonfly.yaml
   - ./externalsecret.yaml
   - ./ingressroute.yaml
+  - ./referencegrant.yaml
   - ./service.yaml
   - ./servicemonitor.yaml
 

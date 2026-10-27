@@ -1,0 +1,34 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/gateway.networking.k8s.io/referencegrant_v1.json
+apiVersion: gateway.networking.k8s.io/v1
+kind: ReferenceGrant
+metadata:
+  name: authelia-ext-authz
+spec:
+  # namespaces whose HTTPRoutes use authelia as an ExternalAuth backend
+  from:
+    - group: gateway.networking.k8s.io
+      kind: HTTPRoute
+      namespace: bookboss
+    - group: gateway.networking.k8s.io
+      kind: HTTPRoute
+      namespace: observability
+    - group: gateway.networking.k8s.io
+      kind: HTTPRoute
+      namespace: rcon-web-admin
+    - group: gateway.networking.k8s.io
+      kind: HTTPRoute
+      namespace: rook-ceph
+    - group: gateway.networking.k8s.io
+      kind: HTTPRoute
+      namespace: servarr
+    - group: gateway.networking.k8s.io
+      kind: HTTPRoute
+      namespace: tandoor
+    - group: gateway.networking.k8s.io
+      kind: HTTPRoute
+      namespace: thelounge
+  to:
+    - group: ""
+      kind: Service
+      name: authelia

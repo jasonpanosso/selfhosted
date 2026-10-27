@@ -34,3 +34,5 @@ spec:
       namespace: dragonfly-operator-system
     - name: lldap
       namespace: *namespace
+    - name: gateway-api-crds
+      namespace: kube-system

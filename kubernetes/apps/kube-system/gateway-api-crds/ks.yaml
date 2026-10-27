@@ -1,0 +1,38 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/source.toolkit.fluxcd.io/gitrepository_v1.json
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: GitRepository
+metadata:
+  name: gateway-api
+spec:
+  interval: 1h
+  url: https://github.com/kubernetes-sigs/gateway-api
+  ref:
+    tag: v1.6.3
+  ignore: |
+    # exclude all
+    /*
+    !/config
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/kustomize.toolkit.fluxcd.io/kustomization_v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: &app gateway-api-crds
+  namespace: &namespace kube-system
+spec:
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: *app
+  # experimental channel is required for the HTTPRoute ExternalAuth filter
+  path: ./config/crd/experimental
+  interval: 1h
+  retryInterval: 2m
+  timeout: 5m
+  # never prune: deleting these CRDs deletes every Gateway API object in the cluster
+  prune: false
+  wait: true
+  sourceRef:
+    kind: GitRepository
+    name: gateway-api
+    namespace: *namespace
