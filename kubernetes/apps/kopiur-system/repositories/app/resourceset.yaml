@@ -1,0 +1,191 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/fluxcd.controlplane.io/resourceset_v1.json
+apiVersion: fluxcd.controlplane.io/v1
+kind: ResourceSet
+metadata:
+  name: kopiur-repositories
+spec:
+  # One entry per namespace, matching kopia_repositories in
+  # terraform/bitwarden_secrets/kopia.tf. Repositories are seeded from their
+  # offsite mirror on first bootstrap (a no-op once initialized). A new
+  # namespace has no mirror yet: add bootstrap: true until its first offsite
+  # replication has succeeded, then remove it.
+  inputs:
+    - namespace: thelounge
+      capacity: 5Gi
+      bootstrap: true
+  # Populator Restores stay unready until a PVC claims them, so health is
+  # reported by Kopiur's own alerts rather than by waiting here.
+  wait: false
+  resources:
+    - apiVersion: external-secrets.io/v1
+      kind: ExternalSecret
+      metadata:
+        name: kopiur-repository
+        namespace: << inputs.namespace >>
+      spec:
+        secretStoreRef:
+          kind: ClusterSecretStore
+          name: bitwarden
+        target:
+          name: kopiur-repository
+        data:
+          - secretKey: KOPIA_PASSWORD
+            remoteRef:
+              key: KOPIA_PASSWORD_<< inputs.namespace | upper | replace "-" "_" >>
+
+    - apiVersion: external-secrets.io/v1
+      kind: ExternalSecret
+      metadata:
+        name: kopiur-offsite
+        namespace: << inputs.namespace >>
+      spec:
+        secretStoreRef:
+          kind: ClusterSecretStore
+          name: bitwarden
+        target:
+          name: kopiur-offsite
+        data:
+          - secretKey: AWS_ACCESS_KEY_ID
+            remoteRef:
+              key: S3_ACCESS_KEY_ID
+          - secretKey: AWS_SECRET_ACCESS_KEY
+            remoteRef:
+              key: S3_SECRET_ACCESS_KEY
+
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
+        name: kopiur-repository
+        namespace: << inputs.namespace >>
+        annotations:
+          fluxcd.controlplane.io/prune: disabled
+      spec:
+        accessModes: [ReadWriteMany]
+        storageClassName: rook-cephfs-hdd
+        resources:
+          requests:
+            storage: << inputs.capacity | quote >>
+
+    # Two variants of the same Repository; the reconcile annotation keeps
+    # exactly one of them: unseeded while bootstrapping, seeded otherwise.
+    - apiVersion: kopiur.home-operations.com/v1alpha1
+      kind: Repository
+      metadata:
+        name: primary
+        namespace: << inputs.namespace >>
+        annotations:
+          fluxcd.controlplane.io/prune: disabled
+          fluxcd.controlplane.io/reconcile: << if get inputs "bootstrap" >>enabled<< else >>disabled<< end >>
+      spec:
+        backend: &backend
+          filesystem:
+            path: /repo
+            volume:
+              pvc:
+                name: kopiur-repository
+        encryption: &encryption
+          passwordSecretRef:
+            name: kopiur-repository
+            key: KOPIA_PASSWORD
+        create: &create
+          enabled: true
+        moverDefaults: &moverDefaults
+          securityContext:
+            runAsUser: 65534
+            runAsGroup: 65534
+          podSecurityContext:
+            fsGroup: 65534
+            fsGroupChangePolicy: OnRootMismatch
+
+    - apiVersion: kopiur.home-operations.com/v1alpha1
+      kind: Repository
+      metadata:
+        name: primary
+        namespace: << inputs.namespace >>
+        annotations:
+          fluxcd.controlplane.io/prune: disabled
+          fluxcd.controlplane.io/reconcile: << if get inputs "bootstrap" >>disabled<< else >>enabled<< end >>
+      spec:
+        backend: *backend
+        encryption: *encryption
+        create: *create
+        moverDefaults: *moverDefaults
+        seed:
+          from:
+            backend:
+              s3: &offsite
+                bucket: "${s3_backup_bucket_name}"
+                endpoint: "${s3_backup_domain_name}"
+                region: nyc3
+                prefix: kopiur/<< inputs.namespace >>/
+                auth:
+                  secretRef:
+                    name: kopiur-offsite
+          sync:
+            parallel: 4
+
+    - apiVersion: kopiur.home-operations.com/v1alpha1
+      kind: RepositoryReplication
+      metadata:
+        name: offsite
+        namespace: << inputs.namespace >>
+      spec:
+        sourceRef:
+          kind: Repository
+          name: primary
+        destination:
+          s3: *offsite
+        schedule:
+          cron: "H 3 * * *"
+          jitter: 30m
+        sync:
+          parallel: 4
+
+    - apiVersion: kopiur.home-operations.com/v1alpha1
+      kind: SnapshotPolicy
+      metadata:
+        name: hourly
+        namespace: << inputs.namespace >>
+      spec:
+        repository:
+          name: primary
+        sources:
+          - pvcSelector:
+              labelSelector:
+                matchLabels:
+                  kopiur/policy: hourly
+            sourcePathStrategy: PvcName
+        groupBy: None
+        copyMethod: Snapshot
+        volumeSnapshotClassName: csi-ceph-blockpool
+        retention:
+          keepHourly: 24
+          keepDaily: 7
+          keepWeekly: 4
+
+    - apiVersion: kopiur.home-operations.com/v1alpha1
+      kind: SnapshotSchedule
+      metadata:
+        name: hourly
+        namespace: << inputs.namespace >>
+      spec:
+        policyRef:
+          name: hourly
+        schedule:
+          cron: "H * * * *"
+          jitter: 10m
+
+    - apiVersion: kopiur.home-operations.com/v1alpha1
+      kind: Restore
+      metadata:
+        name: hourly
+        namespace: << inputs.namespace >>
+      spec:
+        source:
+          fromPolicy:
+            name: hourly
+        target:
+          populator: {}
+        policy:
+          onMissingSnapshot: Continue
