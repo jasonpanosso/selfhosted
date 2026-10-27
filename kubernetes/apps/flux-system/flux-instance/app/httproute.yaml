@@ -18,6 +18,12 @@ spec:
         - path:
             type: PathPrefix
             value: /hook
+      filters:
+        - type: RequestHeaderModifier
+          requestHeaderModifier:
+            set:
+              - name: X-Forwarded-For
+                value: "%DOWNSTREAM_REMOTE_ADDRESS_WITHOUT_PORT%"
       backendRefs:
         - name: webhook-receiver
           port: 80

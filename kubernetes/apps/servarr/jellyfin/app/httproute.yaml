@@ -14,7 +14,13 @@ spec:
   hostnames:
     - watch.${domain}.${tld}
   rules:
-    - backendRefs:
+    - filters:
+        - type: RequestHeaderModifier
+          requestHeaderModifier:
+            set:
+              - name: X-Forwarded-For
+                value: "%DOWNSTREAM_REMOTE_ADDRESS_WITHOUT_PORT%"
+      backendRefs:
         - name: *app
           port: 80
       timeouts:

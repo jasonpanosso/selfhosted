@@ -23,13 +23,10 @@ spec:
               namespace: auth
               port: 80
             http:
-              # trailing slash is required: envoy appends the original path (with its leading slash)
               path: /api/authz/ext-authz/
               allowedHeaders:
                 - accept
                 - cookie
-                - proxy-authorization
-                - x-forwarded-for
                 - x-forwarded-proto
                 - x-requested-with
               allowedResponseHeaders:
@@ -37,6 +34,11 @@ spec:
                 - Remote-Name
                 - Remote-Groups
                 - Remote-Email
+        - type: RequestHeaderModifier
+          requestHeaderModifier:
+            set:
+              - name: X-Forwarded-For
+                value: "%DOWNSTREAM_REMOTE_ADDRESS_WITHOUT_PORT%"
       backendRefs:
         - name: *app
           port: 9696
