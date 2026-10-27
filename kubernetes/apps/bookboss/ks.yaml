@@ -32,3 +32,5 @@ spec:
       namespace: kopiur-system
     - name: secret-store
       namespace: external-secrets
+    - name: cilium-gateway
+      namespace: kube-system
