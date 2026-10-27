@@ -15,6 +15,9 @@ spec:
       capacity: 5Gi
     - namespace: rcon-web-admin
       capacity: 1Gi
+    - namespace: bookboss
+      capacity: 5Gi
+      bootstrap: true
   # Populator Restores stay unready until a PVC claims them, so health is
   # reported by Kopiur's own alerts rather than by waiting here.
   wait: false

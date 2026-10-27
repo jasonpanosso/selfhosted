@@ -4,6 +4,7 @@ locals {
   kopia_repositories = toset([
     "thelounge",
     "rcon-web-admin",
+    "bookboss",
   ])
 }
 
