@@ -22,6 +22,7 @@
             cmctl
             docker
             fluxcd
+            just
             kopia
             kubectl
             kubernetes-helm
