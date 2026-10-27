@@ -74,15 +74,6 @@
       }
     },
     {
-      "description": "Traefik Group",
-      "groupName": "Traefik",
-      "matchDatasources": ["docker"],
-      "matchPackageNames": ["/traefik/", "/traefik-config/"],
-      "group": {
-        "commitMessageTopic": "{{{groupName}}} group"
-      }
-    },
-    {
       "description": "OpenTelemetry Group",
       "groupName": "OpenTelemetry",
       "matchDatasources": ["docker"],

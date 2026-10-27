@@ -6,7 +6,6 @@ resources:
   - ./externalsecret.yaml
   - ./deployment.yaml
   - ./httproute.yaml
-  - ./ingressroute.yaml
   - ./persistentvolumeclaim.yaml
   - ./service.yaml
   - ./pvc.yaml

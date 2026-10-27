@@ -8,5 +8,4 @@ resources:
   - ./service.yaml
   - ./servicemonitor.yaml
   - ./httproute.yaml
-  - ./ingressroute.yaml
   - ./pvc.yaml

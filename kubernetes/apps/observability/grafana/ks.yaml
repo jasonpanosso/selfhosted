@@ -26,7 +26,5 @@ spec:
     namespace: flux-system
   targetNamespace: *namespace
   dependsOn:
-    - name: traefik
-      namespace: traefik
     - name: cilium-gateway
       namespace: kube-system

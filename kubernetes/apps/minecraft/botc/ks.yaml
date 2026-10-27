@@ -33,5 +33,3 @@ spec:
       namespace: external-secrets
     - name: rook-ceph-cluster
       namespace: rook-ceph
-    - name: traefik
-      namespace: traefik

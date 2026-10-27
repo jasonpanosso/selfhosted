@@ -1,0 +1,29 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/monitoring.coreos.com/prometheusrule_v1.json
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: cilium-gateway-rules
+spec:
+  groups:
+    - name: cilium-gateway.rules
+      rules:
+        - alert: CiliumEnvoyDown
+          expr: |
+            up{job="cilium-envoy"} == 0
+          for: 5m
+          annotations:
+            summary: >-
+              Cilium Envoy on {{ $labels.node }} is down
+          labels:
+            severity: warning
+
+        - alert: GatewayExternalAuthErrors
+          expr: |
+            sum(rate(envoy_http_ext_authz_error{envoy_http_conn_manager_prefix="listener-secure"}[5m])) > 0
+          for: 10m
+          annotations:
+            summary: >-
+              Gateway cannot reach the ExternalAuth backend (Authelia); protected routes are returning 403
+          labels:
+            severity: critical

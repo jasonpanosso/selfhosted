@@ -7,3 +7,4 @@ resources:
   - ./certificate.yaml
   - ./gateway.yaml
   - ./httproute.yaml
+  - ./prometheusrule.yaml
