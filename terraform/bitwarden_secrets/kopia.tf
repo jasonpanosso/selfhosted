@@ -5,6 +5,7 @@ locals {
     "thelounge",
     "rcon-web-admin",
     "bookboss",
+    "tandoor",
   ])
 }
 
