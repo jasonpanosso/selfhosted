@@ -3,6 +3,7 @@ locals {
   # Removing an entry is blocked by prevent_destroy: retire a repository deliberately.
   kopia_repositories = toset([
     "thelounge",
+    "rcon-web-admin",
   ])
 }
 
