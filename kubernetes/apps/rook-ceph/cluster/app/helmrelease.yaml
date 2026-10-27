@@ -36,10 +36,12 @@ spec:
             keyGeneration: 2
           csi:
             keyRotationPolicy: KeyGeneration
-            keyGeneration: 2
-            keyType: aes256k
-            # keep old key valid until existing mounts are remounted, then set to 0
-            keepPriorKeyCountMax: 1
+            keyGeneration: 3
+            # kernel krbd/cephfs clients reject aes256k ("libceph: secret too big 32"),
+            # so csi keys must stay aes until the kernel supports it
+            keyType: aes
+            # keep gen 1 (existing mounts) and gen 2 valid until everything is remounted
+            keepPriorKeyCountMax: 2
           rbdMirrorPeer:
             keyRotationPolicy: KeyGeneration
             keyGeneration: 2
