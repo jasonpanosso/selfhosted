@@ -27,3 +27,16 @@ spec:
               An offsite RepositoryReplication run failed; check `kubectl get repositoryreplication -A`
           labels:
             severity: warning
+
+        # Quick verification runs daily, so a verify older than two days means
+        # verification stopped succeeding or stopped running. Individual failed
+        # quick/deep runs surface sooner through KubeJobFailed.
+        - alert: KopiurVerificationStale
+          expr: |-
+            time() - kopiur_snapshot_verified_timestamp_seconds > 2 * 86400
+          annotations:
+            summary: >-
+              {{ $labels.namespace }}/{{ $labels.name }} has not verified successfully in over 2 days
+          for: 1h
+          labels:
+            severity: warning

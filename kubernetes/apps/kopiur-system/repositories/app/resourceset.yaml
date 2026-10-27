@@ -96,6 +96,10 @@ spec:
           podSecurityContext:
             fsGroup: 65534
             fsGroupChangePolicy: OnRootMismatch
+          # Throwaway volume for deep verification's restore test, on HDD.
+          scratch:
+            capacity: << inputs.capacity | quote >>
+            storageClassName: rook-ceph-block-hdd
 
     - apiVersion: kopiur.home-operations.com/v1alpha1
       kind: Repository
@@ -162,6 +166,20 @@ spec:
           keepHourly: 24
           keepDaily: 7
           keepWeekly: 4
+        # quick: daily blob-level `kopia snapshot verify`.
+        # deep: weekly restore of the latest snapshot into a throwaway volume.
+        # A failed run leaves a failed Job, caught by KubeJobFailed.
+        verification:
+          quick:
+            schedule:
+              cron: "H 4 * * *"
+              jitter: 30m
+          deep:
+            schedule:
+              cron: "H 5 * * 0"
+              jitter: 1h
+          successExpr: "stats.files > 0 && stats.errors == 0"
+          verifyFilesPercent: 10
 
     - apiVersion: kopiur.home-operations.com/v1alpha1
       kind: SnapshotSchedule
