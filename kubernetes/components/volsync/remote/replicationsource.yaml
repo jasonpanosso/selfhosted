@@ -18,6 +18,7 @@ spec:
     cacheAccessModes: [ReadWriteOnce]
     storageClassName: "${VOLSYNC_STORAGECLASS:=rook-ceph-block}"
     accessModes: ["${VOLSYNC_SNAP_ACCESSMODES:=ReadWriteOnce}"]
+    unlock: "2026-10-27"
     moverSecurityContext:
       runAsUser: ${VOLSYNC_PUID:=65534}
       runAsGroup: ${VOLSYNC_PGID:=65534}
