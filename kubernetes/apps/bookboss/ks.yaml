@@ -9,15 +9,6 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  components:
-    - ./../../../components/volsync
-  postBuild:
-    substitute:
-      APP: *app
-      VOLSYNC_CACHE_CAPACITY: 5Gi
-      VOLSYNC_CAPACITY: 10Gi
-      VOLSYNC_STORAGECLASS: rook-ceph-block
-      VOLSYNC_CACHE_STORAGECLASS: rook-ceph-block
   path: ./kubernetes/apps/bookboss/app
   interval: 1h
   retryInterval: 2m
@@ -37,7 +28,7 @@ spec:
   dependsOn:
     - name: rook-ceph-cluster
       namespace: rook-ceph
-    - name: volsync
-      namespace: volsync-system
+    - name: kopiur-repositories
+      namespace: kopiur-system
     - name: secret-store
       namespace: external-secrets
