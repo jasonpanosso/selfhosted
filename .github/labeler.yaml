@@ -1,8 +1,4 @@
 ---
-area/docs:
-  - changed-files:
-      - any-glob-to-any-file:
-          - "README.md"
 area/github:
   - changed-files:
       - any-glob-to-any-file: ".github/**/*"
@@ -14,9 +10,6 @@ area/renovate:
       - any-glob-to-any-file:
           - ".renovate/**/*"
           - ".renovaterc.jsonc"
-area/scripts:
-  - changed-files:
-      - any-glob-to-any-file: "scripts/**/*"
 area/talos:
   - changed-files:
       - any-glob-to-any-file: "talos/**/*"
