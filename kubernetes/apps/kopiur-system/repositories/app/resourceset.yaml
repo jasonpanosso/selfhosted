@@ -176,6 +176,8 @@ spec:
           jitter: 30m
         sync:
           parallel: 4
+          # remove blobs the source no longer has
+          deleteExtra: true
 
     - apiVersion: kopiur.home-operations.com/v1alpha1
       kind: SnapshotPolicy

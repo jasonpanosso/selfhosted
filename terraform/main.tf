@@ -6,6 +6,16 @@ module "spaces" {
   region     = var.spaces_region
   acl        = "private"
   versioning = true
+
+  # Keep deleted or overwritten objects (Kopiur mirrors with deleteExtra,
+  # CNPG backups past retention) recoverable for 30 days, then expire them.
+  lifecycle_rule = [
+    {
+      id                                 = "expire-noncurrent-versions"
+      enabled                            = true
+      noncurrent_version_expiration_days = 30
+    },
+  ]
 }
 
 resource "digitalocean_spaces_key" "this" {
