@@ -1,0 +1,148 @@
+---
+name: Flate
+
+on:
+  pull_request:
+    branches:
+      - main
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  filter:
+    name: Flate - Filter
+    runs-on: ubuntu-latest
+    outputs:
+      changed-files: ${{ steps.changed-files.outputs.changed_files }}
+    steps:
+      - name: Get Changed Files
+        id: changed-files
+        uses: bjw-s-labs/action-changed-files@147be9638332cf68fd60714a610509d7a9360d60 # v0.7.0
+        with:
+          patterns: kubernetes/**/*
+
+  test:
+    if: ${{ needs.filter.outputs.changed-files != '[]' }}
+    needs: filter
+    name: Flate - Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Setup flate
+        uses: home-operations/flate/action@631b76b69c4e58c6f4d1cb01e23616fa61aebafa # v0.6.5
+        with:
+          cache: "true"
+
+      - name: Run flate test
+        run: |
+          # The setup action exports FLATE_BASE, which would put `test` in
+          # changed-only mode; test the full tree instead.
+          unset FLATE_BASE
+          flate test all --path ./kubernetes/clusters/prod
+
+  diff:
+    if: ${{ needs.filter.outputs.changed-files != '[]' }}
+    needs: filter
+    name: Flate - Diff
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Setup flate
+        uses: home-operations/flate/action@631b76b69c4e58c6f4d1cb01e23616fa61aebafa # v0.6.5
+        with:
+          cache: "true"
+
+      # The checkout is the PR merge ref, so diffing against the base SHA shows
+      # exactly what merging would change. Render failures are reported by the
+      # test job; here they only annotate the comment.
+      - name: Run flate diff
+        id: diff
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: |
+          rc=0
+          flate diff all --path ./kubernetes/clusters/prod --base "${BASE_SHA}" -o github > diff.patch || rc=$?
+          if [[ "${rc}" -ne 0 ]]; then
+            echo "::warning::flate diff exited ${rc}; some resources failed to render"
+          fi
+          echo "rc=${rc}" >> "${GITHUB_OUTPUT}"
+          if [[ -s diff.patch ]]; then
+            echo "changed=true" >> "${GITHUB_OUTPUT}"
+            flate diff all --path ./kubernetes/clusters/prod --base "${BASE_SHA}" -o html > diff.html || true
+          else
+            echo "changed=false" >> "${GITHUB_OUTPUT}"
+          fi
+
+      - if: ${{ steps.diff.outputs.changed == 'true' }}
+        name: Upload HTML Diff
+        id: upload
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: flate-diff
+          path: diff.html
+          retention-days: 14
+
+      - if: ${{ steps.diff.outputs.changed == 'true' }}
+        name: Build Comment
+        env:
+          ARTIFACT_URL: ${{ steps.upload.outputs.artifact-url }}
+          DIFF_RC: ${{ steps.diff.outputs.rc }}
+        run: |
+          # GitHub caps comment bodies at 65536 characters
+          limit=60000
+          {
+            if [[ "${DIFF_RC}" -ne 0 ]]; then
+              echo '> [!WARNING]'
+              echo '> Some resources failed to render and are missing from this diff. See the Flate - Test job.'
+              echo
+            fi
+            echo '```diff'
+            head -c "${limit}" diff.patch
+            echo
+            echo '```'
+            if [[ "$(wc -c < diff.patch)" -gt "${limit}" ]]; then
+              echo
+              echo "_Diff truncated._"
+            fi
+            echo
+            echo "[Full HTML diff](${ARTIFACT_URL})"
+          } > comment.md
+
+      - name: Generate Token
+        uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
+        id: app-token
+        with:
+          app-id: ${{ secrets.BOT_APP_ID }}
+          private-key: ${{ secrets.BOT_APP_PRIVATE_KEY }}
+
+      - if: ${{ steps.diff.outputs.changed == 'true' }}
+        name: Add Comment
+        uses: marocchino/sticky-pull-request-comment@5770ad5eb8f42dd2c4f34da00c94c5381e49af88 # v3.0.5
+        with:
+          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
+          header: ${{ github.event.pull_request.number }}/kubernetes/flate
+          path: comment.md
+
+      - if: ${{ steps.diff.outputs.changed != 'true' }}
+        name: Remove Stale Comment
+        uses: marocchino/sticky-pull-request-comment@5770ad5eb8f42dd2c4f34da00c94c5381e49af88 # v3.0.5
+        with:
+          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
+          header: ${{ github.event.pull_request.number }}/kubernetes/flate
+          delete: true
