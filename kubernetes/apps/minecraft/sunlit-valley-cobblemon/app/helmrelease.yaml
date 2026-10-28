@@ -110,6 +110,7 @@ spec:
       enabled: true
       persistence:
         backupDir:
+          enabled: true
           existingClaim: sunlit-valley-cobblemon-backup
 
     deploymentAnnotations:
