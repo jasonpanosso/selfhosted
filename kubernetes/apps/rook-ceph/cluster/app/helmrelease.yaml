@@ -92,7 +92,6 @@ spec:
             cpu: 500m
             memory: 3Gi
           limits:
-            cpu: 500m
             memory: 3Gi
       priorityClassNames:
         mon: system-node-critical
@@ -245,11 +244,10 @@ spec:
             activeStandby: true
             priorityClassName: system-cluster-critical
             resources:
-              limits:
-                cpu: 500m
-                memory: 1024Mi
               requests:
-                cpu: 500m
+                cpu: 250m
+                memory: 1024Mi
+              limits:
                 memory: 1024Mi
         storageClass:
           enabled: true
