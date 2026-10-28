@@ -6,8 +6,8 @@ on:
   push:
     branches: ["main"]
     paths:
-      - .renovaterc.jsonc
-      - .renovate/**.jsonc
+      - .renovaterc.json
+      - .renovate/**.json
   schedule:
     - cron: "0 * * * *" # hourly
   workflow_dispatch:
