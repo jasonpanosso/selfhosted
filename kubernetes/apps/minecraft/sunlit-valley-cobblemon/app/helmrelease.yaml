@@ -18,7 +18,7 @@ spec:
       retries: 2
   values:
     fullnameOverride: *app
-    replicaCount: 1
+    replicaCount: 0
     image:
       repository: ghcr.io/itzg/minecraft-server
       tag: 2026.10.1-java21@sha256:07ab333a8542208c4c863a78fd3cf3fd1138d5a2e118306e1a316d202f69ab74
