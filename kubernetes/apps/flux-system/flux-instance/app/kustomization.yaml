@@ -5,8 +5,6 @@ kind: Kustomization
 
 resources:
   - ./fluxinstance.yaml
-  - ./gitrepository.yaml
-  - ./ks.yaml
   - ./prometheusrule.yaml
   - ./externalsecret.yaml
   - ./receiver.yaml

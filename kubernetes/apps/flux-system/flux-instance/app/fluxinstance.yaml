@@ -27,8 +27,45 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: flux
+  sync:
+    kind: GitRepository
+    url: https://github.com/jasonpanosso/selfhosted
+    ref: refs/heads/main
+    path: kubernetes/clusters/prod
+    interval: 5m
   kustomize:
     patches:
+      - # Only sync the kubernetes directory
+        target:
+          group: source.toolkit.fluxcd.io
+          kind: GitRepository
+          name: flux-system
+        patch: |-
+          apiVersion: source.toolkit.fluxcd.io/v1
+          kind: GitRepository
+          metadata:
+            name: flux-system
+          spec:
+            ignore: |
+              # exclude all
+              /*
+              !/kubernetes
+      - # Settings for the root Kustomization
+        target:
+          group: kustomize.toolkit.fluxcd.io
+          kind: Kustomization
+          name: flux-system
+        patch: |-
+          apiVersion: kustomize.toolkit.fluxcd.io/v1
+          kind: Kustomization
+          metadata:
+            name: flux-system
+          spec:
+            interval: 1h
+            retryInterval: 2m
+            timeout: 20m
+            decryption:
+              provider: sops
       - # Increase the number of workers
         target:
           kind: Deployment
