@@ -4,6 +4,9 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: flux-system
+  annotations:
+    # Moving to FluxInstance.spec.sync: keep this object when it leaves the inventory
+    kustomize.toolkit.fluxcd.io/prune: disabled
 spec:
   path: ./kubernetes/clusters/prod
   interval: 1h

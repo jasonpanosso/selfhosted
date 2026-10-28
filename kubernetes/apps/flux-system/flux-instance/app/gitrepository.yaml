@@ -4,6 +4,9 @@ apiVersion: source.toolkit.fluxcd.io/v1
 kind: GitRepository
 metadata:
   name: flux-system
+  annotations:
+    # Moving to FluxInstance.spec.sync: keep this object when it leaves the inventory
+    kustomize.toolkit.fluxcd.io/prune: disabled
 spec:
   interval: 5m
   url: https://github.com/jasonpanosso/selfhosted
