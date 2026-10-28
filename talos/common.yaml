@@ -4,8 +4,6 @@ machine:
     image: ghcr.io/siderolabs/kubelet:v1.36.6
     extraConfig:
       serializeImagePulls: false
-      featureGates:
-        ImageVolume: true
   features:
     hostDNS:
       resolveMemberNames: true

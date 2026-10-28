@@ -14,9 +14,6 @@ cluster:
             enforce-version: latest
             warn: privileged
             warn-version: latest
-    extraArgs:
-      feature-gates: MutatingAdmissionPolicy=true,ImageVolume=true
-      runtime-config: admissionregistration.k8s.io/v1beta1=true
   controllerManager:
     image: registry.k8s.io/kube-controller-manager:v1.36.6
     extraArgs:
