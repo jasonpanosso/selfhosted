@@ -1,7 +1,7 @@
 # Dell Wyse 5070
 machine:
   install:
-    disk: /dev/sdb
+    disk: /dev/disk/by-id/ata-ORICO_ZHXV3ZI87KC0ZVQBQV9B
 ---
 apiVersion: v1alpha1
 kind: HostnameConfig
