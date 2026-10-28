@@ -60,9 +60,12 @@ jobs:
       contents: read
       pull-requests: write
     steps:
+      # Depth 2 pulls in the merge commit's first parent, the base SHA; flate
+      # can't fetch a bare SHA from origin on its own.
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
+          fetch-depth: 2
           persist-credentials: false
 
       - name: Setup flate
@@ -81,6 +84,10 @@ jobs:
           rc=0
           flate diff all --path ./kubernetes/clusters/prod --base "${BASE_SHA}" -o github > diff.patch || rc=$?
           if [[ "${rc}" -ne 0 ]]; then
+            if [[ ! -s diff.patch ]]; then
+              echo "::error::flate diff exited ${rc} with no output"
+              exit "${rc}"
+            fi
             echo "::warning::flate diff exited ${rc}; some resources failed to render"
           fi
           echo "rc=${rc}" >> "${GITHUB_OUTPUT}"
