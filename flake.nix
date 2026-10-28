@@ -56,6 +56,28 @@
             dontUnpack = true;
             installPhase = "install -Dm755 $src $out/bin/talosctl";
           };
+
+        kubectl =
+          let
+            version = "1.36.6";
+            platforms = {
+              x86_64-linux = { os = "linux/amd64"; sha256 = "29818b6729dc9262b692307470d0558d027725e738be5dd47c760261868a2634"; };
+              aarch64-linux = { os = "linux/arm64"; sha256 = "35507ef408c3d38849e5d3203e18f8e861db822aa664101a9ced0869edd06046"; };
+              x86_64-darwin = { os = "darwin/amd64"; sha256 = "2e22d382f2423c88d9d076246f860bb3d5c743dd279ca63e113474bb88382426"; };
+              aarch64-darwin = { os = "darwin/arm64"; sha256 = "1cf735c3d35ccfec28d0618784cb06a4614d2c42aade28b6be0eab76a2ffb623"; };
+            };
+            platform = platforms.${system};
+          in
+          pkgs.stdenvNoCC.mkDerivation {
+            pname = "kubectl";
+            inherit version;
+            src = pkgs.fetchurl {
+              url = "https://dl.k8s.io/release/v${version}/bin/${platform.os}/kubectl";
+              inherit (platform) sha256;
+            };
+            dontUnpack = true;
+            installPhase = "install -Dm755 $src $out/bin/kubectl";
+          };
       in
       {
         devShells.default = pkgs.mkShell {
