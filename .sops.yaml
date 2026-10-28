@@ -16,6 +16,13 @@ creation_rules:
         age:
           - age1ukrrt44dctfz6krhl5ynjtm2w6vt7jk20057gz7g2s7nervrxeqqd57cdf
 
+  # Talos machine configs + talosconfig: only encrypt secret material, leave the
+  # rest (images, versions, CA certs) readable and editable by Renovate
+  - path_regex: talos/.+\.sops\.yaml$
+    encrypted_regex: ^(token|key|id|secret|secretboxEncryptionSecret|ca|crt)$
+    mac_only_encrypted: true
+    pgp: 7F4BBBCE5FA232F9DC9E6707CD4B7B6A06A225FD
+
   - pgp: 7F4BBBCE5FA232F9DC9E6707CD4B7B6A06A225FD
 
 stores:
