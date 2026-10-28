@@ -284,7 +284,8 @@ spec:
             erasureCoded:
               dataChunks: 2
               codingChunks: 1
-          preservePoolsOnDelete: true
+          # Being decommissioned: let Rook delete the pools with the store.
+          preservePoolsOnDelete: false
           gateway:
             hostNetwork: false
             port: 8080
