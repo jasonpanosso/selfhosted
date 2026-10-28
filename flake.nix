@@ -82,6 +82,7 @@
             opentofu
             sops
             talosctl
+            yq-go
           ];
         };
       });

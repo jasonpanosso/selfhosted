@@ -1,0 +1,32 @@
+---
+machine:
+  kubelet:
+    image: ghcr.io/siderolabs/kubelet:v1.35.4
+    extraConfig:
+      serializeImagePulls: false
+      featureGates:
+        ImageVolume: true
+  features:
+    hostDNS:
+      resolveMemberNames: true
+      forwardKubeDNSToHost: false
+  files:
+    - path: /etc/cri/conf.d/20-customization.part
+      op: create
+      content: |
+        [plugins."io.containerd.cri.v1.images"]
+          discard_unpacked_layers = false
+cluster:
+  clusterName: prod
+  controlPlane:
+    endpoint: https://192.168.20.100:6443
+  network:
+    cni:
+      name: none
+  proxy:
+    disabled: true
+---
+# gen config adds `auto: stable`; every node sets a static hostname in its own patch instead
+apiVersion: v1alpha1
+kind: HostnameConfig
+$patch: delete

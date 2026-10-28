@@ -18,7 +18,7 @@
   ],
   "dependencyDashboardTitle": "Renovate Dashboard 🤖",
   "suppressNotifications": ["prEditedNotification", "prIgnoreNotification"],
-  "ignorePaths": ["**/*.sops.*", "**/*.md", "talos", "terraform"],
+  "ignorePaths": ["**/*.sops.*", "**/*.md", "terraform"],
   "flux": {
     "managerFilePatterns": ["/(^|/)kubernetes/.+\\.ya?ml$/"]
   },

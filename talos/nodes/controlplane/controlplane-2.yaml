@@ -1,6 +1,8 @@
+---
 # Dell Wyse 5070
 machine:
   install:
+    image: factory.talos.dev/metal-installer/376567988ad370138ad8b2698212367b8edcb69b5fd68c80be1f2ec7d603b4ba:v1.13.12
     disk: /dev/disk/by-id/ata-ORICO_XD8HBF5120R0LCLZ7UZJ
 ---
 apiVersion: v1alpha1
@@ -14,12 +16,3 @@ addresses:
   - address: 192.168.20.102/24
 routes:
   - gateway: 192.168.20.1
----
-apiVersion: v1alpha1
-kind: DHCPv4Config
-name: enp1s0
----
-apiVersion: v1alpha1
-kind: Layer2VIPConfig
-name: 192.168.20.100
-link: enp1s0

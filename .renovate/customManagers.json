@@ -14,6 +14,23 @@
         "datasource=(?<datasource>\\S+) depName=(?<depName>\\S+)\\n.+/(?<currentValue>(v|\\d)[^/]+)"
       ],
       "datasourceTemplate": "{{#if datasource}}{{{datasource}}}{{else}}github-releases{{/if}}"
+    },
+    {
+      "customType": "regex",
+      "description": "Talos installer images in Talos patches",
+      "managerFilePatterns": ["/(^|/)talos/.+\\.ya?ml$/"],
+      "matchStrings": ["factory\\.talos\\.dev/metal-installer/[0-9a-f]{64}:(?<currentValue>v\\d+\\.\\d+\\.\\d+)"],
+      "depNameTemplate": "ghcr.io/siderolabs/installer",
+      "datasourceTemplate": "docker"
+    },
+    {
+      "customType": "regex",
+      "description": "Kubernetes images in Talos patches",
+      "managerFilePatterns": ["/(^|/)talos/.+\\.ya?ml$/"],
+      "matchStrings": [
+        "image: (?<depName>(ghcr\\.io/siderolabs/kubelet|registry\\.k8s\\.io/kube-(apiserver|controller-manager|scheduler|proxy))):(?<currentValue>v\\d+\\.\\d+\\.\\d+)"
+      ],
+      "datasourceTemplate": "docker"
     }
   ]
 }

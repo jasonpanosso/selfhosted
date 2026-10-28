@@ -11,22 +11,24 @@ age.agekey
 .vagrant
 .envrc
 .ansible
-worker*.yaml
-controlplane*.yaml
+# plaintext `talosctl gen config` output, in any directory
+controlplane.yaml
+worker.yaml
 
 # all secrets
 **/secrets/**
-talos/**
 # allow traversal of secrets dirs
 !**/secrets/**/
-!talos/**/
 # allow sops files in secrets dirs
 !**/secrets/*.sops*
 !**/secrets/**/kustomizeconfig.yaml
 !**/secrets/**/*.sops*
-!talos/*.sops*
-!talos/**/*.sops*
-!talos/**/*patch.yaml
+# talos: only secrets are ignored, except their sops-encrypted files
+talos/secrets/*
+!talos/secrets/*.sops.yaml
+# talos role patches share those names but hold no secrets
+!talos/controlplane.yaml
+!talos/worker.yaml
 # allow kustomization.yaml in secrets dirs
 !**/secrets/**/kustomization.yaml
 terraform/.bitwarden
