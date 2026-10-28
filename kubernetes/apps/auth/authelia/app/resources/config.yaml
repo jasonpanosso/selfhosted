@@ -16,6 +16,9 @@ server:
               - Basic
             scheme_basic_cache_lifespan: 0
           - name: CookieSession
+      # used by the jellyfin authelia plugin
+      auth-request:
+        implementation: AuthRequest
 
 access_control:
   default_policy: deny
