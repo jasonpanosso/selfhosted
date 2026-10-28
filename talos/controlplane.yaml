@@ -1,7 +1,7 @@
 ---
 cluster:
   apiServer:
-    image: registry.k8s.io/kube-apiserver:v1.35.4
+    image: registry.k8s.io/kube-apiserver:v1.36.6
     certSANs:
       - 192.168.20.100
     admissionControl:
@@ -18,11 +18,11 @@ cluster:
       feature-gates: MutatingAdmissionPolicy=true,ImageVolume=true
       runtime-config: admissionregistration.k8s.io/v1beta1=true
   controllerManager:
-    image: registry.k8s.io/kube-controller-manager:v1.35.4
+    image: registry.k8s.io/kube-controller-manager:v1.36.6
     extraArgs:
       bind-address: 0.0.0.0
   scheduler:
-    image: registry.k8s.io/kube-scheduler:v1.35.4
+    image: registry.k8s.io/kube-scheduler:v1.36.6
     extraArgs:
       bind-address: 0.0.0.0
     config:
@@ -50,7 +50,7 @@ cluster:
     advertisedSubnets:
       - 192.168.20.0/24
   proxy:
-    image: registry.k8s.io/kube-proxy:v1.35.4 # disabled in common.yaml; pinned so the rendered config has no generated image
+    image: registry.k8s.io/kube-proxy:v1.36.6 # disabled in common.yaml; pinned so the rendered config has no generated image
 ---
 apiVersion: v1alpha1
 kind: DHCPv4Config
