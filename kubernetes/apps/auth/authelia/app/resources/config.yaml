@@ -3,6 +3,8 @@ theme: dark
 server:
   address: tcp://0.0.0.0:80
   disable_healthcheck: true
+  buffers:
+    read: 16384
   endpoints:
     authz:
       ext-authz:
