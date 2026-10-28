@@ -23,11 +23,18 @@ spec:
       kind: HelmRelease
       name: *app
       namespace: *namespace
+    - apiVersion: ceph.rook.io/v1
+      kind: CephFilesystem
+      name: mediafs
+      namespace: *namespace
   healthCheckExprs:
     - apiVersion: ceph.rook.io/v1
       kind: CephCluster
       failed: status.ceph.health == 'HEALTH_ERR'
       current: status.ceph.health in ['HEALTH_OK', 'HEALTH_WARN']
+    - apiVersion: ceph.rook.io/v1
+      kind: CephFilesystem
+      current: status.phase == 'Ready'
   sourceRef:
     kind: GitRepository
     name: flux-system

@@ -9,5 +9,5 @@ components:
 
 resources:
   - ./ceph-csi-drivers/ks.yaml
-  - ./operator/ks.yaml
   - ./cluster/ks.yaml
+  - ./operator/ks.yaml
