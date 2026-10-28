@@ -1,0 +1,40 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/helm.toolkit.fluxcd.io/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &app intel-gpu-resource-driver
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: *app
+  interval: 1h
+  upgrade:
+    strategy:
+      name: RemediateOnFailure
+    remediation:
+      remediateLastFailure: true
+      retries: 2
+  values:
+    cdi:
+      staticPath: /run/cdi
+      dynamicPath: /run/cdi
+    kubeletPlugin:
+      privileged: false
+      healthMonitoring:
+        enabled: false
+      # the chart only renders --manage-binding=false when healthMonitoring is enabled
+      extraArgs: --manage-binding=false
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: extensions.talos.dev/i915
+                    operator: Exists
+      resources:
+        requests:
+          cpu: 10m
+          memory: 64Mi
+        limits:
+          memory: 64Mi
