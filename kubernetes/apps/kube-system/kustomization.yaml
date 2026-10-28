@@ -9,7 +9,6 @@ components:
 
 resources:
   - ./coredns/ks.yaml
-  - ./generic-device-plugins/ks.yaml
   - ./metrics-server/ks.yaml
   - ./reloader/ks.yaml
   - ./snapshot-controller/ks.yaml
