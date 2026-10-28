@@ -35,7 +35,7 @@ apply-role role *args:
       just talos_version="{{ talos_version }}" apply "$node" {{ args }}
       # give kubelet/reboot a moment to flip the node NotReady before gating on Ready
       sleep 10
-      kubectl wait --for=condition=Ready "node/$node" --timeout=10m
+      just _node-ready "$node"
     done
 
 # Upgrade Talos on one node to the installer image in its config, e.g. `just upgrade worker-6` (extra args go to talosctl)
@@ -60,7 +60,7 @@ upgrade-role role *args:
       node="$(basename "$file" .yaml)"
       just _ceph-wait
       just talos_version="{{ talos_version }}" upgrade "$node" {{ args }}
-      kubectl wait --for=condition=Ready "node/$node" --timeout=10m
+      just _node-ready "$node"
     done
 
 # Upgrade Kubernetes to the version pinned in the patches (extra args go to talosctl, e.g. --dry-run)
@@ -116,6 +116,17 @@ _kubernetes-version:
     versions="$(printf '%s\n' "$images" | sed 's/.*://' | sort -u)"
     [[ $(printf '%s\n' "$versions" | wc -l) -eq 1 && $versions != null ]] || { printf 'Kubernetes images in %s disagree:\n%s\n' "{{ talos_dir }}" "$images" >&2; exit 1; }
     echo "$versions"
+
+# Block until a node is Ready, retrying through API outages: the VIP stays on its node while that
+# node's kube-apiserver restarts, so the API can refuse connections for a while mid-rollout
+_node-ready node:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    deadline=$((SECONDS + 600))
+    until kubectl wait --for=condition=Ready "node/{{ node }}" --timeout=30s 2>/dev/null; do
+      (( SECONDS < deadline )) || { echo "{{ node }} not Ready after 10m, aborting" >&2; exit 1; }
+      sleep 5
+    done
 
 # Block until every mon is in quorum, every in OSD is up and every PG is active+clean, so a
 # rolling apply/upgrade never takes down a node while Ceph is still recovering from the last one
