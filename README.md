@@ -4,8 +4,8 @@
 
 update image installs in the talos/*.yaml files:
 ```sh
-sed -i 's|\(factory\.talos\.dev/metal-installer/[0-9a-f]*\):v1\.42\.42|\1:v1.67.67|' \
-  talos/controlplane.sops.yaml talos/worker.sops.yaml talos/worker-{5,6,7,8}-patch.yaml
+# change versions
+sed -i 's|\(factory\.talos\.dev/metal-installer/[0-9a-f]*\):v1\.42\.42|\1:v1.67.67|' talos/*.yaml
 ```
 
 sanity check a few diffs:
