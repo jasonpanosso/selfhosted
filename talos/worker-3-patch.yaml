@@ -2,5 +2,7 @@
 machine:
   install:
     disk: /dev/disk/by-id/ata-TIMETEC_SATA_256GB_TA241218C256G2261
-  network:
-    hostname: worker-3
+---
+apiVersion: v1alpha1
+kind: HostnameConfig
+hostname: worker-3

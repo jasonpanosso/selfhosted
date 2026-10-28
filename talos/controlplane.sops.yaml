@@ -1,6 +1,5 @@
 version: v1alpha1
 debug: false
-persist: true
 machine:
   type: controlplane
   token: ENC[AES256_GCM,data:kcCk5kJ/wmG2+4HZ7qolrI1njyAaABA=,iv:vg/lrVPPOlsLh6K7mO6CBQ4Xv8WN16DigQ4hYRQpbK0=,tag:8jUCjkx2OfFaR/f6m2N9qA==,type:str]
@@ -19,11 +18,7 @@ machine:
   install:
     image: factory.talos.dev/metal-installer/376567988ad370138ad8b2698212367b8edcb69b5fd68c80be1f2ec7d603b4ba:v1.12.7
     wipe: false
-  registries: {}
   features:
-    rbac: true
-    stableHostname: true
-    apidCheckExtKeyUsage: true
     diskQuotaSupport: true
     kubePrism:
       enabled: true
@@ -68,7 +63,6 @@ cluster:
     image: registry.k8s.io/kube-apiserver:v1.35.4
     certSANs:
       - 192.168.20.100
-    disablePodSecurityPolicy: true
     admissionControl:
       - name: PodSecurity
         configuration:

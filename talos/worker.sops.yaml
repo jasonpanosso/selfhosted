@@ -1,6 +1,5 @@
 version: v1alpha1
 debug: false
-persist: true
 machine:
   type: worker
   token: ENC[AES256_GCM,data:UEGShHUbe9ymI9HRDpX4tVyc4kaFBgc=,iv:nm8fHReSZQNyxNZoxq+v+3emS/D5f2trqCuLWthBhjA=,tag:9WlWK92RIiTmRj6XJzPPdA==,type:str]
@@ -38,11 +37,7 @@ machine:
   install:
     image: factory.talos.dev/metal-installer/376567988ad370138ad8b2698212367b8edcb69b5fd68c80be1f2ec7d603b4ba:v1.12.7
     wipe: false
-  registries: {}
   features:
-    rbac: true
-    stableHostname: true
-    apidCheckExtKeyUsage: true
     diskQuotaSupport: true
     kubePrism:
       enabled: true

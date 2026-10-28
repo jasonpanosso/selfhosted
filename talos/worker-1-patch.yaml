@@ -2,5 +2,7 @@
 machine:
   install:
     disk: /dev/disk/by-id/ata-ORICO_XD8HBF5120R0LCLZ7UZJ
-  network:
-    hostname: worker-1
+---
+apiVersion: v1alpha1
+kind: HostnameConfig
+hostname: worker-1
