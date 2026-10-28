@@ -28,6 +28,9 @@ spec:
         runAsNonRoot: true
         seccompProfile:
           type: RuntimeDefault
+      resourceClaims:
+        - name: gpu
+          resourceClaimTemplateName: jellyfin-gpu
       containers:
         - image: ghcr.io/jellyfin/jellyfin:12.4@sha256:fea863d0cd9ec445985d9c75fc6ed64e38a1d2766cf0c250a33d553f4fc1b771
           name: *app
@@ -47,10 +50,10 @@ spec:
             requests:
               cpu: 100m
               memory: 2Gi
-              squat.ai/drm: "1"
             limits:
               memory: 6Gi
-              squat.ai/drm: "1"
+            claims:
+              - name: gpu
           securityContext:
             allowPrivilegeEscalation: false
             readOnlyRootFilesystem: true
