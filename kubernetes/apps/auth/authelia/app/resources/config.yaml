@@ -24,7 +24,10 @@ access_control:
   default_policy: deny
   rules:
     # one factor for jellyfin clients to function
+    # matched against the jellyfin authelia plugin's JellyfinUrl, not the address clients use
+    # TODO: drop watch.${domain}.${tld} once the plugin's JellyfinUrl is https://watch.home.${domain}.${tld}
     - domain:
+        - watch.home.${domain}.${tld}
         - watch.${domain}.${tld}
       subject:
         - group:admins

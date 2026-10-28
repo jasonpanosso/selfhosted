@@ -9,6 +9,9 @@ spec:
     - name: cilium
       namespace: kube-system
       sectionName: http
+    - name: cilium-internal
+      namespace: kube-system
+      sectionName: http
   rules:
     - filters:
         - requestRedirect:

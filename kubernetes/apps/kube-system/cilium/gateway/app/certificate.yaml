@@ -11,3 +11,16 @@ spec:
     kind: ClusterIssuer
   commonName: ${domain}.${tld}
   dnsNames: ["${domain}.${tld}", "*.${domain}.${tld}"]
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/cert-manager.io/certificate_v1.json
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: wildcard-home
+spec:
+  secretName: wildcard-home-tls
+  issuerRef:
+    name: letsencrypt
+    kind: ClusterIssuer
+  commonName: home.${domain}.${tld}
+  dnsNames: ["home.${domain}.${tld}", "*.home.${domain}.${tld}"]
