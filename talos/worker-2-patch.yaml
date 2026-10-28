@@ -1,8 +1,0 @@
-# Dell Wyse 5070
-machine:
-  install:
-    disk: /dev/disk/by-id/ata-ORICO_3T3JCA0BA5IGAZO6XC0Y
----
-apiVersion: v1alpha1
-kind: HostnameConfig
-hostname: worker-2
