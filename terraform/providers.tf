@@ -11,7 +11,8 @@ terraform {
     }
 
     bitwarden-secrets = {
-      source = "registry.terraform.io/bitwarden/bitwarden-secrets"
+      source  = "bitwarden/bitwarden-secrets"
+      version = ">= 1.0.0"
     }
 
     random = {

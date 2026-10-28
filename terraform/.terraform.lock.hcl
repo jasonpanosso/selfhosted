@@ -1,11 +1,15 @@
-# This file is maintained automatically by "terraform init".
+# This file is maintained automatically by "tofu init".
 # Manual edits may be lost in future updates.
 
-provider "registry.terraform.io/bitwarden/bitwarden-secrets" {
+provider "registry.opentofu.org/bitwarden/bitwarden-secrets" {
   version     = "1.0.0"
   constraints = ">= 1.0.0"
   hashes = [
+    "h1:0/k3qxTpG5JN67f4fK0L7zkFgfr2/PfcoA9Pd2BpelY=",
     "h1:JwVsAEAbIp1e8H5qHcT9CR+j5oZz7LAgCyJTuwczlrA=",
+    "h1:tm/sPudvPpzaVhv0yJ/XwOvb03cFoTJDK+/DB6M4KSU=",
+    "h1:yEynV9c+s/HCfLStrZQAmZU310sz7Dl4c7P3Azi2j8w=",
+    "h1:ywotNI33DInN2j1wjHUZuu2VGKcfx1KULfWlrBl5274=",
     "zh:32fb9eb0672fe0b12b136abd932a5531fb163b4cc982cd477feea96d28021701",
     "zh:3aabe5ab6809fce2ea6386a2164fa75736f6ed75189da91648b6129c72754ab8",
     "zh:6ca7554c7a35c211ea5678696f246259a54a22b4e7022ab335168124b005f92a",
@@ -15,11 +19,26 @@ provider "registry.terraform.io/bitwarden/bitwarden-secrets" {
   ]
 }
 
-provider "registry.terraform.io/digitalocean/digitalocean" {
+provider "registry.opentofu.org/digitalocean/digitalocean" {
   version     = "2.66.0"
   constraints = ">= 2.28.1, ~> 2.66.0"
   hashes = [
+    "h1:+pht6nG8ynLdYm7rPjkbwrWCrsB4qeE5o1smwsekzvs=",
+    "h1:3FGCHCcsYlqZzA68Nvt3l7bx7uQS4Xuel/9dcsMnuZQ=",
+    "h1:8PAjDygyUAIl2QamHXhqyjP79VPqPGS2FF9Wp569ygo=",
+    "h1:8gnbu61xLjAeVWymAd3iUAhbz71rhoMU6eSPlPenDb0=",
+    "h1:CJJAkImEnfoSc4KU3E/u9ag5wNjgaZwDjRmXmQZqeYk=",
+    "h1:DzZFqFlNV8rqIFlKe/rNNzl6oDgP8q+A9JlT0FNMf7s=",
+    "h1:EZeXIWgZgJ7w/jfi8RT6X1bLN6NJNL4g42fAXLu7W4s=",
+    "h1:Et6Pdk1QJ07ZxcUFdbheY3YhVJ9QpmkVIggm2/5hvxo=",
+    "h1:RffAHbESZlivifXo/1BckyCHrjsKzveU7HR3GcH5VWo=",
     "h1:T6po3hpT1THqTsWzpcqvVXEp+EdbE8/gwfGBIJnsKhs=",
+    "h1:Ttq77Sa4xySb+BlLliqWgRDhyzhr+k8SBU6fKJ97BiY=",
+    "h1:U1ARbQ9lrlYyYLb4Zp06mSqwclXHl+GXe9p30l+P6xA=",
+    "h1:fg2BZlFpOSoFHZ1X/BlS3pD9h/8ddKLaK4+AW2XrYw8=",
+    "h1:lr/FRnDeKOAvaysSiXZ9arRQVxBraZLUeS78K35jN24=",
+    "h1:t/Ri+XplfXHnnKIKQFeDyn5c013IWXgARnXwwm4kpHo=",
+    "h1:wVm2vj4RKOhQfiEH4oakqFDXvkv4+cdKBhebdzu595Y=",
     "zh:004faa95468130dae03989b968829b3cce8f20ca8f9ce108fa87803a814067f7",
     "zh:02d006f6bfff57dcafa90d00fc973f3078f992699d6dfe1d9ed0fd13f3c0af8d",
     "zh:03a32349eed362a974856e0ba837c645728e55733eef050ec380bba22821957a",
@@ -39,31 +58,51 @@ provider "registry.terraform.io/digitalocean/digitalocean" {
   ]
 }
 
-provider "registry.terraform.io/hashicorp/random" {
+provider "registry.opentofu.org/hashicorp/random" {
   version     = "3.7.2"
   constraints = "3.7.2"
   hashes = [
-    "h1:356j/3XnXEKr9nyicLUufzoF4Yr6hRy481KIxRVpK0c=",
-    "zh:14829603a32e4bc4d05062f059e545a91e27ff033756b48afbae6b3c835f508f",
-    "zh:1527fb07d9fea400d70e9e6eb4a2b918d5060d604749b6f1c361518e7da546dc",
-    "zh:1e86bcd7ebec85ba336b423ba1db046aeaa3c0e5f921039b3f1a6fc2f978feab",
-    "zh:24536dec8bde66753f4b4030b8f3ef43c196d69cccbea1c382d01b222478c7a3",
-    "zh:29f1786486759fad9b0ce4fdfbbfece9343ad47cd50119045075e05afe49d212",
-    "zh:4d701e978c2dd8604ba1ce962b047607701e65c078cb22e97171513e9e57491f",
-    "zh:78d5eefdd9e494defcb3c68d282b8f96630502cac21d1ea161f53cfe9bb483b3",
-    "zh:7b8434212eef0f8c83f5a90c6d76feaf850f6502b61b53c329e85b3b281cba34",
-    "zh:ac8a23c212258b7976e1621275e3af7099e7e4a3d4478cf8d5d2a27f3bc3e967",
-    "zh:b516ca74431f3df4c6cf90ddcdb4042c626e026317a33c53f0b445a3d93b720d",
-    "zh:dc76e4326aec2490c1600d6871a95e78f9050f9ce427c71707ea412a2f2f1a62",
-    "zh:eac7b63e86c749c7d48f527671c7aee5b4e26c10be6ad7232d6860167f99dbb0",
+    "h1:5wxrQQTchfk/2S1wSi9lx/fmiscVLGI3kL2v/+LccHU=",
+    "h1:C1D2Vo445WXAeLwSpovebSDR97ohiGvXVixcXJneQTg=",
+    "h1:KvLLxlMi6iNdlZS+vQAwovIeL2r5Q2s/EXXF+oypKHI=",
+    "h1:Q1EQQw7icbHSYUSYMlgi4qSXPuJDySuMjXcC0WqzgP8=",
+    "h1:cFGCdxTlsrteTiaOV/iOQdql7eJkD3F/vtJxenkj9IE=",
+    "h1:o15Kr/27vFN5AD9YkF48tDrHLSAshEq4Q7sAxIViZHM=",
+    "h1:rdpkD+Rzr+KCPqOvb1ckzupjWCOum/boRX4FqVboAHQ=",
+    "h1:ttMGebt31P1FZCEWptLTMpmx1aeDvkJ9nBDivtCCkyM=",
+    "h1:wz31hqWhHTq9bgIM/3+VNqy89JAICMXSwCmG8A70w0A=",
+    "h1:yHMBbZOIHlXUuBQ8Mhioe0hwmhermuboq2eNNoCJaf8=",
+    "zh:2ffeb1058bd7b21a9e15a5301abb863053a2d42dffa3f6cf654a1667e10f4727",
+    "zh:519319ed8f4312ed76519652ad6cd9f98bc75cf4ec7990a5684c072cf5dd0a5d",
+    "zh:7371c2cc28c94deb9dba62fbac2685f7dde47f93019273a758dd5a2794f72919",
+    "zh:9b0ac4c1d8e36a86b59ced94fa517ae9b015b1d044b3455465cc6f0eab70915d",
+    "zh:c6336d7196f1318e1cbb120b3de8426ce43d4cacd2c75f45dba2dbdba666ce00",
+    "zh:c71f18b0cb5d55a103ea81e346fb56db15b144459123f1be1b0209cffc1deb4e",
+    "zh:d2dc49a6cac2d156e91b0506d6d756809e36bf390844a187f305094336d3e8d8",
+    "zh:d5b5fc881ccc41b268f952dae303501d6ec9f9d24ee11fe2fa56eed7478e15d0",
+    "zh:db9723eaca26d58c930e13fde221d93501529a5cd036b1f167ef8cff6f1a03cc",
+    "zh:fe3359f733f3ab518c6f85f3a9cd89322a7143463263f30321de0973a52d4ad8",
   ]
 }
 
-provider "registry.terraform.io/loafoe/htpasswd" {
+provider "registry.opentofu.org/loafoe/htpasswd" {
   version     = "1.2.1"
   constraints = ">= 1.2.1, 1.2.1"
   hashes = [
+    "h1:+MFiU49btB5MWE5DazQ4+3jhN7VQ5f7Ry5vWa1Bl8GQ=",
+    "h1:+wQyTeM4O/SUaE+mlLxMAoc/m9ehPbfjr2NAq856S28=",
+    "h1:6rIzkkekg9UUXfjHyMIRCEfagRhf4EcZ2mxikZxyEsU=",
+    "h1:Co2v1c3IHOdkGJ0YNcEBVoLMLM29ThYMv2zvn/w+wno=",
+    "h1:GlwtUEgYT3gWUeicvRgxPiwyGSzSY7KCwG/p8AlmqDM=",
+    "h1:HpTitjSrdx+7Sa7lb4cGyGoY/Fccnqp0oDDXdYKWddc=",
+    "h1:UvNg7hp7tjOYk7VsPVFJ5xKeSftHv5nFld7fCF6jOJQ=",
+    "h1:VZVwPekF4yFQ3ibBxkwbjeW/cbgnvaNlGytLp980bls=",
     "h1:W1euQGM6t+QlB6Rq4fDbRKRHmeCIyYdIYdHrxL97BeE=",
+    "h1:WajhG0SwTgYsvP5keu2WInMrOpCm7sa+RCReG6H+8JU=",
+    "h1:mmC8+VzpR9FGgPa5liXou/VxruKE1QrtJP2gpIFZk+s=",
+    "h1:pBn/BLoTP0sFJFqdkdC+FWAj29u+eWVxTcURFyUHltU=",
+    "h1:sAh4heiLL89d5d9nU2Q39G6xtndfiCoXxBbqZzgF64Y=",
+    "h1:sHouURGEN5VMSHRBvdAZLsEJTYczfmSdt67EHCv+K8k=",
     "zh:14460c85ddc40a9ecadf583c22a7de91b83798a8ca4843949d50c3288c6f5bdd",
     "zh:1af9416e28dd0a77c5d2c685561c4f60e19e2d606df0477ebc18eaa110c77807",
     "zh:2245325864faaf027701ab12a04d641359a0dc439dd23c6e8f768407b78a5c18",
@@ -81,11 +120,23 @@ provider "registry.terraform.io/loafoe/htpasswd" {
   ]
 }
 
-provider "registry.terraform.io/maxlaverse/bitwarden" {
+provider "registry.opentofu.org/maxlaverse/bitwarden" {
   version     = "0.17.6"
   constraints = ">= 0.16.0"
   hashes = [
+    "h1:2uNKNRtAkLqsHuH5myRwYSY73PdB9GHjlM0speXe32o=",
+    "h1:6+bYEaaKzlyH7nKM+yKE0Om/6gHXzkujh1lYBUk7Eug=",
+    "h1:Aah/6r1x6RuwIQgkv/EqaXVcvprbrgOvI9nacKU7wZY=",
+    "h1:EXzMfWTS1OH1unf/7bN9jdz7+KWJ9zrOiHBaEVi6ULI=",
+    "h1:J/mnON4m3mp+a5r9EoU24B7rzfLxTq2fdnTBAzR0ts0=",
+    "h1:Lw+wkKRoK6qpxLEqhmAwcPDvp7zHEupuc+5UKyTtxXk=",
     "h1:Rke+62Qj1g/4rR9HyyoR067z+dfPQaPTAgc7nZby+tI=",
+    "h1:V1sFpAFtqyMAUrdWb8qMQDJPqTrTE28spXo2rw+h2D8=",
+    "h1:ZpSkxez64F6+FGQTcexMwtnZFqsQfkVmMQcQQvgRYqY=",
+    "h1:hnuXFLZlD1eyO/xrNod6pY3wczBVLPZ7zlE0OGUllS8=",
+    "h1:lWmdq2zG2HLmdN/SA51PfhYAM99vYLSFsYaXHqzEMpw=",
+    "h1:x7RnUzrvW3+jHVplAQVuWTJmxGPUbXylFubDlp8wHlI=",
+    "h1:zux2X2VwHcIyMrIsS2Deg1EbVreQpIOohBgSrz3j84c=",
     "zh:01acd6e3da51973cb1327859ba61282711af92d2efa51bf4613bcdb9a15f2443",
     "zh:375f1574dd11eca89e4ff9b99739af87b5f04d2cb6e99728c62c32ce24162556",
     "zh:5b176aa6e86a16010c60b6e4d0e0717b50a3ea0f935f6763f9fe392ec5290fc9",

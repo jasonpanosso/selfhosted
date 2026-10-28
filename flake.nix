@@ -11,16 +11,44 @@
           system = system;
           config.allowUnfree = true;
         };
+
+        opentofu =
+          let
+            version = "1.13.2";
+            platforms = {
+              x86_64-linux = { os = "linux_amd64"; sha256 = "723bebb0df8411daff1e5fc3862e28ff5581fe5634087f4c29a9aa41d78208b5"; };
+              aarch64-linux = { os = "linux_arm64"; sha256 = "6e815c58a09ee957de606ff48cefad082942e70afc43b737ff975654c54ec453"; };
+              x86_64-darwin = { os = "darwin_amd64"; sha256 = "2093d0f881d911eb133cf51d2d7e09f22da71b1e6465c60826a314d217b0b84e"; };
+              aarch64-darwin = { os = "darwin_arm64"; sha256 = "cb46112c095f1c4da721b6a18c8368f67341896a62205d1c117299e85993af61"; };
+            };
+            platform = platforms.${system};
+          in
+          pkgs.stdenvNoCC.mkDerivation {
+            pname = "opentofu";
+            inherit version;
+            src = pkgs.fetchurl {
+              url = "https://github.com/opentofu/opentofu/releases/download/v${version}/tofu_${version}_${platform.os}.zip";
+              inherit (platform) sha256;
+            };
+            nativeBuildInputs = [ pkgs.unzip ];
+            sourceRoot = ".";
+            installPhase = "install -Dm755 tofu $out/bin/tofu";
+          };
       in
       {
         devShells.default = pkgs.mkShell {
+          env = {
+            TF_CLI_ARGS_plan = "-parallelism=2";
+            TF_CLI_ARGS_apply = "-parallelism=2";
+          };
+
           buildInputs = with pkgs; [
+            actionlint
             age
             awscli2
-            bws
+            bws # bitwarden cli
             cilium-cli
-            cmctl
-            docker
+            cmctl # cert-manager
             fluxcd
             jq
             just
@@ -29,9 +57,9 @@
             kubernetes-helm
             kube-linter
             kustomize
+            opentofu
             sops
             talosctl
-            terraform
           ];
         };
       });
