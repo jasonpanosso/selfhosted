@@ -49,10 +49,8 @@ spec:
             requests:
               cpu: 250m
               memory: 256Mi
-              squat.ai/tun: "1"
             limits:
               memory: 256Mi
-              squat.ai/tun: "1"
           ports:
             - name: http
               containerPort: 8080
@@ -79,6 +77,8 @@ spec:
               value: 10.96.0.0/16,10.244.0.0/16
             - name: VPN_TYPE
               value: wireguard
+            - name: WIREGUARD_IMPLEMENTATION
+              value: kernelspace
             - name: PUID
               value: "65534"
             - name: PGID
