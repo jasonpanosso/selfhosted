@@ -8,11 +8,11 @@ metadata:
     app.kubernetes.io/name: *app
 spec:
   parentRefs:
-    - name: cilium
+    - name: cilium-internal
       namespace: kube-system
-      sectionName: https
+      sectionName: http
   hostnames:
-    - watch.${domain}.${tld}
+    - watch.home.internal
   rules:
     - filters:
         - type: RequestHeaderModifier
