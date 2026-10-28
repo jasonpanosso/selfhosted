@@ -11,3 +11,44 @@ spec:
     requests:
       storage: 3500Gi
   storageClassName: rook-cephfs-hdd
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/master-standalone/persistentvolume-v1.json
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: media-copy
+spec:
+  accessModes:
+    - ReadWriteMany
+  capacity:
+    storage: 3500Gi
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: ""
+  claimRef:
+    namespace: servarr
+    name: media-copy
+  csi:
+    driver: rook-ceph.cephfs.csi.ceph.com
+    volumeHandle: media-copy
+    nodeStageSecretRef:
+      name: rook-csi-cephfs-node
+      namespace: rook-ceph
+    volumeAttributes:
+      clusterID: rook-ceph
+      fsName: mediafs
+      staticVolume: "true"
+      rootPath: /
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/master-standalone/persistentvolumeclaim-v1.json
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: media-copy
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 3500Gi
+  storageClassName: ""
+  volumeName: media-copy
