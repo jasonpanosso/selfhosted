@@ -267,47 +267,4 @@ spec:
     cephFileSystemVolumeSnapshotClass:
       enabled: false
 
-    cephObjectStores:
-      - name: my-store
-        spec:
-          metadataPool:
-            failureDomain: host
-            enableCrushUpdates: true
-            deviceClass: nvme
-            replicated:
-              size: 3
-          dataPool:
-            failureDomain: osd
-            enableCrushUpdates: true
-            deviceClass: hdd
-            # For production it is recommended to use more chunks, such as 4+2 or 8+4
-            erasureCoded:
-              dataChunks: 2
-              codingChunks: 1
-          # Being decommissioned: let Rook delete the pools with the store.
-          preservePoolsOnDelete: false
-          gateway:
-            hostNetwork: false
-            port: 8080
-            instances: 2
-            priorityClassName: system-cluster-critical
-            resources:
-              requests:
-                cpu: 100m
-                memory: 1Gi
-              limits:
-                memory: 2Gi
-          hosting:
-            advertiseEndpoint:
-              dnsName: rook-ceph-rgw-my-store.rook-ceph.svc.cluster.local
-              port: 8080
-              useTls: false
-            dnsNames:
-              - s3.${domain}.${tld}
-              - rook-ceph-rgw-my-store.rook-ceph.svc.cluster.local
-        storageClass:
-          enabled: true
-          isDefault: false
-          name: rook-ceph-bucket
-          reclaimPolicy: Delete
-          volumeBindingMode: Immediate
+    cephObjectStores: []
