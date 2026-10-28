@@ -46,7 +46,7 @@ upgrade node *args:
     node="{{ node }}"
     config="$(just talos_version="{{ talos_version }}" _render "$node")"
     # talosctl defaults to the vanilla installer, which would drop the factory schematic's extensions
-    image="$(printf '%s\n' "$config" | yq 'select(document_index == 0) | .machine.install.image')"
+    image="$(printf '%s\n' "$config" | yq 'select(.kind == "UnattendedInstallConfig") | .installer.image')"
     [[ -n $image && $image != null ]] || { echo "no install image in config for $node" >&2; exit 1; }
     echo "== $node -> $image"
     talosctl -n "$node" upgrade --image "$image" {{ args }}
@@ -85,26 +85,23 @@ _render node:
     role="$(basename "$(dirname "$patch")")"
     [[ $role == controlplane || $role == worker ]] || { echo "unknown role '$role' for $node ($patch)" >&2; exit 1; }
     # without one, gen config falls back to the plain installer and the node would lose its extensions
-    yq -e 'select(document_index == 0) | .machine.install.image' "$patch" >/dev/null 2>&1 \
-      || { echo "$patch must set machine.install.image" >&2; exit 1; }
+    yq -e 'select(.kind == "UnattendedInstallConfig") | .installer.image' "$patch" >/dev/null 2>&1 \
+      || { echo "$patch must set UnattendedInstallConfig installer.image" >&2; exit 1; }
     # a gpg passphrase prompt during `sops -d` can leave the terminal without newline translation
     # (staircased output); put it back however we exit
     if [[ -t 0 ]]; then tty_state="$(stty -g)"; trap 'stty "$tty_state"' EXIT; fi
-    # gen config takes these as arguments; they're kept in common.yaml like any other field
-    cluster_name="$(yq -e 'select(document_index == 0) | .cluster.clusterName' "{{ talos_dir }}/common.yaml")"
-    endpoint="$(yq -e 'select(document_index == 0) | .cluster.controlPlane.endpoint' "{{ talos_dir }}/common.yaml")"
+    # gen config takes these as arguments; they're kept in common.yaml's KubeClusterConfig like any other field
+    cluster_name="$(yq -e 'select(.kind == "KubeClusterConfig") | .clusterName' "{{ talos_dir }}/common.yaml")"
+    endpoint="$(yq -e 'select(.kind == "KubeClusterConfig") | .endpoint' "{{ talos_dir }}/common.yaml")"
     kubernetes_version="$(just _kubernetes-version)"
     # decrypt up front so a sops failure aborts instead of feeding talosctl an empty file
     secrets="$(sops -d {{ talos_dir }}/secrets/secrets.sops.yaml)"
     talos_version_flag=()
     [[ -z "{{ talos_version }}" ]] || talos_version_flag=(--talos-version "{{ talos_version }}")
-    # remove-persist must come after common.yaml, which deletes HostnameConfig: JSON patches only
-    # work while the config is a single document
     base="$(talosctl gen config "$cluster_name" "$endpoint" \
       --with-secrets <(printf '%s\n' "$secrets") \
       "${talos_version_flag[@]}" --kubernetes-version "${kubernetes_version#v}" \
       --config-patch "@{{ talos_dir }}/common.yaml" \
-      --config-patch "@{{ talos_dir }}/remove-persist.json" \
       --config-patch-control-plane "@{{ talos_dir }}/controlplane.yaml" \
       --config-patch-worker "@{{ talos_dir }}/worker.yaml" \
       --output-types "$role" -o - 2> >(grep -v '^generating PKI and tokens$' >&2))"
@@ -115,7 +112,7 @@ _kubernetes-version:
     #!/usr/bin/env bash
     set -euo pipefail
     images="$(yq 'select(document_index == 0) | .machine.kubelet.image' "{{ talos_dir }}/common.yaml"
-      yq 'select(document_index == 0) | (.cluster.apiServer.image, .cluster.controllerManager.image, .cluster.scheduler.image, .cluster.proxy.image)' "{{ talos_dir }}/controlplane.yaml")"
+      yq -N 'select(.kind == "KubeAPIServerConfig" or .kind == "KubeControllerManagerConfig" or .kind == "KubeSchedulerConfig" or .kind == "KubeProxyConfig") | .image' "{{ talos_dir }}/controlplane.yaml")"
     versions="$(printf '%s\n' "$images" | sed 's/.*://' | sort -u)"
     [[ $(printf '%s\n' "$versions" | wc -l) -eq 1 && $versions != null ]] || { printf 'Kubernetes images in %s disagree:\n%s\n' "{{ talos_dir }}" "$images" >&2; exit 1; }
     echo "$versions"

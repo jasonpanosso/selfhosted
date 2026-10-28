@@ -1,9 +1,13 @@
 ---
 # Dell Wyse 5070
-machine:
-  install:
-    image: factory.talos.dev/metal-installer/376567988ad370138ad8b2698212367b8edcb69b5fd68c80be1f2ec7d603b4ba:v1.14.5
-    disk: /dev/disk/by-id/ata-ORICO_ZHXV3ZI87KC0ZVQBQV9B
+apiVersion: v1alpha1
+kind: UnattendedInstallConfig
+installer:
+  image: factory.talos.dev/metal-installer/376567988ad370138ad8b2698212367b8edcb69b5fd68c80be1f2ec7d603b4ba:v1.14.5
+provisioning:
+  diskSelector:
+    match: '"/dev/disk/by-id/ata-ORICO_ZHXV3ZI87KC0ZVQBQV9B" in disk.symlinks'
+  wipe: false
 ---
 apiVersion: v1alpha1
 kind: HostnameConfig

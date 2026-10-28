@@ -37,12 +37,12 @@
 
         talosctl =
           let
-            version = "1.13.12";
+            version = "1.14.5";
             platforms = {
-              x86_64-linux = { os = "linux-amd64"; sha256 = "4ce4218764c24d6a6bd561097199b60ed8619db073792fce5b7cfce7fa8d12fc"; };
-              aarch64-linux = { os = "linux-arm64"; sha256 = "35c304c378d70f241ec5d63612defde25305f8108e550256aa63f37da510b6be"; };
-              x86_64-darwin = { os = "darwin-amd64"; sha256 = "54247a7f93e29e8ef81c31711645d573319e49586534aef695cf4fcfcd182353"; };
-              aarch64-darwin = { os = "darwin-arm64"; sha256 = "90e392866168081897325ff1eeceec10a85476a9bc9eb4399fe741a8d7f7893d"; };
+              x86_64-linux = { os = "linux-amd64"; sha256 = "ff432b68986709e6b69c563a08a2ced4232d5196b0dccd6d2e783e9d714d7d7d"; };
+              aarch64-linux = { os = "linux-arm64"; sha256 = "dfd3aa33c3159810e216fc39afb685d4d120c8f2728e017d8c7f7635d3139382"; };
+              x86_64-darwin = { os = "darwin-amd64"; sha256 = "cf994f2f9b3b24941f331124bade278eb6bd84e9f2c2b1bb0cfb5f7cb49db13c"; };
+              aarch64-darwin = { os = "darwin-arm64"; sha256 = "c865077bdfc99c38d70b377708682eec1a8febab987f0623206e7139d9013096"; };
             };
             platform = platforms.${system};
           in

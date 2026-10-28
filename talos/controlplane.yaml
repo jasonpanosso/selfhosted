@@ -1,53 +1,67 @@
 ---
 cluster:
-  apiServer:
-    image: registry.k8s.io/kube-apiserver:v1.36.6
-    certSANs:
-      - 192.168.20.100
-    admissionControl:
-      - name: PodSecurity
-        configuration:
-          defaults:
-            audit: privileged
-            audit-version: latest
-            enforce: privileged
-            enforce-version: latest
-            warn: privileged
-            warn-version: latest
-  controllerManager:
-    image: registry.k8s.io/kube-controller-manager:v1.36.6
-    extraArgs:
-      bind-address: 0.0.0.0
-  scheduler:
-    image: registry.k8s.io/kube-scheduler:v1.36.6
-    extraArgs:
-      bind-address: 0.0.0.0
-    config:
-      apiVersion: kubescheduler.config.k8s.io/v1
-      kind: KubeSchedulerConfiguration
-      profiles:
-        - schedulerName: default-scheduler
-          plugins:
-            score:
-              disabled:
-                - name: ImageLocality
-          pluginConfig:
-            - name: PodTopologySpread
-              args:
-                defaultingType: List
-                defaultConstraints:
-                  - maxSkew: 1
-                    topologyKey: kubernetes.io/hostname
-                    whenUnsatisfiable: ScheduleAnyway
-  coreDNS:
-    disabled: true
   etcd:
     extraArgs:
       listen-metrics-urls: http://0.0.0.0:2381
     advertisedSubnets:
       - 192.168.20.0/24
-  proxy:
-    image: registry.k8s.io/kube-proxy:v1.36.6 # disabled in common.yaml; pinned so the rendered config has no generated image
+---
+apiVersion: v1alpha1
+kind: KubeAPIServerConfig
+image: registry.k8s.io/kube-apiserver:v1.36.6
+certExtraSANs:
+  - 192.168.20.100
+---
+apiVersion: v1alpha1
+kind: KubeAdmissionControlConfig
+name: PodSecurity
+configuration:
+  defaults:
+    audit: privileged
+    audit-version: latest
+    enforce: privileged
+    enforce-version: latest
+    warn: privileged
+    warn-version: latest
+---
+apiVersion: v1alpha1
+kind: KubeControllerManagerConfig
+image: registry.k8s.io/kube-controller-manager:v1.36.6
+extraArgs:
+  bind-address: 0.0.0.0
+---
+apiVersion: v1alpha1
+kind: KubeSchedulerConfig
+image: registry.k8s.io/kube-scheduler:v1.36.6
+extraArgs:
+  bind-address: 0.0.0.0
+config:
+  apiVersion: kubescheduler.config.k8s.io/v1
+  kind: KubeSchedulerConfiguration
+  profiles:
+    - schedulerName: default-scheduler
+      plugins:
+        score:
+          disabled:
+            - name: ImageLocality
+      pluginConfig:
+        - name: PodTopologySpread
+          args:
+            defaultingType: List
+            defaultConstraints:
+              - maxSkew: 1
+                topologyKey: kubernetes.io/hostname
+                whenUnsatisfiable: ScheduleAnyway
+---
+# cilium replaces kube-proxy; image pinned so the rendered config has no generated image
+apiVersion: v1alpha1
+kind: KubeProxyConfig
+enabled: false
+image: registry.k8s.io/kube-proxy:v1.36.6
+---
+apiVersion: v1alpha1
+kind: KubeCoreDNSConfig
+enabled: false
 ---
 apiVersion: v1alpha1
 kind: DHCPv4Config

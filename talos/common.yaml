@@ -1,30 +1,64 @@
 ---
+# kubelet stays in v1alpha1 until local-path/rook move to user volumes: KubeletConfig has no extraMounts
 machine:
   kubelet:
     image: ghcr.io/siderolabs/kubelet:v1.36.6
+    defaultRuntimeSeccompProfileEnabled: true
+    disableManifestsDirectory: true
     extraConfig:
       serializeImagePulls: false
-  features:
-    hostDNS:
-      resolveMemberNames: true
-      forwardKubeDNSToHost: false
-  files:
-    - path: /etc/cri/conf.d/20-customization.part
-      op: create
-      content: |
-        [plugins."io.containerd.cri.v1.images"]
-          discard_unpacked_layers = false
-cluster:
-  clusterName: prod
-  controlPlane:
-    endpoint: https://192.168.20.100:6443
-  network:
-    cni:
-      name: none
-  proxy:
-    disabled: true
+---
+apiVersion: v1alpha1
+kind: KubeletConfig
+$patch: delete
+---
+apiVersion: v1alpha1
+kind: KubeClusterConfig
+clusterName: prod
+endpoint: https://192.168.20.100:6443
+---
+apiVersion: v1alpha1
+kind: ResolverConfig
+nameservers:
+  - address: 192.168.20.1
+searchDomains:
+  domains:
+    - kubernetes.internal
+    - home.internal
+hostDNS:
+  enabled: true
+  forwardKubeDNSToHost: false
+  resolveMemberNames: true
+---
+apiVersion: v1alpha1
+kind: CRICustomizationConfig
+name: discard-unpacked-layers
+content: |
+  [plugins."io.containerd.cri.v1.images"]
+    discard_unpacked_layers = false
+---
+# cilium is the CNI
+apiVersion: v1alpha1
+kind: KubeFlannelCNIConfig
+$patch: delete
 ---
 # gen config adds `auto: stable`; every node sets a static hostname in its own patch instead
 apiVersion: v1alpha1
 kind: HostnameConfig
 $patch: delete
+---
+# off until local-path/rook move to user volumes; it changes what the kubelet sees of the host
+apiVersion: v1alpha1
+kind: SecurityProfileConfig
+workloadIsolation: false
+---
+# /var is mounted without nosuid/nodev today; keep it that way
+apiVersion: v1alpha1
+kind: VolumeConfig
+name: EPHEMERAL
+mount:
+  secure: false
+---
+apiVersion: v1alpha1
+kind: FilesystemTrimConfig
+interval: 168h0m0s
