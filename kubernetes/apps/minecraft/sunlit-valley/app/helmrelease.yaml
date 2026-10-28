@@ -51,7 +51,7 @@ spec:
     persistence:
       dataDir:
         enabled: true
-        existingClaim: *app
+        existingClaim: sunlit-valley-data
     minecraftServer:
       eula: true
       version: 1.20.1

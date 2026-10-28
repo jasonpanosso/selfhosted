@@ -3,19 +3,6 @@
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: sunlit-valley
-spec:
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 50Gi
-  storageClassName: local-path
----
-# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/master-standalone/persistentvolumeclaim-v1.json
-kind: PersistentVolumeClaim
-apiVersion: v1
-metadata:
   name: sunlit-valley-backup
 spec:
   accessModes:
