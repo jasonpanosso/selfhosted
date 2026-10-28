@@ -111,7 +111,7 @@ _render node:
 _kubernetes-version:
     #!/usr/bin/env bash
     set -euo pipefail
-    images="$(yq 'select(document_index == 0) | .machine.kubelet.image' "{{ talos_dir }}/common.yaml"
+    images="$(yq 'select(.kind == "KubeletConfig") | .image' "{{ talos_dir }}/common.yaml"
       yq -N 'select(.kind == "KubeAPIServerConfig" or .kind == "KubeControllerManagerConfig" or .kind == "KubeSchedulerConfig" or .kind == "KubeProxyConfig") | .image' "{{ talos_dir }}/controlplane.yaml")"
     versions="$(printf '%s\n' "$images" | sed 's/.*://' | sort -u)"
     [[ $(printf '%s\n' "$versions" | wc -l) -eq 1 && $versions != null ]] || { printf 'Kubernetes images in %s disagree:\n%s\n' "{{ talos_dir }}" "$images" >&2; exit 1; }

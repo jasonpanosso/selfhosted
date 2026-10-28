@@ -1,16 +1,10 @@
 ---
-# kubelet stays in v1alpha1 until local-path/rook move to user volumes: KubeletConfig has no extraMounts
-machine:
-  kubelet:
-    image: ghcr.io/siderolabs/kubelet:v1.36.6
-    defaultRuntimeSeccompProfileEnabled: true
-    disableManifestsDirectory: true
-    extraConfig:
-      serializeImagePulls: false
----
 apiVersion: v1alpha1
 kind: KubeletConfig
-$patch: delete
+image: ghcr.io/siderolabs/kubelet:v1.36.6
+defaultRuntimeSeccompProfileEnabled: true
+config:
+  serializeImagePulls: false
 ---
 apiVersion: v1alpha1
 kind: KubeClusterConfig
