@@ -22,6 +22,7 @@
             cmctl
             docker
             fluxcd
+            jq
             just
             kopia
             kubectl
