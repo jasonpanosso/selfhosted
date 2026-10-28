@@ -4,6 +4,7 @@ apiVersion: source.toolkit.fluxcd.io/v1
 kind: GitRepository
 metadata:
   name: gateway-api
+  namespace: kube-system
 spec:
   interval: 1h
   url: https://github.com/kubernetes-sigs/gateway-api
