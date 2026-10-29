@@ -1,4 +1,5 @@
 ---
+# yaml-language-server: $schema=https://datreeio.github.io/CRDs-catalog/opentelemetry.io/opentelemetrycollector_v1beta1.json
 apiVersion: opentelemetry.io/v1beta1
 kind: OpenTelemetryCollector
 metadata:
@@ -151,6 +152,7 @@ spec:
         path: /var/log/pods
       name: varlogpods
 ---
+# yaml-language-server: $schema=https://datreeio.github.io/CRDs-catalog/opentelemetry.io/opentelemetrycollector_v1beta1.json
 apiVersion: opentelemetry.io/v1beta1
 kind: OpenTelemetryCollector
 metadata:
