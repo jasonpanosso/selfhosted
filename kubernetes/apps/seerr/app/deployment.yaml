@@ -42,13 +42,13 @@ spec:
             - name: RADARR_API_KEY
               valueFrom:
                 secretKeyRef:
-                  name: radarr
-                  key: token
+                  name: seerr
+                  key: radarr-token
             - name: SONARR_API_KEY
               valueFrom:
                 secretKeyRef:
-                  name: sonarr
-                  key: token
+                  name: seerr
+                  key: sonarr-token
             - name: API_KEY
               valueFrom:
                 secretKeyRef:
