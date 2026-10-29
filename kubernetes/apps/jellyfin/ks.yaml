@@ -4,12 +4,12 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &app jellyfin
-  namespace: &namespace servarr
+  namespace: &namespace jellyfin
 spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  path: ./kubernetes/apps/servarr/jellyfin/app
+  path: ./kubernetes/apps/jellyfin/app
   interval: 1h
   retryInterval: 2m
   timeout: 5m
@@ -36,7 +36,5 @@ spec:
       namespace: rook-ceph
     - name: secret-store
       namespace: external-secrets
-    - name: storage
-      namespace: *namespace
     - name: cilium-gateway
       namespace: kube-system

@@ -10,7 +10,6 @@ components:
 resources:
   - ./configarr/ks.yaml
   - ./deduparr/ks.yaml
-  - ./jellyfin/ks.yaml
   - ./prowlarr/ks.yaml
   - ./radarr/ks.yaml
   - ./sonarr/ks.yaml

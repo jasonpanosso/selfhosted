@@ -20,7 +20,7 @@ spec:
     - namespace: tandoor
       app: tandoor
       capacity: 1Gi
-    - namespace: servarr
+    - namespace: jellyfin
       app: jellyfin
       capacity: 5Gi
     - namespace: servarr

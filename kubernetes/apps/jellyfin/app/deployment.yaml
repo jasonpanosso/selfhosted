@@ -75,12 +75,16 @@ spec:
               mountPath: /config
             - name: cache
               mountPath: /config/metadata
+              subPath: metadata
+            - name: cache
+              mountPath: /config/data/trickplay
+              subPath: trickplay
             - name: scratch
               mountPath: /tmp
       volumes:
         - name: media
           persistentVolumeClaim:
-            claimName: media-mediafs
+            claimName: media
         - name: config
           persistentVolumeClaim:
             claimName: *app
