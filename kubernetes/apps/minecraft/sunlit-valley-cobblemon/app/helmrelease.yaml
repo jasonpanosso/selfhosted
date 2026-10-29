@@ -33,8 +33,8 @@ spec:
                     - amd64
     resources:
       requests:
-        cpu: 2000m
-        memory: 8Gi
+        cpu: 500m
+        memory: 4Gi
     podSecurityContext:
       runAsUser: 65534
       runAsGroup: 65534
@@ -73,7 +73,6 @@ spec:
       version: 1.20.1
       type: AUTO_CURSEFORGE
       icon: https://cdn2.steamgriddb.com/logo_thumb/804a8294a8f33203683b3e6ed46fe092.png
-      memory: 8G
       serviceType: ClusterIP
       clusterIP: 10.96.0.40
       servicePort: 25565

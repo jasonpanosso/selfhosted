@@ -252,6 +252,9 @@ spec:
     - app: sunlit-valley-cobblemon
       capacity: 20Gi
       bootstrap: true
+    - app: sunlit-valley
+      capacity: 20Gi
+      bootstrap: true
   wait: false
   resources:
     - apiVersion: external-secrets.io/v1

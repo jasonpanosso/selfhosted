@@ -160,6 +160,7 @@ spec:
         # represents the IP address of the server to connect to.
         sunlit-valley-cobblemon = "10.96.0.40:25565"
         botc = "10.96.0.41:25565"
+        sunlit-valley = "10.96.0.42:25565"
 
         # In what order we should try servers when a player logs in or is kicked from a server.
         try = []
@@ -171,6 +172,9 @@ spec:
         ]
         "botc.${domain}.${tld}" = [
             "botc"
+        ]
+        "sunlit-valley.${domain}.${tld}" = [
+            "sunlit-valley"
         ]
 
         [advanced]

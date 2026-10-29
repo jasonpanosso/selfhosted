@@ -18,7 +18,7 @@ spec:
       retries: 2
   values:
     fullnameOverride: *app
-    replicaCount: 0
+    replicaCount: 1
     image:
       repository: ghcr.io/itzg/minecraft-server
       tag: 2026.10.1-java21@sha256:07ab333a8542208c4c863a78fd3cf3fd1138d5a2e118306e1a316d202f69ab74
@@ -33,8 +33,8 @@ spec:
                     - amd64
     resources:
       requests:
-        cpu: 2000m
-        memory: 8Gi
+        cpu: 500m
+        memory: 4Gi
     securityContext:
       runAsUser: 65534
       runAsGroup: 65534
@@ -51,24 +51,57 @@ spec:
     persistence:
       dataDir:
         enabled: true
-        existingClaim: sunlit-valley-data
+        existingClaim: *app
+    extraVolumes:
+      - volumeMounts:
+          - name: forwarding-secret
+            mountPath: /secrets
+            readOnly: true
+          - name: logs
+            mountPath: /data/logs
+          - name: crash-reports
+            mountPath: /data/crash-reports
+      - volumes:
+          - name: forwarding-secret
+            secret:
+              secretName: *app
+          - name: logs
+            emptyDir: {}
+          - name: crash-reports
+            emptyDir: {}
     minecraftServer:
       eula: true
       version: 1.20.1
       type: AUTO_CURSEFORGE
       icon: https://i.imgur.com/xCwev3X.png
-      memory: 8G
-      serviceType: LoadBalancer
+      serviceType: ClusterIP
+      clusterIP: 10.96.0.42
+      servicePort: 25565
+      extraPorts:
+        - name: voicechat
+          protocol: UDP
+          containerPort: 24454
+          service:
+            enabled: true
+            embedded: true
+            type: ClusterIP
+            port: 24454
+          ingress:
+            enabled: false
       difficulty: normal
       levelType: normal
       spawnProtection: 0
       gameMode: survival
       pvp: default
-      onlineMode: true
+      onlineMode: false
       whitelist: "Jayce"
       ops: "Jayce"
       motd: "pour one out for cobblemon academy"
       viewDistance: default
+      pluginUrls:
+        - https://cdn.modrinth.com/data/vDyrHl8l/versions/uRu4jaFs/proxy-compatible-forge-1.3.0.jar?mr_download_reason=standalone&mr_game_version=1.20.1&mr_loader=neoforge
+        # simple voice chat for proxy plugin, all servers require it
+        - https://cdn.modrinth.com/data/9eGKb6K1/versions/nHtyikTv/voicechat-forge-1.20.1-2.4.32.jar?mr_download_reason=standalone&mr_game_version=1.20.1&mr_loader=neoforge
       rcon:
         enabled: true
         existingSecret: *app
@@ -80,14 +113,5 @@ spec:
         slug: society-sunlit-valley
         filenameMatcher: 3.4.3
 
-    mcbackup:
-      enabled: true
-      persistence:
-        backupDir:
-          enabled: true
-          existingClaim: sunlit-valley-backup
-
-    serviceAnnotations:
-      lbipam.cilium.io/ips: 192.168.20.40
     deploymentAnnotations:
       reloader.stakater.com/auto: "true"
