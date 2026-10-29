@@ -132,6 +132,11 @@ spec:
           scratch:
             capacity: << inputs.capacity | quote >>
             storageClassName: rook-ceph-block-hdd
+        # Re-scan daily so Discovered Snapshot CRs track snapshots written or
+        # deleted outside Kopiur (each scan is one short bootstrap Job).
+        catalog: &catalog
+          periodicRefresh: true
+          refreshInterval: 24h
 
     - apiVersion: kopiur.home-operations.com/v1alpha1
       kind: Repository
@@ -146,6 +151,7 @@ spec:
         encryption: *encryption
         create: *create
         moverDefaults: *moverDefaults
+        catalog: *catalog
         seed:
           from:
             backend:
@@ -345,6 +351,11 @@ spec:
           scratch:
             capacity: << inputs.capacity | quote >>
             storageClassName: rook-ceph-block-hdd
+        # Re-scan daily so Discovered Snapshot CRs track snapshots written or
+        # deleted outside Kopiur (each scan is one short bootstrap Job).
+        catalog: &catalog
+          periodicRefresh: true
+          refreshInterval: 24h
 
     - apiVersion: kopiur.home-operations.com/v1alpha1
       kind: Repository
@@ -359,6 +370,7 @@ spec:
         encryption: *encryption
         create: *create
         moverDefaults: *moverDefaults
+        catalog: *catalog
         seed:
           from:
             backend:
