@@ -4,12 +4,12 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &app qbittorrent
-  namespace: &namespace servarr
+  namespace: &namespace qbittorrent
 spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  path: ./kubernetes/apps/servarr/qbittorrent/app
+  path: ./kubernetes/apps/qbittorrent/app
   interval: 1h
   retryInterval: 2m
   timeout: 5m
@@ -32,7 +32,5 @@ spec:
       namespace: kopiur-system
     - name: secret-store
       namespace: external-secrets
-    - name: storage
-      namespace: *namespace
     - name: cilium-gateway
       namespace: kube-system
