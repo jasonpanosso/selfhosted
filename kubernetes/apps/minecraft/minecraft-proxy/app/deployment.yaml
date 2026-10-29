@@ -1,0 +1,135 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/master-standalone/deployment-apps-v1.json
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: &app minecraft-proxy
+  labels:
+    app.kubernetes.io/name: *app
+  annotations:
+    reloader.stakater.com/auto: "true"
+spec:
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: *app
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: *app
+    spec:
+      securityContext:
+        runAsUser: 65534
+        runAsGroup: 65534
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+      initContainers:
+        - name: copy-plugins
+          image: docker.io/library/eclipse-temurin:25-jre-noble@sha256:2ef7a81085e0502d7d4ff7e7c0257b6d4f46433f8ea6021180aa3c8a2b9ca3ec
+          command:
+            - cp
+            - /opt/plugins/ambassador/ambassador.jar
+            - /opt/plugins/simple-voice-chat/simple-voice-chat.jar
+            - /server/plugins/
+          resources:
+            requests:
+              cpu: 10m
+              memory: 16Mi
+            limits:
+              memory: 64Mi
+          securityContext: &securityContext
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities: {drop: [ALL]}
+          volumeMounts:
+            - name: plugins
+              mountPath: /server/plugins
+            - name: ambassador
+              mountPath: /opt/plugins/ambassador
+              readOnly: true
+            - name: simple-voice-chat
+              mountPath: /opt/plugins/simple-voice-chat
+              readOnly: true
+      containers:
+        - name: *app
+          image: docker.io/library/eclipse-temurin:25-jre-noble@sha256:2ef7a81085e0502d7d4ff7e7c0257b6d4f46433f8ea6021180aa3c8a2b9ca3ec
+          workingDir: /server
+          command:
+            - java
+            - -Xms256M
+            - -Xmx256M
+            - -XX:+UseZGC
+            - -XX:+UseCompactObjectHeaders
+            - -jar
+            - /opt/velocity/velocity.jar
+          env:
+            - name: TZ
+              value: America/Detroit
+          ports:
+            - name: proxy
+              containerPort: 25577
+              protocol: TCP
+            - name: voicechat
+              containerPort: 25577
+              protocol: UDP
+          startupProbe:
+            tcpSocket:
+              port: 25577
+            periodSeconds: 5
+            failureThreshold: 30
+          livenessProbe: &probes
+            tcpSocket:
+              port: 25577
+            periodSeconds: 15
+          readinessProbe: *probes
+          resources:
+            requests:
+              cpu: 100m
+              memory: 512Mi
+            limits:
+              memory: 512Mi
+          securityContext: *securityContext
+          volumeMounts:
+            - name: server
+              mountPath: /server
+            - name: plugins
+              mountPath: /server/plugins
+            - name: velocity
+              mountPath: /opt/velocity
+              readOnly: true
+            - name: config
+              mountPath: /server/velocity.toml
+              subPath: velocity.toml
+              readOnly: true
+            - name: forwarding-secret
+              mountPath: /secrets
+              readOnly: true
+            - name: tmp
+              mountPath: /tmp
+      volumes:
+        - name: server
+          emptyDir: {}
+        - name: velocity
+          image:
+            reference: ghcr.io/jasonpanosso/velocity:v4.3.1@sha256:8e1ec6233d873cfde73500fe4829bae1ff08577d69a43c715fc50337cdace93d
+            pullPolicy: IfNotPresent
+        - name: plugins
+          emptyDir: {}
+        - name: ambassador
+          image:
+            reference: ghcr.io/jasonpanosso/ambassador:1.4.5@sha256:080d56d4b8eb45ad6157fdb965e3dc0823eecf531d86b91f6a60947a07151200
+            pullPolicy: IfNotPresent
+        - name: simple-voice-chat
+          image:
+            reference: ghcr.io/jasonpanosso/simple-voice-chat:velocity-2.6.26@sha256:5ff118a86ce54491c8e89e633df8005c5f35b01a4be41497c9f6a2bfe7d3a988
+            pullPolicy: IfNotPresent
+        - name: tmp
+          emptyDir: {}
+        - name: config
+          configMap:
+            name: *app
+        - name: forwarding-secret
+          secret:
+            secretName: *app

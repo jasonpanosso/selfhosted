@@ -1,0 +1,23 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/master-standalone/service-v1.json
+apiVersion: v1
+kind: Service
+metadata:
+  name: &app minecraft-proxy
+  labels:
+    app.kubernetes.io/name: *app
+  annotations:
+    lbipam.cilium.io/ips: 192.168.20.42
+spec:
+  type: LoadBalancer
+  ports:
+    - name: proxy
+      port: 25565
+      targetPort: proxy
+      protocol: TCP
+    - name: voicechat
+      port: 25577
+      targetPort: voicechat
+      protocol: UDP
+  selector:
+    app.kubernetes.io/name: *app
