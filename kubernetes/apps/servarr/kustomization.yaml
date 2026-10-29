@@ -8,6 +8,7 @@ components:
   - ../../components/common
 
 resources:
+  - ./namespace.yaml
   - ./configarr/ks.yaml
   - ./deduparr/ks.yaml
   - ./prowlarr/ks.yaml

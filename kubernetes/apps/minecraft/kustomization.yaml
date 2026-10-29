@@ -8,6 +8,7 @@ components:
   - ../../components/common
 
 resources:
+  - ./namespace.yaml
   - ./botc/ks.yaml
   - ./minecraft-proxy/ks.yaml
   - ./sunlit-valley/ks.yaml

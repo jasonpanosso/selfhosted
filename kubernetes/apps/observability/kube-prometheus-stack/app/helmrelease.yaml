@@ -102,6 +102,7 @@ spec:
     prometheus-node-exporter:
       nameOverride: node-exporter
       fullnameOverride: node-exporter
+      namespaceOverride: observability-agents
       priorityClassName: system-node-critical
       resources:
         limits:

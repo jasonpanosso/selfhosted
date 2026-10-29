@@ -20,10 +20,6 @@ spec:
       kind: OpenTelemetryCollector
       name: cluster
       namespace: *namespace
-    - apiVersion: opentelemetry.io/v1beta1
-      kind: OpenTelemetryCollector
-      name: node
-      namespace: *namespace
   sourceRef:
     kind: GitRepository
     name: flux-system

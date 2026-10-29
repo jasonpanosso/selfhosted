@@ -3,45 +3,15 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: otel-collector-opentelemetry-collector
+  name: otel-cluster-collector
 rules:
+  # k8s_attributes processor
   - apiGroups:
       - ""
     resources:
-      - endpoints
-      - events
       - namespaces
-      - namespaces/status
       - nodes
-      - nodes/metrics
-      - nodes/proxy
-      - nodes/spec
-      - nodes/stats
-      - persistentvolumeclaims
-      - persistentvolumes
       - pods
-      - pods/status
-      - replicationcontrollers
-      - replicationcontrollers/status
-      - resourcequotas
-      - secrets
-      - services
-    verbs:
-      - get
-      - list
-      - watch
-  - apiGroups:
-      - extensions
-    resources:
-      - ingresses
-    verbs:
-      - get
-      - list
-      - watch
-  - apiGroups:
-      - networking.k8s.io
-    resources:
-      - ingresses
     verbs:
       - get
       - list
@@ -58,61 +28,19 @@ rules:
       - list
       - watch
   - apiGroups:
-      - extensions
-    resources:
-      - daemonsets
-      - deployments
-      - replicasets
-    verbs:
-      - get
-      - list
-      - watch
-  - apiGroups:
       - batch
     resources:
-      - jobs
       - cronjobs
+      - jobs
     verbs:
       - get
       - list
       - watch
-  - apiGroups:
-      - autoscaling
-    resources:
-      - horizontalpodautoscalers
-    verbs:
-      - get
-      - list
-      - watch
-  - apiGroups:
-      - coordination.k8s.io
-    resources:
-      - leases
-    verbs:
-      - get
-      - list
-      - watch
-      - create
-      - update
-      - patch
-      - delete
+  # k8sobjects receiver
   - apiGroups:
       - events.k8s.io
     resources:
       - events
     verbs:
-      - watch
-      - list
-  - apiGroups:
-      - discovery.k8s.io
-    resources:
-      - endpointslices
-    verbs:
-      - get
       - list
       - watch
-  - nonResourceURLs:
-      - /metrics
-      - /metrics/cadvisor
-    verbs:
-      - get

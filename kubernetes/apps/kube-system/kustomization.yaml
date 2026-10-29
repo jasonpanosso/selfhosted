@@ -8,6 +8,7 @@ components:
   - ../../components/common
 
 resources:
+  - ./namespace.yaml
   - ./coredns/ks.yaml
   - ./metrics-server/ks.yaml
   - ./reloader/ks.yaml

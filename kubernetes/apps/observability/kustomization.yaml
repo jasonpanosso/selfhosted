@@ -8,6 +8,7 @@ components:
   - ../../components/common
 
 resources:
+  - ./namespace.yaml
   - ./grafana/ks.yaml
   - ./kube-prometheus-stack/ks.yaml
   - ./victoria-logs/ks.yaml
@@ -15,4 +16,3 @@ resources:
   - ./opentelemetry/collector/ks.yaml
   - ./silence-operator/operator/ks.yaml
   - ./silence-operator/silences/ks.yaml
-  - ./smartctl-exporter/ks.yaml

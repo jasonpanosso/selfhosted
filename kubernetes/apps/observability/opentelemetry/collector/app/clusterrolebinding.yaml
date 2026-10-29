@@ -3,12 +3,12 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: otel-collector-opentelemetry-collector
+  name: otel-cluster-collector
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: otel-collector-opentelemetry-collector
+  name: otel-cluster-collector
 subjects:
   - kind: ServiceAccount
-    name: otel-collector-opentelemetry-collector
-    namespace: default
+    name: otel-cluster-collector
+    namespace: observability

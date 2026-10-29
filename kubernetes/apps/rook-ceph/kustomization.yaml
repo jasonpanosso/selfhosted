@@ -8,6 +8,7 @@ components:
   - ../../components/common
 
 resources:
+  - ./namespace.yaml
   - ./ceph-csi-drivers/ks.yaml
   - ./cluster/ks.yaml
   - ./operator/ks.yaml
