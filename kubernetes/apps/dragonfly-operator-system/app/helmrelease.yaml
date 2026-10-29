@@ -17,6 +17,10 @@ spec:
       retries: 2
   values:
     replicaCount: 3
+    podSecurityContext:
+      runAsNonRoot: true
+      seccompProfile:
+        type: RuntimeDefault
     rbacProxy:
       # TODO: reenable after https://github.com/dragonflydb/dragonfly-operator/issues/404
       enabled: false

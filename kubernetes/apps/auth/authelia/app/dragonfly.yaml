@@ -11,6 +11,18 @@ spec:
       name: authelia
       key: REDIS_PASSWORD
   replicas: 2
+  podSecurityContext:
+    runAsNonRoot: true
+    runAsUser: 999
+    runAsGroup: 999
+    fsGroup: 999
+    seccompProfile:
+      type: RuntimeDefault
+  containerSecurityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - ALL
   resources:
     requests:
       cpu: 10m

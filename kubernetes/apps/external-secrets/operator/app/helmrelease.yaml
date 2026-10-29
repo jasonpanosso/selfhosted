@@ -22,6 +22,15 @@ spec:
       enabled: true
       deploymentAnnotations:
         reloader.stakater.com/auto: "true"
+      podSecurityContext:
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+      securityContext:
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop:
+            - ALL
     leaderElect: true
     image:
       repository: ghcr.io/external-secrets/external-secrets
