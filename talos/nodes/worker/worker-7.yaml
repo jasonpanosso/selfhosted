@@ -13,3 +13,9 @@ provisioning:
 apiVersion: v1alpha1
 kind: HostnameConfig
 hostname: worker-7
+---
+# kexec reboots weird on ARM?
+apiVersion: v1alpha1
+kind: SysctlConfig
+params:
+  kernel.kexec_load_disabled: "1"
