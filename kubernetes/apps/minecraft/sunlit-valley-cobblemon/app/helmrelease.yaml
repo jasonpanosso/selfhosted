@@ -50,16 +50,24 @@ spec:
     persistence:
       dataDir:
         enabled: true
-        existingClaim: sunlit-valley-cobblemon-data
+        existingClaim: *app
     extraVolumes:
       - volumeMounts:
           - name: forwarding-secret
             mountPath: /secrets
             readOnly: true
+          - name: logs
+            mountPath: /data/logs
+          - name: crash-reports
+            mountPath: /data/crash-reports
       - volumes:
           - name: forwarding-secret
             secret:
               secretName: *app
+          - name: logs
+            emptyDir: {}
+          - name: crash-reports
+            emptyDir: {}
     minecraftServer:
       eula: true
       version: 1.20.1
@@ -105,13 +113,6 @@ spec:
           secretKey: CURSEFORGE_API_KEY
         slug: society-sunlit-cobblemon
         filenameMatcher: "1.0.5-SSV4.0.8"
-
-    mcbackup:
-      enabled: true
-      persistence:
-        backupDir:
-          enabled: true
-          existingClaim: sunlit-valley-cobblemon-backup
 
     deploymentAnnotations:
       reloader.stakater.com/auto: "true"

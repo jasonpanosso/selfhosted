@@ -20,6 +20,10 @@ spec:
       kind: ResourceSet
       name: *app
       namespace: *namespace
+    - apiVersion: fluxcd.controlplane.io/v1
+      kind: ResourceSet
+      name: kopiur-minecraft
+      namespace: *namespace
   sourceRef:
     kind: GitRepository
     name: flux-system

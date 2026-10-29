@@ -239,3 +239,229 @@ spec:
           populator: {}
         policy:
           onMissingSnapshot: Continue
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/fluxcd.controlplane.io/resourceset_v1.json
+# separate setup for minecraft servers that use local-path, and need a webhook
+# to save before a snapshot
+apiVersion: fluxcd.controlplane.io/v1
+kind: ResourceSet
+metadata:
+  name: kopiur-minecraft
+spec:
+  inputs:
+    - app: sunlit-valley-cobblemon
+      capacity: 20Gi
+      bootstrap: true
+  wait: false
+  resources:
+    - apiVersion: external-secrets.io/v1
+      kind: ExternalSecret
+      metadata:
+        name: kopiur-<< inputs.app >>
+        namespace: minecraft
+      spec:
+        secretStoreRef:
+          kind: ClusterSecretStore
+          name: bitwarden
+        target:
+          name: kopiur-<< inputs.app >>
+        data:
+          - secretKey: KOPIA_PASSWORD
+            remoteRef:
+              key: KOPIA_PASSWORD_<< inputs.app | upper | replace "-" "_" >>
+
+    # identical for every server
+    - apiVersion: external-secrets.io/v1
+      kind: ExternalSecret
+      metadata:
+        name: kopiur-offsite
+        namespace: minecraft
+      spec:
+        secretStoreRef:
+          kind: ClusterSecretStore
+          name: bitwarden
+        target:
+          name: kopiur-offsite
+        data:
+          - secretKey: AWS_ACCESS_KEY_ID
+            remoteRef:
+              key: S3_ACCESS_KEY_ID
+          - secretKey: AWS_SECRET_ACCESS_KEY
+            remoteRef:
+              key: S3_SECRET_ACCESS_KEY
+
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
+        name: kopiur-<< inputs.app >>
+        namespace: minecraft
+        annotations:
+          fluxcd.controlplane.io/prune: disabled
+      spec:
+        accessModes: [ReadWriteMany]
+        storageClassName: rook-cephfs-hdd
+        resources:
+          requests:
+            storage: << inputs.capacity | quote >>
+
+    # Two variants of the same Repository; the reconcile annotation keeps
+    # exactly one of them: unseeded while bootstrapping, seeded otherwise.
+    - apiVersion: kopiur.home-operations.com/v1alpha1
+      kind: Repository
+      metadata:
+        name: << inputs.app >>
+        namespace: minecraft
+        annotations:
+          fluxcd.controlplane.io/prune: disabled
+          fluxcd.controlplane.io/reconcile: << if get inputs "bootstrap" >>enabled<< else >>disabled<< end >>
+      spec:
+        backend: &backend
+          filesystem:
+            path: /repo
+            volume:
+              pvc:
+                name: kopiur-<< inputs.app >>
+        encryption: &encryption
+          passwordSecretRef:
+            name: kopiur-<< inputs.app >>
+            key: KOPIA_PASSWORD
+        create: &create
+          enabled: true
+        moverDefaults: &moverDefaults
+          securityContext:
+            runAsUser: 65534
+            runAsGroup: 65534
+          podSecurityContext:
+            fsGroup: 65534
+            fsGroupChangePolicy: OnRootMismatch
+          # Throwaway volume for deep verification's restore test, on HDD.
+          scratch:
+            capacity: << inputs.capacity | quote >>
+            storageClassName: rook-ceph-block-hdd
+
+    - apiVersion: kopiur.home-operations.com/v1alpha1
+      kind: Repository
+      metadata:
+        name: << inputs.app >>
+        namespace: minecraft
+        annotations:
+          fluxcd.controlplane.io/prune: disabled
+          fluxcd.controlplane.io/reconcile: << if get inputs "bootstrap" >>disabled<< else >>enabled<< end >>
+      spec:
+        backend: *backend
+        encryption: *encryption
+        create: *create
+        moverDefaults: *moverDefaults
+        seed:
+          from:
+            backend:
+              s3: &offsite
+                bucket: "${s3_backup_bucket_name}"
+                endpoint: "${s3_backup_domain_name}"
+                region: nyc3
+                prefix: kopiur/<< inputs.app >>/
+                auth:
+                  secretRef:
+                    name: kopiur-offsite
+          sync:
+            parallel: 4
+
+    - apiVersion: kopiur.home-operations.com/v1alpha1
+      kind: RepositoryReplication
+      metadata:
+        name: << inputs.app >>
+        namespace: minecraft
+      spec:
+        sourceRef:
+          kind: Repository
+          name: << inputs.app >>
+        destination:
+          s3: *offsite
+        schedule:
+          cron: "H 3 * * *"
+          jitter: 30m
+        sync:
+          parallel: 4
+          # remove blobs the source no longer has
+          deleteExtra: true
+
+    - apiVersion: kopiur.home-operations.com/v1alpha1
+      kind: SnapshotPolicy
+      metadata:
+        name: << inputs.app >>
+        namespace: minecraft
+      spec:
+        repository:
+          name: << inputs.app >>
+        sources:
+          - pvc:
+              name: << inputs.app >>
+        # local-path has no CSI snapshots; the mover reads the live volume
+        # read-only on the server's node.
+        copyMethod: Direct
+        hooks:
+          beforeSnapshot:
+            - workloadExec:
+                podSelector:
+                  matchLabels:
+                    app: << inputs.app >>
+                container: << inputs.app >>
+                command:
+                  [
+                    "/bin/sh",
+                    "-c",
+                    "rcon-cli save-off && rcon-cli save-all flush && sync",
+                  ]
+                timeout: 5m
+          afterSnapshot:
+            - workloadExec:
+                podSelector:
+                  matchLabels:
+                    app: << inputs.app >>
+                container: << inputs.app >>
+                command: ["rcon-cli", "save-on"]
+                timeout: 1m
+        retention:
+          keepHourly: 12
+          keepDaily: 7
+          keepWeekly: 4
+        verification:
+          quick:
+            schedule:
+              # daily quick verification
+              cron: "H 4 * * *"
+              jitter: 30m
+          deep:
+            schedule:
+              # weekly deep verification
+              cron: "H 5 * * 0"
+              jitter: 1h
+          successExpr: "(stats.files > 0 || stats.bytes > 0) && stats.errors == 0"
+          verifyFilesPercent: 10
+
+    - apiVersion: kopiur.home-operations.com/v1alpha1
+      kind: SnapshotSchedule
+      metadata:
+        name: << inputs.app >>
+        namespace: minecraft
+      spec:
+        policyRef:
+          name: << inputs.app >>
+        schedule:
+          # every 6 hours
+          cron: "H */6 * * *"
+          jitter: 10m
+
+    - apiVersion: kopiur.home-operations.com/v1alpha1
+      kind: Restore
+      metadata:
+        name: << inputs.app >>
+        namespace: minecraft
+      spec:
+        source:
+          fromPolicy:
+            name: << inputs.app >>
+        target:
+          populator: {}
+        policy:
+          onMissingSnapshot: Continue

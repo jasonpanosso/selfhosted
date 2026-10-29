@@ -15,6 +15,7 @@ locals {
     "seerr",
     "sonarr",
     "upbrr",
+    "sunlit-valley-cobblemon",
   ])
 }
 
