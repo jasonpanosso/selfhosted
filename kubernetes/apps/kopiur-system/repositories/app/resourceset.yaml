@@ -242,7 +242,9 @@ spec:
 ---
 # yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/fluxcd.controlplane.io/resourceset_v1.json
 # separate setup for minecraft servers that use local-path, and need a webhook
-# to save before a snapshot
+# to save before a snapshot.
+# local-path doesn't support volume populators, so there is no populator
+# Restore here; restore by hand with a Restore targeting the PVC (target.pvcRef).
 apiVersion: fluxcd.controlplane.io/v1
 kind: ResourceSet
 metadata:
@@ -335,6 +337,10 @@ spec:
           podSecurityContext:
             fsGroup: 65534
             fsGroupChangePolicy: OnRootMismatch
+          # a restore mover is the first consumer of a new local-path PVC and
+          # pins it to its node; the servers only run on amd64
+          nodeSelector:
+            kubernetes.io/arch: amd64
           # Throwaway volume for deep verification's restore test, on HDD.
           scratch:
             capacity: << inputs.capacity | quote >>
@@ -452,17 +458,3 @@ spec:
           # every 6 hours
           cron: "H */6 * * *"
           jitter: 10m
-
-    - apiVersion: kopiur.home-operations.com/v1alpha1
-      kind: Restore
-      metadata:
-        name: << inputs.app >>
-        namespace: minecraft
-      spec:
-        source:
-          fromPolicy:
-            name: << inputs.app >>
-        target:
-          populator: {}
-        policy:
-          onMissingSnapshot: Continue

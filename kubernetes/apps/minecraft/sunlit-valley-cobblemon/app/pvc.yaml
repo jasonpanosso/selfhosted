@@ -7,10 +7,6 @@ metadata:
 spec:
   accessModes:
     - ReadWriteOnce
-  dataSourceRef:
-    apiGroup: kopiur.home-operations.com
-    kind: Restore
-    name: sunlit-valley-cobblemon
   resources:
     requests:
       storage: 50Gi
