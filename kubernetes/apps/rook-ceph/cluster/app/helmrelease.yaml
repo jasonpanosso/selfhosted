@@ -62,7 +62,7 @@ spec:
         allowMultiplePerNode: false
         modules:
           - name: rook
-            # https://github.com/rook/rook/issues/17786
+            # TODO: https://github.com/rook/rook/issues/17786
             enabled: false
           - name: pg_autoscaler
             enabled: true
