@@ -35,6 +35,8 @@ spec:
       requests:
         cpu: 500m
         memory: 4Gi
+      limits:
+        memory: 6Gi
     securityContext:
       runAsUser: 65534
       runAsGroup: 65534
@@ -48,6 +50,9 @@ spec:
     extraEnv:
       TZ: America/Detroit
       USE_MEOWICE_FLAGS: "true"
+      # sets PCF's forwarding secret on every start; PCF has no env or file option
+      PATCH_DEFINITIONS: /patches
+      CFG_PROXY_SECRET_FILE: /secrets/MINECRAFT_PROXY_SECRET
     persistence:
       dataDir:
         enabled: true
@@ -61,6 +66,9 @@ spec:
             mountPath: /data/logs
           - name: crash-reports
             mountPath: /data/crash-reports
+          - name: patches
+            mountPath: /patches
+            readOnly: true
       - volumes:
           - name: forwarding-secret
             secret:
@@ -69,11 +77,16 @@ spec:
             emptyDir: {}
           - name: crash-reports
             emptyDir: {}
+          - name: patches
+            configMap:
+              name: sunlit-valley-patches
     minecraftServer:
       eula: true
       version: 1.20.1
       type: AUTO_CURSEFORGE
       icon: https://i.imgur.com/xCwev3X.png
+      # heap = 75% of the memory limit (-XX:MaxRAMPercentage)
+      memory: "75%"
       serviceType: ClusterIP
       clusterIP: 10.96.0.42
       servicePort: 25565

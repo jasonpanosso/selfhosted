@@ -8,3 +8,10 @@ resources:
   - ./helmrelease.yaml
   - ./ocirepository.yaml
   - ./pvc.yaml
+
+configMapGenerator:
+  - name: sunlit-valley-patches
+    files:
+      - proxy-compatible-forge.json=./resources/proxy-compatible-forge.json
+    options:
+      disableNameSuffixHash: true

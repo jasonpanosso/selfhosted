@@ -1,0 +1,11 @@
+{
+  "file": "/data/config/proxy-compatible-forge.toml",
+  "ops": [
+    {
+      "$set": {
+        "path": "$.forwarding.secret",
+        "value": "${CFG_PROXY_SECRET}"
+      }
+    }
+  ]
+}
