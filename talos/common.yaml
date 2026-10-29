@@ -24,6 +24,13 @@ hostDNS:
   forwardKubeDNSToHost: false
   resolveMemberNames: true
 ---
+# cloudflare being weird?
+apiVersion: v1alpha1
+kind: TimeSyncConfig
+ntp:
+  servers:
+    - time.google.com
+---
 apiVersion: v1alpha1
 kind: CRICustomizationConfig
 name: discard-unpacked-layers

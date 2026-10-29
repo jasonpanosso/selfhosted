@@ -51,6 +51,10 @@ session:
     port: 6379
     max_retries: 10
 
+ntp:
+  # same source as the nodes (talos/common.yaml);
+  address: udp://time.google.com:123
+
 storage:
   postgres:
     address: tcp://pgcluster-rw.db.svc.cluster.local:5432
