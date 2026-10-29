@@ -125,11 +125,8 @@ spec:
           secretKey: CURSEFORGE_API_KEY
         slug: society-sunlit-cobblemon
         filenameMatcher: "1.0.5-SSV4.0.8"
-        # does not work on 1.20.1 with velocity
         excludeMods:
-          - better-compatibility-checker
-        # re-evaluate exclusions against the existing install
-        forceSynchronize: true
+          - better-compatibility-checker # does not work on 1.20.1 with velocity
 
     deploymentAnnotations:
       reloader.stakater.com/auto: "true"
