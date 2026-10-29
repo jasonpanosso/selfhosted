@@ -24,40 +24,20 @@ spec:
     rbacProxy:
       # TODO: reenable after https://github.com/dragonflydb/dragonfly-operator/issues/404
       enabled: false
-    storage:
-      enabled: true
-      requests: 1Gi
-      storageClassName: rook-ceph-block
-    extraArgs:
-      - --dbfilename=my-dump-{timestamp}
-      - --snapshot_cron=0 */2 * * * # every 2 hours
-    resources:
-      requests:
-        cpu: 10m
-        memory: 128Mi
-      limits:
-        memory: 128Mi
-    securityContext:
-      allowPrivilegeEscalation: false
-      capabilities:
-        drop:
-          - ALL
-      readOnlyRootFilesystem: true
-      runAsNonRoot: true
-      runAsUser: 1000
-
+    manager:
+      resources:
+        requests:
+          cpu: 10m
+          memory: 128Mi
+        limits:
+          memory: 128Mi
+      securityContext:
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop:
+            - ALL
+        readOnlyRootFilesystem: true
     serviceMonitor:
       enabled: true
-    prometheusRule:
-      enabled: true
-      spec:
-        - alert: DragonflyMissing
-          expr: absent(dragonfly_uptime_in_seconds) == 1
-          for: 0m
-          labels:
-            severity: critical
-          annotations:
-            summary: Dragonfly is missing
-            description: "Dragonfly is missing"
     grafanaDashboard:
       enabled: true
