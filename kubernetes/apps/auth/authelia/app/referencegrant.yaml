@@ -9,6 +9,9 @@ spec:
   from:
     - group: gateway.networking.k8s.io
       kind: HTTPRoute
+      namespace: autobrr
+    - group: gateway.networking.k8s.io
+      kind: HTTPRoute
       namespace: bookboss
     - group: gateway.networking.k8s.io
       kind: HTTPRoute
