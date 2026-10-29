@@ -18,7 +18,7 @@ spec:
   healthChecks:
     - apiVersion: v1
       kind: PersistentVolumeClaim
-      name: media-mediafs
+      name: media
       namespace: *namespace
   sourceRef:
     kind: GitRepository

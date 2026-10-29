@@ -13,7 +13,7 @@ spec:
   storageClassName: ""
   claimRef:
     namespace: servarr
-    name: media-mediafs
+    name: media
   csi:
     driver: rook-ceph.cephfs.csi.ceph.com
     volumeHandle: media-servarr
@@ -30,7 +30,7 @@ spec:
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: media-mediafs
+  name: media
 spec:
   accessModes:
     - ReadWriteMany
