@@ -31,22 +31,19 @@ content: |
   [plugins."io.containerd.cri.v1.images"]
     discard_unpacked_layers = false
 ---
-# cilium is the CNI
 apiVersion: v1alpha1
 kind: KubeFlannelCNIConfig
 $patch: delete
 ---
-# gen config adds `auto: stable`; every node sets a static hostname in its own patch instead
 apiVersion: v1alpha1
 kind: HostnameConfig
 $patch: delete
 ---
-# off until local-path/rook move to user volumes; it changes what the kubelet sees of the host
 apiVersion: v1alpha1
 kind: SecurityProfileConfig
-workloadIsolation: false
+workloadIsolation: true
 ---
-# /var is mounted without nosuid/nodev today; keep it that way
+# no nosuid/nodev
 apiVersion: v1alpha1
 kind: VolumeConfig
 name: EPHEMERAL

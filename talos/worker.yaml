@@ -7,7 +7,6 @@ config:
   # remove unused images older than 30 days
   imageMaximumGCAge: 720h
 ---
-# local-path-provisioner storage; a directory on /var, mounted without nosuid/nodev/noexec like /var itself
 apiVersion: v1alpha1
 kind: UserVolumeConfig
 name: local-path-provisioner
