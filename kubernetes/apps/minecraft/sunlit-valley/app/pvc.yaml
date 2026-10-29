@@ -7,6 +7,10 @@ metadata:
 spec:
   accessModes:
     - ReadWriteOnce
+  dataSourceRef:
+    apiGroup: kopiur.home-operations.com
+    kind: Restore
+    name: sunlit-valley
   resources:
     requests:
       storage: 50Gi
