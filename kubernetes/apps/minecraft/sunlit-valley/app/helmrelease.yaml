@@ -125,6 +125,13 @@ spec:
           secretKey: CURSEFORGE_API_KEY
         slug: society-sunlit-valley
         filenameMatcher: 3.4.3
+        # BCC appends data to the status ping that Velocity can't decode, which
+        # breaks ping passthrough (nanite/BetterCompatibilityChecker#37, not
+        # fixed for 1.20.1)
+        excludeMods:
+          - better-compatibility-checker
+        # re-evaluate exclusions against the existing install
+        forceSynchronize: true
 
     deploymentAnnotations:
       reloader.stakater.com/auto: "true"
