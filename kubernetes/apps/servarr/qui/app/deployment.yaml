@@ -121,7 +121,7 @@ spec:
       volumes:
         - name: media
           persistentVolumeClaim:
-            claimName: media
+            claimName: media-mediafs
         - name: config
           persistentVolumeClaim:
             claimName: *app

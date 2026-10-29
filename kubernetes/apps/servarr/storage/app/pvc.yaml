@@ -16,7 +16,7 @@ spec:
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: media-copy
+  name: media-servarr
 spec:
   accessModes:
     - ReadWriteMany
@@ -26,10 +26,10 @@ spec:
   storageClassName: ""
   claimRef:
     namespace: servarr
-    name: media-copy
+    name: media-mediafs
   csi:
     driver: rook-ceph.cephfs.csi.ceph.com
-    volumeHandle: media-copy
+    volumeHandle: media-servarr
     nodeStageSecretRef:
       name: rook-csi-cephfs-node
       namespace: rook-ceph
@@ -43,7 +43,7 @@ spec:
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: media-copy
+  name: media-mediafs
 spec:
   accessModes:
     - ReadWriteMany
@@ -51,4 +51,4 @@ spec:
     requests:
       storage: 3500Gi
   storageClassName: ""
-  volumeName: media-copy
+  volumeName: media-servarr

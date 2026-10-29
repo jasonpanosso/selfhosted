@@ -20,6 +20,10 @@ spec:
       kind: PersistentVolumeClaim
       name: media
       namespace: *namespace
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      name: media-mediafs
+      namespace: *namespace
   sourceRef:
     kind: GitRepository
     name: flux-system
