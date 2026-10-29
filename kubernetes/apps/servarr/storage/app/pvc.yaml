@@ -1,17 +1,4 @@
 ---
-# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/master-standalone/persistentvolumeclaim-v1.json
-kind: PersistentVolumeClaim
-apiVersion: v1
-metadata:
-  name: media
-spec:
-  accessModes:
-    - ReadWriteMany
-  resources:
-    requests:
-      storage: 3500Gi
-  storageClassName: rook-cephfs-hdd
----
 # yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/master-standalone/persistentvolume-v1.json
 apiVersion: v1
 kind: PersistentVolume
