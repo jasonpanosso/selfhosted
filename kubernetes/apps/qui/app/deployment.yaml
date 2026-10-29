@@ -48,31 +48,11 @@ spec:
               value: "false"
             - name: QUI__LOG_LEVEL
               value: "INFO"
-            - name: QUI__DATABASE_TYPE
-              value: postgres
             - name: QUI__SESSION_SECRET
               valueFrom:
                 secretKeyRef:
                   name: *app
                   key: QUI_SESSION_SECRET
-            - name: QUI__POSTGRES_HOST
-              value: pgcluster-rw.db.svc.cluster.local
-            - name: QUI__POSTGRES_PORT
-              value: "5432"
-            - name: QUI__POSTGRES_DATABASE
-              value: autobrr
-            - name: QUI__POSTGRES_USER
-              valueFrom:
-                secretKeyRef:
-                  name: *app
-                  key: QUI_DB_USERNAME
-            - name: QUI__POSTGRES_PASS
-              valueFrom:
-                secretKeyRef:
-                  name: *app
-                  key: QUI_DB_PASSWORD
-            - name: QUI__POSTGRES_SSLMODE
-              value: disable
             - name: QUI__OIDC_ENABLED
               value: "true"
             - name: QUI__OIDC_ISSUER
@@ -122,7 +102,7 @@ spec:
       volumes:
         - name: media
           persistentVolumeClaim:
-            claimName: media-mediafs
+            claimName: media
         - name: config
           persistentVolumeClaim:
             claimName: *app

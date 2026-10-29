@@ -29,7 +29,7 @@ spec:
     - namespace: servarr
       app: qbittorrent
       capacity: 1Gi
-    - namespace: servarr
+    - namespace: qui
       app: qui
       capacity: 5Gi
     - namespace: servarr
