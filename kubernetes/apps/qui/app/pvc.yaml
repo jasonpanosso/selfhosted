@@ -6,13 +6,9 @@ metadata:
   name: qui
 spec:
   accessModes: [ReadWriteOnce]
-  dataSourceRef:
-    apiGroup: kopiur.home-operations.com
-    kind: Restore
-    name: qui
   resources:
     requests:
-      storage: 5Gi
+      storage: 1Gi
   storageClassName: rook-ceph-block
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/master-standalone/persistentvolume-v1.json

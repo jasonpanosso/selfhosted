@@ -29,9 +29,6 @@ spec:
     - namespace: qbittorrent
       app: qbittorrent
       capacity: 1Gi
-    - namespace: qui
-      app: qui
-      capacity: 5Gi
     - namespace: servarr
       app: radarr
       capacity: 1Gi
