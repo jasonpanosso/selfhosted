@@ -24,6 +24,9 @@ spec:
       namespace: rook-ceph
     - group: gateway.networking.k8s.io
       kind: HTTPRoute
+      namespace: seerr
+    - group: gateway.networking.k8s.io
+      kind: HTTPRoute
       namespace: servarr
     - group: gateway.networking.k8s.io
       kind: HTTPRoute

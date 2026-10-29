@@ -4,12 +4,12 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &app seerr
-  namespace: &namespace servarr
+  namespace: &namespace seerr
 spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  path: ./kubernetes/apps/servarr/seerr/app
+  path: ./kubernetes/apps/seerr/app
   interval: 1h
   retryInterval: 2m
   timeout: 5m
@@ -35,8 +35,8 @@ spec:
     - name: secret-store
       namespace: external-secrets
     - name: radarr
-      namespace: *namespace
+      namespace: servarr
     - name: sonarr
-      namespace: *namespace
+      namespace: servarr
     - name: cilium-gateway
       namespace: kube-system

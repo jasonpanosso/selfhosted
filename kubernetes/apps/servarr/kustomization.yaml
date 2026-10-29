@@ -15,7 +15,6 @@ resources:
   - ./qbittorrent/ks.yaml
   - ./qui/ks.yaml
   - ./radarr/ks.yaml
-  - ./seerr/ks.yaml
   - ./sonarr/ks.yaml
   - ./storage/ks.yaml
   - ./upbrr/ks.yaml

@@ -35,7 +35,7 @@ spec:
     - namespace: servarr
       app: radarr
       capacity: 1Gi
-    - namespace: servarr
+    - namespace: seerr
       app: seerr
       capacity: 1Gi
     - namespace: servarr
