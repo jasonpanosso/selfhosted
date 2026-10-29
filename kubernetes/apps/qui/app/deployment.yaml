@@ -9,7 +9,6 @@ metadata:
   annotations:
     reloader.stakater.com/auto: "true"
 spec:
-  replicas: 0
   strategy:
     type: Recreate
   selector:
@@ -48,6 +47,26 @@ spec:
               value: "false"
             - name: QUI__LOG_LEVEL
               value: "INFO"
+            - name: QUI__DATABASE_ENGINE
+              value: postgres
+            - name: QUI__DATABASE_HOST
+              value: pgcluster-rw.db.svc.cluster.local
+            - name: QUI__DATABASE_PORT
+              value: "5432"
+            - name: QUI__DATABASE_NAME
+              value: qui
+            - name: QUI__DATABASE_SSL_MODE
+              value: disable
+            - name: QUI__DATABASE_USER
+              valueFrom:
+                secretKeyRef:
+                  name: *app
+                  key: QUI_DB_USERNAME
+            - name: QUI__DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: *app
+                  key: QUI_DB_PASSWORD
             - name: QUI__SESSION_SECRET
               valueFrom:
                 secretKeyRef:
