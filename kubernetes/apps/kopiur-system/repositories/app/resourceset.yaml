@@ -417,6 +417,8 @@ spec:
         copyMethod: Direct
         hooks:
           beforeSnapshot:
+            # Kopiur execs into any Running pod, ready or not, so wait for RCON
+            # while the server boots; timeout matches the 5m startupProbe.
             - workloadExec:
                 podSelector:
                   matchLabels:
@@ -426,7 +428,7 @@ spec:
                   [
                     "/bin/sh",
                     "-c",
-                    "rcon-cli save-off && rcon-cli save-all flush && sync",
+                    "until rcon-cli list >/dev/null 2>&1; do sleep 5; done && rcon-cli save-off && rcon-cli save-all flush && sync",
                   ]
                 timeout: 5m
           afterSnapshot:
