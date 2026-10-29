@@ -69,4 +69,4 @@ spec:
             claimName: *app
         - name: media
           persistentVolumeClaim:
-            claimName: media-mediafs
+            claimName: media

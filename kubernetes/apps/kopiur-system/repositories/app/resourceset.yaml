@@ -41,7 +41,7 @@ spec:
     - namespace: servarr
       app: sonarr
       capacity: 1Gi
-    - namespace: servarr
+    - namespace: upbrr
       app: upbrr
       capacity: 1Gi
   # Populator Restores stay unready until a PVC claims them, so health is
