@@ -15,3 +15,6 @@ configMapGenerator:
       - proxy-compatible-forge.json=./resources/proxy-compatible-forge.json
     options:
       disableNameSuffixHash: true
+      # keep ${CFG_PROXY_SECRET} for the image; Flux postBuild would substitute it
+      annotations:
+        kustomize.toolkit.fluxcd.io/substitute: disabled
