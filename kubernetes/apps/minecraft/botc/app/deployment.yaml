@@ -19,7 +19,6 @@ spec:
       labels:
         app.kubernetes.io/name: *app
     spec:
-      # longer than STOP_DURATION, so the world save on stop isn't killed
       terminationGracePeriodSeconds: 120
       securityContext:
         runAsUser: 65534
@@ -48,10 +47,8 @@ spec:
                 https://cdn.modrinth.com/data/P7dR8mSH/versions/6qAuTtLR/fabric-api-0.141.6%2B1.21.11.jar
                 https://cdn.modrinth.com/data/8dI2tmqs/versions/nR8AIdvx/FabricProxy-Lite-2.11.0.jar
                 https://cdn.modrinth.com/data/Wq5SjeWM/versions/3g5Zg7dL/fancymenu_fabric_3.9.12_MC_1.21.11.jar
-            # read by FabricProxy-Lite itself
             - name: FABRIC_PROXY_SECRET_FILE
               value: /secrets/MINECRAFT_PROXY_SECRET
-            # Xms and Xmx both 75% of the memory limit
             - name: MEMORY
               value: "75%"
             # https://exa.y2k.diy/garden/jvm-args/
@@ -73,7 +70,7 @@ spec:
               value: survival
             - name: SPAWN_PROTECTION
               value: "1"
-            # velocity handles authentication and forwards player info
+            # handled by velocity
             - name: ONLINE_MODE
               value: "false"
             - name: WHITELIST

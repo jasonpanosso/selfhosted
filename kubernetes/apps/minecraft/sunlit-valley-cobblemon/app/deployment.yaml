@@ -19,7 +19,6 @@ spec:
       labels:
         app.kubernetes.io/name: *app
     spec:
-      # longer than STOP_DURATION, so the world save on stop isn't killed
       terminationGracePeriodSeconds: 120
       securityContext:
         runAsUser: 65534
@@ -63,16 +62,12 @@ spec:
               value: |
                 https://cdn.modrinth.com/data/vDyrHl8l/versions/uRu4jaFs/proxy-compatible-forge-1.3.0.jar
                 https://cdn.modrinth.com/data/9eGKb6K1/versions/nHtyikTv/voicechat-forge-1.20.1-2.4.32.jar
-            # sets PCF's forwarding secret on every start; PCF has no env or file option
             - name: PATCH_DEFINITIONS
               value: /patches
             - name: CFG_PROXY_SECRET_FILE
               value: /secrets/MINECRAFT_PROXY_SECRET
-            # Xms and Xmx both 75% of the memory limit
             - name: MEMORY
               value: "75%"
-            # https://exa.y2k.diy/garden/jvm-args/; Cobblemon 1.5.2's
-            # GraalJS does not run on Java 22+
             - name: JVM_XX_OPTS
               value: -XX:+UseZGC -XX:+ZGenerational
             - name: STOP_DURATION
@@ -93,7 +88,7 @@ spec:
               value: survival
             - name: SPAWN_PROTECTION
               value: "0"
-            # velocity handles authentication and forwards player info
+            # handled by velocity
             - name: ONLINE_MODE
               value: "false"
             - name: WHITELIST
@@ -128,7 +123,7 @@ spec:
               memory: 4Gi
             limits:
               memory: 6Gi
-          securityContext: &securityContext
+          securityContext:
             allowPrivilegeEscalation: false
             readOnlyRootFilesystem: true
             capabilities: {drop: [ALL]}
