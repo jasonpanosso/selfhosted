@@ -1,0 +1,85 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/master-standalone/deployment-apps-v1.json
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: &app filebrowser
+  labels:
+    app.kubernetes.io/name: *app
+  annotations:
+    reloader.stakater.com/auto: "true"
+spec:
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: *app
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: *app
+    spec:
+      securityContext:
+        runAsUser: 65534
+        runAsGroup: 65534
+        fsGroup: 65534
+        fsGroupChangePolicy: OnRootMismatch
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - image: ghcr.io/gtsteffaniak/filebrowser:2.1.3-beta@sha256:c91fbf4b442ba14f5d45f8687b74cf71477e36a1a8118b5d0643522dcf78f73c
+          name: *app
+          # filebrowser chmods what it creates directly, but parent dirs made
+          # during uploads go through the umask; match the media apps' 0002
+          command: ["/bin/sh", "-c", "umask 0002 && exec ./filebrowser"]
+          env:
+            - name: TZ
+              value: Etc/UTC
+            - name: FILEBROWSER_CONFIG
+              value: /config/config.yaml
+          ports:
+            - containerPort: 80
+              name: http
+          livenessProbe: &probes
+            httpGet:
+              path: /api/health
+              port: 80
+            initialDelaySeconds: 0
+            periodSeconds: 15
+            timeoutSeconds: 1
+            failureThreshold: 3
+          readinessProbe: *probes
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              memory: 1Gi
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: [ALL]
+          volumeMounts:
+            - name: config
+              mountPath: /config
+              readOnly: true
+            - name: data
+              mountPath: /data
+            - name: media
+              mountPath: /media
+            - name: scratch
+              mountPath: /tmp
+      volumes:
+        - name: config
+          configMap:
+            name: *app
+        - name: data
+          persistentVolumeClaim:
+            claimName: *app
+        - name: media
+          persistentVolumeClaim:
+            claimName: media
+        - name: scratch
+          emptyDir: {}

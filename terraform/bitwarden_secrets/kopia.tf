@@ -15,6 +15,7 @@ locals {
     "seerr",
     "sonarr",
     "upbrr",
+    "filebrowser",
     "sunlit-valley-cobblemon",
     "sunlit-valley",
   ])

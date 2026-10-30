@@ -1,0 +1,57 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/master-standalone/persistentvolumeclaim-v1.json
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: filebrowser
+spec:
+  accessModes: [ReadWriteOnce]
+  dataSourceRef:
+    apiGroup: kopiur.home-operations.com
+    kind: Restore
+    name: filebrowser
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: rook-ceph-block
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/master-standalone/persistentvolume-v1.json
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: media-filebrowser
+spec:
+  accessModes:
+    - ReadWriteMany
+  capacity:
+    storage: 3500Gi
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: ""
+  claimRef:
+    namespace: filebrowser
+    name: media
+  csi:
+    driver: rook-ceph.cephfs.csi.ceph.com
+    volumeHandle: media-filebrowser
+    nodeStageSecretRef:
+      name: rook-csi-cephfs-node
+      namespace: rook-ceph
+    volumeAttributes:
+      clusterID: rook-ceph
+      fsName: mediafs
+      staticVolume: "true"
+      rootPath: /
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/master-standalone/persistentvolumeclaim-v1.json
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: media
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 3500Gi
+  storageClassName: ""
+  volumeName: media-filebrowser

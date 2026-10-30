@@ -1,0 +1,57 @@
+---
+# https://filebrowserquantum.com/en/docs/reference/fullconfig/
+server:
+  disableUpdateCheck: true
+  sources:
+    - path: /media
+      name: media
+      config:
+        # mediafs root also holds the root-owned ceph-csi "volumes" dir
+        rules:
+          - includeRootItem: downloads
+          - includeRootItem: movies
+          - includeRootItem: shows
+        defaultUserScope: /
+        defaultEnabled: true
+        createUserDir: false
+        # only Authelia's admins group reaches this route
+        defaultPermissions:
+          view: true
+          download: true
+          modify: true
+          delete: true
+          create: true
+          configured: true
+  # scratch emptyDir: thumbnails, archive spool and the search index
+  cacheDir: /tmp
+  cacheDirCleanup: false
+  # match mediafs: nobody:nobody, setgid group-writable directories
+  filesystem:
+    createFilePermission: "664"
+    createDirectoryPermission: "2775"
+  database:
+    path: /data/filebrowser.sqlite
+    migrateFrom: ""
+
+auth:
+  methods:
+    password:
+      enabled: false
+    proxy:
+      enabled: true
+      # set by Authelia ext-authz; safe only while access_control has no bypass rules
+      header: Remote-User
+      # comma-separated; admin is granted and revoked on each login
+      groupsClaim: Remote-Groups
+      adminGroup: admins
+      userGroups:
+        - admins
+      logoutRedirectUrl: https://auth.${domain}.${tld}/logout
+
+http:
+  port: 80
+  baseURL: /
+  externalUrl: https://files.${domain}.${tld}
+  # XFF is overwritten with the client address by the HTTPRoute
+  trustProxyHeaders: true
+  disableWebDAV: true
