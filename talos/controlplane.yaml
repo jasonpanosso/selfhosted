@@ -19,7 +19,7 @@ configuration:
   defaults:
     audit: restricted
     audit-version: latest
-    enforce: baseline
+    enforce: restricted
     enforce-version: latest
     warn: restricted
     warn-version: latest
