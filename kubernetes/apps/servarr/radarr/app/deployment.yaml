@@ -53,7 +53,7 @@ spec:
             - name: RADARR__AUTH__METHOD
               value: External
             - name: RADARR__AUTH__REQUIRED
-              value: DisabledForLocalAddresses
+              value: Enabled
             - name: RADARR__SERVER__BINDADDRESS
               value: "*"
             - name: RADARR__SERVER__ALLOWEDHOSTS
