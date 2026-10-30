@@ -71,7 +71,7 @@ spec:
             - name: MEMORY
               value: "75%"
             - name: JVM_XX_OPTS
-              value: -XX:+UseZGC -XX:+ZGenerational
+              value: -XX:+UseG1GC
             - name: STOP_DURATION
               value: "60"
             - name: ENABLE_RCON
