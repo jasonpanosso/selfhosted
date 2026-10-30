@@ -32,10 +32,12 @@ apply-role role *args:
     for file in {{ talos_dir }}/nodes/{{ role }}/*.yaml; do
       node="$(basename "$file" .yaml)"
       just _ceph-wait
+      [[ {{ role }} != controlplane ]] || started="$(just _apiserver-started "$node")"
       just talos_version="{{ talos_version }}" apply "$node" {{ args }}
       # give kubelet/reboot a moment to flip the node NotReady before gating on Ready
       sleep 10
       just _node-ready "$node"
+      [[ {{ role }} != controlplane ]] || just _apiserver-ready "$node" "$started"
     done
 
 # Upgrade Talos on one node to the installer image in its config, e.g. `just upgrade worker-6` (extra args go to talosctl)
@@ -59,8 +61,10 @@ upgrade-role role *args:
     for file in {{ talos_dir }}/nodes/{{ role }}/*.yaml; do
       node="$(basename "$file" .yaml)"
       just _ceph-wait
+      [[ {{ role }} != controlplane ]] || started="$(just _apiserver-started "$node")"
       just talos_version="{{ talos_version }}" upgrade "$node" {{ args }}
       just _node-ready "$node"
+      [[ {{ role }} != controlplane ]] || just _apiserver-ready "$node" "$started"
     done
 
 # Upgrade Kubernetes to the version pinned in the patches (extra args go to talosctl, e.g. --dry-run)
@@ -125,6 +129,31 @@ _node-ready node:
     deadline=$((SECONDS + 600))
     until kubectl wait --for=condition=Ready "node/{{ node }}" --timeout=30s 2>/dev/null; do
       (( SECONDS < deadline )) || { echo "{{ node }} not Ready after 10m, aborting" >&2; exit 1; }
+      sleep 5
+    done
+
+# Print when a control-plane node's kube-apiserver container started; empty while it restarts
+# or the API is unreachable
+_apiserver-started node:
+    @kubectl --request-timeout=5s -n kube-system get pod "kube-apiserver-{{ node }}" \
+      -o jsonpath='{.status.containerStatuses[0].state.running.startedAt}' 2>/dev/null || true
+
+# Block until a control-plane node's own kube-apiserver has restarted (if the change restarts it)
+# and passes /readyz, so a rolling apply never has two apiservers down at once. The node is asked
+# directly because the VIP may be answered by another control plane meanwhile
+_apiserver-ready node started:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    # the kubelet polls Talos for static pod manifests every 20s, so the restart can begin well
+    # after apply returns; no restart by the deadline means the change didn't touch the apiserver
+    deadline=$((SECONDS + 40))
+    until [[ "$(just _apiserver-started "{{ node }}")" != "{{ started }}" ]] || (( SECONDS >= deadline )); do
+      sleep 5
+    done
+    deadline=$((SECONDS + 600))
+    until kubectl --request-timeout=5s --server "https://{{ node }}:6443" get --raw /readyz >/dev/null 2>&1; do
+      (( SECONDS < deadline )) || { echo "{{ node }} kube-apiserver not ready after 10m, aborting" >&2; exit 1; }
+      (( ${waited:-0} )) || { echo "waiting for {{ node }} kube-apiserver..."; waited=1; }
       sleep 5
     done
 
