@@ -1,0 +1,10 @@
+---
+customization:
+  extraKernelArgs:
+    # packet loss on cores 0-3
+    - irqaffinity=4-7
+  systemExtensions:
+    officialExtensions:
+      - siderolabs/panfrost
+      # RTL8125B firmware (rtl_nic/rtl8125b-2.fw)
+      - siderolabs/realtek-firmware

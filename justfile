@@ -30,6 +30,8 @@ apply-role role *args:
     #!/usr/bin/env bash
     set -euo pipefail
     for file in {{ talos_dir }}/nodes/{{ role }}/*.yaml; do
+      # each node's factory schematic sits beside it as <node>.schematic.yaml
+      [[ $file != *.schematic.yaml ]] || continue
       node="$(basename "$file" .yaml)"
       just _ceph-wait
       [[ {{ role }} != controlplane ]] || started="$(just _apiserver-started "$node")"
@@ -59,6 +61,8 @@ upgrade-role role *args:
     #!/usr/bin/env bash
     set -euo pipefail
     for file in {{ talos_dir }}/nodes/{{ role }}/*.yaml; do
+      # each node's factory schematic sits beside it as <node>.schematic.yaml
+      [[ $file != *.schematic.yaml ]] || continue
       node="$(basename "$file" .yaml)"
       just _ceph-wait
       [[ {{ role }} != controlplane ]] || started="$(just _apiserver-started "$node")"
@@ -89,8 +93,22 @@ _render node:
     role="$(basename "$(dirname "$patch")")"
     [[ $role == controlplane || $role == worker ]] || { echo "unknown role '$role' for $node ($patch)" >&2; exit 1; }
     # without one, gen config falls back to the plain installer and the node would lose its extensions
-    yq -e 'select(.kind == "UnattendedInstallConfig") | .installer.image' "$patch" >/dev/null 2>&1 \
+    image="$(yq -e 'select(.kind == "UnattendedInstallConfig") | .installer.image' "$patch" 2>/dev/null)" \
       || { echo "$patch must set UnattendedInstallConfig installer.image" >&2; exit 1; }
+    # the image's schematic ID must match the node's schematic file. The factory's ID is the sha256 of
+    # the schematic re-marshalled by Go's yaml (4-space, block style, no comments, struct field order);
+    # the key lists mirror the structs in image-factory pkg/schematic/schematic.go. A field missing from
+    # them is dropped by pick, so the hash mismatches and this fails rather than passing
+    schematic="${patch%.yaml}.schematic.yaml"
+    [[ -f $schematic ]] || { echo "no schematic for $node (want $schematic)" >&2; exit 1; }
+    [[ $image =~ ^factory\.talos\.dev/metal-installer/([0-9a-f]{64}): ]] \
+      || { echo "$patch installer.image is not a factory.talos.dev metal-installer image: $image" >&2; exit 1; }
+    image_id="${BASH_REMATCH[1]}"
+    schematic_id="$(yq -I4 '... comments="" | ... style=""
+      | .customization |= pick(["embeddedMachineConfiguration", "extraKernelArgs", "meta", "systemExtensions", "bootloader", "secureboot", "diskImage"])
+      | pick(["owner", "overlay", "customization"])' "$schematic" | sha256sum | cut -d' ' -f1)"
+    [[ $image_id == "$schematic_id" ]] \
+      || { printf '%s installer.image schematic %s does not match %s (sha256 %s)\n' "$patch" "$image_id" "$schematic" "$schematic_id" >&2; exit 1; }
     # a gpg passphrase prompt during `sops -d` can leave the terminal without newline translation
     # (staircased output); put it back however we exit
     if [[ -t 0 ]]; then tty_state="$(stty -g)"; trap 'stty "$tty_state"' EXIT; fi

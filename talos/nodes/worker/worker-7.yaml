@@ -3,8 +3,8 @@
 apiVersion: v1alpha1
 kind: UnattendedInstallConfig
 installer:
-  # bare-metal arm64 + panfrost + realtek-firmware (RTL8125B NICs)
-  image: factory.talos.dev/metal-installer/9d260d8c38d4cb38ce538bdf534e88ca4a16d553fc6cac4bd38b99451c42be6b:v1.14.5
+  # bare-metal arm64; schematic in worker-7.schematic.yaml
+  image: factory.talos.dev/metal-installer/1366559988480b3ebccf7c53e3870ecc2c509b5d684b054f36701250dc36bd0b:v1.14.5
 provisioning:
   diskSelector:
     match: '"/dev/disk/by-id/nvme-Patriot_M.2_P300_256GB_P300IDBB24110706005" in disk.symlinks'
