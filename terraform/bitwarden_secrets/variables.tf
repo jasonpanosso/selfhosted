@@ -26,6 +26,35 @@ variable "s3_secret_access_key" {
   sensitive   = true
 }
 
+variable "b2_bucket_id" {
+  description = "ID of the B2 backup bucket, for the per-repository Kopiur keys"
+  type        = string
+}
+
+variable "b2_cnpg_access_key_id" {
+  description = "B2 application key ID for CNPG backups (cnpg-backups/)"
+  type        = string
+  sensitive   = true
+}
+
+variable "b2_cnpg_secret_access_key" {
+  description = "B2 application key for CNPG backups (cnpg-backups/)"
+  type        = string
+  sensitive   = true
+}
+
+variable "b2_talos_backup_access_key_id" {
+  description = "B2 application key ID for talos-backup (talos-backup/)"
+  type        = string
+  sensitive   = true
+}
+
+variable "b2_talos_backup_secret_access_key" {
+  description = "B2 application key for talos-backup (talos-backup/)"
+  type        = string
+  sensitive   = true
+}
+
 variable "vpn_wireguard_private_key" {
   description = "WireGuard private key"
   type        = string

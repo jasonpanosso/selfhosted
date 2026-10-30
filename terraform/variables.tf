@@ -27,6 +27,18 @@ variable "spaces_region" {
   default     = "nyc3"
 }
 
+variable "b2_application_key_id" {
+  description = "Backblaze B2 application key ID with permissions to manage buckets and keys"
+  type        = string
+  sensitive   = true
+}
+
+variable "b2_application_key" {
+  description = "Backblaze B2 application key with permissions to manage buckets and keys"
+  type        = string
+  sensitive   = true
+}
+
 variable "bitwarden_access_token" {
   description = "Access token for Bitwarden Secrets"
   type        = string

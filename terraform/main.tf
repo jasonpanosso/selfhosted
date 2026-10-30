@@ -57,6 +57,12 @@ module "bitwarden_secrets" {
   s3_access_key_id     = digitalocean_spaces_key.this.access_key
   s3_secret_access_key = digitalocean_spaces_key.this.secret_key
 
+  b2_bucket_id                      = b2_bucket.backups.bucket_id
+  b2_cnpg_access_key_id             = b2_application_key.cnpg.application_key_id
+  b2_cnpg_secret_access_key         = b2_application_key.cnpg.application_key
+  b2_talos_backup_access_key_id     = b2_application_key.talos_backup.application_key_id
+  b2_talos_backup_secret_access_key = b2_application_key.talos_backup.application_key
+
   # how can I generate this zz
   authelia_oidc_jwks_private_key = var.authelia_oidc_jwks_private_key
 

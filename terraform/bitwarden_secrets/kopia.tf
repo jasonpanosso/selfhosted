@@ -10,7 +10,6 @@ locals {
     "jellyfin",
     "prowlarr",
     "qbittorrent",
-    "qui",
     "radarr",
     "seerr",
     "sonarr",
@@ -43,4 +42,32 @@ resource "bitwarden-secrets_secret" "kopia_password" {
   lifecycle {
     prevent_destroy = true
   }
+}
+
+# scoped key per repository
+resource "b2_application_key" "kopiur" {
+  for_each = local.kopia_repositories
+
+  key_name     = "kopiur-${each.key}"
+  capabilities = ["listBuckets", "listFiles", "readFiles", "writeFiles"]
+  bucket_ids   = [var.b2_bucket_id]
+  name_prefix  = "kopiur/${each.key}/"
+}
+
+resource "bitwarden-secrets_secret" "kopiur_b2_access_key_id" {
+  for_each = local.kopia_repositories
+
+  key        = "B2_KOPIUR_${upper(replace(each.key, "-", "_"))}_ACCESS_KEY_ID"
+  value      = b2_application_key.kopiur[each.key].application_key_id
+  project_id = bitwarden_project.this.id
+  note       = "B2 key ID for the ${each.key} Kopiur offsite repository, scoped to kopiur/${each.key}/"
+}
+
+resource "bitwarden-secrets_secret" "kopiur_b2_secret_access_key" {
+  for_each = local.kopia_repositories
+
+  key        = "B2_KOPIUR_${upper(replace(each.key, "-", "_"))}_SECRET_ACCESS_KEY"
+  value      = b2_application_key.kopiur[each.key].application_key
+  project_id = bitwarden_project.this.id
+  note       = "B2 key for the ${each.key} Kopiur offsite repository, scoped to kopiur/${each.key}/"
 }
