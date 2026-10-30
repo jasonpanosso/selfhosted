@@ -11,7 +11,10 @@ resources:
   - ./namespace.yaml
   - ./grafana/ks.yaml
   - ./kube-prometheus-stack/ks.yaml
+  - ./kube-state-metrics/ks.yaml
+  - ./prometheus-operator-crds/ks.yaml
   - ./victoria-logs/ks.yaml
+  - ./victoria-metrics-k8s-stack/ks.yaml
   - ./opentelemetry/operator/ks.yaml
   - ./opentelemetry/collector/ks.yaml
   - ./silence-operator/operator/ks.yaml

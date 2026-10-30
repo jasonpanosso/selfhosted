@@ -28,3 +28,5 @@ spec:
   dependsOn:
     - name: secret-store
       namespace: external-secrets
+    - name: prometheus-operator-crds
+      namespace: observability

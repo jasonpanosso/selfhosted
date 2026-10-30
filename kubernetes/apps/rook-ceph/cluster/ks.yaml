@@ -51,3 +51,5 @@ spec:
       namespace: kube-system
     - name: cilium-gateway
       namespace: kube-system
+    - name: prometheus-operator-crds
+      namespace: observability

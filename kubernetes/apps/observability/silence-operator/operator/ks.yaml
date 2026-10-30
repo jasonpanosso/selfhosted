@@ -28,3 +28,5 @@ spec:
   dependsOn:
     - name: kube-prometheus-stack
       namespace: *namespace
+    - name: prometheus-operator-crds
+      namespace: *namespace

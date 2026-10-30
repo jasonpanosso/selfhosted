@@ -1,0 +1,23 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/helm.toolkit.fluxcd.io/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &app prometheus-operator-crds
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: *app
+  interval: 1h
+  upgrade:
+    strategy:
+      name: RemediateOnFailure
+    remediation:
+      remediateLastFailure: true
+      retries: 2
+  values:
+    crds:
+      annotations:
+        # CRDs are chart templates, so without this an uninstall deletes them
+        # and every ServiceMonitor/PodMonitor/PrometheusRule in the cluster
+        helm.sh/resource-policy: keep

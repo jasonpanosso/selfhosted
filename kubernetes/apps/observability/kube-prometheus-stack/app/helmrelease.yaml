@@ -18,6 +18,10 @@ spec:
   values:
     cleanPrometheusOperatorObjectNames: true
 
+    # managed by the prometheus-operator-crds HelmRelease
+    crds:
+      enabled: false
+
     prometheusOperator:
       enabled: true
     prometheus:
@@ -97,54 +101,13 @@ spec:
     kubeProxy:
       enabled: false
 
+    # node-exporter and kube-state-metrics are standalone HelmReleases
     nodeExporter:
-      enabled: true
-    prometheus-node-exporter:
-      nameOverride: node-exporter
-      fullnameOverride: node-exporter
-      namespaceOverride: observability-agents
-      priorityClassName: system-node-critical
-      resources:
-        limits:
-          memory: 128Mi
-        requests:
-          cpu: 100m
-          memory: 128Mi
-      prometheus:
-        monitor:
-          enabled: true
-          relabelings:
-            - action: replace
-              regex: (.*)
-              replacement: $1
-              sourceLabels: ["__meta_kubernetes_pod_node_name"]
-              targetLabel: kubernetes_node
-            - action: replace
-              regex: (.*)
-              replacement: $1
-              sourceLabels: ["__meta_kubernetes_pod_host_ip"]
-              targetLabel: instance
-
+      enabled: false
+      # keep the node-exporter mixin dashboards
+      forceDeployDashboards: true
     kubeStateMetrics:
-      enabled: true
-    kube-state-metrics:
-      fullnameOverride: kube-state-metrics
-      priorityClassName: system-cluster-critical
-      resources:
-        limits:
-          memory: 256Mi
-        requests:
-          cpu: 10m
-          memory: 256Mi
-      prometheus:
-        monitor:
-          enabled: true
-          relabelings:
-            - action: replace
-              regex: (.*)
-              replacement: $1
-              sourceLabels: ["__meta_kubernetes_pod_node_name"]
-              targetLabel: kubernetes_node
+      enabled: false
 
     grafana:
       enabled: false

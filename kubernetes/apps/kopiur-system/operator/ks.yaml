@@ -28,3 +28,5 @@ spec:
   dependsOn:
     - name: snapshot-controller
       namespace: kube-system
+    - name: prometheus-operator-crds
+      namespace: observability

@@ -83,6 +83,11 @@ spec:
             access: proxy
             url: http://prometheus-operated.observability.svc.cluster.local:9090
             isDefault: true
+          - name: VictoriaMetrics
+            type: prometheus
+            uid: victoriametrics
+            access: proxy
+            url: http://vmsingle-victoria-metrics.observability.svc.cluster.local:8428
           - name: Alertmanager
             type: alertmanager
             uid: alertmanager

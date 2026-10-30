@@ -27,3 +27,5 @@ spec:
       namespace: *namespace
     - name: clusterissuer
       namespace: cert-manager
+    - name: prometheus-operator-crds
+      namespace: observability
