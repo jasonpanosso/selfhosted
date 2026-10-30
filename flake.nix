@@ -35,6 +35,33 @@
             installPhase = "install -Dm755 tofu $out/bin/tofu";
           };
 
+        # tofu that passes terraform.sops.tfvars to commands taking -var-file,
+        # decrypted into a pipe so plaintext never hits disk
+        tofu = pkgs.writeShellApplication {
+          name = "tofu";
+          runtimeInputs = [ pkgs.git pkgs.sops ];
+          text = ''
+            dir="$(git rev-parse --show-toplevel)/terraform"
+            tfvars="$dir/terraform.sops.tfvars"
+            # run against terraform/ from anywhere, unless -chdir is given
+            chdir=("-chdir=$dir")
+            for arg in "$@"; do
+              case "$arg" in -chdir=*) chdir=() ;; esac
+            done
+            args=("$@")
+            for i in "''${!args[@]}"; do
+              case "''${args[i]}" in
+                -*) ;;
+                plan | apply | destroy | import | refresh | console)
+                  exec ${opentofu}/bin/tofu "''${chdir[@]}" "''${args[@]:0:i+1}" -var-file=<(sops decrypt "$tfvars") "''${args[@]:i+1}"
+                  ;;
+                *) break ;;
+              esac
+            done
+            exec ${opentofu}/bin/tofu "''${chdir[@]}" "$@"
+          '';
+        };
+
         talosctl =
           let
             version = "1.14.5";
@@ -82,8 +109,8 @@
       {
         devShells.default = pkgs.mkShell {
           env = {
-            TF_CLI_ARGS_plan = "-parallelism=2";
-            TF_CLI_ARGS_apply = "-parallelism=2";
+            TF_CLI_ARGS_plan = "-parallelism=1";
+            TF_CLI_ARGS_apply = "-parallelism=1";
           };
 
           buildInputs = with pkgs; [
@@ -101,7 +128,7 @@
             kubernetes-helm
             kube-linter
             kustomize
-            opentofu
+            tofu
             sops
             talosctl
             yq-go
