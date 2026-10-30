@@ -48,6 +48,10 @@ spec:
                 nodeAffinityType:
                   - requiredDuringSchedulingIgnoredDuringExecution
             - name: RemovePodsViolatingNodeTaints
+              args:
+                # set by cilium-operator while a node's agent restarts; evicting for it empties the node
+                excludedTaints:
+                  - node.cilium.io/agent-not-ready
             - name: RemovePodsViolatingTopologySpreadConstraint
             - name: LowNodeUtilization
               args:
