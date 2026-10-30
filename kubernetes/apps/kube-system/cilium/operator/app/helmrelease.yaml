@@ -52,8 +52,9 @@ spec:
       enabled: true
       metrics:
         enabled:
-          - drop:sourceContext=workload-name|reserved-identity;destinationContext=workload-name|reserved-identity;labelsContext=source_namespace,destination_namespace
-          - policy:sourceContext=workload-name|reserved-identity;destinationContext=workload-name|reserved-identity;labelsContext=source_namespace,destination_namespace
+          # app reads pod labels from the identity; workload-name only resolves pods on the observing node
+          - drop:sourceContext=app|reserved-identity;destinationContext=app|reserved-identity;labelsContext=source_namespace,destination_namespace
+          - policy:sourceContext=app|reserved-identity;destinationContext=app|reserved-identity;labelsContext=source_namespace,destination_namespace
         serviceMonitor:
           enabled: true
     ipam:
