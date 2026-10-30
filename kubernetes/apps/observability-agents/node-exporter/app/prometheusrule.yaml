@@ -1,0 +1,23 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/monitoring.coreos.com/prometheusrule_v1.json
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: node-exporter-rules
+spec:
+  groups:
+    - name: node-exporter.rules
+      rules:
+        # orange pi 5 is naughty: https://forum.armbian.com/topic/33360-orangepi-5-plus-rtc-hym8563-irq-issue/
+        # hym8563 RTC initcall_blacklist symbol can change between kernel versions,
+        # this will alert if it changes and the nodes kernel args need to be updated
+        - alert: NodeCPUHighHardIRQ
+          expr: |
+            rate(node_cpu_seconds_total{mode="irq"}[15m]) > 0.10
+          for: 30m
+          annotations:
+            summary: >-
+              CPU {{ $labels.cpu }} on {{ $labels.kubernetes_node }} spends {{ $value | humanizePercentage }} in hard IRQ handlers;
+              check /proc/interrupts for a storming line
+          labels:
+            severity: warning

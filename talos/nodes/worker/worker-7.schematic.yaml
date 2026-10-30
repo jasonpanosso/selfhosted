@@ -3,6 +3,9 @@ customization:
   extraKernelArgs:
     # packet loss on cores 0-3
     - irqaffinity=4-7
+    # latent orange pi 5 plus bug not fixed upstream, details: https://forum.armbian.com/topic/33360-orangepi-5-plus-rtc-hym8563-irq-issue/
+    # note: recheck for rtc issues on kernel upgrade as the symbol can be renamed
+    - initcall_blacklist=__initstub__kmod_rtc_hym8563__904_588_hym8563_driver_init6
   systemExtensions:
     officialExtensions:
       - siderolabs/panfrost

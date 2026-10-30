@@ -3,7 +3,7 @@
 apiVersion: v1alpha1
 kind: UnattendedInstallConfig
 installer:
-  image: factory.talos.dev/metal-installer/1366559988480b3ebccf7c53e3870ecc2c509b5d684b054f36701250dc36bd0b:v1.14.5
+  image: factory.talos.dev/metal-installer/d8ed49dcbeee6696cfd30619b2ee7f56d982efd66e8283f59170de5af6e78deb:v1.14.5
 provisioning:
   diskSelector:
     match: '"/dev/disk/by-id/nvme-Patriot_M.2_P300_256GB_P300IDBB24110706005" in disk.symlinks'
