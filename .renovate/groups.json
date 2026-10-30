@@ -47,15 +47,6 @@
       }
     },
     {
-      "description": "Kyverno Group",
-      "groupName": "Kyverno",
-      "matchDatasources": ["docker"],
-      "matchPackageNames": ["/kyverno/", "/kyverno-policies/"],
-      "group": {
-        "commitMessageTopic": "{{{groupName}}} group"
-      }
-    },
-    {
       "description": "Kube-Prometheus-Stack Group",
       "groupName": "Kube-Prometheus-Stack",
       "matchDatasources": ["docker"],
