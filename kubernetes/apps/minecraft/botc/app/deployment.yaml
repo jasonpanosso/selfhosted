@@ -53,7 +53,7 @@ spec:
               value: "75%"
             # https://exa.y2k.diy/garden/jvm-args/
             - name: JVM_XX_OPTS
-              value: -XX:+UseG1GC -XX:+UseCompactObjectHeaders
+              value: -XX:+UseShenandoahGC -XX:+UseCompactObjectHeaders
             - name: STOP_DURATION
               value: "60"
             - name: ENABLE_RCON
