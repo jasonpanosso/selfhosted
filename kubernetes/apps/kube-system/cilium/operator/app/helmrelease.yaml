@@ -36,7 +36,6 @@ spec:
       exclusive: false
     dashboards:
       enabled: true
-    enableIPv4BIGTCP: true
     endpointRoutes:
       enabled: true
     envoy:
@@ -81,7 +80,6 @@ spec:
     loadBalancer:
       algorithm: maglev
       mode: dsr
-    localRedirectPolicy: true
     # identify if node if control-plane or worker
     nodeLabels: node-role.kubernetes.io/control-plane
     nodeSelectorLabels: true
@@ -125,3 +123,6 @@ spec:
           - SYS_RESOURCE
     socketLB:
       terminatePodConnections: true
+    updateStrategy:
+      rollingUpdate:
+        maxUnavailable: 1
