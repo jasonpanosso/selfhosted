@@ -50,21 +50,49 @@ spec:
     kube-state-metrics:
       enabled: false
 
-    # TODO: managed by kube-prometheus stack
     kubelet:
-      enabled: false
+      enabled: true
     kubeApiServer:
-      enabled: false
+      enabled: true
     kubeControllerManager:
-      enabled: false
+      enabled: true
+      vmScrape:
+        spec:
+          endpoints:
+            - bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
+              port: http-metrics
+              scheme: https
+              # talos serves a self-signed certificate
+              tlsConfig:
+                insecureSkipVerify: true
     kubeDns:
       enabled: false
     coreDns:
-      enabled: false
+      enabled: true
     kubeEtcd:
-      enabled: false
+      enabled: true
+      service:
+        port: 2381
+        targetPort: 2381
+        # talos runs etcd as a system service, not a pod; kube-apiserver pods run on the same nodes
+        selector:
+          component: kube-apiserver
+      vmScrape:
+        spec:
+          endpoints:
+            - port: http-metrics
+              scheme: http
     kubeScheduler:
-      enabled: false
+      enabled: true
+      vmScrape:
+        spec:
+          endpoints:
+            - bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
+              port: http-metrics
+              scheme: https
+              # talos serves a self-signed certificate
+              tlsConfig:
+                insecureSkipVerify: true
     kubeProxy:
       enabled: false
 
@@ -108,30 +136,38 @@ spec:
       enabled: true
       annotations:
         grafana_folder: VictoriaMetrics
-      # TODO: enable when kube-prometheus-stack does not manage
       sources:
-        kubernetes-views-global:
+        # node-exporter is a standalone HelmRelease, so the chart can't tie this to its subchart
+        node-exporter-full:
+          enabled: true
+      # from the kube-prometheus source: no windows nodes and no prometheus
+      dashboards:
+        k8s-resources-windows-cluster:
           enabled: false
-        kubernetes-views-namespaces:
+        k8s-resources-windows-namespace:
           enabled: false
-        kubernetes-views-pods:
+        k8s-resources-windows-pod:
           enabled: false
-        kubernetes-views-nodes:
+        k8s-windows-cluster-rsrc-use:
           enabled: false
-        kubernetes-system-api-server:
+        k8s-windows-node-rsrc-use:
           enabled: false
-        kubernetes-system-coredns:
+        prometheus:
           enabled: false
-        kube-prometheus:
+        prometheus-remote-write:
           enabled: false
 
     defaultRules:
       enabled: true
-      # TODO: enable when kube-prometheus-stack does not manage
       sources:
-        kubernetes-control-plane:
-          enabled: false
-        kubernetes:
+        # exporters are standalone HelmReleases, so the chart can't tie these to its subcharts
+        kube-state-metrics:
+          enabled: true
+        node-exporter:
+          enabled: true
+      rules:
+        # fires for count:up0, which is empty whenever no target is down
+        RecordingRulesNoData:
           enabled: false
 
     vmsingle:
@@ -172,8 +208,6 @@ spec:
         evaluationInterval: 30s
         extraArgs:
           http.pathPrefix: /
-          # TODO: remove when kube-prometheus-stack not managing alerts
-          notifier.blackhole: "true"
         resources:
           requests:
             cpu: 50m
@@ -182,4 +216,24 @@ spec:
             memory: 256Mi
 
     alertmanager:
-      enabled: false
+      enabled: true
+      spec:
+        useStrictSecurity: true
+        externalURL: https://alerts.${domain}.${tld}
+        # vmalertmanagerconfig.yaml routes alerts from every namespace
+        disableNamespaceMatcher: true
+        resources:
+          requests:
+            cpu: 10m
+            memory: 128Mi
+          limits:
+            memory: 128Mi
+        storage:
+          volumeClaimTemplate:
+            spec:
+              storageClassName: rook-ceph-block
+              accessModes:
+                - ReadWriteOnce
+              resources:
+                requests:
+                  storage: 1Gi

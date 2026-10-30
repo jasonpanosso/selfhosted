@@ -16,7 +16,7 @@ spec:
       remediateLastFailure: true
       retries: 2
   values:
-    alertmanagerAddress: http://alertmanager-operated.observability.svc.cluster.local:9093
+    alertmanagerAddress: http://vmalertmanager-victoria-metrics.observability.svc.cluster.local:9093
     crds:
       install: true
     networkPolicy:

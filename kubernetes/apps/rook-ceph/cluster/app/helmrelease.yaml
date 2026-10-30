@@ -111,7 +111,7 @@ spec:
         urlPrefix: /
         port: 7000
         ssl: false
-        prometheusEndpoint: http://prometheus-operated.observability.svc.cluster.local:9090
+        prometheusEndpoint: http://vmsingle-victoria-metrics.observability.svc.cluster.local:8428
       network:
         connections:
           encryption:

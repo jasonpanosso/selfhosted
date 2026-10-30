@@ -1,55 +1,46 @@
 ---
-# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/monitoring.coreos.com/alertmanagerconfig_v1alpha1.json
-apiVersion: monitoring.coreos.com/v1alpha1
-kind: AlertmanagerConfig
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/operator.victoriametrics.com/vmalertmanagerconfig_v1beta1.json
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMAlertmanagerConfig
 metadata:
-  name: &name alertmanager
+  # not "alertmanager": the converter's copy of the old AlertmanagerConfig has that name and is deleted with it
+  name: notifications
 spec:
   route:
-    groupBy: ["alertname", "job"]
-    groupInterval: 10m
-    groupWait: 1m
+    group_by: ["alertname", "job"]
+    group_interval: 10m
+    group_wait: 1m
     # warning/info: quiet notification; critical pages via the route below
     receiver: pushover-quiet
-    repeatInterval: 12h
+    repeat_interval: 12h
     routes:
       - receiver: "null"
         matchers:
-          - name: alertname
-            value: InfoInhibitor
-            matchType: =
+          - alertname="InfoInhibitor"
       - receiver: heartbeat
-        groupInterval: 5m
-        groupWait: 0s
-        repeatInterval: 5m
+        group_interval: 5m
+        group_wait: 0s
+        repeat_interval: 5m
         matchers:
-          - name: alertname
-            value: Watchdog
-            matchType: =
+          - alertname="Watchdog"
       - receiver: pushover
         matchers:
-          - name: severity
-            value: critical
-            matchType: =
-  inhibitRules:
+          - severity="critical"
+  inhibit_rules:
     - equal: ["alertname", "namespace"]
-      sourceMatch:
-        - name: severity
-          value: critical
-          matchType: =
-      targetMatch:
-        - name: severity
-          value: warning
-          matchType: =
+      source_matchers:
+        - severity="critical"
+      target_matchers:
+        - severity="warning"
   receivers:
     - name: "null"
     - name: heartbeat
-      webhookConfigs:
-        - urlSecret:
-            name: *name
+      webhook_configs:
+        - url_secret:
+            name: alertmanager
             key: ALERTMANAGER_HEARTBEAT_URL
     - name: pushover
-      pushoverConfigs:
+      pushover_configs:
         - html: true
           message: &message |-
             {{- range .Alerts }}
@@ -72,28 +63,26 @@ spec:
             {{- end }}
           priority: |-
             {{ if eq .Status "firing" }}1{{ else }}0{{ end }}
-          sendResolved: true
+          send_resolved: true
           sound: bugle
           title: &title >-
             [{{ .Status | toUpper }}{{ if eq .Status "firing" }}:{{ .Alerts.Firing | len }}{{ end }}]
             {{ .CommonLabels.alertname }}
-          ttl: 86400s
           token: &token
-            name: *name
+            name: alertmanager
             key: PUSHOVER_API_TOKEN
-          userKey: &userKey
-            name: *name
+          user_key: &userKey
+            name: alertmanager
             key: PUSHOVER_USER_KEY
-          urlTitle: View in Alertmanager
+          url_title: View in Alertmanager
     - name: pushover-quiet
-      pushoverConfigs:
+      pushover_configs:
         - html: true
           message: *message
           # -1: delivered without sound or vibration
           priority: "-1"
-          sendResolved: true
+          send_resolved: true
           title: *title
-          ttl: 86400s
           token: *token
-          userKey: *userKey
-          urlTitle: View in Alertmanager
+          user_key: *userKey
+          url_title: View in Alertmanager

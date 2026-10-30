@@ -26,7 +26,7 @@ spec:
     namespace: flux-system
   targetNamespace: *namespace
   dependsOn:
-    - name: kube-prometheus-stack
+    - name: victoria-metrics-k8s-stack
       namespace: *namespace
     - name: opentelemetry-operator
       namespace: *namespace
