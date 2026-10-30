@@ -49,7 +49,13 @@ spec:
       enabled: true
       enableAlpn: true
     hubble:
-      enabled: false
+      enabled: true
+      metrics:
+        enabled:
+          - drop:sourceContext=workload-name|reserved-identity;destinationContext=workload-name|reserved-identity;labelsContext=source_namespace,destination_namespace
+          - policy:sourceContext=workload-name|reserved-identity;destinationContext=workload-name|reserved-identity;labelsContext=source_namespace,destination_namespace
+        serviceMonitor:
+          enabled: true
     ipam:
       mode: kubernetes
     ipv4NativeRoutingCIDR: 10.244.0.0/16

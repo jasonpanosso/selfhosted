@@ -58,7 +58,13 @@ spec:
         probeSelectorNilUsesHelmValues: false
         ruleSelectorNilUsesHelmValues: false
         scrapeConfigSelectorNilUsesHelmValues: false
-        serviceMonitorSelectorNilUsesHelmValues: false
+        # hubble is scraped by victoria-metrics only
+        serviceMonitorSelector:
+          matchExpressions:
+            - key: app.kubernetes.io/name
+              operator: NotIn
+              values:
+                - hubble
 
     kubernetesServiceMonitors:
       enabled: true
