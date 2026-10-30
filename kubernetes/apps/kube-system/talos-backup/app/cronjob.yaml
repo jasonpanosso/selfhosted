@@ -31,11 +31,11 @@ spec:
                 - name: CLUSTER_NAME
                   value: prod
                 - name: AWS_REGION
-                  value: nyc3
+                  value: us-east-005
                 - name: CUSTOM_S3_ENDPOINT
-                  value: https://${s3_backup_domain_name}
+                  value: https://s3.us-east-005.backblazeb2.com
                 - name: BUCKET
-                  value: ${s3_backup_bucket_name}
+                  value: selfhosted-backups-cbb55f9e
                 - name: S3_PREFIX
                   value: talos-backup
                 - name: USE_PATH_STYLE
