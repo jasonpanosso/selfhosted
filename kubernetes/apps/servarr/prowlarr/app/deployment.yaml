@@ -53,9 +53,11 @@ spec:
             - name: PROWLARR__AUTH__METHOD
               value: External
             - name: PROWLARR__AUTH__REQUIRED
-              value: DisabledForLocalAddresses
+              value: Enabled
             - name: PROWLARR__SERVER__BINDADDRESS
               value: "*"
+            - name: PROWLARR__SERVER__ALLOWEDHOSTS
+              value: prowlarr.${domain}.${tld},prowlarr,prowlarr.servarr.svc.cluster.local
             - name: PROWLARR__UPDATE__MECHANISM
               value: Docker
             - name: PROWLARR__UPDATE__BRANCH
@@ -73,6 +75,9 @@ spec:
             httpGet:
               path: /ping
               port: 9696
+              httpHeaders:
+                - name: Host
+                  value: localhost
             initialDelaySeconds: 10
             periodSeconds: 15
             timeoutSeconds: 1
