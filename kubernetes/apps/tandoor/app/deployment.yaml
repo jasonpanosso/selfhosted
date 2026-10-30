@@ -45,6 +45,9 @@ spec:
               value: "1"
             - name: SPACE_AI_ENABLED
               value: "0"
+            # gunicornc control socket is unused and $HOME is read-only
+            - name: GUNICORN_CMD_ARGS
+              value: --no-control-socket
             - name: DB_ENGINE
               value: django.db.backends.postgresql
             - name: POSTGRES_HOST
