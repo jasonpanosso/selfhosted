@@ -153,96 +153,79 @@ spec:
     dashboards:
       default:
         qui:
-          # renovate: depName="qBittorrent / QUI Overview"
           gnetId: 25156
           revision: 10
           datasource:
             - {name: DS_PROMETHEUS, value: Prometheus}
       data:
         cloudnative-pg:
-          # renovate: depName="CloudnativePG"
           gnetId: 20417
           revision: 4
           datasource:
             - {name: DS_PROMETHEUS, value: Prometheus}
       network:
         cert-manager:
-          # renovate: depName="Cert-manager-Kubernetes"
           gnetId: 20842
           revision: 3
           datasource: Prometheus
         envoy-overview:
-          # renovate: depName="Envoy / Overview"
           gnetId: 24459
           revision: 3
           datasource: Prometheus
         envoy-upstream:
-          # renovate: depName="Envoy / Upstream"
           gnetId: 24457
           revision: 4
           datasource: Prometheus
         envoy-downstream:
-          # renovate: depName="Envoy / Downstream"
           gnetId: 24458
           revision: 3
           datasource: Prometheus
       storage:
         etcd-storage:
-          # renovate: depName="etcd"
           gnetId: 22236
           revision: 5
           datasource:
             - {name: DS_VICTORIAMETRICS, value: Prometheus}
         ceph-cluster:
-          # renovate: depName="Ceph Cluster"
           gnetId: 2842
           revision: 18
           datasource: Prometheus
         ceph-osd:
-          # renovate: depName="Ceph - OSD (Single)"
           gnetId: 5336
           revision: 9
           datasource: Prometheus
         ceph-pools:
-          # renovate: depName="Ceph - Pools"
           gnetId: 5342
           revision: 9
           datasource: Prometheus
         ceph-usage:
-          # renovate: depName="Ceph Usage"
           gnetId: 23246
           revision: 1
           datasource:
             - {name: DS_VICTORIAMETRICS, value: Prometheus}
         kubernetes-pvc:
-          # renovate: depName="Kubernetes PVC Stats"
           gnetId: 23233
           revision: 10
           datasource:
             - {name: DS_PROMETHEUS, value: Prometheus}
       kubernetes:
         kubernetes-api-server:
-          # renovate: depName="Kubernetes / System / API Server"
           gnetId: 15761
           revision: 21
           datasource: Prometheus
         kubernetes-coredns:
-          # renovate: depName="Kubernetes / System / CoreDNS"
           gnetId: 15762
           revision: 22
           datasource: Prometheus
         kubernetes-global:
-          # renovate: depName="Kubernetes / Views / Global"
           gnetId: 15757
           revision: 43
           datasource: Prometheus
         kubernetes-namespaces:
-          # renovate: depName="Kubernetes / Views / Namespaces"
           gnetId: 15758
           revision: 46
           datasource: Prometheus
         # kubernetes-nodes:
-        #   # renovate: depName="Kubernetes / Views / Nodes"
         #   gnetId: 15759
         #   revision: 35
         #   datasource: Prometheus
@@ -250,36 +233,30 @@ spec:
           url: https://raw.githubusercontent.com/dotdc/grafana-dashboards-kubernetes/master/dashboards/k8s-views-nodes.json
           token: ""
         kubernetes-pods:
-          # renovate: depName="Kubernetes / Views / Pods"
           gnetId: 15760
           revision: 41
           datasource: Prometheus
         kubernetes-volumes:
-          # renovate: depName="K8s / Storage / Volumes / Cluster"
           gnetId: 11454
           revision: 14
           datasource: Prometheus
       system:
         node-exporter-full:
-          # renovate: depName="Node Exporter Full"
           gnetId: 1860
           revision: 45
           datasource:
             - {name: DS_PROMETHEUS, value: Prometheus}
         smartctl-exporter:
-          # renovate: depName="SMARTctl Exporter Dashboard"
           gnetId: 22604
           revision: 4
           datasource:
             - {name: DS_PROMETHEUS, value: Prometheus}
         spegel:
-          # renovate: depName="Spegel"
           gnetId: 18089
           revision: 1
           datasource:
             - {name: DS_PROMETHEUS, value: Prometheus}
         prometheus:
-          # renovate: depName="Prometheus"
           gnetId: 19105
           revision: 9
           datasource: Prometheus
