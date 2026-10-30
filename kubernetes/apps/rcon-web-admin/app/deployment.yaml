@@ -69,6 +69,8 @@ spec:
               containerPort: 4327
               protocol: TCP
           env:
+            - name: RWA_ENV
+              value: "FALSE"
             - name: RWA_WEBSOCKET_URL
               value: ws://rcon.${domain}.${tld}/websocket
             - name: RWA_WEBSOCKET_URL_SSL
