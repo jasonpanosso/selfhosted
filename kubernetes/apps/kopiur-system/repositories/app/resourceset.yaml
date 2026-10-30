@@ -99,74 +99,6 @@ spec:
           requests:
             storage: << inputs.capacity | quote >>
 
-    # Two variants of the same Repository; the reconcile annotation keeps
-    # exactly one of them: unseeded while bootstrapping, seeded otherwise.
-    - apiVersion: kopiur.home-operations.com/v1alpha1
-      kind: Repository
-      metadata:
-        name: << inputs.app >>
-        namespace: << inputs.namespace >>
-        annotations:
-          fluxcd.controlplane.io/prune: disabled
-          fluxcd.controlplane.io/reconcile: << if get inputs "bootstrap" >>enabled<< else >>disabled<< end >>
-      spec:
-        backend: &backend
-          filesystem:
-            path: /repo
-            volume:
-              pvc:
-                name: kopiur-<< inputs.app >>
-        encryption: &encryption
-          passwordSecretRef:
-            name: kopiur-<< inputs.app >>
-            key: KOPIA_PASSWORD
-        create: &create
-          enabled: true
-        moverDefaults: &moverDefaults
-          securityContext:
-            runAsUser: 65534
-            runAsGroup: 65534
-          podSecurityContext:
-            fsGroup: 65534
-            fsGroupChangePolicy: OnRootMismatch
-          # Throwaway volume for deep verification's restore test, on HDD.
-          scratch:
-            capacity: << inputs.capacity | quote >>
-            storageClassName: rook-ceph-block-hdd
-        # Re-scan daily so Discovered Snapshot CRs track snapshots written or
-        # deleted outside Kopiur (each scan is one short bootstrap Job).
-        catalog: &catalog
-          periodicRefresh: true
-          refreshInterval: 24h
-
-    - apiVersion: kopiur.home-operations.com/v1alpha1
-      kind: Repository
-      metadata:
-        name: << inputs.app >>
-        namespace: << inputs.namespace >>
-        annotations:
-          fluxcd.controlplane.io/prune: disabled
-          fluxcd.controlplane.io/reconcile: << if get inputs "bootstrap" >>disabled<< else >>enabled<< end >>
-      spec:
-        backend: *backend
-        encryption: *encryption
-        create: *create
-        moverDefaults: *moverDefaults
-        catalog: *catalog
-        seed:
-          from:
-            backend:
-              s3: &offsite
-                bucket: "${s3_backup_bucket_name}"
-                endpoint: "${s3_backup_domain_name}"
-                region: nyc3
-                prefix: kopiur/<< inputs.app >>/
-                auth:
-                  secretRef:
-                    name: kopiur-offsite
-          sync:
-            parallel: 4
-
     - apiVersion: kopiur.home-operations.com/v1alpha1
       kind: RepositoryReplication
       metadata:
@@ -177,7 +109,14 @@ spec:
           kind: Repository
           name: << inputs.app >>
         destination:
-          s3: *offsite
+          s3:
+            bucket: "${s3_backup_bucket_name}"
+            endpoint: "${s3_backup_domain_name}"
+            region: nyc3
+            prefix: kopiur/<< inputs.app >>/
+            auth:
+              secretRef:
+                name: kopiur-offsite
         schedule:
           cron: "H 3 * * *"
           jitter: 30m
@@ -246,6 +185,60 @@ spec:
           populator: {}
         policy:
           onMissingSnapshot: Continue
+
+  # leave seed out while bootstrapping.
+  resourcesTemplate: |
+    apiVersion: kopiur.home-operations.com/v1alpha1
+    kind: Repository
+    metadata:
+      name: << inputs.app >>
+      namespace: << inputs.namespace >>
+      annotations:
+        fluxcd.controlplane.io/prune: disabled
+    spec:
+      backend:
+        filesystem:
+          path: /repo
+          volume:
+            pvc:
+              name: kopiur-<< inputs.app >>
+      encryption:
+        passwordSecretRef:
+          name: kopiur-<< inputs.app >>
+          key: KOPIA_PASSWORD
+      create:
+        enabled: true
+      moverDefaults:
+        securityContext:
+          runAsUser: 65534
+          runAsGroup: 65534
+        podSecurityContext:
+          fsGroup: 65534
+          fsGroupChangePolicy: OnRootMismatch
+        # Throwaway volume for deep verification's restore test, on HDD.
+        scratch:
+          capacity: << inputs.capacity | quote >>
+          storageClassName: rook-ceph-block-hdd
+      # Re-scan daily so Discovered Snapshot CRs track snapshots written or
+      # deleted outside Kopiur (each scan is one short bootstrap Job).
+      catalog:
+        periodicRefresh: true
+        refreshInterval: 24h
+      <<- if not (get inputs "bootstrap") >>
+      seed:
+        from:
+          backend:
+            s3:
+              bucket: "${s3_backup_bucket_name}"
+              endpoint: "${s3_backup_domain_name}"
+              region: nyc3
+              prefix: kopiur/<< inputs.app >>/
+              auth:
+                secretRef:
+                  name: kopiur-offsite
+        sync:
+          parallel: 4
+      <<- end >>
 ---
 # yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/fluxcd.controlplane.io/resourceset_v1.json
 # separate setup for minecraft servers that use local-path, and need a webhook
@@ -314,78 +307,6 @@ spec:
           requests:
             storage: << inputs.capacity | quote >>
 
-    # Two variants of the same Repository; the reconcile annotation keeps
-    # exactly one of them: unseeded while bootstrapping, seeded otherwise.
-    - apiVersion: kopiur.home-operations.com/v1alpha1
-      kind: Repository
-      metadata:
-        name: << inputs.app >>
-        namespace: minecraft
-        annotations:
-          fluxcd.controlplane.io/prune: disabled
-          fluxcd.controlplane.io/reconcile: << if get inputs "bootstrap" >>enabled<< else >>disabled<< end >>
-      spec:
-        backend: &backend
-          filesystem:
-            path: /repo
-            volume:
-              pvc:
-                name: kopiur-<< inputs.app >>
-        encryption: &encryption
-          passwordSecretRef:
-            name: kopiur-<< inputs.app >>
-            key: KOPIA_PASSWORD
-        create: &create
-          enabled: true
-        moverDefaults: &moverDefaults
-          securityContext:
-            runAsUser: 65534
-            runAsGroup: 65534
-          podSecurityContext:
-            fsGroup: 65534
-            fsGroupChangePolicy: OnRootMismatch
-          # a restore mover is the first consumer of a new local-path PVC and
-          # pins it to its node; the servers only run on amd64
-          nodeSelector:
-            kubernetes.io/arch: amd64
-          # Throwaway volume for deep verification's restore test, on HDD.
-          scratch:
-            capacity: << inputs.capacity | quote >>
-            storageClassName: rook-ceph-block-hdd
-        # Re-scan daily so Discovered Snapshot CRs track snapshots written or
-        # deleted outside Kopiur (each scan is one short bootstrap Job).
-        catalog: &catalog
-          periodicRefresh: true
-          refreshInterval: 24h
-
-    - apiVersion: kopiur.home-operations.com/v1alpha1
-      kind: Repository
-      metadata:
-        name: << inputs.app >>
-        namespace: minecraft
-        annotations:
-          fluxcd.controlplane.io/prune: disabled
-          fluxcd.controlplane.io/reconcile: << if get inputs "bootstrap" >>disabled<< else >>enabled<< end >>
-      spec:
-        backend: *backend
-        encryption: *encryption
-        create: *create
-        moverDefaults: *moverDefaults
-        catalog: *catalog
-        seed:
-          from:
-            backend:
-              s3: &offsite
-                bucket: "${s3_backup_bucket_name}"
-                endpoint: "${s3_backup_domain_name}"
-                region: nyc3
-                prefix: kopiur/<< inputs.app >>/
-                auth:
-                  secretRef:
-                    name: kopiur-offsite
-          sync:
-            parallel: 4
-
     - apiVersion: kopiur.home-operations.com/v1alpha1
       kind: RepositoryReplication
       metadata:
@@ -396,7 +317,14 @@ spec:
           kind: Repository
           name: << inputs.app >>
         destination:
-          s3: *offsite
+          s3:
+            bucket: "${s3_backup_bucket_name}"
+            endpoint: "${s3_backup_domain_name}"
+            region: nyc3
+            prefix: kopiur/<< inputs.app >>/
+            auth:
+              secretRef:
+                name: kopiur-offsite
         schedule:
           cron: "H 3 * * *"
           jitter: 30m
@@ -473,3 +401,61 @@ spec:
           # every 6 hours
           cron: "H */6 * * *"
           jitter: 10m
+
+  # leave seed out while bootstrapping.
+  resourcesTemplate: |
+    apiVersion: kopiur.home-operations.com/v1alpha1
+    kind: Repository
+    metadata:
+      name: << inputs.app >>
+      namespace: minecraft
+      annotations:
+        fluxcd.controlplane.io/prune: disabled
+    spec:
+      backend:
+        filesystem:
+          path: /repo
+          volume:
+            pvc:
+              name: kopiur-<< inputs.app >>
+      encryption:
+        passwordSecretRef:
+          name: kopiur-<< inputs.app >>
+          key: KOPIA_PASSWORD
+      create:
+        enabled: true
+      moverDefaults:
+        securityContext:
+          runAsUser: 65534
+          runAsGroup: 65534
+        podSecurityContext:
+          fsGroup: 65534
+          fsGroupChangePolicy: OnRootMismatch
+        # a restore mover is the first consumer of a new local-path PVC and
+        # pins it to its node; the servers only run on amd64
+        nodeSelector:
+          kubernetes.io/arch: amd64
+        # Throwaway volume for deep verification's restore test, on HDD.
+        scratch:
+          capacity: << inputs.capacity | quote >>
+          storageClassName: rook-ceph-block-hdd
+      # Re-scan daily so Discovered Snapshot CRs track snapshots written or
+      # deleted outside Kopiur (each scan is one short bootstrap Job).
+      catalog:
+        periodicRefresh: true
+        refreshInterval: 24h
+      <<- if not (get inputs "bootstrap") >>
+      seed:
+        from:
+          backend:
+            s3:
+              bucket: "${s3_backup_bucket_name}"
+              endpoint: "${s3_backup_domain_name}"
+              region: nyc3
+              prefix: kopiur/<< inputs.app >>/
+              auth:
+                secretRef:
+                  name: kopiur-offsite
+        sync:
+          parallel: 4
+      <<- end >>
