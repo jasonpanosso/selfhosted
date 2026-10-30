@@ -53,7 +53,7 @@ spec:
                 requests:
                   storage: 40Gi
         retention: 10d
-        retentionSize: 40GiB
+        retentionSize: 34GiB
         podMonitorSelectorNilUsesHelmValues: false
         probeSelectorNilUsesHelmValues: false
         ruleSelectorNilUsesHelmValues: false
