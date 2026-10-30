@@ -62,7 +62,6 @@ spec:
             - -Xmx256M
             - -XX:+UseZGC
             - -XX:+UseCompactObjectHeaders
-            - -Djava.net.preferIPv4Stack=true
             - -jar
             - /opt/velocity/velocity.jar
           env:

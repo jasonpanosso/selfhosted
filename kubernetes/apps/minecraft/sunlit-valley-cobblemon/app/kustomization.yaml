@@ -13,6 +13,7 @@ configMapGenerator:
   - name: sunlit-valley-cobblemon-patches
     files:
       - proxy-compatible-forge.json=./resources/proxy-compatible-forge.json
+      - forge-server.json=./resources/forge-server.json
     options:
       disableNameSuffixHash: true
       # keep ${CFG_PROXY_SECRET} for the image; Flux postBuild would substitute it

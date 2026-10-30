@@ -1,0 +1,11 @@
+{
+  "file": "/data/sunlit-cobblemon/serverconfig/forge-server.toml",
+  "ops": [
+    {
+      "$set": {
+        "path": "$.server.advertiseDedicatedServerToLan",
+        "value": false
+      }
+    }
+  ]
+}

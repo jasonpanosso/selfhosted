@@ -51,8 +51,6 @@ spec:
               value: /secrets/MINECRAFT_PROXY_SECRET
             - name: MEMORY
               value: "75%"
-            - name: JVM_OPTS
-              value: -Djava.net.preferIPv4Stack=true
             # https://exa.y2k.diy/garden/jvm-args/
             - name: JVM_XX_OPTS
               value: -XX:+UseShenandoahGC -XX:+UseCompactObjectHeaders
