@@ -112,6 +112,7 @@ spec:
           persistentVolumeClaim:
             claimName: *app
         - name: ingest
-          emptyDir: {}
+          persistentVolumeClaim:
+            claimName: bookdrop
         - name: scratch
           emptyDir: {}

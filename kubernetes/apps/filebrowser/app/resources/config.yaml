@@ -11,6 +11,7 @@ server:
           - includeRootItem: downloads
           - includeRootItem: movies
           - includeRootItem: shows
+          - includeRootItem: bookdrop
         defaultUserScope: /
         defaultEnabled: true
         createUserDir: false

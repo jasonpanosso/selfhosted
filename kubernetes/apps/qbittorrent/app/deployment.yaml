@@ -138,6 +138,9 @@ spec:
             - name: media
               mountPath: /data/downloads
               subPath: downloads
+            - name: media
+              mountPath: /bookdrop
+              subPath: bookdrop
             - name: scratch
               mountPath: /tmp
             - name: qbrr

@@ -14,3 +14,44 @@ spec:
     requests:
       storage: 10Gi
   storageClassName: rook-ceph-block
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/master-standalone/persistentvolume-v1.json
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: bookdrop-bookboss
+spec:
+  accessModes:
+    - ReadWriteMany
+  capacity:
+    storage: 3500Gi
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: ""
+  claimRef:
+    namespace: bookboss
+    name: bookdrop
+  csi:
+    driver: rook-ceph.cephfs.csi.ceph.com
+    volumeHandle: bookdrop-bookboss
+    nodeStageSecretRef:
+      name: rook-csi-cephfs-node
+      namespace: rook-ceph
+    volumeAttributes:
+      clusterID: rook-ceph
+      fsName: mediafs
+      staticVolume: "true"
+      rootPath: /bookdrop
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/master-standalone/persistentvolumeclaim-v1.json
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: bookdrop
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 3500Gi
+  storageClassName: ""
+  volumeName: bookdrop-bookboss
