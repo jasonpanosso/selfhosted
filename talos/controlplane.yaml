@@ -17,6 +17,69 @@ cluster:
       - 192.168.20.0/24
 ---
 apiVersion: v1alpha1
+kind: NetworkRuleConfig
+name: kube-apiserver
+portSelector:
+  ports:
+    - 6443
+  protocol: tcp
+ingress:
+  # do not allow IPv6, kubeprism is mean
+  - subnet: 192.168.20.0/24
+  - subnet: 10.244.0.0/16
+  # admin network
+  - subnet: 192.168.1.0/24
+---
+# talos-backup takes etcd snapshots through the talos.default Service
+apiVersion: v1alpha1
+kind: NetworkRuleConfig
+name: apid-pods
+portSelector:
+  ports:
+    - 50000
+  protocol: tcp
+ingress:
+  - subnet: 10.244.0.0/16
+---
+apiVersion: v1alpha1
+kind: NetworkRuleConfig
+name: trustd
+portSelector:
+  ports:
+    - 50001
+  protocol: tcp
+ingress:
+  - subnet: 192.168.20.0/24
+---
+# 2379 client, 2380 peer, 2383 client HTTP; etcd only advertises IPv4
+apiVersion: v1alpha1
+kind: NetworkRuleConfig
+name: etcd
+portSelector:
+  ports:
+    - 2379-2380
+    - 2383
+  protocol: tcp
+ingress:
+  - subnet: 192.168.20.101/32
+  - subnet: 192.168.20.102/32
+  - subnet: 192.168.20.103/32
+---
+# etcd, kube-controller-manager and kube-scheduler metrics
+apiVersion: v1alpha1
+kind: NetworkRuleConfig
+name: controlplane-metrics
+portSelector:
+  ports:
+    - 2381
+    - 10257
+    - 10259
+  protocol: tcp
+ingress:
+  - subnet: 192.168.20.0/24
+  - subnet: 10.244.0.0/16
+---
+apiVersion: v1alpha1
 kind: KubeAPIServerConfig
 image: registry.k8s.io/kube-apiserver:v1.36.6
 certExtraSANs:

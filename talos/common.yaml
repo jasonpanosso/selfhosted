@@ -60,3 +60,71 @@ mount:
 apiVersion: v1alpha1
 kind: FilesystemTrimConfig
 interval: 168h0m0s
+---
+# default drop. Talos always allows loopback, established/related, & pod-to-pod/service traffic
+apiVersion: v1alpha1
+kind: NetworkDefaultActionConfig
+ingress: block
+---
+# allow gateway traffic
+apiVersion: v1alpha1
+kind: NetworkRuleConfig
+name: gateway
+portSelector:
+  ports:
+    - 80
+    - 443
+  protocol: tcp
+ingress:
+  - subnet: 0.0.0.0/0
+---
+apiVersion: v1alpha1
+kind: NetworkRuleConfig
+name: apid
+portSelector:
+  ports:
+    - 50000
+  protocol: tcp
+ingress:
+  # controlplane apid proxies requests to the other nodes
+  - subnet: 192.168.20.0/24
+  # admin workstation
+  - subnet: 192.168.1.0/24
+---
+apiVersion: v1alpha1
+kind: NetworkRuleConfig
+name: kubelet
+portSelector:
+  ports:
+    - 10250
+  protocol: tcp
+ingress:
+  - subnet: 192.168.20.0/24
+  # metrics scrapes
+  - subnet: 10.244.0.0/16
+---
+# 4240 cilium-health between nodes, 4244 hubble peer for hubble-relay
+apiVersion: v1alpha1
+kind: NetworkRuleConfig
+name: cilium
+portSelector:
+  ports:
+    - 4240
+    - 4244
+  protocol: tcp
+ingress:
+  - subnet: 192.168.20.0/24
+  - subnet: 10.244.0.0/16
+---
+# node-exporter, cilium agent/operator/envoy/hubble metrics
+apiVersion: v1alpha1
+kind: NetworkRuleConfig
+name: node-metrics
+portSelector:
+  ports:
+    - 9100
+    - 9962-9965
+  protocol: tcp
+ingress:
+  - subnet: 192.168.20.0/24
+  - subnet: 10.244.0.0/16
