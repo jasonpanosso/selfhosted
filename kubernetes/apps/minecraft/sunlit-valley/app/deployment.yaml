@@ -67,9 +67,8 @@ spec:
               value: /patches
             - name: CFG_PROXY_SECRET_FILE
               value: /secrets/MINECRAFT_PROXY_SECRET
-            # Xms and Xmx both 75% of the memory limit
             - name: MEMORY
-              value: "75%"
+              value: "65%"
             - name: JVM_XX_OPTS
               value: -XX:+UseShenandoahGC
             - name: STOP_DURATION

@@ -67,7 +67,7 @@ spec:
             - name: CFG_PROXY_SECRET_FILE
               value: /secrets/MINECRAFT_PROXY_SECRET
             - name: MEMORY
-              value: "75%"
+              value: "65%"
             - name: JVM_XX_OPTS
               value: -XX:+UseShenandoahGC
             - name: STOP_DURATION
