@@ -9,7 +9,8 @@ spec:
     groupBy: ["alertname", "job"]
     groupInterval: 10m
     groupWait: 1m
-    receiver: pushover
+    # warning/info: quiet notification; critical pages via the route below
+    receiver: pushover-quiet
     repeatInterval: 12h
     routes:
       - receiver: "null"
@@ -50,7 +51,7 @@ spec:
     - name: pushover
       pushoverConfigs:
         - html: true
-          message: |-
+          message: &message |-
             {{- range .Alerts }}
               {{- if ne .Annotations.description "" }}
                 {{ .Annotations.description }}
@@ -73,14 +74,26 @@ spec:
             {{ if eq .Status "firing" }}1{{ else }}0{{ end }}
           sendResolved: true
           sound: bugle
-          title: >-
+          title: &title >-
             [{{ .Status | toUpper }}{{ if eq .Status "firing" }}:{{ .Alerts.Firing | len }}{{ end }}]
             {{ .CommonLabels.alertname }}
           ttl: 86400s
-          token:
+          token: &token
             name: *name
             key: PUSHOVER_API_TOKEN
-          userKey:
+          userKey: &userKey
             name: *name
             key: PUSHOVER_USER_KEY
+          urlTitle: View in Alertmanager
+    - name: pushover-quiet
+      pushoverConfigs:
+        - html: true
+          message: *message
+          # -1: delivered without sound or vibration
+          priority: "-1"
+          sendResolved: true
+          title: *title
+          ttl: 86400s
+          token: *token
+          userKey: *userKey
           urlTitle: View in Alertmanager
