@@ -28,8 +28,8 @@ spec:
             - name: DefaultEvictor
               args:
                 evictFailedBarePods: true
-                evictLocalStoragePods: true
-                evictSystemCriticalPods: true
+                evictLocalStoragePods: false
+                evictSystemCriticalPods: false
             - name: RemoveFailedPods
               args:
                 reasons:
