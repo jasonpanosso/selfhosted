@@ -9,4 +9,5 @@ resources:
   - ./objectstore.yaml
   - ./database.yaml
   - ./scheduledbackup.yaml
+  - ./podmonitor.yaml
   - ./prometheusrule.yaml
