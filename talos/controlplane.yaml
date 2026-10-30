@@ -1,4 +1,14 @@
 ---
+# no standalone document for this yet in 1.14
+machine:
+  features:
+    # lets talos-backup's talos.dev ServiceAccount take etcd snapshots
+    kubernetesTalosAPIAccess:
+      enabled: true
+      allowedRoles:
+        - os:etcd:backup
+      allowedKubernetesNamespaces:
+        - kube-system
 cluster:
   etcd:
     extraArgs:

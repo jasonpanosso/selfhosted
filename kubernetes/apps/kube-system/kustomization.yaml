@@ -8,12 +8,13 @@ components:
   - ../../components/common
 
 resources:
-  - ./namespace.yaml
+  - ./cilium
   - ./coredns/ks.yaml
+  - ./descheduler/ks.yaml
+  - ./gateway-api-crds/ks.yaml
+  - ./namespace.yaml
   - ./metrics-server/ks.yaml
   - ./reloader/ks.yaml
   - ./snapshot-controller/ks.yaml
-  - ./descheduler/ks.yaml
   - ./spegel/ks.yaml
-  - ./gateway-api-crds/ks.yaml
-  - ./cilium
+  - ./talos-backup/ks.yaml

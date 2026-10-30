@@ -1,0 +1,20 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/monitoring.coreos.com/prometheusrule_v1.json
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: talos-backup-rules
+spec:
+  groups:
+    - name: talos-backup.rules
+      rules:
+        # a failed run already fires KubeJobFailed; this catches the job not running at all
+        - alert: TalosBackupStale
+          expr: |-
+            time() - kube_cronjob_status_last_successful_time{namespace="kube-system", cronjob="talos-backup"} > 2 * 86400
+          for: 1h
+          annotations:
+            summary: >-
+              No successful etcd snapshot upload in over 2 days
+          labels:
+            severity: critical

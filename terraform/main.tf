@@ -1,28 +1,42 @@
-module "spaces" {
-  source  = "terraform-do-modules/spaces/digitalocean"
-  version = "1.0.0"
+resource "digitalocean_spaces_bucket" "backups" {
+  name   = var.spaces_name
+  region = var.spaces_region
+  acl    = "private"
 
-  name       = var.spaces_name
-  region     = var.spaces_region
-  acl        = "private"
-  versioning = true
+  versioning {
+    enabled = true
+  }
 
-  # Keep deleted or overwritten objects (Kopiur mirrors with deleteExtra,
-  # CNPG backups past retention) recoverable for 30 days, then expire them.
-  lifecycle_rule = [
-    {
-      id                                 = "expire-noncurrent-versions"
-      enabled                            = true
-      noncurrent_version_expiration_days = 30
-    },
-  ]
+  lifecycle_rule {
+    id      = "expire-noncurrent-versions"
+    enabled = true
+
+    noncurrent_version_expiration {
+      days = 30
+    }
+  }
+
+  # prune talos etcd backups older than 30d
+  lifecycle_rule {
+    id      = "expire-talos-backup"
+    enabled = true
+    prefix  = "talos-backup/"
+
+    expiration {
+      days = 30
+    }
+  }
+
+  lifecycle {
+    prevent_destroy = true
+  }
 }
 
 resource "digitalocean_spaces_key" "this" {
-  name = "${module.spaces.name}-key"
+  name = "${digitalocean_spaces_bucket.backups.name}-key"
 
   grant {
-    bucket     = module.spaces.name
+    bucket     = digitalocean_spaces_bucket.backups.name
     permission = "readwrite"
   }
 }
