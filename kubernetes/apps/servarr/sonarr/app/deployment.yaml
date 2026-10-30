@@ -56,6 +56,8 @@ spec:
               value: DisabledForLocalAddresses
             - name: SONARR__SERVER__BINDADDRESS
               value: "*"
+            - name: SONARR__SERVER__ALLOWEDHOSTS
+              value: sonarr.${domain}.${tld},sonarr,sonarr.servarr.svc.cluster.local
             - name: SONARR__UPDATE__MECHANISM
               value: Docker
             - name: SONARR__UPDATE__BRANCH
@@ -73,6 +75,9 @@ spec:
             httpGet:
               path: /ping
               port: 8989
+              httpHeaders:
+                - name: Host
+                  value: localhost
             initialDelaySeconds: 10
             periodSeconds: 15
             timeoutSeconds: 1
