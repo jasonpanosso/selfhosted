@@ -3,7 +3,6 @@
 module.exports = {
   public: false,
   host: undefined,
-  port: 80,
   bind: undefined,
 
   // ### `reverseProxy`
@@ -107,42 +106,6 @@ module.exports = {
 
   // ## User management
 
-  // ### `messageStorage`
-
-  // The Lounge can log user messages, for example to access them later or to
-  // reload messages on server restart.
-
-  // Set this array with one or multiple values to enable logging:
-  // - `text`: Messages per network and channel will be stored as text files.
-  //   **Messages will not be reloaded on restart.**
-  // - `sqlite`: Messages are stored in SQLite database files, one per user.
-  //
-  // Logging can be disabled globally by setting this value to an empty array
-  // `[]`. Logging is also controlled per user individually in the `log` key of
-  // their JSON configuration file.
-  //
-  // This value is set to `["sqlite", "text"]` by default.
-  messageStorage: ["sqlite"],
-
-  // ### `storagePolicy`
-
-  // When the sqlite storage is in use, control the maximum storage duration.
-  // A background task will periodically clean up messages older than the limit.
-
-  // The available keys for the `storagePolicy` object are:
-  //
-  // - `enabled`: If this is false, the cleaning task is not running.
-  // - `maxAgeDays`: Maximum age of an entry in days.
-  // - `deletionPolicy`: Controls what types of messages are being deleted.
-  //   Valid options are:
-  //   - `statusOnly`: Only delete message types which are status related (e.g. away, back, join, parts, mode, ctcp...)
-  //     but keep actual messages from nicks. This keeps the DB size down while retaining "precious" messages.
-  //   - `everything`: Delete everything, including messages from irc nicks
-  storagePolicy: {
-    enabled: true,
-    maxAgeDays: 7,
-    deletionPolicy: "everything",
-  },
   useHexIp: false,
   webirc: null,
   identd: {

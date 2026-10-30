@@ -28,20 +28,30 @@ spec:
         seccompProfile:
           type: RuntimeDefault
       containers:
-        - image: ghcr.io/thelounge/thelounge:4.5.2@sha256:345af9c9d48d789f71a09d172fbc1bd3f250d47059c5a317497b67bd315989b7
+        - image: ghcr.io/home-operations/thelounge:4.5.2@sha256:b1603864b3eae673f780aa56e966d9b488986ed71d2260b408ebc9a6d5cdd0df
           name: *app
           ports:
-            - containerPort: 80
+            - containerPort: 9000
               name: http
           env:
             - name: TZ
               value: Etc/UTC
             - name: THELOUNGE_HOME
               value: /config
+            - name: THELOUNGE_PORT
+              value: "9000"
+            - name: THELOUNGE_MESSAGE_STORAGE
+              value: "[sqlite]"
+            - name: THELOUNGE_STORAGE_POLICY_ENABLED
+              value: "true"
+            - name: THELOUNGE_STORAGE_POLICY_MAX_AGE_DAYS
+              value: "7"
+            - name: THELOUNGE_STORAGE_POLICY_DELETION_POLICY
+              value: everything
           livenessProbe: &probes
             httpGet:
               path: /
-              port: 80
+              port: 9000
             initialDelaySeconds: 5
             periodSeconds: 15
           readinessProbe: *probes
