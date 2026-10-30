@@ -26,6 +26,16 @@
       "matchPackageNames": ["/eclipse-temurin$/"],
       "versioning": "regex:^(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)(?:\\.(?<build>\\d+))?_(?<revision>\\d+)(?<compatibility>-jre-noble)$",
       "allowedVersions": "/^25\\./"
+    },
+    {
+      "description": "Postgres majors run pg_upgrade in place; hold for dashboard approval",
+      "matchDatasources": ["docker"],
+      "matchPackageNames": ["ghcr.io/cloudnative-pg/postgresql"],
+      "matchUpdateTypes": ["major"],
+      "dependencyDashboardApproval": true,
+      "prBodyNotes": [
+        "Major upgrade: change `serverName` in both `plugins` and `externalClusters` of `db/app/cluster.yaml` in this PR, or the new timeline 1 overwrites the old archive."
+      ]
     }
   ],
   "flux": {

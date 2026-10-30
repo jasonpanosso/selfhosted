@@ -17,6 +17,15 @@
     },
     {
       "customType": "regex",
+      "description": "CloudNativePG Cluster imageName",
+      "managerFilePatterns": ["/(^|/)kubernetes/.+\\.ya?ml$/"],
+      "matchStrings": [
+        "imageName: (?<depName>[^\\s:@]+):(?<currentValue>[^\\s@]+)(@(?<currentDigest>sha256:[0-9a-f]{64}))?"
+      ],
+      "datasourceTemplate": "docker"
+    },
+    {
+      "customType": "regex",
       "description": "Talos installer images in Talos patches",
       "managerFilePatterns": ["/(^|/)talos/.+\\.ya?ml$/"],
       "matchStrings": ["factory\\.talos\\.dev/metal-installer/[0-9a-f]{64}:(?<currentValue>v\\d+\\.\\d+\\.\\d+)"],

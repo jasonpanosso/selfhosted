@@ -41,7 +41,7 @@
       "description": "CloudNativePG Group",
       "groupName": "CloudNativePG",
       "matchDatasources": ["docker"],
-      "matchPackageNames": ["/cloudnative-pg/"],
+      "matchPackageNames": ["/cloudnative-pg/charts/"],
       "group": {
         "commitMessageTopic": "{{{groupName}}} group"
       }
