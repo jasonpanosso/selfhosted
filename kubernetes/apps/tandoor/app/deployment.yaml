@@ -21,6 +21,9 @@ spec:
       securityContext:
         runAsUser: 65534
         runAsGroup: 65534
+        # required by nginx to open its error log (lol)
+        supplementalGroups:
+          - 101
         fsGroup: 65534
         fsGroupChangePolicy: OnRootMismatch
         runAsNonRoot: true
