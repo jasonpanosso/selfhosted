@@ -3,7 +3,7 @@
 apiVersion: v1alpha1
 kind: UnattendedInstallConfig
 installer:
-  image: factory.talos.dev/metal-installer/376567988ad370138ad8b2698212367b8edcb69b5fd68c80be1f2ec7d603b4ba:v1.14.5
+  image: factory.talos.dev/metal-installer/c43979d88ecd7c9881b410e0c5f6c4625062912600a27310ee0db3c98dc4b7fc:v1.14.5
 provisioning:
   diskSelector:
     match: '"/dev/disk/by-id/ata-TIMETEC_SATA_256GB_TA241218C256G2261" in disk.symlinks'

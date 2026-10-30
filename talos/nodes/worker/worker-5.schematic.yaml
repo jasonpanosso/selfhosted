@@ -3,3 +3,5 @@ customization:
   systemExtensions:
     officialExtensions:
       - siderolabs/i915
+      # N100 / N355 ship with old microcode
+      - siderolabs/intel-ucode

@@ -3,7 +3,6 @@
 apiVersion: v1alpha1
 kind: UnattendedInstallConfig
 installer:
-  # bare-metal arm64; schematic in worker-7.schematic.yaml
   image: factory.talos.dev/metal-installer/1366559988480b3ebccf7c53e3870ecc2c509b5d684b054f36701250dc36bd0b:v1.14.5
 provisioning:
   diskSelector:

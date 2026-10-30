@@ -1,2 +1,8 @@
 ---
-customization: {}
+customization:
+  systemExtensions:
+    officialExtensions:
+      # Pentium Silver J5005 ships with old microcode (no RFDS mitigation)
+      - siderolabs/intel-ucode
+      # RTL8168h firmware (rtl_nic/rtl8168h-2.fw)
+      - siderolabs/realtek-firmware
