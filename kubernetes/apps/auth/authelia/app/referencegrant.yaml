@@ -15,6 +15,9 @@ spec:
       namespace: bookboss
     - group: gateway.networking.k8s.io
       kind: HTTPRoute
+      namespace: filebrowser
+    - group: gateway.networking.k8s.io
+      kind: HTTPRoute
       namespace: observability
     - group: gateway.networking.k8s.io
       kind: HTTPRoute
