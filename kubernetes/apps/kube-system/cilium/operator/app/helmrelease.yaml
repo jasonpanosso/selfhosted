@@ -36,7 +36,6 @@ spec:
       exclusive: false
     dashboards:
       enabled: true
-    # devices: enp+
     enableIPv4BIGTCP: true
     endpointRoutes:
       enabled: true
@@ -50,6 +49,8 @@ spec:
       enableAlpn: true
     hubble:
       enabled: true
+      # about ~3-4 minutes of flows stored on workers
+      eventBufferCapacity: 16383
       metrics:
         enabled:
           # app reads pod labels from the identity; workload-name only resolves pods on the observing node
@@ -81,6 +82,9 @@ spec:
       algorithm: maglev
       mode: dsr
     localRedirectPolicy: true
+    # identify if node if control-plane or worker
+    nodeLabels: node-role.kubernetes.io/control-plane
+    nodeSelectorLabels: true
     operator:
       dashboards:
         enabled: true
@@ -90,6 +94,8 @@ spec:
           enabled: true
       replicas: 2
       rollOutPods: true
+    # TODO: disable audit mode after a few days of hubble metrics
+    policyAuditMode: true
     prometheus:
       enabled: true
       serviceMonitor:
