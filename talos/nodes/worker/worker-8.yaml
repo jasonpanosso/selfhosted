@@ -13,3 +13,11 @@ provisioning:
 apiVersion: v1alpha1
 kind: HostnameConfig
 hostname: worker-8
+---
+apiVersion: v1alpha1
+kind: LinkConfig
+name: enp4s0
+addresses:
+  - address: 192.168.20.118/24
+routes:
+  - gateway: 192.168.20.1

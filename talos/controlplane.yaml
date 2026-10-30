@@ -75,10 +75,6 @@ kind: KubeCoreDNSConfig
 enabled: false
 ---
 apiVersion: v1alpha1
-kind: DHCPv4Config
-name: enp1s0
----
-apiVersion: v1alpha1
 kind: Layer2VIPConfig
 name: 192.168.20.100
 link: enp1s0
