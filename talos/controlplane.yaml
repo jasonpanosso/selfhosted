@@ -17,11 +17,11 @@ kind: KubeAdmissionControlConfig
 name: PodSecurity
 configuration:
   defaults:
-    audit: privileged
+    audit: restricted
     audit-version: latest
-    enforce: privileged
+    enforce: baseline
     enforce-version: latest
-    warn: privileged
+    warn: restricted
     warn-version: latest
 ---
 apiVersion: v1alpha1
