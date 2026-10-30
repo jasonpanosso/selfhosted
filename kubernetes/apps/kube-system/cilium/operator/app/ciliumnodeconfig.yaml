@@ -1,0 +1,11 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/cilium.io/ciliumnodeconfig_v2.json
+# fixes https://github.com/cilium/cilium/issues/47913
+apiVersion: cilium.io/v2
+kind: CiliumNodeConfig
+metadata:
+  name: socket-lb-pods
+spec:
+  nodeSelector: {}
+  defaults:
+    bpf-lb-sock-hostns-only: "false"
