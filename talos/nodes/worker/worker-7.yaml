@@ -3,8 +3,8 @@
 apiVersion: v1alpha1
 kind: UnattendedInstallConfig
 installer:
-  # bare-metal arm64 + panfrost
-  image: factory.talos.dev/metal-installer/9557a43ed46345a996ab0f954bd1f916c0b070d463ea3d7178b5c9732801938a:v1.14.5
+  # bare-metal arm64 + panfrost + realtek-firmware (RTL8125B NICs)
+  image: factory.talos.dev/metal-installer/9d260d8c38d4cb38ce538bdf534e88ca4a16d553fc6cac4bd38b99451c42be6b:v1.14.5
 provisioning:
   diskSelector:
     match: '"/dev/disk/by-id/nvme-Patriot_M.2_P300_256GB_P300IDBB24110706005" in disk.symlinks'
@@ -19,3 +19,11 @@ apiVersion: v1alpha1
 kind: SysctlConfig
 params:
   kernel.kexec_load_disabled: "1"
+---
+apiVersion: v1alpha1
+kind: LinkConfig
+name: enP4p65s0
+addresses:
+  - address: 192.168.20.117/24
+routes:
+  - gateway: 192.168.20.1
