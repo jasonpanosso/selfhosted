@@ -44,5 +44,6 @@ spec:
           type: RuntimeDefault
 
       featureGatesMap:
-        operator.networkpolicy: true
+        # replaced by ciliumnetworkpolicy.yaml; the operator pinned its policy to a single apiserver IP
+        operator.networkpolicy: false
         operand.networkpolicy: true
