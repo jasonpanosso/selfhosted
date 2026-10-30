@@ -64,6 +64,7 @@ spec:
             remoteRef:
               key: KOPIA_PASSWORD_<< inputs.app | upper | replace "-" "_" >>
 
+    # Spaces, read only by seed until the B2 copy is verified.
     # Identical for every app in a namespace; the ResourceSet keeps one copy.
     - apiVersion: external-secrets.io/v1
       kind: ExternalSecret
@@ -83,6 +84,26 @@ spec:
           - secretKey: AWS_SECRET_ACCESS_KEY
             remoteRef:
               key: S3_SECRET_ACCESS_KEY
+
+    # B2 key scoped to kopiur/<app>/, without deleteFiles
+    - apiVersion: external-secrets.io/v1
+      kind: ExternalSecret
+      metadata:
+        name: kopiur-<< inputs.app >>-b2
+        namespace: << inputs.namespace >>
+      spec:
+        secretStoreRef:
+          kind: ClusterSecretStore
+          name: bitwarden
+        target:
+          name: kopiur-<< inputs.app >>-b2
+        data:
+          - secretKey: AWS_ACCESS_KEY_ID
+            remoteRef:
+              key: B2_KOPIUR_<< inputs.app | upper | replace "-" "_" >>_ACCESS_KEY_ID
+          - secretKey: AWS_SECRET_ACCESS_KEY
+            remoteRef:
+              key: B2_KOPIUR_<< inputs.app | upper | replace "-" "_" >>_SECRET_ACCESS_KEY
 
     - apiVersion: v1
       kind: PersistentVolumeClaim
@@ -109,13 +130,13 @@ spec:
           name: << inputs.app >>
         destination:
           s3:
-            bucket: "${s3_backup_bucket_name}"
-            endpoint: "${s3_backup_domain_name}"
-            region: nyc3
+            bucket: selfhosted-backups-cbb55f9e
+            endpoint: s3.us-east-005.backblazeb2.com
+            region: us-east-005
             prefix: kopiur/<< inputs.app >>/
             auth:
               secretRef:
-                name: kopiur-offsite
+                name: kopiur-<< inputs.app >>-b2
         schedule:
           cron: "H 3 * * *"
           jitter: 30m
@@ -272,6 +293,7 @@ spec:
             remoteRef:
               key: KOPIA_PASSWORD_<< inputs.app | upper | replace "-" "_" >>
 
+    # Spaces, read only by seed until the B2 copy is verified.
     # identical for every server
     - apiVersion: external-secrets.io/v1
       kind: ExternalSecret
@@ -291,6 +313,26 @@ spec:
           - secretKey: AWS_SECRET_ACCESS_KEY
             remoteRef:
               key: S3_SECRET_ACCESS_KEY
+
+    # B2 key scoped to kopiur/<app>/, without deleteFiles
+    - apiVersion: external-secrets.io/v1
+      kind: ExternalSecret
+      metadata:
+        name: kopiur-<< inputs.app >>-b2
+        namespace: minecraft
+      spec:
+        secretStoreRef:
+          kind: ClusterSecretStore
+          name: bitwarden
+        target:
+          name: kopiur-<< inputs.app >>-b2
+        data:
+          - secretKey: AWS_ACCESS_KEY_ID
+            remoteRef:
+              key: B2_KOPIUR_<< inputs.app | upper | replace "-" "_" >>_ACCESS_KEY_ID
+          - secretKey: AWS_SECRET_ACCESS_KEY
+            remoteRef:
+              key: B2_KOPIUR_<< inputs.app | upper | replace "-" "_" >>_SECRET_ACCESS_KEY
 
     - apiVersion: v1
       kind: PersistentVolumeClaim
@@ -317,13 +359,13 @@ spec:
           name: << inputs.app >>
         destination:
           s3:
-            bucket: "${s3_backup_bucket_name}"
-            endpoint: "${s3_backup_domain_name}"
-            region: nyc3
+            bucket: selfhosted-backups-cbb55f9e
+            endpoint: s3.us-east-005.backblazeb2.com
+            region: us-east-005
             prefix: kopiur/<< inputs.app >>/
             auth:
               secretRef:
-                name: kopiur-offsite
+                name: kopiur-<< inputs.app >>-b2
         schedule:
           cron: "H 3 * * *"
           jitter: 30m
