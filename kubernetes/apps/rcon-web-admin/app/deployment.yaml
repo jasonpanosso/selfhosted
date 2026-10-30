@@ -6,6 +6,8 @@ metadata:
   name: &app rcon-web-admin
   labels:
     app.kubernetes.io/name: *app
+  annotations:
+    reloader.stakater.com/auto: "true"
 spec:
   strategy:
     type: Recreate
@@ -25,6 +27,37 @@ spec:
         runAsNonRoot: true
         seccompProfile:
           type: RuntimeDefault
+      initContainers:
+        # servers.json is declared in the ExternalSecret; edits made in the UI
+        # are overwritten on restart. Each server keeps its widget state in
+        # db/server_<id>, which the UI only creates for servers it adds.
+        - name: copy-servers
+          image: docker.io/itzg/rcon:latest@sha256:c9521f333bf9eaedf2db0acd750e67be88eaaa9c5e9026385bd875dc18a49110
+          command:
+            - /bin/sh
+            - -c
+            - >-
+              cp /config/servers.json /opt/rcon-web-admin/db/servers.json &&
+              mkdir -p
+              /opt/rcon-web-admin/db/server_a836f5f84b638e90ff7dca46a3d271e7
+              /opt/rcon-web-admin/db/server_e2df97c7a288b6e8677074085577519f
+              /opt/rcon-web-admin/db/server_9abb32f5c8547b395707fc486a417f3f
+          resources:
+            requests:
+              cpu: 10m
+              memory: 16Mi
+            limits:
+              memory: 64Mi
+          securityContext: &securityContext
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities: {drop: [ALL]}
+          volumeMounts:
+            - name: data
+              mountPath: /opt/rcon-web-admin/db
+            - name: servers
+              mountPath: /config
+              readOnly: true
       containers:
         - image: docker.io/itzg/rcon:latest@sha256:c9521f333bf9eaedf2db0acd750e67be88eaaa9c5e9026385bd875dc18a49110
           name: *app
@@ -36,26 +69,6 @@ spec:
               containerPort: 4327
               protocol: TCP
           env:
-            - name: RWA_ENV
-              value: "true"
-            - name: RWA_ADMIN
-              value: "true"
-            - name: RWA_USERNAME
-              value: admin
-            # protected via authelia
-            - name: RWA_PASSWORD
-              value: admin
-            - name: RWA_RCON_HOST
-              value: cobblemon-rcon.minecraft.svc.cluster.local
-            - name: RWA_GAME
-              value: minecraft
-            - name: RWA_SERVER_NAME
-              value: cobblemon
-            - name: RWA_RCON_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: *app
-                  key: MINECRAFT_COBBLEMON_RCON_PASSWORD
             - name: RWA_WEBSOCKET_URL
               value: ws://rcon.${domain}.${tld}/websocket
             - name: RWA_WEBSOCKET_URL_SSL
@@ -73,10 +86,7 @@ spec:
               memory: 256Mi
             limits:
               memory: 256Mi
-          securityContext:
-            allowPrivilegeEscalation: false
-            readOnlyRootFilesystem: true
-            capabilities: {drop: [ALL]}
+          securityContext: *securityContext
           volumeMounts:
             - name: data
               mountPath: /opt/rcon-web-admin/db
@@ -84,3 +94,6 @@ spec:
         - name: data
           persistentVolumeClaim:
             claimName: *app
+        - name: servers
+          secret:
+            secretName: *app
