@@ -25,11 +25,13 @@ hostDNS:
   resolveMemberNames: true
 ---
 # cloudflare being weird?
+# make sure all servers have same smear
 apiVersion: v1alpha1
 kind: TimeSyncConfig
 ntp:
   servers:
     - time.google.com
+    - time.aws.com
 ---
 apiVersion: v1alpha1
 kind: CRICustomizationConfig
