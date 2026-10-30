@@ -72,6 +72,8 @@ spec:
               mountPath: /config/config.js
               subPath: config.js
               readOnly: true
+            - name: tmp
+              mountPath: /tmp
       volumes:
         - name: config
           persistentVolumeClaim:
@@ -79,3 +81,5 @@ spec:
         - name: configjs
           configMap:
             name: *app
+        - name: tmp
+          emptyDir: {}
