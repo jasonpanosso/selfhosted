@@ -121,6 +121,7 @@
             cilium-cli
             cmctl # cert-manager
             fluxcd
+            hubble
             jq
             just
             kopia

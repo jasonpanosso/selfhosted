@@ -1,0 +1,23 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/monitoring.coreos.com/prometheusrule_v1.json
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: hubble-rules
+spec:
+  groups:
+    - name: hubble.rules
+      rules:
+        # hubble metrics are only scraped by VictoriaMetrics, so only vmalert evaluates this
+        - alert: HubblePolicyDrops
+          expr: |
+            sum by (source_namespace, source, destination_namespace, destination) (
+              increase(hubble_drop_total{reason="POLICY_DENIED"}[5m])
+            ) > 0
+          annotations:
+            summary: >-
+              Network policy dropped traffic from
+              {{ $labels.source_namespace }}/{{ $labels.source }} to
+              {{ $labels.destination_namespace }}/{{ $labels.destination }}
+          labels:
+            severity: warning

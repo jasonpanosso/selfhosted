@@ -6,5 +6,7 @@ kind: Kustomization
 resources:
   - ./ciliumnodeconfig.yaml
   - ./helmrelease.yaml
+  - ./httproute.yaml
   - ./network.yaml
   - ./ocirepository.yaml
+  - ./prometheusrule.yaml
