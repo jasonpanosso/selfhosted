@@ -27,3 +27,41 @@ spec:
         memory: 256Mi
       limits:
         memory: 256Mi
+---
+apiVersion: barmancloud.cnpg.io/v1
+kind: ObjectStore
+metadata:
+  name: b2-store
+spec:
+  retentionPolicy: 30d
+  configuration:
+    destinationPath: s3://selfhosted-backups-cbb55f9e/cnpg-backups
+    endpointURL: https://s3.us-east-005.backblazeb2.com
+    # backups run constantly and restores are rare: favour size over restore speed
+    data:
+      compression: bzip2
+    wal:
+      compression: zstd
+    s3Credentials:
+      accessKeyId:
+        name: b2
+        key: ACCESS_KEY_ID
+      secretAccessKey:
+        name: b2
+        key: ACCESS_SECRET_KEY
+  instanceSidecarConfiguration:
+    retentionPolicyIntervalSeconds: 1800
+    env:
+      - name: AWS_DEFAULT_REGION
+        value: us-east-005
+      # newer boto3 checksum headers aren't supported by every S3-compatible store
+      - name: AWS_REQUEST_CHECKSUM_CALCULATION
+        value: when_required
+      - name: AWS_RESPONSE_CHECKSUM_VALIDATION
+        value: when_required
+    resources:
+      requests:
+        cpu: 100m
+        memory: 256Mi
+      limits:
+        memory: 256Mi

@@ -28,7 +28,7 @@ spec:
       enabled: true
       isWALArchiver: true
       parameters:
-        barmanObjectName: s3-store
+        barmanObjectName: b2-store
         serverName: pgcluster
   managed:
     roles:
