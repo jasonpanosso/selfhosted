@@ -7,7 +7,7 @@ metadata:
   labels:
     app.kubernetes.io/name: *app
   annotations:
-    lbipam.cilium.io/ips: 192.168.20.42
+    lbipam.cilium.io/ips: 192.168.21.42
 spec:
   type: LoadBalancer
   ports:
