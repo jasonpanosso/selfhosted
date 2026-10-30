@@ -57,6 +57,13 @@ spec:
           - policy:sourceContext=app|reserved-identity;destinationContext=app|reserved-identity;labelsContext=source_namespace,destination_namespace
         serviceMonitor:
           enabled: true
+      tls:
+        auto:
+          # helm method reuses its certs on every upgrade and never renews them; certmanager
+          # would need cert-manager's CRDs before the CNI exists
+          method: cronJob
+          certValidityDuration: 365
+          schedule: "0 0 1 */4 *"
     ipam:
       mode: kubernetes
     ipv4NativeRoutingCIDR: 10.244.0.0/16
