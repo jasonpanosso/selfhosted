@@ -4,70 +4,49 @@ metadata:
   name: sops-age
 type: Opaque
 stringData:
-  age.agekey: ENC[AES256_GCM,data:K53u3QnG/jzK2BmsR9m2mjO/60tf5fkQRZZnGwgwDffJKfCCJnPKcDAvSyaQPk9qgEKJQHrUX0wFghvbSUoF8A7sHLm4DkrPUhk=,iv:dGmzTxdUwbPmrf2vM9yR7U5iv4NUzPiCzH4zS4iAu0o=,tag:rb62CkUh+ilKXxLKGckX4Q==,type:str]
+  age.agekey: ENC[AES256_GCM,data:vLvblXeKGlB17PjXP6Qczlky+5Gx4T6d/onY4CmJl9jcP4YZhDZSIJpQUyxs4NwzSXseeR96a7dXH9+FoN0okqNJLxyd5zJYgi0=,iv:dGmzTxdUwbPmrf2vM9yR7U5iv4NUzPiCzH4zS4iAu0o=,tag:JWtbCzjuSXZ1u7NlTb8oWQ==,type:str]
 sops:
   age:
     - recipient: age1yubikey1qvh7cprhr6kwhejcyegzdza3tysjepz55w5rh539v2dy7yu4gk046laevy2
       enc: |
         -----BEGIN AGE ENCRYPTED FILE-----
-        YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IHBpdi1wMjU2IHNJSkNNUSBBNHJvb2d6
-        VzcvRUhlWHY1Ykc0QTNGWGlzUVJwOVcxSVFOdDRkTmJ4ZnVGZApsdWVRVEFDMldl
-        MXJRdmE5ckw3Y2ZOVFJYQmt5UjBDanBqeU9oSDFQTEpRCi0tLSBUWGRDYXVSSXFJ
-        cHVLYTloYmxGQWYrQ3pqVU1GMmtvZjBXSTdSU3FNSzVFCv0FJifqOWNTLPwW2/h3
-        grAYSclm2aNxaz+Dy+ERQulkBHSCG3+++BB0jJW5bxshZyikxPwtr6y+6e6ZgWce
-        XrQ=
+        YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IHBpdi1wMjU2IHNJSkNNUSBBaFVSTjcr
+        U2lhR3pwdi9oOWU5RVlFQmN5b24yL2NxSmpsWU9RR3paWjAxaQpKS0hzYjZRRm50
+        Z01oQUZya0FtU2VETnJqYmVvS2dYMXVkaVRvYXNqNVJ3Ci0tLSBHUnd3ejZ2MFVz
+        UjVxbWFYSERmamZQTS9PVDlWWnkyNkxhd1FXV0N3djNRCv94VOg2+6eF0engz0FX
+        6Ph4ykOISKpp/xzywPPPr19umkxBe2obrgrykbED+B5U4ibfvPzsTCFnAgitNEaM
+        71g=
         -----END AGE ENCRYPTED FILE-----
     - recipient: age1yubikey1qfl7hg6g2e2s4vd4kv3c9ea6pcqhjs9g7sn43dda65ln839x0x3fusmlyu2
       enc: |
         -----BEGIN AGE ENCRYPTED FILE-----
-        YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IHBpdi1wMjU2IFV1ODVnUSBBaTk4SG5x
-        RnMrenorK0NoM1E2aWZIVmRqbCtKZURsa1A0M0djenJ3TnJ6eApWOUFFWUV3Zkpx
-        a3cxa0s1c2ErbzlvbmZjNXVsSTRpM1RIbURDRmhYRXhVCi0tLSB4bmc3M2d4M01t
-        SjNORXozYnlwaW10VGhEYzlXUDRMdzA0RlNhQ3pvSVZrClYmFZQz81mi6o7vcLTV
-        9aInovaC8hcZEhsLMyDFE2u13GTIfAw+oh38v+jlkLfWB+Yafp3sTLxpi5E3Szsk
-        egU=
+        YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IHBpdi1wMjU2IFV1ODVnUSBBMkhTL1Bp
+        VVorUmNNNGVSR05HVHl4eERaZ0NrRmtDM21ldW1Yb3B4QWYrVQoza0tFczN4SVVN
+        WmFPQ1V2ZTV6Z1pQSlMwSFNDWWRCY24zb0swYk1hbzRvCi0tLSBGOENJamNORFBy
+        THBKaGdjV1Nha0NvWGd0TnpML2lkTkdpblFmTGt4SHRnCviLqQpgvopKnZjHOFX7
+        qsp0MqXaYR3Y6DDT4LnX9As5wVwajIrGA5axeZh8DnOB4jRcTgQofvXLjzNObtN/
+        PNs=
         -----END AGE ENCRYPTED FILE-----
     - recipient: age1wckum007u3z8j0psv78x36y4y846hptazq927w4uducq0wzk63ts32gdlc
       enc: |
         -----BEGIN AGE ENCRYPTED FILE-----
-        YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSAzempTdkxTWlV6cDNabTdL
-        enJkTnNveU5ZcGYxdTdUR0ZFNjhqUkVFQVY4CjJOQWRHamR0R25RU2s1Q3VoSjdh
-        WllPSVQxMnVLeDdjWUFZTDZ2aTdndjAKLS0tIDRpZC9iVm9YdHh3c2QzN0UvYVZz
-        Z1M5amNyeGxUcG5paDBqdlRVOU5JTFEK9QsfVjAZyk48TuWeg4GX8QlWecnlsBB7
-        yniJS8+/GhGyvwU+OIYo1iG+LxkcxwlSCo4E3mM0aEYyMDjN8Thh7w==
+        YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBVMWQ1YktOVXRCOS9jZ2VO
+        M1EvMVQwYXNGRjR5eVd4b0lCQ29wWnNtQnd3CjBuRWhqbUVhOUVGekVEL2pNWmZS
+        U1RxWGZVMno5c0ZJVXVjb1NCbm1XbFkKLS0tIFNuMlNOVWE3bjVySFpGV3VpK3FT
+        VjVjYTNobHdCdkhxbTJuNWJ4akNTUGcKvA4jY9NS8JZamRtvd5roQGjhFvapsWye
+        X67coO+SSFPImpt5KB0/lSskb+1xvAR38NEfOfw6AtR1CD+QL+CuGw==
         -----END AGE ENCRYPTED FILE-----
     - recipient: age1ukrrt44dctfz6krhl5ynjtm2w6vt7jk20057gz7g2s7nervrxeqqd57cdf
       enc: |
         -----BEGIN AGE ENCRYPTED FILE-----
-        YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSB1bWpXa00rSlpDemV0ZDFx
-        cFA3ZEpYQ2VlZ1orYlMxdG0wS2JHVytvL1FVCkxaa2hkaXBzSVpSRTJwQTU4Z3Iv
-        Nk92cHVMZ1YrNWh1S3BNOXNvQ1pxaTQKLS0tIHFxbTVzMkxtOFcrRnBuZWRRbkhn
-        ZXRVMEpiaGVQNTgxUU9HVk9WaVFzRFUKyXXmQ5fj++KLbSG79ZKirMGg3Vstpzxc
-        zw5AFFKVe1UsVQ65Xp0vKt16gVfvhv3rop4BLDGVBFOTmfPN1q7CiQ==
+        YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBSQm0yZmVMTmdSbTRSb3RS
+        NUJQcXhxcWo0NzY1bGJFeFQwOTNhZWhsdVJBCnhCMEZvN2hjUGQ5ZFhYbXY2ZXBy
+        Mjk2K0RXbjg1MSthR3FBSUxzT1l4UGsKLS0tIEo3dnk3NDUrdzJSekJ3TmFmdW5j
+        NmNrMXFZNW8zYmpva29nZHVrVXRwM0kKxkf2i365EG1AvKo8JZFXi2c4i+fr6Poi
+        jtuWxr/Mdu3DV2mjxwzozDhFeKyyWdEbp4gyf3+QcLVpAXeVrvTjNQ==
         -----END AGE ENCRYPTED FILE-----
-  lastmodified: "2025-05-20T18:43:48Z"
-  mac: ENC[AES256_GCM,data:j+yrU10cXlN1uvUJPBcJNPOugOPL9vPBxg6NV5PUvWv3QYVCUdECIliBQTVVgvq7ie0kBJnpnb3eCA8CSwhWT+UhZ1fH31yJlWK01e7i6Bv57zdtlFTuHgVBAWT9ZdyPvZhnWab64wfG22IHCui3Nv79opvU9ZWwTzmjrmKm/64=,iv:E5lURh8WGrHzybCRGQgM2oJhZQxNagxTa9tyipdYKgY=,tag:Kdw0Z6/XuzUTNWDyo9Sf/g==,type:str]
-  pgp:
-    - created_at: "2026-11-01T20:18:00Z"
-      enc: |-
-        -----BEGIN PGP MESSAGE-----
-
-        hQIMA5pmqlcrcEZ2ARAAyKQrSuWa5AtvISZiVFA+/MyPpTtVqe/FfOR7zbd3mz5N
-        NX+AI2yTGza8o0euI2HVGG+OKHN8TyUoeCvrNP9p9mfLM01SZwGldzrmNTOippkM
-        SbVAwS9nN1QmC02wquDgrvyi0mpQYhu4vKCXbvFqxRmALMhgJO3GRGMNDFHZ3nvD
-        JFPh/gnVsVTKKIFRvUXNddpGoQt9bMZsw0XZgzblSW08jIxdZpTTWo6vol9FL/4W
-        Ir5QwFwuRohFIqrOf1qvs4vVatMSFkUfsD1IYOfYr/twTMJVUCIyHGmnzPjwDE+F
-        Acs70lnGRmr+ejEvS4kPdXsIZlZnqyoNP+xSlR3k4Pwrf5aJScthKFl2I9U9duY+
-        9ioBIvJY6hn/n/s7MQ+SrDeQZ5Sy9X502YHwY04bULr3q3VHAJRSe3wiY70aJrDf
-        qOukKtEtcDJ+8AGwlB9wq+3IdLYjZWWGhFfCc2MIZAuVGXvd+v2M9GSo6yzTjDJ+
-        7XVhm71nPVYbzzDsepVYV+1xxx6MYJJIQNFrYReKg58d6iJF2bl4iAvlKXaV8KXo
-        x5hGF+t4+85KgLPjfoPktQLObcMw7jAZd5mqBW2q3AJ3M6IbRSKfYA2Q2xEcDOmg
-        lA8ngIOCQu0Tj/+yo1HXTCQg52a3vLflP2ZWFEKHx1+2JGjTq1E0lFJb1/ezQ2DS
-        XgGCA17BQH/Fq3dq9IJ/cCXsY1LmBajCKnYv+CgNB/m7zqe6HbH0C17Kz4QKftms
-        Q1Of8XTe8NReibUEQNvP8pCkNDFRgVdcjGqllJcwtP13C8MPKCusKBg3PJAUWYo=
-        =0z+S
-        -----END PGP MESSAGE-----
-      fp: 7F4BBBCE5FA232F9DC9E6707CD4B7B6A06A225FD
+  lastmodified: "2026-11-01T23:44:49Z"
+  mac: ENC[AES256_GCM,data:+Q8WQoLUAkwIq1+jQM0w46Q72ifHbovU7OP8tREm5XgzSwFcMTYOWwwy4NhJZgPHBpMYCHWvWyH6Q9lpEzOYBKf0XsWqVDzVWxvaINPJnkoURVhtoR6g2aPqzHq6yGMiHz8lbRnhY7yPG4esPlViaolQYY7I1hFaP+lQ0UJ/Ufk=,iv:vOMMhbnDOdQXEERF0PSsJAl+vfts1t90KCRGbE0mUMs=,tag:xbnaiHGDtz6eeGM+qt7oHg==,type:str]
   encrypted_regex: ^(data|stringData)$
   mac_only_encrypted: true
   version: 3.10.2

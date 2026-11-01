@@ -6,8 +6,6 @@ keys:
       - &yubikey_37800708 age1yubikey1qfl7hg6g2e2s4vd4kv3c9ea6pcqhjs9g7sn43dda65ln839x0x3fusmlyu2
       # USB backup
       - &breakglass age1wckum007u3z8j0psv78x36y4y846hptazq927w4uducq0wzk63ts32gdlc
-      # old GPG (REMOVE & ROTATE)
-      - &jason_gpg 7F4BBBCE5FA232F9DC9E6707CD4B7B6A06A225FD
   - cluster:
       - &cluster age1ukrrt44dctfz6krhl5ynjtm2w6vt7jk20057gz7g2s7nervrxeqqd57cdf
 
@@ -21,8 +19,6 @@ creation_rules:
           - *yubikey_37800708
           - *breakglass
           - *cluster
-        pgp:
-          - *jason_gpg
 
   - path_regex: kubernetes/*
     key_groups:
@@ -31,8 +27,6 @@ creation_rules:
           - *yubikey_37800708
           - *breakglass
           - *cluster
-        pgp:
-          - *jason_gpg
 
   - path_regex: talos/secrets/secrets\.sops\.yaml$
     key_groups:
@@ -40,8 +34,6 @@ creation_rules:
           - *yubikey_37800570
           - *yubikey_37800708
           - *breakglass
-        pgp:
-          - *jason_gpg
 
   - path_regex: talos/secrets/talosconfig\.sops\.yaml$
     encrypted_regex: ^(token|key|id|secret|secretboxEncryptionSecret|ca|crt)$
@@ -51,16 +43,12 @@ creation_rules:
           - *yubikey_37800570
           - *yubikey_37800708
           - *breakglass
-        pgp:
-          - *jason_gpg
 
   - key_groups:
       - age:
           - *yubikey_37800570
           - *yubikey_37800708
           - *breakglass
-        pgp:
-          - *jason_gpg
 
 stores:
   yaml:
