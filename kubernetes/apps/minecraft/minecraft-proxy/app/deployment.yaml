@@ -27,7 +27,7 @@ spec:
           type: RuntimeDefault
       initContainers:
         - name: copy-plugins
-          image: docker.io/library/eclipse-temurin:25.0.5_8-jre-noble@sha256:39d8a64f84d4c0aab4639757e1502264da350be831df4bb25d182d6a514113c2
+          image: docker.io/library/eclipse-temurin:25.0.5_8-jre-noble@sha256:a98128a57de944a72bd31fbc79b898edd5a5864d3652071d5bbd2160ab7d7dce
           command:
             - cp
             - /opt/plugins/ambassador/ambassador.jar
@@ -54,7 +54,7 @@ spec:
               readOnly: true
       containers:
         - name: *app
-          image: docker.io/library/eclipse-temurin:25.0.5_8-jre-noble@sha256:39d8a64f84d4c0aab4639757e1502264da350be831df4bb25d182d6a514113c2
+          image: docker.io/library/eclipse-temurin:25.0.5_8-jre-noble@sha256:a98128a57de944a72bd31fbc79b898edd5a5864d3652071d5bbd2160ab7d7dce
           workingDir: /server
           command:
             - java
