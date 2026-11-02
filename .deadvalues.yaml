@@ -7,3 +7,9 @@ apiVersions:
   - monitoring.coreos.com/v1/PodMonitor
   - monitoring.coreos.com/v1/PrometheusRule
   - monitoring.coreos.com/v1/ServiceMonitor
+ignore:
+  # only matters while the ServiceMonitor CRD is missing, e.g. a cluster
+  # rebuild where cilium comes up before prometheus-operator-crds
+  - app: cilium
+    keys:
+      - prometheus.serviceMonitor.trustCRDsExist

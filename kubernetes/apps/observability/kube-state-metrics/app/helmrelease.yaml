@@ -30,8 +30,6 @@ spec:
         enabled: true
         http:
           honorLabels: true
-        metrics:
-          honorLabels: true
         relabelings:
           - action: replace
             regex: (.*)
