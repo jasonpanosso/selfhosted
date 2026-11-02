@@ -4,7 +4,7 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &app lldap
-  namespace: &namespace auth
+  namespace: &namespace lldap
 spec:
   commonMetadata:
     labels:
@@ -12,7 +12,7 @@ spec:
   interval: 1h
   retryInterval: 2m
   timeout: 5m
-  path: ./kubernetes/apps/auth/lldap/app
+  path: ./kubernetes/apps/lldap/app
   prune: true
   healthChecks:
     - apiVersion: apps/v1

@@ -75,7 +75,7 @@ authentication_backend:
     disable: true
   ldap:
     implementation: lldap
-    address: ldap://lldap.auth.svc.cluster.local
+    address: ldap://lldap.lldap.svc.cluster.local
     base_dn: dc=${domain},dc=${tld}
     additional_users_dn: ou=people
     additional_groups_dn: ou=groups

@@ -33,7 +33,7 @@ spec:
     - name: dragonfly-operator
       namespace: dragonfly-operator-system
     - name: lldap
-      namespace: *namespace
+      namespace: lldap
     - name: gateway-api-crds
       namespace: kube-system
     - name: prometheus-operator-crds

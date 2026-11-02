@@ -29,7 +29,7 @@ spec:
     - name: db
       namespace: db
     - name: lldap
-      namespace: auth
+      namespace: lldap
     - name: kopiur-repositories
       namespace: kopiur-system
     - name: rook-ceph-cluster
