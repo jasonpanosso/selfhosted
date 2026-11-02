@@ -36,5 +36,5 @@ spec:
       namespace: rook-ceph
     - name: secret-store
       namespace: external-secrets
-    - name: cilium-gateway
+    - name: gateway-api-crds
       namespace: kube-system

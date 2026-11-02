@@ -36,5 +36,5 @@ spec:
       namespace: external-secrets
     - name: storage
       namespace: *namespace
-    - name: cilium-gateway
+    - name: gateway-api-crds
       namespace: kube-system

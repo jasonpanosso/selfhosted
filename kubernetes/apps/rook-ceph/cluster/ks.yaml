@@ -49,7 +49,7 @@ spec:
       namespace: external-secrets
     - name: snapshot-controller
       namespace: kube-system
-    - name: cilium-gateway
+    - name: gateway-api-crds
       namespace: kube-system
     - name: prometheus-operator-crds
       namespace: observability

@@ -30,5 +30,5 @@ spec:
       namespace: rook-ceph
     - name: kopiur-repositories
       namespace: kopiur-system
-    - name: cilium-gateway
+    - name: gateway-api-crds
       namespace: kube-system
