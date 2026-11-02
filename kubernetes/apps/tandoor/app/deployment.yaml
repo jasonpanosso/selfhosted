@@ -93,8 +93,10 @@ spec:
             timeoutSeconds: 10
           resources:
             requests:
-              cpu: 100m
+              cpu: 50m
               memory: 1Gi
+            limits:
+              memory: 2Gi
           securityContext:
             allowPrivilegeEscalation: false
             readOnlyRootFilesystem: true
