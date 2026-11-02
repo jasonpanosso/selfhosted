@@ -8,8 +8,9 @@ spec:
   mode: daemonset
   serviceAccount: otel-node-collector
   priorityClassName: system-node-critical
-  # root so the collector can write its state dir on the hostPath, which kubelet creates as root:root 0755
-  # hostUsers: false would map it to an unprivileged host UID, but Talos sets user.max_user_namespaces=0
+  # root so the collector can write its state dir on the hostPath, which kubelet creates as root:root 0755;
+  # the user namespace maps it to an unprivileged UID on the host (needs user.max_user_namespaces in talos/common.yaml)
+  hostUsers: false
   podSecurityContext:
     runAsUser: 0
     runAsGroup: 0
