@@ -105,6 +105,28 @@
             dontUnpack = true;
             installPhase = "install -Dm755 $src $out/bin/kubectl";
           };
+
+        deadvalues =
+          let
+            version = "0.1.9";
+            platforms = {
+              x86_64-linux = { os = "linux_amd64"; sha256 = "1505dd03d7f5c78b3f26f5008611e0735da149193489067452ff62d7a30326e0"; };
+              aarch64-linux = { os = "linux_arm64"; sha256 = "24bb2ec63fec652eadb350fa2313081f590bf49e117114e125cbe5be411aee9c"; };
+              x86_64-darwin = { os = "darwin_amd64"; sha256 = "6aa8913160161da1a0e6683f0d7bd47c2b6e8e21cca9f21b33ef8022e3c86450"; };
+              aarch64-darwin = { os = "darwin_arm64"; sha256 = "b2de8a2658b84eb8491e9d857a046a9a1b0562a353e28d4e4ea2377bf164cf57"; };
+            };
+            platform = platforms.${system};
+          in
+          pkgs.stdenvNoCC.mkDerivation {
+            pname = "deadvalues";
+            inherit version;
+            src = pkgs.fetchurl {
+              url = "https://github.com/guarnz/deadvalues/releases/download/v${version}/deadvalues_${platform.os}.tar.gz";
+              inherit (platform) sha256;
+            };
+            sourceRoot = ".";
+            installPhase = "install -Dm755 deadvalues $out/bin/deadvalues";
+          };
       in
       {
         devShells.default = pkgs.mkShell {
@@ -120,6 +142,7 @@
             bws # bitwarden cli
             cilium-cli
             cmctl # cert-manager
+            deadvalues
             fluxcd
             hubble
             jq

@@ -34,6 +34,14 @@
       }
     },
     {
+      "description": "deadvalues Group: the action's digest and its version input",
+      "groupName": "deadvalues",
+      "matchPackageNames": ["guarnz/deadvalues"],
+      "group": {
+        "commitMessageTopic": "{{{groupName}}} group"
+      }
+    },
+    {
       "description": "Talos Group",
       "groupName": "Talos",
       "matchDatasources": ["docker"],

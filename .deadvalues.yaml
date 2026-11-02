@@ -1,0 +1,9 @@
+---
+# https://github.com/guarnz/deadvalues/blob/main/docs/configuration.md
+kubeVersion: "1.36"
+# APIs charts check with .Capabilities.APIVersions.Has; deadvalues doesn't
+# follow this repo's Flux graph, so it can't find the CRDs on its own
+apiVersions:
+  - monitoring.coreos.com/v1/PodMonitor
+  - monitoring.coreos.com/v1/PrometheusRule
+  - monitoring.coreos.com/v1/ServiceMonitor
