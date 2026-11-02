@@ -15,6 +15,19 @@ spec:
       storage: 15Gi
   storageClassName: rook-ceph-block
 ---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/master-standalone/persistentvolumeclaim-v1.json
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: mousehole
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: rook-ceph-block
+---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/master-standalone/persistentvolume-v1.json
 apiVersion: v1
 kind: PersistentVolume
