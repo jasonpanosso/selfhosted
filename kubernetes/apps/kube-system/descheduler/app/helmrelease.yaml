@@ -20,16 +20,16 @@ spec:
     kind: Deployment
     deschedulerPolicyAPIVersion: descheduler/v1alpha2
     deschedulerPolicy:
-      metricsProviders:
-        - source: KubernetesMetrics
       profiles:
         - name: Default
           pluginConfig:
             - name: DefaultEvictor
               args:
-                evictFailedBarePods: true
-                evictLocalStoragePods: false
-                evictSystemCriticalPods: false
+                nodeFit: true
+                podProtections:
+                  defaultDisabled:
+                    - FailedBarePods
+                    - PodsWithLocalStorage
             - name: RemoveFailedPods
               args:
                 reasons:
@@ -53,16 +53,6 @@ spec:
                 excludedTaints:
                   - node.cilium.io/agent-not-ready
             - name: RemovePodsViolatingTopologySpreadConstraint
-            - name: LowNodeUtilization
-              args:
-                thresholds:
-                  cpu: 20
-                  memory: 20
-                  pods: 20
-                targetThresholds:
-                  cpu: 70
-                  memory: 70
-                  pods: 50
           plugins:
             balance:
               enabled:
