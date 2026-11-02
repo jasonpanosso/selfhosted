@@ -8,6 +8,20 @@ spec:
   mode: daemonset
   serviceAccount: otel-node-collector
   priorityClassName: system-node-critical
+  # root so the collector can write its state dir on the hostPath, which kubelet creates as root:root 0755;
+  # the user namespace maps it to an unprivileged UID on the host
+  hostUsers: false
+  podSecurityContext:
+    runAsUser: 0
+    runAsGroup: 0
+    seccompProfile:
+      type: RuntimeDefault
+  securityContext:
+    allowPrivilegeEscalation: false
+    readOnlyRootFilesystem: true
+    capabilities:
+      drop:
+        - ALL
   resources:
     limits:
       memory: 512Mi
@@ -29,6 +43,15 @@ spec:
   nodeSelector:
     kubernetes.io/os: linux
   config:
+    extensions:
+      # persists filelog offsets and the exporter queue across collector restarts
+      file_storage:
+        directory: /var/lib/otelcol
+        compaction:
+          directory: /var/lib/otelcol
+          on_start: true
+          on_rebound: true
+
     exporters:
       debug/metrics: {}
       debug/logs: {}
@@ -37,12 +60,24 @@ spec:
         logs_endpoint: http://victoria-logs.observability.svc.cluster.local:9428/insert/opentelemetry/v1/logs
         tls:
           insecure: true
+        # retry until victoria-logs is back
+        retry_on_failure:
+          enabled: true
+          max_elapsed_time: 0
+        sending_queue:
+          enabled: true
+          storage: file_storage
+          sizer: bytes
+          queue_size: 268435456 # 256MiB on /var per node
+          # batching in the exporter instead of the batch processor, which acks
+          # upstream before export and drops when the queue is full
+          batch:
+            sizer: items
+            min_size: 1000
+            max_size: 1500
+            flush_timeout: 1s
 
     processors:
-      batch:
-        send_batch_max_size: 1500
-        send_batch_size: 1000
-        timeout: 1s
       memory_limiter:
         check_interval: 1s
         limit_percentage: 80
@@ -128,9 +163,13 @@ spec:
             type: container
         retry_on_failure:
           enabled: true
+          max_elapsed_time: 0
         start_at: end
+        storage: file_storage
 
     service:
+      extensions:
+        - file_storage
       pipelines:
         logs:
           receivers:
@@ -139,7 +178,6 @@ spec:
             - memory_limiter
             - k8s_attributes
             - resourcedetection/env
-            - batch
           exporters:
             # - debug/logs
             - otlp_http/victoria-logs
@@ -147,7 +185,13 @@ spec:
     - mountPath: /var/log/pods
       name: varlogpods
       readOnly: true
+    - mountPath: /var/lib/otelcol
+      name: varlibotelcol
   volumes:
     - hostPath:
         path: /var/log/pods
       name: varlogpods
+    - hostPath:
+        path: /var/lib/otelcol
+        type: DirectoryOrCreate
+      name: varlibotelcol

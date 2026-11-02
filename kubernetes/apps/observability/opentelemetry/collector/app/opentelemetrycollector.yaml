@@ -7,14 +7,21 @@ metadata:
 spec:
   mode: deployment
   priorityClassName: system-cluster-critical
-  replicas: 2
+  # single replica: k8sobjects resumes from its persisted resourceVersion instead of leader election
+  replicas: 1
+  # the RWO volume can't be attached to two pods across nodes, and two pods would duplicate the watch
+  deploymentUpdateStrategy:
+    type: Recreate
   serviceAccount: otel-cluster-collector
   podSecurityContext:
     runAsNonRoot: true
+    fsGroup: 10001
+    fsGroupChangePolicy: OnRootMismatch
     seccompProfile:
       type: RuntimeDefault
   securityContext:
     allowPrivilegeEscalation: false
+    readOnlyRootFilesystem: true
     capabilities:
       drop:
         - ALL
@@ -31,10 +38,13 @@ spec:
       value: "k8s.cluster.name=prod"
   config:
     extensions:
-      k8s_leader_elector:
-        auth_type: serviceAccount
-        lease_name: otel-collector-daemonset-leader
-        lease_namespace: observability
+      # persists the k8sobjects resourceVersion and the exporter queue across restarts
+      file_storage:
+        directory: /var/lib/otelcol
+        compaction:
+          directory: /var/lib/otelcol
+          on_start: true
+          on_rebound: true
 
     exporters:
       debug: {}
@@ -42,12 +52,22 @@ spec:
         logs_endpoint: http://victoria-logs.observability.svc.cluster.local:9428/insert/opentelemetry/v1/logs
         tls:
           insecure: true
+        # retry until victoria-logs is back
+        retry_on_failure:
+          enabled: true
+          max_elapsed_time: 0
+        sending_queue:
+          enabled: true
+          storage: file_storage
+          sizer: bytes
+          queue_size: 268435456 # 256MiB, leaves room on the 1Gi volume for compaction's copy
+          batch:
+            sizer: items
+            min_size: 1000
+            max_size: 1500
+            flush_timeout: 1s
 
     processors:
-      batch:
-        send_batch_max_size: 1500
-        send_batch_size: 1000
-        timeout: 1s
       memory_limiter:
         check_interval: 1s
         limit_percentage: 80
@@ -56,72 +76,22 @@ spec:
         detectors: [env]
         timeout: 2s
         override: false
-      k8s_attributes:
-        passthrough: false
-        extract:
-          otel_annotations: true
-          labels:
-            - from: pod
-              key: app.kubernetes.io/name
-              tag_name: service.name
-            - from: pod
-              key: k8s-app
-              tag_name: service.name
-            - from: pod
-              key: app.kubernetes.io/instance
-              tag_name: k8s.app.instance
-            - from: pod
-              key: app.kubernetes.io/version
-              tag_name: service.version
-            - from: pod
-              key: app.kubernetes.io/component
-              tag_name: k8s.app.component
-          metadata:
-            - k8s.namespace.name
-            - k8s.pod.name
-            - k8s.pod.uid
-            - k8s.node.name
-            - k8s.pod.start_time
-            - k8s.deployment.name
-            - k8s.replicaset.name
-            - k8s.replicaset.uid
-            - k8s.daemonset.name
-            - k8s.daemonset.uid
-            - k8s.job.name
-            - k8s.job.uid
-            - k8s.container.name
-            - k8s.cronjob.name
-            - k8s.statefulset.name
-            - k8s.statefulset.uid
-            - container.image.tag
-            - container.image.name
-            - k8s.cluster.uid
-        pod_association:
-          - sources:
-              - from: resource_attribute
-                name: k8s.pod.uid
-          - sources:
-              - from: resource_attribute
-                name: k8s.pod.name
-              - from: resource_attribute
-                name: k8s.namespace.name
-              - from: resource_attribute
-                name: k8s.node.name
-          - sources:
-              - from: resource_attribute
-                name: k8s.pod.ip
-          - sources:
-              - from: resource_attribute
-                name: k8s.pod.name
-              - from: resource_attribute
-                name: k8s.namespace.name
-          - sources:
-              - from: connection
+      # the body is the watch event ({type, object}); victoria-logs takes _msg from the body,
+      # so move the event into attributes under the same names and use its note as the message
+      transform/events:
+        error_mode: ignore
+        log_statements:
+          - context: log
+            statements:
+              - delete_key(log.body["object"]["metadata"], "managedFields")
+              - set(log.attributes["type"], log.body["type"])
+              - set(log.attributes["object"], log.body["object"])
+              - set(log.body, log.attributes["object"]["note"])
 
     receivers:
       k8sobjects:
-        k8s_leader_elector: k8s_leader_elector
         auth_type: serviceAccount
+        storage: file_storage
         objects:
           - name: events
             group: events.k8s.io
@@ -131,16 +101,22 @@ spec:
 
     service:
       extensions:
-        - k8s_leader_elector
+        - file_storage
       pipelines:
         logs:
           receivers:
             - k8sobjects
           processors:
             - memory_limiter
-            - k8s_attributes
+            - transform/events
             - resourcedetection/env
-            - batch
           exporters:
             # - debug
             - otlp_http/victoria-logs
+  volumeMounts:
+    - mountPath: /var/lib/otelcol
+      name: state
+  volumes:
+    - name: state
+      persistentVolumeClaim:
+        claimName: otel-cluster-collector
