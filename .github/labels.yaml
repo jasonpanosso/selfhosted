@@ -19,6 +19,8 @@
   color: "027fa0"
 - name: renovate/helm
   color: "027fa0"
+- name: renovate/modpack
+  color: "7b42bc"
 # Semantic Types
 - name: type/digest
   color: "ffeC19"

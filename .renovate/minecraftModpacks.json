@@ -1,0 +1,57 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "customDatasources": {
+    "curseforge-modpacks": {
+      "description": "cfwidget mirrors the CurseForge file list without needing an API key",
+      "defaultRegistryUrlTemplate": "https://api.cfwidget.com/minecraft/modpacks/{{packageName}}",
+      "format": "json",
+      "transformTemplates": [
+        "{\"releases\": [files[type=\"release\"].{\"version\": name, \"releaseTimestamp\": uploaded_at}], \"homepage\": urls.curseforge}"
+      ]
+    },
+    "modrinth-modpacks": {
+      "defaultRegistryUrlTemplate": "https://api.modrinth.com/v2/project/{{packageName}}/version",
+      "format": "json",
+      "transformTemplates": [
+        "{\"releases\": [$[version_type=\"release\"].{\"version\": version_number, \"releaseTimestamp\": date_published}]}"
+      ]
+    }
+  },
+  "customManagers": [
+    {
+      "description": "itzg AUTO_CURSEFORGE packs pinned with CF_FILENAME_MATCHER",
+      "customType": "regex",
+      "managerFilePatterns": ["/(^|/)kubernetes/apps/minecraft/.+\\.ya?ml$/"],
+      "matchStrings": [
+        "- name: CF_SLUG\\n\\s+value: (?<depName>\\S+)\\n\\s+- name: CF_FILENAME_MATCHER\\n\\s+value: \"(?<currentValue>[^\"]+)\""
+      ],
+      "datasourceTemplate": "custom.curseforge-modpacks",
+      "versioningTemplate": "deb"
+    },
+    {
+      "description": "itzg MODRINTH packs pinned in the MODRINTH_MODPACK URL",
+      "customType": "regex",
+      "managerFilePatterns": ["/(^|/)kubernetes/apps/minecraft/.+\\.ya?ml$/"],
+      "matchStrings": [
+        "- name: MODRINTH_MODPACK\\n\\s+value: https://modrinth\\.com/modpack/(?<depName>[^/\\s]+)/version/(?<currentValue>\\S+)"
+      ],
+      "datasourceTemplate": "custom.modrinth-modpacks"
+    }
+  ],
+  "packageRules": [
+    {
+      "description": "CF file names look like Society-Sunlit-Cobblemon-1.1.4-SSV4.1.5A.zip; CF_FILENAME_MATCHER takes the part after the pack name",
+      "matchDatasources": ["custom.curseforge-modpacks"],
+      "extractVersion": "-(?<version>\\d+\\.\\S+)\\.zip$"
+    },
+    {
+      "matchDatasources": ["custom.curseforge-modpacks", "custom.modrinth-modpacks"],
+      "addLabels": ["renovate/modpack"],
+      "semanticCommitScope": "modpack",
+      "commitMessageTopic": "modpack {{depName}}",
+      "prBodyNotes": [
+        "Modpack updates can break existing worlds. Read the changelog, and check that `VERSION` still matches the pack's Minecraft version."
+      ]
+    }
+  ]
+}
