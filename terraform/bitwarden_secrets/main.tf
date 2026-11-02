@@ -9,17 +9,3 @@ resource "bitwarden-secrets_secret" "cloudflare_api_token" {
   project_id = bitwarden_project.this.id
   note       = "API token for cloudflare"
 }
-
-resource "bitwarden-secrets_secret" "s3_access_key_id" {
-  key        = "S3_ACCESS_KEY_ID"
-  value      = var.s3_access_key_id
-  project_id = bitwarden_project.this.id
-  note       = "Access Key ID for S3 WAL Backup Bucket"
-}
-
-resource "bitwarden-secrets_secret" "s3_secret_access_key" {
-  key        = "S3_SECRET_ACCESS_KEY"
-  value      = var.s3_secret_access_key
-  project_id = bitwarden_project.this.id
-  note       = "Secret Access Key for S3 WAL Backup Bucket"
-}

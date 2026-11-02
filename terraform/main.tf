@@ -1,46 +1,3 @@
-resource "digitalocean_spaces_bucket" "backups" {
-  name   = var.spaces_name
-  region = var.spaces_region
-  acl    = "private"
-
-  versioning {
-    enabled = true
-  }
-
-  lifecycle_rule {
-    id      = "expire-noncurrent-versions"
-    enabled = true
-
-    noncurrent_version_expiration {
-      days = 30
-    }
-  }
-
-  # prune talos etcd backups older than 30d
-  lifecycle_rule {
-    id      = "expire-talos-backup"
-    enabled = true
-    prefix  = "talos-backup/"
-
-    expiration {
-      days = 30
-    }
-  }
-
-  lifecycle {
-    prevent_destroy = true
-  }
-}
-
-resource "digitalocean_spaces_key" "this" {
-  name = "${digitalocean_spaces_bucket.backups.name}-key"
-
-  grant {
-    bucket     = digitalocean_spaces_bucket.backups.name
-    permission = "readwrite"
-  }
-}
-
 module "bitwarden_secrets" {
   source       = "./bitwarden_secrets"
   project_name = "selfhosted_secrets"
@@ -53,9 +10,6 @@ module "bitwarden_secrets" {
   vpn_wireguard_private_key   = var.vpn_wireguard_private_key
   vpn_wireguard_preshared_key = var.vpn_wireguard_preshared_key
   vpn_server_names            = var.vpn_server_names
-
-  s3_access_key_id     = digitalocean_spaces_key.this.access_key
-  s3_secret_access_key = digitalocean_spaces_key.this.secret_key
 
   b2_bucket_id                      = b2_bucket.backups.bucket_id
   b2_cnpg_access_key_id             = b2_application_key.cnpg.application_key_id

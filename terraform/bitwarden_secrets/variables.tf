@@ -14,18 +14,6 @@ variable "cloudflare_api_token" {
   sensitive   = true
 }
 
-variable "s3_access_key_id" {
-  description = "Access key ID for S3 Bucket"
-  type        = string
-  sensitive   = true
-}
-
-variable "s3_secret_access_key" {
-  description = "Secret access key for S3 Bucket"
-  type        = string
-  sensitive   = true
-}
-
 variable "b2_bucket_id" {
   description = "ID of the B2 backup bucket, for the per-repository Kopiur keys"
   type        = string

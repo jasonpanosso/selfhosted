@@ -1,10 +1,5 @@
 terraform {
   required_providers {
-    digitalocean = {
-      source  = "digitalocean/digitalocean"
-      version = "~> 2.66.0"
-    }
-
     b2 = {
       source  = "Backblaze/b2"
       version = "~> 0.14.1"
@@ -30,12 +25,6 @@ terraform {
       version = "1.2.1"
     }
   }
-}
-
-provider "digitalocean" {
-  token             = var.digitalocean_token
-  spaces_access_id  = var.digitalocean_spaces_access_id
-  spaces_secret_key = var.digitalocean_spaces_secret_key
 }
 
 provider "b2" {
