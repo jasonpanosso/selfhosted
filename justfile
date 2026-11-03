@@ -19,8 +19,9 @@ apply node *args:
     #!/usr/bin/env bash
     set -euo pipefail
     node="{{ node }}"
+    secrets="$(just _secrets)"
     # render up front so a failure aborts instead of feeding talosctl an empty file
-    config="$(just talos_version="{{ talos_version }}" _render "$node")"
+    config="$(printf '%s\n' "$secrets" | just talos_version="{{ talos_version }}" _render "$node")"
     echo "== $node"
     talosctl -n "$node" apply-config --file <(printf '%s\n' "$config") {{ args }}
 
@@ -29,13 +30,25 @@ apply node *args:
 apply-role role *args:
     #!/usr/bin/env bash
     set -euo pipefail
+    nodes=()
     for file in {{ talos_dir }}/nodes/{{ role }}/*.yaml; do
       # each node's factory schematic sits beside it as <node>.schematic.yaml
       [[ $file != *.schematic.yaml ]] || continue
-      node="$(basename "$file" .yaml)"
+      nodes+=("$(basename "$file" .yaml)")
+    done
+    # decrypt once and render every node before touching any, so one YubiKey prompt covers the
+    # rollout and a node that fails to render aborts it before it starts
+    secrets="$(just _secrets)"
+    declare -A configs
+    for node in "${nodes[@]}"; do
+      configs[$node]="$(printf '%s\n' "$secrets" | just talos_version="{{ talos_version }}" _render "$node")"
+    done
+    unset secrets
+    for node in "${nodes[@]}"; do
       just _ceph-wait
       [[ {{ role }} != controlplane ]] || started="$(just _apiserver-started "$node")"
-      just talos_version="{{ talos_version }}" apply "$node" {{ args }}
+      echo "== $node"
+      talosctl -n "$node" apply-config --file <(printf '%s\n' "${configs[$node]}") {{ args }}
       # give kubelet/reboot a moment to flip the node NotReady before gating on Ready
       sleep 10
       just _node-ready "$node"
@@ -48,10 +61,8 @@ upgrade node *args:
     #!/usr/bin/env bash
     set -euo pipefail
     node="{{ node }}"
-    config="$(just talos_version="{{ talos_version }}" _render "$node")"
     # talosctl defaults to the vanilla installer, which would drop the factory schematic's extensions
-    image="$(printf '%s\n' "$config" | yq 'select(.kind == "UnattendedInstallConfig") | .installer.image')"
-    [[ -n $image && $image != null ]] || { echo "no install image in config for $node" >&2; exit 1; }
+    image="$(just _installer-image "$node")"
     echo "== $node -> $image"
     talosctl -n "$node" upgrade --image "$image" {{ args }}
 
@@ -80,11 +91,23 @@ upgrade-k8s *args:
     echo "== kubernetes -> $version"
     talosctl -n controlplane-1 upgrade-k8s --to "${version#v}" {{ args }}
 
-# Render a node's machine config: `talosctl gen config` from the secrets bundle and role patches,
-# then the node's own patch on top
+# Print the decrypted Talos secrets bundle, for piping into `_render`
+_secrets:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    # a PIN prompt during `sops -d` can leave the terminal without newline translation
+    # (staircased output); put it back however we exit
+    if [[ -t 0 ]]; then tty_state="$(stty -g)"; trap 'stty "$tty_state"' EXIT; fi
+    sops -d {{ talos_dir }}/secrets/secrets.sops.yaml
+
+# Render a node's machine config: `talosctl gen config` from the secrets bundle (read from stdin, see
+# `_secrets`, so a rollout decrypts it once) and role patches, then the node's own patch on top
 _render node:
     #!/usr/bin/env bash
     set -euo pipefail
+    # read before anything else so no subcommand consumes it; abort instead of feeding talosctl an empty bundle
+    secrets="$(cat)"
+    [[ -n $secrets ]] || { echo "no secrets bundle on stdin (pipe in \`just _secrets\`)" >&2; exit 1; }
     node="{{ node }}"
     # the node's directory under nodes/ is its role
     files=({{ talos_dir }}/nodes/*/"$node".yaml)
@@ -92,6 +115,30 @@ _render node:
     patch="${files[0]}"
     role="$(basename "$(dirname "$patch")")"
     [[ $role == controlplane || $role == worker ]] || { echo "unknown role '$role' for $node ($patch)" >&2; exit 1; }
+    just _installer-image "$node" >/dev/null
+    # gen config takes these as arguments; they're kept in common.yaml's KubeClusterConfig like any other field
+    cluster_name="$(yq -e 'select(.kind == "KubeClusterConfig") | .clusterName' "{{ talos_dir }}/common.yaml")"
+    endpoint="$(yq -e 'select(.kind == "KubeClusterConfig") | .endpoint' "{{ talos_dir }}/common.yaml")"
+    kubernetes_version="$(just _kubernetes-version)"
+    talos_version_flag=()
+    [[ -z "{{ talos_version }}" ]] || talos_version_flag=(--talos-version "{{ talos_version }}")
+    base="$(talosctl gen config "$cluster_name" "$endpoint" \
+      --with-secrets <(printf '%s\n' "$secrets") \
+      "${talos_version_flag[@]}" --kubernetes-version "${kubernetes_version#v}" \
+      --config-patch "@{{ talos_dir }}/common.yaml" \
+      --config-patch-control-plane "@{{ talos_dir }}/controlplane.yaml" \
+      --config-patch-worker "@{{ talos_dir }}/worker.yaml" \
+      --output-types "$role" -o - 2> >(grep -v '^generating PKI and tokens$' >&2))"
+    talosctl machineconfig patch <(printf '%s\n' "$base") --patch "@$patch" -o /dev/stdout
+
+# Print a node's installer image after checking it's a factory image built from the node's schematic file
+_installer-image node:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    node="{{ node }}"
+    files=({{ talos_dir }}/nodes/*/"$node".yaml)
+    [[ ${#files[@]} -eq 1 && -f ${files[0]} ]] || { echo "no config for $node (want {{ talos_dir }}/nodes/<role>/$node.yaml)" >&2; exit 1; }
+    patch="${files[0]}"
     # without one, gen config falls back to the plain installer and the node would lose its extensions
     image="$(yq -e 'select(.kind == "UnattendedInstallConfig") | .installer.image' "$patch" 2>/dev/null)" \
       || { echo "$patch must set UnattendedInstallConfig installer.image" >&2; exit 1; }
@@ -109,25 +156,7 @@ _render node:
       | pick(["owner", "overlay", "customization"])' "$schematic" | sha256sum | cut -d' ' -f1)"
     [[ $image_id == "$schematic_id" ]] \
       || { printf '%s installer.image schematic %s does not match %s (sha256 %s)\n' "$patch" "$image_id" "$schematic" "$schematic_id" >&2; exit 1; }
-    # a gpg passphrase prompt during `sops -d` can leave the terminal without newline translation
-    # (staircased output); put it back however we exit
-    if [[ -t 0 ]]; then tty_state="$(stty -g)"; trap 'stty "$tty_state"' EXIT; fi
-    # gen config takes these as arguments; they're kept in common.yaml's KubeClusterConfig like any other field
-    cluster_name="$(yq -e 'select(.kind == "KubeClusterConfig") | .clusterName' "{{ talos_dir }}/common.yaml")"
-    endpoint="$(yq -e 'select(.kind == "KubeClusterConfig") | .endpoint' "{{ talos_dir }}/common.yaml")"
-    kubernetes_version="$(just _kubernetes-version)"
-    # decrypt up front so a sops failure aborts instead of feeding talosctl an empty file
-    secrets="$(sops -d {{ talos_dir }}/secrets/secrets.sops.yaml)"
-    talos_version_flag=()
-    [[ -z "{{ talos_version }}" ]] || talos_version_flag=(--talos-version "{{ talos_version }}")
-    base="$(talosctl gen config "$cluster_name" "$endpoint" \
-      --with-secrets <(printf '%s\n' "$secrets") \
-      "${talos_version_flag[@]}" --kubernetes-version "${kubernetes_version#v}" \
-      --config-patch "@{{ talos_dir }}/common.yaml" \
-      --config-patch-control-plane "@{{ talos_dir }}/controlplane.yaml" \
-      --config-patch-worker "@{{ talos_dir }}/worker.yaml" \
-      --output-types "$role" -o - 2> >(grep -v '^generating PKI and tokens$' >&2))"
-    talosctl machineconfig patch <(printf '%s\n' "$base") --patch "@$patch" -o /dev/stdout
+    echo "$image"
 
 # Print the Kubernetes version pinned in the patches, refusing if the pinned images disagree
 _kubernetes-version:
