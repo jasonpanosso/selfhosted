@@ -27,38 +27,10 @@ variable "cloudflare_api_token" {
   sensitive   = true
 }
 
-variable "vpn_wireguard_private_key" {
-  description = "WireGuard private key"
-  type        = string
-  sensitive   = true
-}
-
-variable "vpn_wireguard_addresses" {
-  description = "Comma-delimited list of WireGuard peer IP addresses (e.g. \"10.0.0.2/32,10.0.0.3/32\")"
-  type        = string
-  sensitive   = true
-}
-
-variable "vpn_wireguard_preshared_key" {
-  description = "WireGuard preshared key"
-  type        = string
-  sensitive   = true
-}
-
 variable "vpn_firewall_input_ports" {
   description = "Comma-delimited list of opened firewall ports (e.g. \"51820,1194\")"
   type        = string
   sensitive   = true
-}
-
-variable "vpn_service_provider" {
-  description = "Identifier for the VPN service provider (e.g. \"privateinternetaccess\", \"nordvpn\")"
-  type        = string
-}
-
-variable "vpn_server_names" {
-  description = "Comma-delimited list of VPN servers to use"
-  type        = string
 }
 
 variable "smtp_username" {
