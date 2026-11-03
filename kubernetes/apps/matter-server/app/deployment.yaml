@@ -44,6 +44,9 @@ spec:
               value: /data
             - name: PORT
               value: "5580"
+            # unauthenticated API: keep it off net1, where cilium policy doesn't apply
+            - name: LISTEN_ADDRESS
+              value: eth0
             # IoT VLAN interface (multus)
             - name: PRIMARY_INTERFACE
               value: net1
