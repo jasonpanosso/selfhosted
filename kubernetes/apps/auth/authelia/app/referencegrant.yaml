@@ -3,9 +3,10 @@
 apiVersion: gateway.networking.k8s.io/v1
 kind: ReferenceGrant
 metadata:
-  name: authelia-ext-authz
+  name: authelia-ext-authz-a-l
 spec:
-  # namespaces whose HTTPRoutes use authelia as an ExternalAuth backend
+  # namespaces whose HTTPRoutes use authelia as an ExternalAuth backend (a-l).
+  # spec.from allows at most 16 entries
   from:
     - group: gateway.networking.k8s.io
       kind: HTTPRoute
@@ -25,6 +26,20 @@ spec:
     - group: gateway.networking.k8s.io
       kind: HTTPRoute
       namespace: lldap
+  to:
+    - group: ""
+      kind: Service
+      name: authelia
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/gateway.networking.k8s.io/referencegrant_v1.json
+apiVersion: gateway.networking.k8s.io/v1
+kind: ReferenceGrant
+metadata:
+  name: authelia-ext-authz-m-z
+spec:
+  # namespaces whose HTTPRoutes use authelia as an ExternalAuth backend (m-z).
+  # spec.from allows at most 16 entries
+  from:
     - group: gateway.networking.k8s.io
       kind: HTTPRoute
       namespace: mousehole
