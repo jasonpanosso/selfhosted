@@ -50,6 +50,10 @@ spec:
     - namespace: mousehole
       app: mousehole
       capacity: 1Gi
+    - namespace: home-assistant
+      app: home-assistant
+      capacity: 5Gi
+      bootstrap: true
   # Populator Restores stay unready until a PVC claims them, so health is
   # reported by Kopiur's own alerts rather than by waiting here.
   wait: false

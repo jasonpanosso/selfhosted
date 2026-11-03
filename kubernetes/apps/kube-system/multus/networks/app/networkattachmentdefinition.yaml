@@ -66,3 +66,37 @@ spec:
         }
       ]
     }
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/k8s.cni.cncf.io/networkattachmentdefinition_v1.json
+# IoT VLAN with the OTBR, no internet
+# pods pick their own IP/MAC in the networks annotation. IPv4 is on-link only (no routes)
+# sysctls:
+# - accept_ra_rt_info_max_plen=64 installs the OTBR's route to the Thread /64 from its RA route information option
+# - accept_ra_defrtr=0 keeps the default route on eth0
+apiVersion: k8s.cni.cncf.io/v1
+kind: NetworkAttachmentDefinition
+metadata:
+  name: iot
+spec:
+  config: |-
+    {
+      "cniVersion": "1.0.0",
+      "name": "iot",
+      "plugins": [
+        {
+          "type": "macvlan",
+          "master": "vlan40",
+          "mode": "bridge",
+          "ipam": { "type": "static" },
+          "capabilities": { "ips": true, "mac": true }
+        },
+        {
+          "type": "tuning",
+          "sysctl": {
+            "net.ipv6.conf.net1.accept_ra": "2",
+            "net.ipv6.conf.net1.accept_ra_rt_info_max_plen": "64",
+            "net.ipv6.conf.net1.accept_ra_defrtr": "0"
+          }
+        }
+      ]
+    }

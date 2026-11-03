@@ -120,12 +120,21 @@ identity_providers:
     claims_policies:
       default:
         id_token: ['groups', 'email', 'email_verified', 'alt_emails', 'preferred_username', 'name']
+    authorization_policies:
+      # home assistant creates a user for anyone the client lets through
+      admins_two_factor:
+        default_policy: deny
+        rules:
+          - policy: two_factor
+            subject: group:admins
     clients:
       - client_id: autobrr
         client_secret: {{ secret "/secrets/OIDC_AUTOBRR_HASHED_SECRET" | mindent 10 "|" | msquote }}
         userinfo_signed_response_alg: none
         claims_policy: default
         public: false
+        require_pkce: true
+        pkce_challenge_method: S256
         authorization_policy: two_factor
         pre_configured_consent_duration: 1y
         redirect_uris:
@@ -140,6 +149,8 @@ identity_providers:
         userinfo_signed_response_alg: none
         claims_policy: default
         public: false
+        require_pkce: true
+        pkce_challenge_method: S256
         authorization_policy: two_factor
         pre_configured_consent_duration: 1y
         redirect_uris:
@@ -154,6 +165,8 @@ identity_providers:
         userinfo_signed_response_alg: none
         claims_policy: default
         public: false
+        require_pkce: true
+        pkce_challenge_method: S256
         authorization_policy: two_factor
         pre_configured_consent_duration: 1y
         redirect_uris:
@@ -162,6 +175,25 @@ identity_providers:
           - openid
           - groups
           - email
+          - profile
+      # hass-oidc-auth (auth_oidc) custom integration
+      - client_id: home-assistant
+        client_name: Home Assistant
+        client_secret: {{ secret "/secrets/OIDC_HOME_ASSISTANT_HASHED_SECRET" | mindent 10 "|" | msquote }}
+        public: false
+        require_pkce: true
+        pkce_challenge_method: S256
+        # auth_oidc sends the secret in the POST body
+        token_endpoint_auth_method: client_secret_post
+        userinfo_signed_response_alg: none
+        claims_policy: default
+        authorization_policy: admins_two_factor
+        pre_configured_consent_duration: 1y
+        redirect_uris:
+          - https://hass.${domain}.${tld}/auth/oidc/callback
+        scopes:
+          - openid
+          - groups
           - profile
 
 telemetry:

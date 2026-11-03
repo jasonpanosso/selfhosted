@@ -1,0 +1,18 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/kustomization
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ./deployment.yaml
+  - ./externalsecret.yaml
+  - ./httproute.yaml
+  - ./pvc.yaml
+  - ./service.yaml
+
+configMapGenerator:
+  - name: home-assistant
+    options:
+      disableNameSuffixHash: true
+    files:
+      - configuration.yaml=./resources/configuration.yaml

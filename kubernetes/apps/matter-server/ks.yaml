@@ -30,5 +30,5 @@ spec:
       namespace: rook-ceph
     - name: kopiur-repositories
       namespace: kopiur-system
-    - name: multus
+    - name: multus-networks
       namespace: kube-system

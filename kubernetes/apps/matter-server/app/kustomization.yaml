@@ -6,6 +6,5 @@ kind: Kustomization
 resources:
   - ./ciliumnetworkpolicy.yaml
   - ./deployment.yaml
-  - ./networkattachmentdefinition.yaml
   - ./pvc.yaml
   - ./service.yaml

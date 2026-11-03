@@ -1,0 +1,81 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/gateway.networking.k8s.io/httproute_v1.json
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: &app home-assistant
+  labels:
+    app.kubernetes.io/name: *app
+spec:
+  parentRefs:
+    - name: cilium
+      namespace: kube-system
+      sectionName: https
+  hostnames:
+    - hass.${domain}.${tld}
+  rules:
+    # companion app API calls, authenticated by HA's own tokens. skips ExternalAuth
+    # (native clients can't do forward auth); strip identity headers so they can't be spoofed.
+    # login/onboarding pages stay behind authelia (rule below)
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /api
+        - path:
+            type: PathPrefix
+            value: /auth/token
+      filters:
+        - type: RequestHeaderModifier
+          requestHeaderModifier:
+            set:
+              - name: X-Forwarded-For
+                value: "%DOWNSTREAM_REMOTE_ADDRESS_WITHOUT_PORT%"
+            remove:
+              - Remote-User
+              - Remote-Name
+              - Remote-Groups
+              - Remote-Email
+      backendRefs:
+        - name: *app
+          port: 8123
+      timeouts:
+        request: 0s
+    # everything else, including /api/onboarding (needs no token before setup is finished;
+    # the longer prefix wins over /api above)
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+        - path:
+            type: PathPrefix
+            value: /api/onboarding
+      filters:
+        - type: ExternalAuth
+          externalAuth:
+            protocol: HTTP
+            backendRef:
+              name: authelia
+              namespace: auth
+              port: 80
+            http:
+              path: /api/authz/ext-authz/
+              allowedHeaders:
+                - accept
+                - cookie
+                - x-forwarded-proto
+                - x-requested-with
+              allowedResponseHeaders:
+                - Remote-User
+                - Remote-Name
+                - Remote-Groups
+                - Remote-Email
+        - type: RequestHeaderModifier
+          requestHeaderModifier:
+            set:
+              - name: X-Forwarded-For
+                value: "%DOWNSTREAM_REMOTE_ADDRESS_WITHOUT_PORT%"
+      backendRefs:
+        - name: *app
+          port: 8123
+      timeouts:
+        request: 0s
