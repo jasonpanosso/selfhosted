@@ -15,6 +15,7 @@ locals {
     "sonarr",
     "upbrr",
     "filebrowser",
+    "matter-server",
     "sunlit-valley-cobblemon",
     "sunlit-valley",
   ])

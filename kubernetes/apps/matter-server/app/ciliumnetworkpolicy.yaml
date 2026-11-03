@@ -1,0 +1,29 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/cilium.io/ciliumnetworkpolicy_v2.json
+# only covers eth0
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: matter-server
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: matter-server
+  ingress:
+    # websocket API and /ble proxy for Home Assistant
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: home-assistant
+            app.kubernetes.io/name: home-assistant
+      toPorts:
+        - ports:
+            - port: "5580"
+              protocol: TCP
+  egress:
+    # DCL attestation lookups and OTA update checks
+    - toEntities:
+        - world
+      toPorts:
+        - ports:
+            - port: "443"
+              protocol: TCP
