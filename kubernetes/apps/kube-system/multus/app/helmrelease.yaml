@@ -1,0 +1,36 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/helm.toolkit.fluxcd.io/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &app multus
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: *app
+  interval: 1h
+  upgrade:
+    strategy:
+      name: RemediateOnFailure
+    remediation:
+      remediateLastFailure: true
+      retries: 2
+  values:
+    nodeSelector:
+      network.home.internal/vlan40: "true"
+    extraArgs:
+      # delegate to cilium's config
+      - --multus-master-cni-file-name=05-cilium.conflist
+    resources:
+      requests:
+        cpu: 10m
+        memory: 32Mi
+      limits:
+        memory: 128Mi
+    cniPlugins:
+      resources:
+        requests:
+          cpu: 10m
+          memory: 32Mi
+        limits:
+          memory: 64Mi
