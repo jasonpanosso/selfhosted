@@ -19,3 +19,6 @@ auth_oidc:
   roles:
     admin: admins
     user: admins
+
+prometheus:
+  requires_auth: false

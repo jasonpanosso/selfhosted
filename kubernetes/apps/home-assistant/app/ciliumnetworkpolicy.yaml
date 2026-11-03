@@ -1,0 +1,28 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/cilium.io/ciliumnetworkpolicy_v2.json
+# only covers eth0 (nothing listens on net1, see the eth0-proxy sidecar).
+# /api/prometheus has no auth, so no other pod may reach HA
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: home-assistant
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: home-assistant
+  ingress:
+    # cilium gateway envoy
+    - fromEntities:
+        - ingress
+      toPorts:
+        - ports:
+            - port: "8123"
+              protocol: TCP
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: observability
+            app.kubernetes.io/name: vmagent
+      toPorts:
+        - ports:
+            - port: "8123"
+              protocol: TCP
