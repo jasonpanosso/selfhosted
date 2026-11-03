@@ -20,3 +20,20 @@ addresses:
   - address: 192.168.20.114/24
 routes:
   - gateway: 192.168.20.1
+---
+# IoT VLAN
+apiVersion: v1alpha1
+kind: VLANConfig
+name: vlan40
+vlanID: 40
+parent: enp1s0
+---
+apiVersion: v1alpha1
+kind: SysctlConfig
+params:
+  net.ipv6.conf.vlan40.disable_ipv6: "1" # default/accept_ra=2 would give the node a SLAAC address from the OTBR on VLAN 40
+---
+apiVersion: v1alpha1
+kind: KubeNodeConfig
+labels:
+  network.home.internal/vlan40: "true"
