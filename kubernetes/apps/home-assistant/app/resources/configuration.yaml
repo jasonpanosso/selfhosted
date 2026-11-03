@@ -9,16 +9,6 @@ automation: !include automations.yaml
 script: !include scripts.yaml
 scene: !include scenes.yaml
 
-http:
-  # eth0 only: net1 (IoT VLAN) isn't covered by cilium policy
-  server_host: !env_var POD_IP
-  use_x_forwarded_for: true
-  # the gateway's envoy connects from each node's cilium ingress IP, allocated from the pod CIDR
-  trusted_proxies:
-    - 10.244.0.0/16
-  ip_ban_enabled: true
-  login_attempts_threshold: 5
-
 auth_oidc:
   client_id: home-assistant
   client_secret: !env_var OIDC_CLIENT_SECRET

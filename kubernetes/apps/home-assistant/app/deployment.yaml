@@ -40,11 +40,6 @@ spec:
             - containerPort: 8123
               name: http
           env:
-            # for `http: server_host: !env_var POD_IP` in configuration.yaml (keeps 8123 off net1)
-            - name: POD_IP
-              valueFrom:
-                fieldRef:
-                  fieldPath: status.podIP
             # auth_oidc client_secret in configuration.yaml
             - name: OIDC_CLIENT_SECRET
               valueFrom:
