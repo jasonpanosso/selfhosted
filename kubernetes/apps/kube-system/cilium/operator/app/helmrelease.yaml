@@ -96,8 +96,6 @@ spec:
           enabled: true
       replicas: 2
       rollOutPods: true
-    # TODO: disable audit mode after a few days of hubble metrics
-    policyAuditMode: true
     prometheus:
       enabled: true
       serviceMonitor:
