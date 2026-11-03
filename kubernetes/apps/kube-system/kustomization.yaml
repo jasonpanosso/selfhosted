@@ -14,7 +14,7 @@ resources:
   - ./gateway-api-crds/ks.yaml
   - ./namespace.yaml
   - ./metrics-server/ks.yaml
-  - ./multus/ks.yaml
+  - ./multus
   - ./reloader/ks.yaml
   - ./snapshot-controller/ks.yaml
   - ./spegel/ks.yaml

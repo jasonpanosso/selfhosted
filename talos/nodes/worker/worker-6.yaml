@@ -19,6 +19,7 @@ kind: SysctlConfig
 params:
   kernel.kexec_load_disabled: "1"
   net.ipv6.conf.vlan40.disable_ipv6: "1" # default/accept_ra=2 would give the node a SLAAC address from the OTBR on VLAN 40
+  net.ipv6.conf.vlan30.disable_ipv6: "1" # VLAN 30 is IPv4-only
 ---
 # inconsistent MAC?
 apiVersion: v1alpha1
@@ -36,7 +37,15 @@ name: vlan40
 vlanID: 40
 parent: end0
 ---
+# VPN VLAN
+apiVersion: v1alpha1
+kind: VLANConfig
+name: vlan30
+vlanID: 30
+parent: end0
+---
 apiVersion: v1alpha1
 kind: KubeNodeConfig
 labels:
   network.home.internal/vlan40: "true"
+  network.home.internal/vlan30: "true"
