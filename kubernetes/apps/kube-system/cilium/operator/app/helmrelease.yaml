@@ -24,6 +24,10 @@ spec:
       datapathMode: netkit
       masquerade: true
       preallocateMaps: true
+      # bpf_host drops tagged frames on the native devices unless their VLAN is listed (multus vlans)
+      vlanBypass:
+        - 30
+        - 40
       # tproxy: true
     bpfClockProbe: true
     bgpControlPlane:
