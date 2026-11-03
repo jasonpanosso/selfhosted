@@ -14,9 +14,7 @@ spec:
   hostnames:
     - hass.${domain}.${tld}
   rules:
-    # companion app API calls, authenticated by HA's own tokens. skips ExternalAuth
-    # (native clients can't do forward auth); strip identity headers so they can't be spoofed.
-    # login/onboarding pages stay behind authelia (rule below)
+    # use auth-oidc plugin for everything but initial onboarding & web view
     - matches:
         - path:
             type: PathPrefix
@@ -40,8 +38,6 @@ spec:
           port: 8123
       timeouts:
         request: 0s
-    # everything else, including /api/onboarding (needs no token before setup is finished;
-    # the longer prefix wins over /api above)
     - matches:
         - path:
             type: PathPrefix
