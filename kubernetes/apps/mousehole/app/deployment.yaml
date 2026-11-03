@@ -20,6 +20,8 @@ spec:
         k8s.v1.cni.cncf.io/networks: |-
           [{"name": "vpn", "namespace": "kube-system", "interface": "net1", "ips": ["192.168.30.12/24"], "mac": "02:00:00:00:30:12"}]
     spec:
+      # the mousehole Service would inject MOUSEHOLE_PORT=tcp://..., which mousehole parses as its own port
+      enableServiceLinks: false
       nodeSelector:
         network.home.internal/vlan30: "true"
       securityContext:
