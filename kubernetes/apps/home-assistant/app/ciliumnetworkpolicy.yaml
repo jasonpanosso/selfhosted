@@ -1,6 +1,5 @@
 ---
 # yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/cilium.io/ciliumnetworkpolicy_v2.json
-# only covers eth0 (nothing listens on net1, see the eth0-proxy sidecar).
 # /api/prometheus has no auth, so no other pod may reach HA
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy

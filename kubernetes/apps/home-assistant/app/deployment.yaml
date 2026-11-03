@@ -18,13 +18,7 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: *app
-      annotations:
-        k8s.v1.cni.cncf.io/networks: |-
-          [{"name": "iot", "namespace": "kube-system", "interface": "net1", "ips": ["192.168.40.12/24"], "mac": "02:00:00:00:40:12"}]
     spec:
-      # IoT VLAN for OTBR, ESPHome and mDNS discovery
-      nodeSelector:
-        network.home.internal/vlan40: "true"
       securityContext:
         runAsUser: 65534
         runAsGroup: 65534
@@ -33,37 +27,12 @@ spec:
         runAsNonRoot: true
         seccompProfile:
           type: RuntimeDefault
-      initContainers:
-        # HA listens on 127.0.0.1 only (http listen addr only configurable in UI)
-        # forward eth0 to it so 8123 stays off net1, where cilium policy doesn't apply
-        - name: eth0-proxy
-          image: &image ghcr.io/home-operations/home-assistant:2026.10.4@sha256:81271a8bbe2a6019659e9d5cde98b884dd0d67fad6819bb4ab177dceb0c1c5e1
-          restartPolicy: Always
-          command: [socat]
-          args:
-            - TCP4-LISTEN:8123,bind=$(POD_IP),fork,reuseaddr
-            - TCP4:127.0.0.1:8123
+      containers:
+        - image: ghcr.io/home-operations/home-assistant:2026.10.4@sha256:81271a8bbe2a6019659e9d5cde98b884dd0d67fad6819bb4ab177dceb0c1c5e1
+          name: *app
           ports:
             - containerPort: 8123
               name: http
-          env:
-            - name: POD_IP
-              valueFrom:
-                fieldRef:
-                  fieldPath: status.podIP
-          resources:
-            requests:
-              cpu: 10m
-              memory: 16Mi
-            limits:
-              memory: 128Mi
-          securityContext: &securityContext
-            allowPrivilegeEscalation: false
-            readOnlyRootFilesystem: true
-            capabilities: {drop: [ALL]}
-      containers:
-        - image: *image
-          name: *app
           env:
             # auth_oidc client_secret in configuration.yaml
             - name: OIDC_CLIENT_SECRET
@@ -87,7 +56,10 @@ spec:
               memory: 512Mi
             limits:
               memory: 2Gi
-          securityContext: *securityContext
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities: {drop: [ALL]}
           volumeMounts:
             - name: data
               mountPath: /config

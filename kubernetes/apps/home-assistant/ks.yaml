@@ -34,5 +34,3 @@ spec:
       namespace: external-secrets
     - name: gateway-api-crds
       namespace: kube-system
-    - name: multus-networks
-      namespace: kube-system

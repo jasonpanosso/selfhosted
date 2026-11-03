@@ -191,6 +191,7 @@ identity_providers:
         pre_configured_consent_duration: 1y
         redirect_uris:
           - https://hass.${domain}.${tld}/auth/oidc/callback
+          - https://hass.home.${domain}.${tld}/auth/oidc/callback
         scopes:
           - openid
           - groups
