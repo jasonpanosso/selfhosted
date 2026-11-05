@@ -217,6 +217,8 @@ spec:
       create:
         enabled: true
       moverDefaults:
+        podLabels:
+          app.kubernetes.io/name: kopiur-mover
         securityContext:
           runAsUser: 65534
           runAsGroup: 65534
@@ -433,6 +435,8 @@ spec:
       create:
         enabled: true
       moverDefaults:
+        podLabels:
+          app.kubernetes.io/name: kopiur-mover
         securityContext:
           runAsUser: 65534
           runAsGroup: 65534
