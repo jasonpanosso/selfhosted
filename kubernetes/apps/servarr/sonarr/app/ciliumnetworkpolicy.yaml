@@ -35,6 +35,9 @@ spec:
         - matchLabels:
             k8s:io.kubernetes.pod.namespace: autobrr
             app.kubernetes.io/name: autobrr
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: upbrr
+            app.kubernetes.io/name: upbrr
       toPorts: *http
   egress:
     # toFQDNs only learns IPs from DNS that goes through the proxy
