@@ -1,0 +1,23 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/cilium.io/ciliumnetworkpolicy_v2.json
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: dragonfly-operator
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: dragonfly-operator
+  enableDefaultDeny:
+    ingress: true
+    egress: true
+  egress:
+    # admin port, for managing replication
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: auth
+            app.kubernetes.io/name: dragonfly
+      toPorts:
+        - ports:
+            - port: "9999"
+              protocol: TCP
