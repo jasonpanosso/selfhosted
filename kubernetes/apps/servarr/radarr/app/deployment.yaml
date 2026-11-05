@@ -48,6 +48,9 @@ spec:
                   key: token
             - name: RADARR__LOG__DBENABLED
               value: "False"
+            # crash reports and telemetry
+            - name: RADARR__LOG__ANALYTICSENABLED
+              value: "False"
             - name: RADARR__APP__INSTANCENAME
               value: Radarr
             - name: RADARR__AUTH__METHOD

@@ -48,6 +48,9 @@ spec:
                   key: token
             - name: SONARR__LOG__DBENABLED
               value: "False"
+            # crash reports and telemetry
+            - name: SONARR__LOG__ANALYTICSENABLED
+              value: "False"
             - name: SONARR__APP__INSTANCENAME
               value: Sonarr
             - name: SONARR__AUTH__METHOD

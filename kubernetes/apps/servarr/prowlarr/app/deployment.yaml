@@ -48,6 +48,9 @@ spec:
                   key: token
             - name: PROWLARR__LOG__DBENABLED
               value: "False"
+            # crash reports and telemetry
+            - name: PROWLARR__LOG__ANALYTICSENABLED
+              value: "False"
             - name: PROWLARR__APP__INSTANCENAME
               value: Prowlarr
             - name: PROWLARR__AUTH__METHOD
