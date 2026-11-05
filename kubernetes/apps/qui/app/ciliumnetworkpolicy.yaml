@@ -1,0 +1,84 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/cilium.io/ciliumnetworkpolicy_v2.json
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: qui
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: qui
+  enableDefaultDeny:
+    ingress: true
+    egress: true
+  ingress:
+    # cilium gateway envoy
+    - fromEntities:
+        - ingress
+      toPorts: &http
+        - ports:
+            - port: "80"
+              protocol: TCP
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: servarr
+            app.kubernetes.io/name: radarr
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: servarr
+            app.kubernetes.io/name: sonarr
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: autobrr
+            app.kubernetes.io/name: autobrr
+      toPorts: *http
+  egress:
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: qbittorrent
+            app.kubernetes.io/name: qbittorrent
+      toPorts:
+        - ports:
+            - port: "8080"
+              protocol: TCP
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: db
+            app.kubernetes.io/name: postgresql
+      toPorts:
+        - ports:
+            - port: "5432"
+              protocol: TCP
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: servarr
+            app.kubernetes.io/name: radarr
+      toPorts:
+        - ports:
+            - port: "7878"
+              protocol: TCP
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: servarr
+            app.kubernetes.io/name: sonarr
+      toPorts:
+        - ports:
+            - port: "8989"
+              protocol: TCP
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: servarr
+            app.kubernetes.io/name: prowlarr
+      toPorts:
+        - ports:
+            - port: "9696"
+              protocol: TCP
+    # OIDC through the public auth hostname, and qui's other external requests
+    - toCIDRSet:
+        - cidr: 0.0.0.0/0
+          except:
+            - 10.0.0.0/8
+            - 172.16.0.0/12
+            - 192.168.0.0/16
+      toPorts:
+        - ports:
+            - port: "443"
+              protocol: TCP
