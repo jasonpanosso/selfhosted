@@ -1,0 +1,104 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/cilium.io/ciliumnetworkpolicy_v2.json
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: sonarr
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: sonarr
+  enableDefaultDeny:
+    ingress: true
+    egress: true
+  ingress:
+    # cilium gateway envoy
+    - fromEntities:
+        - ingress
+      toPorts: &http
+        - ports:
+            - port: "8989"
+              protocol: TCP
+    - fromEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: prowlarr
+        - matchLabels:
+            app.kubernetes.io/name: configarr
+        - matchLabels:
+            app.kubernetes.io/name: deduparr
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: seerr
+            app.kubernetes.io/name: seerr
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: qui
+            app.kubernetes.io/name: qui
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: autobrr
+            app.kubernetes.io/name: autobrr
+      toPorts: *http
+  egress:
+    # toFQDNs only learns IPs from DNS that goes through the proxy
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: kube-system
+            k8s-app: kube-dns
+      toPorts:
+        - ports:
+            - port: "53"
+              protocol: UDP
+            - port: "53"
+              protocol: TCP
+          rules:
+            dns:
+              - matchPattern: "*"
+    - toFQDNs:
+        # metadata
+        - matchName: skyhook.sonarr.tv
+        # update checks and scene mappings
+        - matchName: services.sonarr.tv
+        # scene numbering
+        - matchName: thexem.info
+        # posters
+        - matchName: artworks.thetvdb.com
+        # the Pushover connection
+        - matchName: api.pushover.net
+      toPorts:
+        - ports:
+            - port: "443"
+              protocol: TCP
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: db
+            app.kubernetes.io/name: postgresql
+      toPorts:
+        - ports:
+            - port: "5432"
+              protocol: TCP
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: prowlarr
+      toPorts:
+        - ports:
+            - port: "9696"
+              protocol: TCP
+    # download client, and the webhook on show added
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: qui
+            app.kubernetes.io/name: qui
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: autobrr
+            app.kubernetes.io/name: autobrr
+      toPorts:
+        - ports:
+            - port: "80"
+              protocol: TCP
+    # refresh webhook on import
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: jellyfin
+            app.kubernetes.io/name: jellyfin
+      toPorts:
+        - ports:
+            - port: "8096"
+              protocol: TCP
