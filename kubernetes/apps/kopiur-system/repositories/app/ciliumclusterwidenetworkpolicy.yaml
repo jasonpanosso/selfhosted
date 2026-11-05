@@ -1,0 +1,38 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/cilium.io/ciliumclusterwidenetworkpolicy_v2.json
+# every mover in every namespace; the API server comes from the baseline policy.
+apiVersion: cilium.io/v2
+kind: CiliumClusterwideNetworkPolicy
+metadata:
+  name: kopiur-mover
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: kopiur-mover
+  enableDefaultDeny:
+    ingress: true
+    egress: true
+  egress:
+    # toFQDNs only learns IPs from DNS that goes through the proxy. "*" because
+    # lookups also cover the cluster search domains.
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: kube-system
+            k8s-app: kube-dns
+      toPorts:
+        - ports:
+            - port: "53"
+              protocol: UDP
+            - port: "53"
+              protocol: TCP
+          rules:
+            dns:
+              - matchPattern: "*"
+    # replication to B2; the endpoint set in resourceset.yaml. kopia uses path-style
+    # requests here, so it never looks up the bucket's own hostname.
+    - toFQDNs:
+        - matchName: s3.us-east-005.backblazeb2.com
+      toPorts:
+        - ports:
+            - port: "443"
+              protocol: TCP
