@@ -10,9 +10,12 @@ spec:
       rules:
         # hubble metrics are only scraped by VictoriaMetrics, so only vmalert evaluates this
         - alert: HubblePolicyDrops
+          # minecraft -> rcon-web-admin is a server closing an idle RCON connection after
+          # conntrack forgot it, which looks like a new connection; harmless and still denied
           expr: |
             sum by (source_namespace, source, destination_namespace, destination) (
               increase(hubble_drop_total{reason="POLICY_DENIED"}[5m])
+                unless hubble_drop_total{source_namespace="minecraft", destination_namespace="rcon-web-admin"}
             ) > 0
           annotations:
             summary: >-
