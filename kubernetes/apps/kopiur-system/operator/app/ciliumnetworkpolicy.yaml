@@ -1,0 +1,27 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/cilium.io/ciliumnetworkpolicy_v2.json
+# controller and webhook only need the API server and DNS, from the baseline policy
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: kopiur
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: kopiur
+  enableDefaultDeny:
+    ingress: true
+    egress: true
+  ingress:
+    # admission webhooks, failurePolicy: Fail. control plane nodes aren't the
+    # kube-apiserver entity while restarting, so select them by label as well
+    - fromEntities:
+        - kube-apiserver
+      toPorts: &webhook
+        - ports:
+            - port: "8443"
+              protocol: TCP
+    - fromNodes:
+        - matchLabels:
+            node-role.kubernetes.io/control-plane: ""
+      toPorts: *webhook
