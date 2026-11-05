@@ -1,0 +1,35 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/cilium.io/ciliumnetworkpolicy_v2.json
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: thelounge
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: thelounge
+  enableDefaultDeny:
+    ingress: true
+    egress: true
+  ingress:
+    # cilium gateway envoy
+    - fromEntities:
+        - ingress
+      toPorts:
+        - ports:
+            - port: "9000"
+              protocol: TCP
+  egress:
+    # IRC over TLS
+    - toCIDRSet:
+        - cidr: 0.0.0.0/0
+          except:
+            - 10.0.0.0/8
+            - 172.16.0.0/12
+            - 192.168.0.0/16
+      toPorts:
+        - ports:
+            - port: "6697"
+              protocol: TCP
+            - port: "7000"
+              protocol: TCP

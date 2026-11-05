@@ -9,6 +9,17 @@ spec:
   endpointSelector:
     matchLabels:
       app.kubernetes.io/name: mousehole
+  enableDefaultDeny:
+    ingress: true
+    egress: true
+  ingress:
+    # cilium gateway envoy
+    - fromEntities:
+        - ingress
+      toPorts:
+        - ports:
+            - port: "5010"
+              protocol: TCP
   egress:
     - toEntities:
         - cluster
