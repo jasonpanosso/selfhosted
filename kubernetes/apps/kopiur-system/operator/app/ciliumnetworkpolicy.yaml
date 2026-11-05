@@ -1,6 +1,5 @@
 ---
 # yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/cilium.io/ciliumnetworkpolicy_v2.json
-# controller and webhook only need the API server and DNS, from the baseline policy
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
 metadata:
@@ -13,8 +12,7 @@ spec:
     ingress: true
     egress: true
   ingress:
-    # admission webhooks, failurePolicy: Fail. control plane nodes aren't the
-    # kube-apiserver entity while restarting, so select them by label as well
+    # admission webhooks, failurePolicy
     - fromEntities:
         - kube-apiserver
       toPorts: &webhook

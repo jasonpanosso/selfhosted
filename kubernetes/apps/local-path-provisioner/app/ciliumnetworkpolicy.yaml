@@ -1,7 +1,5 @@
 ---
 # yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/cilium.io/ciliumnetworkpolicy_v2.json
-# the provisioner only needs the API server and DNS, from the baseline policy; its
-# helper pods have the same label and only touch host paths
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
 metadata:

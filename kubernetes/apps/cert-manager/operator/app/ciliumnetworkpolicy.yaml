@@ -82,8 +82,7 @@ spec:
         - ports:
             - port: "6080"
               protocol: TCP
-    # admission webhooks, failurePolicy: Fail. control plane nodes aren't the
-    # kube-apiserver entity while restarting, so select them by label as well
+    # admission webhooks, failurePolicy: Fail
     - fromEntities:
         - kube-apiserver
       toPorts: &webhook
