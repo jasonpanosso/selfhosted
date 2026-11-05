@@ -1,0 +1,99 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/cilium.io/ciliumnetworkpolicy_v2.json
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: pgcluster
+spec:
+  endpointSelector:
+    matchLabels:
+      cnpg.io/cluster: pgcluster
+  enableDefaultDeny:
+    ingress: true
+    egress: true
+  ingress:
+    # replication, and instance manager status
+    - fromEndpoints:
+        - matchLabels:
+            cnpg.io/cluster: pgcluster
+      toPorts:
+        - ports:
+            - port: "5432"
+              protocol: TCP
+            - port: "8000"
+              protocol: TCP
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: cnpg-system
+            app.kubernetes.io/name: cloudnative-pg
+      toPorts:
+        - ports:
+            - port: "8000"
+              protocol: TCP
+    # clients
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: auth
+            app.kubernetes.io/name: authelia
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: autobrr
+            app.kubernetes.io/name: autobrr
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: bookboss
+            app.kubernetes.io/name: bookboss
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: lldap
+            app.kubernetes.io/name: lldap
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: qui
+            app.kubernetes.io/name: qui
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: seerr
+            app.kubernetes.io/name: seerr
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: servarr
+            app.kubernetes.io/name: prowlarr
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: servarr
+            app.kubernetes.io/name: radarr
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: servarr
+            app.kubernetes.io/name: sonarr
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: tandoor
+            app.kubernetes.io/name: tandoor
+      toPorts:
+        - ports:
+            - port: "5432"
+              protocol: TCP
+  egress:
+    # toFQDNs only learns IPs from DNS that goes through the proxy
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: kube-system
+            k8s-app: kube-dns
+      toPorts:
+        - ports:
+            - port: "53"
+              protocol: UDP
+            - port: "53"
+              protocol: TCP
+          rules:
+            dns:
+              - matchPattern: "*"
+    # WAL archiving and backups; the endpoint in objectstore.yaml
+    - toFQDNs:
+        - matchName: s3.us-east-005.backblazeb2.com
+      toPorts:
+        - ports:
+            - port: "443"
+              protocol: TCP
+    - toEndpoints:
+        - matchLabels:
+            cnpg.io/cluster: pgcluster
+      toPorts:
+        - ports:
+            - port: "5432"
+              protocol: TCP
+            - port: "8000"
+              protocol: TCP
