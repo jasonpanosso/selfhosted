@@ -1,0 +1,126 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/cilium.io/ciliumnetworkpolicy_v2.json
+# the API server and DNS come from the baseline policy
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: external-secrets
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: external-secrets
+  enableDefaultDeny:
+    ingress: true
+    egress: true
+  egress:
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: bitwarden-sdk-server
+      toPorts:
+        - ports:
+            - port: "9998"
+              protocol: TCP
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/cilium.io/ciliumnetworkpolicy_v2.json
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: bitwarden-sdk-server
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: bitwarden-sdk-server
+  enableDefaultDeny:
+    ingress: true
+    egress: true
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: external-secrets
+      toPorts: &sdk
+        - ports:
+            - port: "9998"
+              protocol: TCP
+    # kubelet health probe
+    - fromEntities:
+        - host
+      toPorts: *sdk
+  egress:
+    # toFQDNs only learns IPs from DNS that goes through the proxy
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: kube-system
+            k8s-app: kube-dns
+      toPorts:
+        - ports:
+            - port: "53"
+              protocol: UDP
+            - port: "53"
+              protocol: TCP
+          rules:
+            dns:
+              - matchPattern: "*"
+    # the URLs in clustersecretstore.yaml
+    - toFQDNs:
+        - matchName: api.bitwarden.com
+        - matchName: identity.bitwarden.com
+      toPorts:
+        - ports:
+            - port: "443"
+              protocol: TCP
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/cilium.io/ciliumnetworkpolicy_v2.json
+# the API server and DNS come from the baseline policy
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: external-secrets-cert-controller
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: external-secrets-cert-controller
+  enableDefaultDeny:
+    ingress: true
+    egress: true
+  ingress:
+    # kubelet health probe
+    - fromEntities:
+        - host
+      toPorts:
+        - ports:
+            - port: "8081"
+              protocol: TCP
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/cilium.io/ciliumnetworkpolicy_v2.json
+# the API server and DNS come from the baseline policy
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: external-secrets-webhook
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: external-secrets-webhook
+  enableDefaultDeny:
+    ingress: true
+    egress: true
+  ingress:
+    # kubelet health probe
+    - fromEntities:
+        - host
+      toPorts:
+        - ports:
+            - port: "8081"
+              protocol: TCP
+    # admission webhooks, failurePolicy: Fail. control plane nodes aren't the
+    # kube-apiserver entity while restarting, so select them by label as well
+    - fromEntities:
+        - kube-apiserver
+      toPorts: &webhook
+        - ports:
+            - port: "10250"
+              protocol: TCP
+    - fromNodes:
+        - matchLabels:
+            node-role.kubernetes.io/control-plane: ""
+      toPorts: *webhook
