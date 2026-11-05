@@ -1,0 +1,45 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/cilium.io/ciliumnetworkpolicy_v2.json
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: jellyfin
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: jellyfin
+  enableDefaultDeny:
+    ingress: true
+    egress: true
+  ingress:
+    # cilium gateway envoy
+    - fromEntities:
+        - ingress
+      toPorts: &http
+        - ports:
+            - port: "8096"
+              protocol: TCP
+    # seerr, and the refresh webhook from radarr and sonarr
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: seerr
+            app.kubernetes.io/name: seerr
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: servarr
+            app.kubernetes.io/name: radarr
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: servarr
+            app.kubernetes.io/name: sonarr
+      toPorts: *http
+  egress:
+    # metadata, artwork, plugin repositories, and the authelia plugin through the public hostname
+    - toCIDRSet:
+        - cidr: 0.0.0.0/0
+          except:
+            - 10.0.0.0/8
+            - 172.16.0.0/12
+            - 192.168.0.0/16
+      toPorts:
+        - ports:
+            - port: "443"
+              protocol: TCP
