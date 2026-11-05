@@ -6,6 +6,8 @@ metadata:
 spec:
   args:
     - --proactor_threads=1
+    # checks for releases daily and reports anonymous data; its network policy blocks this anyway
+    - --version_check=false
   authentication:
     passwordFromSecret:
       name: authelia
