@@ -1,0 +1,44 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/cilium.io/ciliumnetworkpolicy_v2.json
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: sunlit-valley
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: sunlit-valley
+  enableDefaultDeny:
+    ingress: true
+    egress: true
+  ingress:
+    # game and voice chat
+    - fromEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: minecraft-proxy
+      toPorts:
+        - ports:
+            - port: "25565"
+              protocol: TCP
+            - port: "24454"
+              protocol: UDP
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: rcon-web-admin
+            app.kubernetes.io/name: rcon-web-admin
+      toPorts:
+        - ports:
+            - port: "25575"
+              protocol: TCP
+  egress:
+    # modpack downloads on boot, and requests from mods
+    - toCIDRSet:
+        - cidr: 0.0.0.0/0
+          except:
+            - 10.0.0.0/8
+            - 172.16.0.0/12
+            - 192.168.0.0/16
+      toPorts:
+        - ports:
+            - port: "443"
+              protocol: TCP

@@ -1,0 +1,55 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/cilium.io/ciliumnetworkpolicy_v2.json
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: minecraft-proxy
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: minecraft-proxy
+  enableDefaultDeny:
+    ingress: true
+    egress: true
+  ingress:
+    # players, through the LoadBalancer service; game and voice chat
+    - fromEntities:
+        - world
+      toPorts:
+        - ports:
+            - port: "25577"
+              protocol: TCP
+            - port: "25577"
+              protocol: UDP
+  egress:
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: botc
+      toPorts:
+        - ports:
+            - port: "25565"
+              protocol: TCP
+            - port: "27722"
+              protocol: UDP
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: sunlit-valley
+        - matchLabels:
+            app.kubernetes.io/name: sunlit-valley-cobblemon
+      toPorts:
+        - ports:
+            - port: "25565"
+              protocol: TCP
+            - port: "24454"
+              protocol: UDP
+    # player authentication
+    - toCIDRSet:
+        - cidr: 0.0.0.0/0
+          except:
+            - 10.0.0.0/8
+            - 172.16.0.0/12
+            - 192.168.0.0/16
+      toPorts:
+        - ports:
+            - port: "443"
+              protocol: TCP
