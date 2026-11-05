@@ -9,6 +9,9 @@ spec:
   endpointSelector:
     matchLabels:
       app.kubernetes.io/name: home-assistant
+  enableDefaultDeny:
+    ingress: true
+    egress: true
   ingress:
     # cilium gateway envoy
     - fromEntities:
@@ -25,3 +28,48 @@ spec:
         - ports:
             - port: "8123"
               protocol: TCP
+  egress:
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: matter-server
+            app.kubernetes.io/name: matter-server
+      toPorts:
+        - ports:
+            - port: "5580"
+              protocol: TCP
+    # OTBR REST API
+    - toCIDR:
+        - 192.168.40.10/32
+      toPorts:
+        - ports:
+            - port: "8080"
+              protocol: TCP
+    # integrations, OIDC through the public auth hostname
+    - toCIDRSet:
+        - cidr: 0.0.0.0/0
+          except:
+            - 10.0.0.0/8
+            - 172.16.0.0/12
+            - 192.168.0.0/16
+      toPorts:
+        - ports:
+            - port: "443"
+              protocol: TCP
+    # default_config's SSDP and mDNS discovery
+    - toCIDR:
+        - 224.0.0.251/32
+        - 239.255.255.250/32
+        - 255.255.255.255/32
+      toPorts:
+        - ports:
+            - port: "1900"
+              protocol: UDP
+            - port: "5353"
+              protocol: UDP
+    # hourly UDP probe to the pod's gateway
+    - toEntities:
+        - host
+      toPorts:
+        - ports:
+            - port: "80"
+              protocol: UDP
