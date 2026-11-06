@@ -18,7 +18,7 @@ spec:
         parameters:
           barmanObjectName: b2-store
           serverName: pgcluster-pg18
-  imageName: ghcr.io/cloudnative-pg/postgresql:18.6-standard-trixie@sha256:39add80f5b1e573e2f6b641c66fd1a2f8dede67ca0330e870285bc1078551390
+  imageName: ghcr.io/cloudnative-pg/postgresql:18.6-minimal-trixie@sha256:26d15a12723510b0b416e8aec2bc65f2da7ac9b77ef3182a0911e4b8b991420a
   instances: 3
   storage:
     size: 20Gi
