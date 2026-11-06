@@ -42,6 +42,20 @@
       }
     },
     {
+      "description": "Minecraft proxy images: group digest-only rebuilds",
+      "groupName": "Minecraft proxy digests",
+      "matchDatasources": ["docker"],
+      "matchPackageNames": [
+        "ghcr.io/jasonpanosso/velocity",
+        "ghcr.io/jasonpanosso/ambassador",
+        "ghcr.io/jasonpanosso/simple-voice-chat"
+      ],
+      "matchUpdateTypes": ["digest"],
+      "group": {
+        "commitMessageTopic": "{{{groupName}}} group"
+      }
+    },
+    {
       "description": "Talos Group",
       "groupName": "Talos",
       "matchDatasources": ["docker"],
