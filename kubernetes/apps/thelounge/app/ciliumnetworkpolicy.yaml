@@ -33,3 +33,24 @@ spec:
               protocol: TCP
             - port: "7000"
               protocol: TCP
+    # toFQDNs only learns IPs from DNS that goes through the proxy
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: kube-system
+            k8s-app: kube-dns
+      toPorts:
+        - ports:
+            - port: "53"
+              protocol: UDP
+            - port: "53"
+              protocol: TCP
+          rules:
+            dns:
+              - matchPattern: "*"
+    # update check, the process crashes if this is unreachable
+    - toFQDNs:
+        - matchName: api.github.com
+      toPorts:
+        - ports:
+            - port: "443"
+              protocol: TCP
