@@ -113,17 +113,17 @@ spec:
           emptyDir: {}
         - name: velocity
           image:
-            reference: ghcr.io/jasonpanosso/velocity:v4.3.1@sha256:80b4058bc79fb9eb6f74a490ed8d07ad2a695525e5ea145913c5fc20f464aeee
+            reference: ghcr.io/jasonpanosso/velocity:v4.3.1@sha256:9e35ed70fc2d222c0547e0216b6a7b127b5d728ace01b2a9a074e2b104b1f8e7
             pullPolicy: IfNotPresent
         - name: plugins
           emptyDir: {}
         - name: ambassador
           image:
-            reference: ghcr.io/jasonpanosso/ambassador:1.4.5@sha256:becc1238d9297addee16936a3ed31c5db1a625d698ed81dad3ff4a3802573f8d
+            reference: ghcr.io/jasonpanosso/ambassador:1.4.5@sha256:4e2cfb0f37758bdc4c89dcad88ca13e76b52c318b2b4ee1b1fbe9b58ba6e15b8
             pullPolicy: IfNotPresent
         - name: simple-voice-chat
           image:
-            reference: ghcr.io/jasonpanosso/simple-voice-chat:velocity-2.6.26@sha256:21d882802a807516ad97e8baad3c91e5f87c0c151408a6763ae7dbc521a8454e
+            reference: ghcr.io/jasonpanosso/simple-voice-chat:velocity-2.6.26@sha256:ef414cc24074a3c80d473f68ad7c8a323613c04e1ba47953f188b5f5167ddedd
             pullPolicy: IfNotPresent
         - name: tmp
           emptyDir: {}
