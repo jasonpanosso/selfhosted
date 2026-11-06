@@ -113,7 +113,7 @@ spec:
           emptyDir: {}
         - name: velocity
           image:
-            reference: ghcr.io/jasonpanosso/velocity:v4.3.1@sha256:8e1ec6233d873cfde73500fe4829bae1ff08577d69a43c715fc50337cdace93d
+            reference: ghcr.io/jasonpanosso/velocity:v4.3.1@sha256:80b4058bc79fb9eb6f74a490ed8d07ad2a695525e5ea145913c5fc20f464aeee
             pullPolicy: IfNotPresent
         - name: plugins
           emptyDir: {}
