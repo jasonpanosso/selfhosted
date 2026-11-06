@@ -42,14 +42,10 @@
       }
     },
     {
-      "description": "Minecraft proxy images: group digest-only rebuilds",
-      "groupName": "Minecraft proxy digests",
+      "description": "Containers repo images: group digest-only rebuilds",
+      "groupName": "Personal containers repo digests",
       "matchDatasources": ["docker"],
-      "matchPackageNames": [
-        "ghcr.io/jasonpanosso/velocity",
-        "ghcr.io/jasonpanosso/ambassador",
-        "ghcr.io/jasonpanosso/simple-voice-chat"
-      ],
+      "matchPackageNames": ["/^ghcr\\.io/jasonpanosso//"],
       "matchUpdateTypes": ["digest"],
       "group": {
         "commitMessageTopic": "{{{groupName}}} group"
