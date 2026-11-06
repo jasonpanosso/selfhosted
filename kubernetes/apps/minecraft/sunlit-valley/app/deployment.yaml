@@ -38,6 +38,14 @@ spec:
                     operator: In
                     values:
                       - amd64
+      # mysticaloaktree calls these on boot and only clients use the results
+      hostAliases:
+        - ip: 127.0.0.1
+          hostnames:
+            - checkip.amazonaws.com
+            - api.api-ninjas.com
+            - api.weatherunlocked.com
+            - www.fantasynamegenerators.com
       containers:
         - name: *app
           image: ghcr.io/itzg/minecraft-server:2026.10.1-java21@sha256:07ab333a8542208c4c863a78fd3cf3fd1138d5a2e118306e1a316d202f69ab74
