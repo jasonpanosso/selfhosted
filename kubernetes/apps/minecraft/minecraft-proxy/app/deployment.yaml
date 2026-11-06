@@ -119,7 +119,7 @@ spec:
           emptyDir: {}
         - name: ambassador
           image:
-            reference: ghcr.io/jasonpanosso/ambassador:1.4.5@sha256:080d56d4b8eb45ad6157fdb965e3dc0823eecf531d86b91f6a60947a07151200
+            reference: ghcr.io/jasonpanosso/ambassador:1.4.5@sha256:becc1238d9297addee16936a3ed31c5db1a625d698ed81dad3ff4a3802573f8d
             pullPolicy: IfNotPresent
         - name: simple-voice-chat
           image:
