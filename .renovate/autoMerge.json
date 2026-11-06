@@ -18,7 +18,8 @@
       "automergeType": "branch",
       "matchUpdateTypes": ["minor", "patch"],
       "minimumReleaseAge": "3 days",
-      "schedule": ["* 0-3 * * 1"],
+      "schedule": ["* * * * 1"],
+      "automergeSchedule": ["* * * * 2"],
       "ignoreTests": true
     }
   ]
