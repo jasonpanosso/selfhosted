@@ -123,7 +123,7 @@ spec:
             pullPolicy: IfNotPresent
         - name: simple-voice-chat
           image:
-            reference: ghcr.io/jasonpanosso/simple-voice-chat:velocity-2.6.26@sha256:5ff118a86ce54491c8e89e633df8005c5f35b01a4be41497c9f6a2bfe7d3a988
+            reference: ghcr.io/jasonpanosso/simple-voice-chat:velocity-2.6.26@sha256:21d882802a807516ad97e8baad3c91e5f87c0c151408a6763ae7dbc521a8454e
             pullPolicy: IfNotPresent
         - name: tmp
           emptyDir: {}
