@@ -81,7 +81,7 @@ spec:
             name: *app
         - name: auth-oidc
           image:
-            reference: ghcr.io/jasonpanosso/auth-oidc:v1.2.1@sha256:8dbfff5d5e21969f7609bf0cb4282069797269c8a2f6a702f7b2b64e57fbbfb1
+            reference: ghcr.io/jasonpanosso/auth-oidc:v1.2.1@sha256:9378cccd51ece58ad3580e2e80b5442918c45e70c07ce659f23e62dd1e6aca49
             pullPolicy: IfNotPresent
         - name: tmp
           emptyDir: {}
