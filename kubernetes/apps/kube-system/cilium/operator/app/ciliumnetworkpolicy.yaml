@@ -1,0 +1,73 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/cilium.io/ciliumnetworkpolicy_v2.json
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: hubble-ui
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: hubble-ui
+  enableDefaultDeny:
+    ingress: true
+    egress: true
+  ingress:
+    # cilium gateway envoy
+    - fromEntities:
+        - ingress
+      toPorts: &frontend
+        - ports:
+            - port: "8081"
+              protocol: TCP
+    # kubelet health probe
+    - fromEntities:
+        - host
+      toPorts: *frontend
+  egress:
+    # the backend container streams flows from relay; frontend -> backend stays inside the pod
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: hubble-relay
+      toPorts:
+        - ports:
+            - port: "4245"
+              protocol: TCP
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/cilium.io/ciliumnetworkpolicy_v2.json
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: hubble-relay
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: hubble-relay
+  enableDefaultDeny:
+    ingress: true
+    egress: true
+  ingress:
+    # kubelet health probe
+    - fromEntities:
+        - host
+      toPorts:
+        - ports:
+            - port: "4222"
+              protocol: TCP
+    - fromEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: hubble-ui
+      toPorts:
+        - ports:
+            - port: "4245"
+              protocol: TCP
+  egress:
+    # hubble server in every cilium agent (host network). relay looks the agents up through the
+    # hubble-peer Service and then dials each node IP directly; both arrive as node identities.
+    # control plane identities also carry remote-node, so host + remote-node covers every node
+    - toEntities:
+        - host
+        - remote-node
+      toPorts:
+        - ports:
+            - port: "4244"
+              protocol: TCP
