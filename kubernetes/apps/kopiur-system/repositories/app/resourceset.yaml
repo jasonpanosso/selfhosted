@@ -7,10 +7,12 @@ metadata:
 spec:
   # one repository per app, matches terraform/bitwarden_secrets/kopia.tf.
   # set bootstrap: true until first offsite replication has succeeded.
+  # compressor (optional) turns on kopia compression; kopia stores uncompressed by default.
   inputs:
     - namespace: thelounge
       app: thelounge
-      capacity: 5Gi
+      capacity: 20Gi
+      compressor: zstd
     - namespace: rcon-web-admin
       app: rcon-web-admin
       capacity: 1Gi
@@ -134,41 +136,6 @@ spec:
           deleteExtra: true
 
     - apiVersion: kopiur.home-operations.com/v1alpha1
-      kind: SnapshotPolicy
-      metadata:
-        name: << inputs.app >>
-        namespace: << inputs.namespace >>
-      spec:
-        repository:
-          name: << inputs.app >>
-        sources:
-          - pvc:
-              name: << inputs.app >>
-        copyMethod: Snapshot
-        volumeSnapshotClassName: csi-ceph-blockpool
-        retention:
-          keepHourly: 24
-          keepDaily: 7
-          keepWeekly: 4
-        # quick: daily blob-level `kopia snapshot verify`.
-        # deep: weekly restore of the latest snapshot into a throwaway volume.
-        # A failed run leaves a failed Job, caught by KubeJobFailed.
-        verification:
-          quick:
-            schedule:
-              cron: "H 4 * * *"
-              jitter: 30m
-          deep:
-            schedule:
-              cron: "H 5 * * 0"
-              jitter: 1h
-          # quick derives stats.files from kopia's manifest fileCount, which
-          # excludes cache hits, so an unchanged PVC reports 0 files; stats.bytes
-          # includes them. deep reports restored files with bytes 0.
-          successExpr: "(stats.files > 0 || stats.bytes > 0) && stats.errors == 0"
-          verifyFilesPercent: 10
-
-    - apiVersion: kopiur.home-operations.com/v1alpha1
       kind: SnapshotSchedule
       metadata:
         name: << inputs.app >>
@@ -196,6 +163,45 @@ spec:
 
   # leave seed out while bootstrapping.
   resourcesTemplate: |
+    apiVersion: kopiur.home-operations.com/v1alpha1
+    kind: SnapshotPolicy
+    metadata:
+      name: << inputs.app >>
+      namespace: << inputs.namespace >>
+    spec:
+      repository:
+        name: << inputs.app >>
+      sources:
+        - pvc:
+            name: << inputs.app >>
+      copyMethod: Snapshot
+      volumeSnapshotClassName: csi-ceph-blockpool
+      <<- if get inputs "compressor" >>
+      compression:
+        compressor: << inputs.compressor >>
+      <<- end >>
+      retention:
+        keepHourly: 24
+        keepDaily: 7
+        keepWeekly: 4
+      # quick: daily blob-level `kopia snapshot verify`.
+      # deep: weekly restore of the latest snapshot into a throwaway volume.
+      # A failed run leaves a failed Job, caught by KubeJobFailed.
+      verification:
+        quick:
+          schedule:
+            cron: "H 4 * * *"
+            jitter: 30m
+        deep:
+          schedule:
+            cron: "H 5 * * 0"
+            jitter: 1h
+        # quick derives stats.files from kopia's manifest fileCount, which
+        # excludes cache hits, so an unchanged PVC reports 0 files; stats.bytes
+        # includes them. deep reports restored files with bytes 0.
+        successExpr: "(stats.files > 0 || stats.bytes > 0) && stats.errors == 0"
+        verifyFilesPercent: 10
+    ---
     apiVersion: kopiur.home-operations.com/v1alpha1
     kind: Repository
     metadata:
