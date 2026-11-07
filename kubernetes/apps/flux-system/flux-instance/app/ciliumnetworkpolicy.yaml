@@ -1,0 +1,128 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/cilium.io/ciliumnetworkpolicy_v2.json
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: kustomize-controller
+spec:
+  endpointSelector:
+    matchLabels:
+      app: kustomize-controller
+  enableDefaultDeny:
+    ingress: true
+    egress: true
+  ingress:
+    # kubelet health probes
+    - fromEntities:
+        - host
+      toPorts:
+        - ports:
+            - port: "9440"
+              protocol: TCP
+  egress:
+    # artifacts; no internet needed: no remote kustomize bases, sops uses the in-cluster age key
+    - toEndpoints:
+        - matchLabels:
+            app: source-controller
+      toPorts:
+        - ports:
+            - port: "9090"
+              protocol: TCP
+    # events
+    - toEndpoints:
+        - matchLabels:
+            app: notification-controller
+      toPorts:
+        - ports:
+            - port: "9090"
+              protocol: TCP
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/cilium.io/ciliumnetworkpolicy_v2.json
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: helm-controller
+spec:
+  endpointSelector:
+    matchLabels:
+      app: helm-controller
+  enableDefaultDeny:
+    ingress: true
+    egress: true
+  ingress:
+    # kubelet health probes
+    - fromEntities:
+        - host
+      toPorts:
+        - ports:
+            - port: "9440"
+              protocol: TCP
+  egress:
+    # charts, fetched by source-controller
+    - toEndpoints:
+        - matchLabels:
+            app: source-controller
+      toPorts:
+        - ports:
+            - port: "9090"
+              protocol: TCP
+    # events
+    - toEndpoints:
+        - matchLabels:
+            app: notification-controller
+      toPorts:
+        - ports:
+            - port: "9090"
+              protocol: TCP
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/cilium.io/ciliumnetworkpolicy_v2.json
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: notification-controller
+spec:
+  endpointSelector:
+    matchLabels:
+      app: notification-controller
+  enableDefaultDeny:
+    ingress: true
+    egress: true
+  ingress:
+    # kubelet health probes
+    - fromEntities:
+        - host
+      toPorts:
+        - ports:
+            - port: "9440"
+              protocol: TCP
+    # github webhook receiver, through the gateway (httproute.yaml)
+    - fromEntities:
+        - ingress
+      toPorts:
+        - ports:
+            - port: "9292"
+              protocol: TCP
+    # events from the other controllers
+    - fromEndpoints:
+        - matchLabels:
+            app: kustomize-controller
+        - matchLabels:
+            app: helm-controller
+        - matchLabels:
+            app: source-controller
+        - matchLabels:
+            app.kubernetes.io/name: flux-operator
+      toPorts:
+        - ports:
+            - port: "9090"
+              protocol: TCP
+  egress:
+    # alertmanager Provider in components/common/alerts
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: observability
+            app.kubernetes.io/name: vmalertmanager
+      toPorts:
+        - ports:
+            - port: "9093"
+              protocol: TCP

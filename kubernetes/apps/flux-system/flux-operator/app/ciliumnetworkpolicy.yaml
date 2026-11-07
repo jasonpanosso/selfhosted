@@ -1,0 +1,31 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/cilium.io/ciliumnetworkpolicy_v2.json
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: flux-operator
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: flux-operator
+  # ingress on 8080 (metrics) and 9080 (web) comes from the chart's flux-operator-web NetworkPolicy
+  enableDefaultDeny:
+    ingress: true
+    egress: true
+  ingress:
+    # kubelet health probes
+    - fromEntities:
+        - host
+      toPorts:
+        - ports:
+            - port: "8081"
+              protocol: TCP
+  egress:
+    # events
+    - toEndpoints:
+        - matchLabels:
+            app: notification-controller
+      toPorts:
+        - ports:
+            - port: "9090"
+              protocol: TCP
