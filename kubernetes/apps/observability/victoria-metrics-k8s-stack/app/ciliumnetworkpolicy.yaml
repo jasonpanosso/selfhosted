@@ -205,3 +205,32 @@ spec:
         - ports:
             - port: "443"
               protocol: TCP
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/cilium.io/ciliumnetworkpolicy_v2.json
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: vmagent
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: vmagent
+  enableDefaultDeny:
+    ingress: true
+    egress: true
+  ingress:
+    # kubelet health probes for vmagent and config-reloader
+    - fromEntities:
+        - host
+      toPorts:
+        - ports:
+            - port: "8429"
+              protocol: TCP
+            - port: "8435"
+              protocol: TCP
+  egress:
+    # scrape targets and remote write. cluster covers every pod plus host-network targets on
+    # node IPs (kubelet, node-exporter, cilium, control plane) via host, remote-node and
+    # kube-apiserver. no ports listed so new scrape targets work without a policy change
+    - toEntities:
+        - cluster
