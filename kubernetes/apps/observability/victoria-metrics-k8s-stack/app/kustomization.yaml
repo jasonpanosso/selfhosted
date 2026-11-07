@@ -9,5 +9,6 @@ resources:
   - ./helmrelease.yaml
   - ./httproute.yaml
   - ./ocirepository.yaml
+  - ./vmalertmanager.yaml
   - ./vmalertmanagerconfig.yaml
   - ./vmrule.yaml

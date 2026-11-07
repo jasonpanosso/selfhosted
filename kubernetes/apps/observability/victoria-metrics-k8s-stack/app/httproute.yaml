@@ -86,7 +86,7 @@ spec:
               - name: X-Forwarded-For
                 value: "%DOWNSTREAM_REMOTE_ADDRESS_WITHOUT_PORT%"
       backendRefs:
-        - name: vmalertmanager-victoria-metrics
+        - name: alertmanager
           port: 9093
       timeouts:
         request: 0s

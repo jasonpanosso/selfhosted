@@ -210,6 +210,8 @@ spec:
         disableAutomountServiceAccountToken: true
         useStrictSecurity: true
         evaluationInterval: 30s
+        notifiers:
+          - url: http://alertmanager.observability.svc.cluster.local:9093
         extraArgs:
           http.pathPrefix: /
         resources:
@@ -219,38 +221,6 @@ spec:
           limits:
             memory: 256Mi
 
+
     alertmanager:
-      enabled: true
-      spec:
-        disableAutomountServiceAccountToken: true
-        useStrictSecurity: true
-        externalURL: https://alerts.${domain}.${tld}
-        # vmalertmanagerconfig.yaml routes alerts from every namespace
-        disableNamespaceMatcher: true
-        securityContext:
-          runAsNonRoot: true
-          runAsUser: 65534
-          runAsGroup: 65534
-          fsGroup: 65534
-          seccompProfile:
-            type: RuntimeDefault
-          allowPrivilegeEscalation: false
-          readOnlyRootFilesystem: true
-          capabilities:
-            drop:
-              - ALL
-        resources:
-          requests:
-            cpu: 10m
-            memory: 128Mi
-          limits:
-            memory: 128Mi
-        storage:
-          volumeClaimTemplate:
-            spec:
-              storageClassName: rook-ceph-block
-              accessModes:
-                - ReadWriteOnce
-              resources:
-                requests:
-                  storage: 1Gi
+      enabled: false
