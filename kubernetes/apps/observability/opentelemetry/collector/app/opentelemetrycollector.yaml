@@ -7,7 +7,7 @@ metadata:
 spec:
   mode: deployment
   priorityClassName: system-cluster-critical
-  # single replica: k8sobjects resumes from its persisted resourceVersion instead of leader election
+  # single replica: k8s_objects resumes from its persisted resourceVersion instead of leader election
   replicas: 1
   # the RWO volume can't be attached to two pods across nodes, and two pods would duplicate the watch
   deploymentUpdateStrategy:
@@ -38,7 +38,7 @@ spec:
       value: "k8s.cluster.name=prod"
   config:
     extensions:
-      # persists the k8sobjects resourceVersion and the exporter queue across restarts
+      # persists the k8s_objects resourceVersion and the exporter queue across restarts
       file_storage:
         directory: /var/lib/otelcol
         compaction:
@@ -72,7 +72,7 @@ spec:
         check_interval: 1s
         limit_percentage: 80
         spike_limit_percentage: 15
-      resourcedetection/env:
+      resource_detection/env:
         detectors: [env]
         timeout: 2s
         override: false
@@ -89,7 +89,7 @@ spec:
               - set(log.body, log.attributes["object"]["note"])
 
     receivers:
-      k8sobjects:
+      k8s_objects:
         auth_type: serviceAccount
         storage: file_storage
         objects:
@@ -105,11 +105,11 @@ spec:
       pipelines:
         logs:
           receivers:
-            - k8sobjects
+            - k8s_objects
           processors:
             - memory_limiter
             - transform/events
-            - resourcedetection/env
+            - resource_detection/env
           exporters:
             # - debug
             - otlp_http/victoria-logs
