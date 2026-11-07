@@ -140,8 +140,17 @@ spec:
         # node-exporter is a standalone HelmRelease, so the chart can't tie this to its subchart
         node-exporter-full:
           enabled: true
-      # from the kube-prometheus source: no windows nodes and no prometheus
+      # from the kube-prometheus source: no windows, aix or darwin nodes, no prometheus, one cluster
       dashboards:
+        # alertmanager lives in vmalertmanager.yaml, so the chart can't tie this to its own alertmanager
+        alertmanager-overview:
+          enabled: true
+        nodes-aix:
+          enabled: false
+        nodes-darwin:
+          enabled: false
+        k8s-resources-multicluster:
+          enabled: false
         k8s-resources-windows-cluster:
           enabled: false
         k8s-resources-windows-namespace:
@@ -160,10 +169,12 @@ spec:
     defaultRules:
       enabled: true
       sources:
-        # exporters are standalone HelmReleases, so the chart can't tie these to its subcharts
+        # exporters and alertmanager live outside the chart, so it can't tie these to its own components
         kube-state-metrics:
           enabled: true
         node-exporter:
+          enabled: true
+        alertmanager:
           enabled: true
       rules:
         # fires for count:up0, which is empty whenever no target is down
