@@ -1,0 +1,53 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/cilium.io/ciliumnetworkpolicy_v2.json
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: grafana
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: grafana
+  enableDefaultDeny:
+    ingress: true
+    egress: true
+  ingress:
+    # cilium gateway envoy. auth.proxy trusts the Remote-User header, so nothing else may reach it
+    - fromEntities:
+        - ingress
+      toPorts: &grafana
+        - ports:
+            - port: "3000"
+              protocol: TCP
+    # kubelet health probe
+    - fromEntities:
+        - host
+      toPorts: *grafana
+  egress:
+    # datasources in helmrelease.yaml
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: vmsingle
+      toPorts:
+        - ports:
+            - port: "8428"
+              protocol: TCP
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: vmalertmanager
+      toPorts:
+        - ports:
+            - port: "9093"
+              protocol: TCP
+    # plugins and dashboards downloaded at startup. private ranges excluded so a
+    # dashboard or datasource URL can't reach the LAN
+    - toCIDRSet:
+        - cidr: 0.0.0.0/0
+          except:
+            - 10.0.0.0/8
+            - 172.16.0.0/12
+            - 192.168.0.0/16
+      toPorts:
+        - ports:
+            - port: "443"
+              protocol: TCP
