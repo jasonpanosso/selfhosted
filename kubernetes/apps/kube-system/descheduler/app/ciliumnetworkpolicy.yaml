@@ -1,0 +1,21 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/cilium.io/ciliumnetworkpolicy_v2.json
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: descheduler
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: descheduler
+  enableDefaultDeny:
+    ingress: true
+    egress: true
+  ingress:
+    # kubelet health probe
+    - fromEntities:
+        - host
+      toPorts:
+        - ports:
+            - port: "10258"
+              protocol: TCP
