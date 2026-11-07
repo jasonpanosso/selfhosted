@@ -54,6 +54,18 @@ spec:
       enabled: true
     kubeApiServer:
       enabled: true
+      vmScrape:
+        spec:
+          endpoints:
+            # chart default endpoint, plus a larger limit: request histograms only reset when the
+            # apiserver restarts, and controlplane-2 passed vmagent's 16MiB default after 8 days
+            - bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
+              port: https
+              scheme: https
+              tlsConfig:
+                caFile: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+                serverName: kubernetes
+              max_scrape_size: 64MiB
     kubeControllerManager:
       enabled: true
       vmScrape:
