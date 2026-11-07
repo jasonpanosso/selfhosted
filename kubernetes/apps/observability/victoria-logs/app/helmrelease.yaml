@@ -18,6 +18,10 @@ spec:
   values:
     dashboards:
       enabled: true
+    # the chart only sets automountServiceAccountToken on the pod when it has its own ServiceAccount
+    serviceAccount:
+      create: true
+      automountToken: false
     server:
       fullnameOverride: victoria-logs
       podSecurityContext:

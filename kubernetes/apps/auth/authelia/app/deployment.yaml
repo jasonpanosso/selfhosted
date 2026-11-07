@@ -20,6 +20,7 @@ spec:
       labels:
         app.kubernetes.io/name: *app
     spec:
+      automountServiceAccountToken: false
       # https://www.authelia.com/integration/kubernetes/introduction/#enable-service-links
       enableServiceLinks: false
       containers:

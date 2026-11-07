@@ -19,6 +19,7 @@ spec:
       labels:
         app.kubernetes.io/name: *app
     spec:
+      automountServiceAccountToken: false
       terminationGracePeriodSeconds: 120
       securityContext:
         runAsUser: 65534

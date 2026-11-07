@@ -18,6 +18,7 @@ spec:
       labels:
         app.kubernetes.io/name: *app
     spec:
+      automountServiceAccountToken: false
       securityContext:
         runAsUser: 65534
         runAsGroup: 65534

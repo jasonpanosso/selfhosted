@@ -173,6 +173,8 @@ spec:
     vmsingle:
       enabled: true
       spec:
+        # operator handles mounting
+        disableAutomountServiceAccountToken: true
         useStrictSecurity: true
         retentionPeriod: 10d
         resources:
@@ -192,6 +194,7 @@ spec:
     vmagent:
       enabled: true
       spec:
+        disableAutomountServiceAccountToken: true
         useStrictSecurity: true
         scrapeInterval: 30s
         resources:
@@ -204,6 +207,7 @@ spec:
     vmalert:
       enabled: true
       spec:
+        disableAutomountServiceAccountToken: true
         useStrictSecurity: true
         evaluationInterval: 30s
         extraArgs:
@@ -218,6 +222,7 @@ spec:
     alertmanager:
       enabled: true
       spec:
+        disableAutomountServiceAccountToken: true
         useStrictSecurity: true
         externalURL: https://alerts.${domain}.${tld}
         # vmalertmanagerconfig.yaml routes alerts from every namespace

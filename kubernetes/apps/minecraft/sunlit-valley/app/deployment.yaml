@@ -19,6 +19,7 @@ spec:
       labels:
         app.kubernetes.io/name: *app
     spec:
+      automountServiceAccountToken: false
       # longer than STOP_DURATION, so the world save on stop isn't killed
       terminationGracePeriodSeconds: 120
       securityContext:

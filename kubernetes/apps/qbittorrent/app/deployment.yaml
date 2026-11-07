@@ -22,6 +22,7 @@ spec:
         k8s.v1.cni.cncf.io/networks: |-
           [{"name": "vpn", "namespace": "kube-system", "interface": "net1", "ips": ["192.168.30.10/24"], "mac": "02:00:00:00:30:10"}]
     spec:
+      automountServiceAccountToken: false
       # need vlan30 for the VPN
       nodeSelector:
         network.home.internal/vlan30: "true"

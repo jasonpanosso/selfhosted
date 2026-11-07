@@ -18,6 +18,8 @@ spec:
   values:
     nameOverride: node-exporter
     fullnameOverride: node-exporter
+    serviceAccount:
+      automountServiceAccountToken: false
     priorityClassName: system-node-critical
     image:
       distroless: true

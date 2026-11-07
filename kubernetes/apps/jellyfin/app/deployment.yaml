@@ -19,6 +19,7 @@ spec:
       labels:
         app.kubernetes.io/name: *app
     spec:
+      automountServiceAccountToken: false
       priorityClassName: system-node-critical
       securityContext:
         runAsUser: 65534
