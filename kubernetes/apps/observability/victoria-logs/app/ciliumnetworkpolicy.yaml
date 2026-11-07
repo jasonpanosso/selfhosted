@@ -1,0 +1,34 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/cilium.io/ciliumnetworkpolicy_v2.json
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: victoria-logs
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: victoria-logs-single
+  enableDefaultDeny:
+    ingress: true
+    egress: true
+  ingress:
+    # cilium gateway envoy
+    - fromEntities:
+        - ingress
+      toPorts: &http
+        - ports:
+            - port: "9428"
+              protocol: TCP
+    # kubelet health probes
+    - fromEntities:
+        - host
+      toPorts: *http
+    # log shipping from the cluster and node OpenTelemetry collectors
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: observability
+            app.kubernetes.io/name: opentelemetry-collector
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: observability-agents
+            app.kubernetes.io/name: opentelemetry-collector
+      toPorts: *http
