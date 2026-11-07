@@ -1,0 +1,38 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/cilium.io/ciliumnetworkpolicy_v2.json
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: metrics-server
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: metrics-server
+  enableDefaultDeny:
+    ingress: true
+    egress: true
+  ingress:
+    # kubelet health probes
+    - fromEntities:
+        - host
+      toPorts: &https
+        - ports:
+            - port: "10250"
+              protocol: TCP
+    # v1beta1.metrics.k8s.io APIService
+    - fromEntities:
+        - kube-apiserver
+      toPorts: *https
+    - fromNodes:
+        - matchLabels:
+            node-role.kubernetes.io/control-plane: ""
+      toPorts: *https
+  egress:
+    # kubelet on every node's InternalIP (--kubelet-use-node-status-port)
+    - toEntities:
+        - host
+        - remote-node
+      toPorts:
+        - ports:
+            - port: "10250"
+              protocol: TCP
