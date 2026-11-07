@@ -1,0 +1,32 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/cilium.io/ciliumnetworkpolicy_v2.json
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: victoria-metrics-operator
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: victoria-metrics-operator
+  enableDefaultDeny:
+    ingress: true
+    egress: true
+  ingress:
+    # kubelet health probes
+    - fromEntities:
+        - host
+      toPorts:
+        - ports:
+            - port: "8081"
+              protocol: TCP
+    # admission webhook, failurePolicy: Ignore
+    - fromEntities:
+        - kube-apiserver
+      toPorts: &webhook
+        - ports:
+            - port: "9443"
+              protocol: TCP
+    - fromNodes:
+        - matchLabels:
+            node-role.kubernetes.io/control-plane: ""
+      toPorts: *webhook
