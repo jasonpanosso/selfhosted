@@ -37,13 +37,19 @@ spec:
         - ports:
             - port: "5580"
               protocol: TCP
-    # OTBR REST API
+    # SLZB: SMLIGHT API (80), SMLIGHT events SSE (81), OTBR REST API (8080), BLE proxy (5050)
     - toCIDR:
         - 192.168.40.10/32
       toPorts:
         - ports:
+            - port: "80"
+              protocol: TCP
+            - port: "81"
+              protocol: TCP
             - port: "8080"
               protocol: TCP
+            - port: "5050"
+              protocol: UDP
     # integrations, OIDC through the public auth hostname
     - toCIDRSet:
         - cidr: 0.0.0.0/0
