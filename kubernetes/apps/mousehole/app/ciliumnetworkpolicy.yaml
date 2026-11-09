@@ -1,6 +1,6 @@
 ---
 # yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/cilium.io/ciliumnetworkpolicy_v2.json
-# only covers eth0. block all egress that is not cluster-local
+# only covers eth0 (net1 is the VPN macvlan). eth0 egress is CoreDNS only, so nothing leaks if net1 is down
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
 metadata:
@@ -21,5 +21,14 @@ spec:
             - port: "5010"
               protocol: TCP
   egress:
-    - toEntities:
-        - cluster
+    # eth0 needs CoreDNS
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: kube-system
+            k8s-app: kube-dns
+      toPorts:
+        - ports:
+            - port: "53"
+              protocol: UDP
+            - port: "53"
+              protocol: TCP
