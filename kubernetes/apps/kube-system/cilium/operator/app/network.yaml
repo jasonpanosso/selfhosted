@@ -47,9 +47,10 @@ kind: CiliumBGPClusterConfig
 metadata:
   name: l3-bgp-cluster-config
 spec:
+  # control planes don't advertise LB IPs; keeps ingress off etcd nodes
   nodeSelector:
-    matchLabels:
-      kubernetes.io/os: linux
+    matchExpressions:
+      - {key: node-role.kubernetes.io/control-plane, operator: DoesNotExist}
   bgpInstances:
     - name: cilium
       localASN: 64514
