@@ -47,6 +47,10 @@ spec:
       prometheus:
         serviceMonitor:
           enabled: true
+    extraConfig:
+      # socketLB.terminatePodConnections only kills UDP sockets to deleted backends.
+      # this hidden flag will kill idle TCP sockets as well.
+      lb-sock-terminate-all-protos: "true"
     gatewayAPI:
       enabled: true
       enableAlpn: true
