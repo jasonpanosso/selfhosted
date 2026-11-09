@@ -36,6 +36,19 @@ spec:
             - port: "6443"
               protocol: TCP
   ingress:
+    # allow normal ICMP traffic from stale connections
+    - fromEntities:
+        - all
+      icmps:
+        - fields:
+            - type: EchoRequest
+              family: IPv4
+            - type: DestinationUnreachable
+              family: IPv4
+            - type: TimeExceeded
+              family: IPv4
+            - type: ParameterProblem
+              family: IPv4
     # metrics ports differ per app
     - fromEndpoints:
         - matchLabels:
