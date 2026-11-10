@@ -35,7 +35,7 @@ spec:
               - matchPattern: "*"
     # B2 upload
     - toFQDNs:
-        - matchName: selfhosted-backups-cbb55f9e.s3.us-east-005.backblazeb2.com
+        - matchName: s3.us-east-005.backblazeb2.com
       toPorts:
         - ports:
             - port: "443"
