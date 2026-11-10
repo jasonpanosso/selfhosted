@@ -29,6 +29,12 @@
       "allowedVersions": "/^25\\./"
     },
     {
+      "description": "Simple Voice Chat tags carry Modrinth's loader prefix (e.g. velocity-2.6.26)",
+      "matchDatasources": ["docker"],
+      "matchPackageNames": ["ghcr.io/jasonpanosso/simple-voice-chat"],
+      "versioning": "regex:^velocity-(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)$"
+    },
+    {
       "description": "Postgres majors run pg_upgrade in place; hold for dashboard approval",
       "matchDatasources": ["docker"],
       "matchPackageNames": ["ghcr.io/cloudnative-pg/postgresql"],
