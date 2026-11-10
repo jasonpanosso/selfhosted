@@ -1,0 +1,39 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/cilium.io/ciliumnetworkpolicy_v2.json
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: spegel
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: spegel
+  enableDefaultDeny:
+    ingress: true
+    egress: true
+  ingress:
+    - fromEntities:
+        - host
+        - remote-node
+      toPorts:
+        - ports:
+            - port: "5000"
+              protocol: TCP
+    - fromEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: spegel
+      toPorts: &peers
+        - ports:
+            # registry: blobs served to peers
+            - port: "5000"
+              protocol: TCP
+            # router: libp2p DHT
+            - port: "5001"
+              protocol: TCP
+            - port: "5001"
+              protocol: UDP
+  egress:
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: spegel
+      toPorts: *peers
