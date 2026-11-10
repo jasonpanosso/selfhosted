@@ -1,0 +1,42 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/cilium.io/ciliumnetworkpolicy_v2.json
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: coredns
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: coredns
+  enableDefaultDeny:
+    ingress: true
+    egress: true
+  ingress:
+    # every pod, plus host-network pods using ClusterFirstWithHostNet
+    - fromEntities:
+        - cluster
+      toPorts:
+        - ports:
+            - port: "53"
+              protocol: UDP
+            - port: "53"
+              protocol: TCP
+    # kubelet health (8080) and readiness (8181) probes
+    - fromEntities:
+        - host
+      toPorts:
+        - ports:
+            - port: "8080"
+              protocol: TCP
+            - port: "8181"
+              protocol: TCP
+  egress:
+    # forward plugin -> /etc/resolv.conf (dnsPolicy Default) -> Talos ResolverConfig nameserver
+    - toCIDR:
+        - 192.168.20.1/32
+      toPorts:
+        - ports:
+            - port: "53"
+              protocol: UDP
+            - port: "53"
+              protocol: TCP
