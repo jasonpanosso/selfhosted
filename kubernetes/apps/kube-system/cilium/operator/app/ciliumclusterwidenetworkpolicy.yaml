@@ -54,3 +54,32 @@ spec:
         - matchLabels:
             k8s:io.kubernetes.pod.namespace: observability
             app.kubernetes.io/name: vmagent
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/cilium.io/ciliumclusterwidenetworkpolicy_v2.json
+apiVersion: cilium.io/v2
+kind: CiliumClusterwideNetworkPolicy
+metadata:
+  name: cilium-health
+spec:
+  # one health endpoint per node; only answers probes from cilium agents
+  endpointSelector:
+    matchLabels:
+      reserved:health: ""
+  enableDefaultDeny:
+    ingress: true
+    egress: true
+  ingress:
+    - fromEntities:
+        - host
+        - remote-node
+      toPorts:
+        - ports:
+            - port: "4240"
+              protocol: TCP
+    - fromEntities:
+        - host
+        - remote-node
+      icmps:
+        - fields:
+            - type: EchoRequest
+              family: IPv4
