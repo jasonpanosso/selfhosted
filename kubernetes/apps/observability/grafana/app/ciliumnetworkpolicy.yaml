@@ -34,7 +34,7 @@ spec:
               protocol: TCP
     - toEndpoints:
         - matchLabels:
-            app.kubernetes.io/name: vmalertmanager
+            app.kubernetes.io/name: alertmanager
       toPorts:
         - ports:
             - port: "9093"

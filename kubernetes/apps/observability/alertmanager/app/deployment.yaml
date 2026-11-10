@@ -1,0 +1,89 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/master-standalone/deployment-apps-v1.json
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: &app alertmanager
+  labels:
+    app.kubernetes.io/name: *app
+  annotations:
+    reloader.stakater.com/auto: "true"
+spec:
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: *app
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: *app
+    spec:
+      automountServiceAccountToken: false
+      securityContext:
+        runAsUser: 65534
+        runAsGroup: 65534
+        fsGroup: 65534
+        fsGroupChangePolicy: OnRootMismatch
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - image: ghcr.io/prometheus/alertmanager:v0.35.0@sha256:f093d4dc92bc01323f2aa4fb48899d6586406b8c4b882491cd24841ab85f11ff
+          name: *app
+          args:
+            - --config.file=/etc/alertmanager/config/alertmanager.yaml
+            - --storage.path=/alertmanager
+            - --web.external-url=https://alerts.${domain}.${tld}
+            # single replica: no gossip cluster
+            - --cluster.listen-address=
+            - --enable-feature=utf8-strict-mode
+          ports:
+            - containerPort: 9093
+              name: http
+          livenessProbe:
+            httpGet:
+              path: /-/healthy
+              port: 9093
+            periodSeconds: 10
+            timeoutSeconds: 1
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /-/ready
+              port: 9093
+            periodSeconds: 10
+            timeoutSeconds: 1
+            failureThreshold: 3
+          resources:
+            requests:
+              cpu: 10m
+              memory: 128Mi
+            limits:
+              memory: 128Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: [ALL]
+          volumeMounts:
+            - name: config
+              mountPath: /etc/alertmanager/config
+              readOnly: true
+            # read by the *_file fields in alertmanager.yaml
+            - name: secrets
+              mountPath: /etc/alertmanager/secrets
+              readOnly: true
+            # silences and notification log
+            - name: data
+              mountPath: /alertmanager
+      volumes:
+        - name: config
+          configMap:
+            name: *app
+        - name: secrets
+          secret:
+            secretName: *app
+        - name: data
+          persistentVolumeClaim:
+            claimName: *app

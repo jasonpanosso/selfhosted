@@ -1,0 +1,61 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/cilium.io/ciliumnetworkpolicy_v2.json
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: alertmanager
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: alertmanager
+  enableDefaultDeny:
+    ingress: true
+    egress: true
+  ingress:
+    # cilium gateway envoy
+    - fromEntities:
+        - ingress
+      toPorts: &web
+        - ports:
+            - port: "9093"
+              protocol: TCP
+    # kubelet health probes
+    - fromEntities:
+        - host
+      toPorts: *web
+    - fromEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: vmalert
+        # datasource in grafana's helmrelease.yaml
+        - matchLabels:
+            app.kubernetes.io/name: grafana
+        - matchLabels:
+            app.kubernetes.io/name: silence-operator
+        # flux alerts
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: flux-system
+            app: notification-controller
+      toPorts: *web
+  egress:
+    # toFQDNs only learns IPs from DNS that goes through the proxy
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: kube-system
+            k8s-app: kube-dns
+      toPorts:
+        - ports:
+            - port: "53"
+              protocol: UDP
+            - port: "53"
+              protocol: TCP
+          rules:
+            dns:
+              - matchPattern: "*"
+    # pushover receivers and the heartbeat webhook in resources/alertmanager.yaml
+    - toFQDNs:
+        - matchName: api.pushover.net
+        - matchName: hc-ping.com
+      toPorts:
+        - ports:
+            - port: "443"
+              protocol: TCP

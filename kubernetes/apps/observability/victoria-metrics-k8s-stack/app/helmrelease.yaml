@@ -154,7 +154,7 @@ spec:
           enabled: true
       # from the kube-prometheus source: no windows, aix or darwin nodes, no prometheus, one cluster
       dashboards:
-        # alertmanager lives in vmalertmanager.yaml, so the chart can't tie this to its own alertmanager
+        # alertmanager is its own app (observability/alertmanager), so the chart can't tie this to its own alertmanager
         alertmanager-overview:
           enabled: true
         nodes-aix:
@@ -188,6 +188,14 @@ spec:
           enabled: true
         alertmanager:
           enabled: true
+      groups:
+        alertmanager.rules:
+          labelRewrites:
+            # the chart's default (vmalertmanager-.*) is the operator's job name; ours is the
+            # ServiceMonitor's jobLabel in observability/alertmanager
+            job:
+              match: alertmanager-main
+              value: alertmanager
       rules:
         # fires for count:up0, which is empty whenever no target is down
         RecordingRulesNoData:

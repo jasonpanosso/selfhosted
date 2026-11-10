@@ -1,0 +1,20 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/kustomization
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ./ciliumnetworkpolicy.yaml
+  - ./externalsecret.yaml
+  - ./pvc.yaml
+  - ./deployment.yaml
+  - ./service.yaml
+  - ./servicemonitor.yaml
+  - ./httproute.yaml
+
+configMapGenerator:
+  - name: alertmanager
+    options:
+      disableNameSuffixHash: true
+    files:
+      - alertmanager.yaml=./resources/alertmanager.yaml
