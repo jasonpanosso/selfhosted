@@ -32,3 +32,5 @@ spec:
       namespace: kopiur-system
     - name: multus-networks
       namespace: kube-system
+    - name: gateway-api-crds
+      namespace: kube-system

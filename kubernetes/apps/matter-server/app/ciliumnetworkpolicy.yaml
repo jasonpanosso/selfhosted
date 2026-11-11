@@ -19,6 +19,13 @@ spec:
         - ports:
             - port: "5580"
               protocol: TCP
+    # cilium gateway envoy (web ui)
+    - fromEntities:
+        - ingress
+      toPorts:
+        - ports:
+            - port: "5580"
+              protocol: TCP
   egress:
     # DCL attestation lookups and OTA update checks
     - toEntities:

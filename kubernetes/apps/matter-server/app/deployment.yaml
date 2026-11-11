@@ -51,6 +51,9 @@ spec:
             # IoT VLAN interface (multus)
             - name: PRIMARY_INTERFACE
               value: net1
+            # dashboard connects to the websocket at the page's own URL (behind the gateway)
+            - name: PRODUCTION_MODE
+              value: "true"
             # HA bluetooth proxy
             - name: BLE_PROXY
               value: "true"
