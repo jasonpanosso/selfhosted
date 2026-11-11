@@ -50,6 +50,13 @@ spec:
               protocol: TCP
             - port: "5050"
               protocol: UDP
+    # bluetooth proxy
+    - toCIDR:
+        - 192.168.40.13/32
+      toPorts:
+        - ports:
+            - port: "6053"
+              protocol: TCP
     # integrations, OIDC through the public auth hostname
     - toCIDRSet:
         - cidr: 0.0.0.0/0

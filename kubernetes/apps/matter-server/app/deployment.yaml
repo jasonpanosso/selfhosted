@@ -51,6 +51,9 @@ spec:
             # IoT VLAN interface (multus)
             - name: PRIMARY_INTERFACE
               value: net1
+            # HA bluetooth proxy
+            - name: BLE_PROXY
+              value: "true"
             # trust test PAAs + test CD signer (dev devices with test DACs)
             - name: ENABLE_TEST_NET_DCL
               value: "true"
