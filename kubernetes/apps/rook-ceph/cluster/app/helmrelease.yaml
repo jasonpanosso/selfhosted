@@ -74,6 +74,16 @@ spec:
             enabled: true
           - name: insights
             enabled: true
+      # temp avoid worker-6
+      placement:
+        mon:
+          nodeAffinity:
+            requiredDuringSchedulingIgnoredDuringExecution:
+              nodeSelectorTerms:
+                - matchExpressions:
+                    - key: kubernetes.io/hostname
+                      operator: NotIn
+                      values: ["worker-6"]
       resources:
         api:
           requests:
