@@ -1,4 +1,17 @@
 ---
+# no standalone document for service log destinations yet in 1.14
+machine:
+  logging:
+    destinations:
+      - endpoint: tcp://127.0.0.1:6050
+        format: json_lines
+---
+# kernel log; node-collector DaemonSet hostPort
+apiVersion: v1alpha1
+kind: KmsgLogConfig
+name: node-collector
+url: tcp://127.0.0.1:6051
+---
 apiVersion: v1alpha1
 kind: KubeletConfig
 image: ghcr.io/siderolabs/kubelet:v1.36.6
