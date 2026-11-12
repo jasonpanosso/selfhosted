@@ -30,6 +30,8 @@ spec:
         global:
           bdev_enable_discard: "true"
           bdev_async_discard_threads: "1"
+          # msgr2 only
+          ms_bind_msgr1: "false"
       dataDirHostPath: /var/lib/rook
       skipUpgradeChecks: false
       continueUpgradeAfterChecksEvenIfNotHealthy: false
