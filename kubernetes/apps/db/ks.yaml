@@ -30,7 +30,7 @@ spec:
       namespace: cnpg-system
     - name: secret-store
       namespace: external-secrets
-    - name: local-path-provisioner
-      namespace: local-path-provisioner
+    - name: topolvm
+      namespace: topolvm-system
     - name: prometheus-operator-crds
       namespace: observability

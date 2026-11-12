@@ -7,13 +7,6 @@ config:
   # remove unused images older than 30 days
   imageMaximumGCAge: 720h
 ---
-apiVersion: v1alpha1
-kind: UserVolumeConfig
-name: local-path-provisioner
-volumeType: directory
-mount:
-  secure: false
----
 # cap the ephemeral partition size
 apiVersion: v1alpha1
 kind: VolumeConfig
