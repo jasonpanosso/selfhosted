@@ -179,7 +179,8 @@ spec:
           reclaimPolicy: Delete
           allowVolumeExpansion: true
           volumeBindingMode: Immediate
-          mountOptions: ["discard"]
+          # Talos SELinux label for user volumes (talos.dev SELinux "CSI volumes")
+          mountOptions: ["discard", "context=system_u:object_r:ephemeral_t:s0"]
           parameters:
             imageFormat: "2"
             imageFeatures: layering
@@ -209,7 +210,8 @@ spec:
           reclaimPolicy: Delete
           allowVolumeExpansion: true
           volumeBindingMode: Immediate
-          mountOptions: ["discard"]
+          # Talos SELinux label for user volumes (talos.dev SELinux "CSI volumes")
+          mountOptions: ["discard", "context=system_u:object_r:ephemeral_t:s0"]
           parameters:
             imageFormat: "2"
             imageFeatures: layering
@@ -260,6 +262,8 @@ spec:
           isDefault: false
           name: rook-cephfs-hdd
           pool: replicated
+          # Talos SELinux label for user volumes (talos.dev SELinux "CSI volumes")
+          mountOptions: ["context=system_u:object_r:ephemeral_t:s0"]
           reclaimPolicy: Retain
           allowVolumeExpansion: true
           volumeBindingMode: Immediate

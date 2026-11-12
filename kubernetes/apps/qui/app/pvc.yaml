@@ -23,6 +23,8 @@ spec:
     storage: 3500Gi
   persistentVolumeReclaimPolicy: Retain
   storageClassName: ""
+  mountOptions:
+    - context=system_u:object_r:ephemeral_t:s0
   claimRef:
     namespace: qui
     name: media
