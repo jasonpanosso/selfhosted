@@ -30,6 +30,13 @@ spec:
         - ports:
             - port: "8000"
               protocol: TCP
+    # instance manager status via the API server's pods/proxy (kubectl cnpg status)
+    - fromEntities:
+        - kube-apiserver
+      toPorts:
+        - ports:
+            - port: "8000"
+              protocol: TCP
     # clients
     - fromEndpoints:
         - matchLabels:
