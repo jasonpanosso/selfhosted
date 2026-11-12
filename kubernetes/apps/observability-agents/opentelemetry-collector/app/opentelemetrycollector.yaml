@@ -4,6 +4,8 @@ apiVersion: opentelemetry.io/v1beta1
 kind: OpenTelemetryCollector
 metadata:
   name: node
+  annotations:
+    kustomize.toolkit.fluxcd.io/substitute: disabled
 spec:
   mode: daemonset
   # contrib: tcp_log isn't in the operator's default k8s distribution
