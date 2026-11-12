@@ -53,6 +53,13 @@ content: |
   [plugins."io.containerd.cri.v1.images"]
     discard_unpacked_layers = false
 ---
+# spegel
+apiVersion: v1alpha1
+kind: RegistryMirrorConfig
+name: "*"
+endpoints:
+  - url: http://127.0.0.1:30020
+---
 apiVersion: v1alpha1
 kind: KubeFlannelCNIConfig
 $patch: delete

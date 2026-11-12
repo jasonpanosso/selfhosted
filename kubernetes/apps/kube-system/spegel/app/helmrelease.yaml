@@ -18,6 +18,8 @@ spec:
   values:
     spegel:
       containerdSock: /run/containerd/containerd.sock
+      # mirror setup in talos RegistryMirrorConfig
+      containerdMirrorAdd: false
       containerdRegistryConfigPath: /etc/cri/conf.d/hosts
     serviceMonitor:
       enabled: true
