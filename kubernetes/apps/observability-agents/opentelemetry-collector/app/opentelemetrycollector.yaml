@@ -6,6 +6,20 @@ metadata:
   name: node
 spec:
   mode: daemonset
+  # contrib: tcp_log isn't in the operator's default k8s distribution
+  image: ghcr.io/open-telemetry/opentelemetry-collector-releases/opentelemetry-collector-contrib:0.162.0
+  networkPolicy:
+    enabled: false
+  # Talos sends logs (machine.logging) and kernel logs (KmsgLogConfig) from the host to 127.0.0.1;
+  ports:
+    - name: talos-service
+      port: 6050
+      hostPort: 6050
+      protocol: TCP
+    - name: talos-kernel
+      port: 6051
+      hostPort: 6051
+      protocol: TCP
   serviceAccount: otel-node-collector
   priorityClassName: system-node-critical
   # root so the collector can write its state dir on the hostPath, which kubelet creates as root:root 0755;
@@ -167,6 +181,50 @@ spec:
         start_at: end
         storage: file_storage
 
+      # Talos json_lines: {"msg", "talos-time", "talos-level", "talos-service", ...fields from zap-formatted services}
+      tcp_log/talos-service:
+        listen_address: 0.0.0.0:6050
+        resource:
+          k8s.node.name: ${env:OTEL_K8S_NODE_NAME}
+        operators:
+          - type: json_parser
+            timestamp:
+              parse_from: attributes["talos-time"]
+              layout_type: gotime
+              layout: "2006-01-02T15:04:05.999999999Z07:00"
+            severity:
+              parse_from: attributes["talos-level"]
+          - type: move
+            from: attributes.msg
+            to: body
+          - type: move
+            from: attributes["talos-service"]
+            to: resource["service.name"]
+        retry_on_failure:
+          enabled: true
+          max_elapsed_time: 0
+
+      # Talos kmsg json_lines: {"msg", "talos-time", "talos-level", "facility", "priority", "seq", "clock"}
+      tcp_log/talos-kernel:
+        listen_address: 0.0.0.0:6051
+        resource:
+          k8s.node.name: ${env:OTEL_K8S_NODE_NAME}
+          service.name: kernel
+        operators:
+          - type: json_parser
+            timestamp:
+              parse_from: attributes["talos-time"]
+              layout_type: gotime
+              layout: "2006-01-02T15:04:05.999999999Z07:00"
+            severity:
+              parse_from: attributes["talos-level"]
+          - type: move
+            from: attributes.msg
+            to: body
+        retry_on_failure:
+          enabled: true
+          max_elapsed_time: 0
+
     service:
       extensions:
         - file_storage
@@ -180,6 +238,15 @@ spec:
             - resource_detection/env
           exporters:
             # - debug/logs
+            - otlp_http/victoria-logs
+        logs/talos:
+          receivers:
+            - tcp_log/talos-service
+            - tcp_log/talos-kernel
+          processors:
+            - memory_limiter
+            - resource_detection/env
+          exporters:
             - otlp_http/victoria-logs
   volumeMounts:
     - mountPath: /var/log/pods

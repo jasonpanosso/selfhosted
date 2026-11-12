@@ -9,10 +9,20 @@ spec:
     matchLabels:
       app.kubernetes.io/name: opentelemetry-collector
       app.kubernetes.io/instance: observability-agents.node
-  # ingress on 8888 (metrics) comes from the operator's NetworkPolicy
+  # vmagent scrape of 8888 covered by baseline policy
   enableDefaultDeny:
     ingress: true
     egress: true
+  ingress:
+    # Talos service and kernel logs over the hostPorts; only this node's host, not the LAN
+    - fromEntities:
+        - host
+      toPorts:
+        - ports:
+            - port: "6050"
+              protocol: TCP
+            - port: "6051"
+              protocol: TCP
   egress:
     # otlp_http/victoria-logs exporter
     - toEndpoints:
