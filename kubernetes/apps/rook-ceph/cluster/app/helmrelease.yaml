@@ -112,13 +112,17 @@ spec:
         port: 7000
         ssl: false
         prometheusEndpoint: http://vmsingle-victoria-metrics.observability.svc.cluster.local:8428
+      csi:
+        cephfs:
+          # kernel CephFS mounts default to ms_mode=legacy (msgr1, we require msgr2)
+          kernelMountOptions: ms_mode=prefer-crc
       network:
         connections:
           encryption:
             enabled: false
           compression:
             enabled: false
-          requireMsgr2: false
+          requireMsgr2: true
       removeOSDsIfOutAndSafeToRemove: true
 
       storage: # cluster level storage configuration and selection
