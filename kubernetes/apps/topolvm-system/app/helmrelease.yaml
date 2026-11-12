@@ -1,0 +1,59 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/helm.toolkit.fluxcd.io/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &app topolvm
+spec:
+  chart:
+    spec:
+      chart: topolvm
+      version: 17.3.1
+      sourceRef:
+        kind: HelmRepository
+        name: *app
+  interval: 1h
+  upgrade:
+    strategy:
+      name: RemediateOnFailure
+    remediation:
+      remediateLastFailure: true
+      retries: 2
+  values:
+    lvmd:
+      # lvmd runs embedded in the node plugin (node.lvmdEmbedded), no separate DaemonSet
+      managed: false
+      deviceClasses:
+        - name: thick
+          # LVMVolumeGroupConfig in talos/worker.yaml
+          volume-group: topolvm
+          default: true
+          # the volume group belongs to TopoLVM alone
+          spare-gb: 0
+    node:
+      lvmdEmbedded: true
+      priorityClassName: system-node-critical
+      nodeSelector:
+        storage.home.internal/topolvm: "true"
+      prometheus:
+        podMonitor:
+          enabled: true
+    controller:
+      priorityClassName: system-cluster-critical
+    priorityClass:
+      enabled: false
+    # thick volumes can't be restored from snapshots; revisit once Talos can declare thin pools
+    snapshot:
+      enabled: false
+    storageClasses:
+      - name: topolvm
+        storageClass:
+          fsType: xfs
+          reclaimPolicy: Delete
+          isDefaultClass: false
+          volumeBindingMode: WaitForFirstConsumer
+          allowVolumeExpansion: true
+          additionalParameters:
+            topolvm.io/device-class: thick
+          # Talos SELinux label for user volumes (talos.dev SELinux "CSI volumes")
+          mountOptions: ["discard", "context=system_u:object_r:ephemeral_t:s0"]

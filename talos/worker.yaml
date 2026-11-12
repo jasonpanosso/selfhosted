@@ -13,3 +13,27 @@ name: local-path-provisioner
 volumeType: directory
 mount:
   secure: false
+---
+# cap the ephemeral partition size
+apiVersion: v1alpha1
+kind: VolumeConfig
+name: EPHEMERAL
+provisioning:
+  maxSize: 100GiB
+---
+# give rest of disk to topolvm (no maxSize = all free space).
+apiVersion: v1alpha1
+kind: RawVolumeConfig
+name: topolvm
+provisioning:
+  diskSelector:
+    match: system_disk
+  minSize: 10GiB
+---
+# volume group TopoLVM makes logical volumes from
+apiVersion: v1alpha1
+kind: LVMVolumeGroupConfig
+name: topolvm
+provisioning:
+  volumeSelector:
+    match: volume.partition_label == "r-topolvm"

@@ -1,0 +1,25 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/cilium.io/ciliumnetworkpolicy_v2.json
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: topolvm
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: topolvm
+  enableDefaultDeny:
+    ingress: true
+    egress: true
+  ingress:
+    # kubelet health probes: controller readyz 8081 + healthz 9808, node healthz 9808 + csi-registrar 9809
+    - fromEntities:
+        - host
+      toPorts:
+        - ports:
+            - port: "8081"
+              protocol: TCP
+            - port: "9808"
+              protocol: TCP
+            - port: "9809"
+              protocol: TCP
