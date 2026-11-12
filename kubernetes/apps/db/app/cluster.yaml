@@ -7,6 +7,8 @@ metadata:
   annotations:
     # https://github.com/cloudnative-pg/cloudnative-pg/issues/5778#issuecomment-2782198691
     cnpg.io/skipEmptyWalArchiveCheck: "enabled"
+    # TODO: remove after the topolvm migration
+    cnpg.io/validation: disabled
 spec:
   bootstrap:
     recovery:
@@ -22,8 +24,8 @@ spec:
   instances: 3
   primaryUpdateMethod: switchover
   storage:
-    size: 20Gi
-    storageClass: local-path
+    size: 10Gi
+    storageClass: topolvm
   plugins:
     - name: barman-cloud.cloudnative-pg.io
       enabled: true
