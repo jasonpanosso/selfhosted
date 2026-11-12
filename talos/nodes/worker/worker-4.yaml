@@ -46,3 +46,4 @@ kind: KubeNodeConfig
 labels:
   network.home.internal/vlan40: "true"
   network.home.internal/vlan30: "true"
+  storage.home.internal/topolvm: "true"
