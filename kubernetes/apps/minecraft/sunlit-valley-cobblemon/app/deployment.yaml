@@ -38,6 +38,10 @@ spec:
                     operator: In
                     values:
                       - amd64
+                  - key: kubernetes.io/hostname
+                    operator: In
+                    values:
+                      - worker-8
       # mysticaloaktree calls these on boot and only clients use the results
       hostAliases:
         - ip: 127.0.0.1
