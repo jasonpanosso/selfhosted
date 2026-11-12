@@ -61,7 +61,7 @@ spec:
         allowMultiplePerNode: false
         volumeClaimTemplate:
           spec:
-            storageClassName: local-path
+            storageClassName: topolvm
             resources:
               requests:
                 storage: 10Gi
