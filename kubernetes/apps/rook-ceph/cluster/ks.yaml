@@ -53,3 +53,5 @@ spec:
       namespace: kube-system
     - name: prometheus-operator-crds
       namespace: observability
+    - name: topolvm
+      namespace: topolvm-system
