@@ -18,4 +18,3 @@ resources:
   - ./opentelemetry/operator/ks.yaml
   - ./opentelemetry/collector/ks.yaml
   - ./silence-operator/operator/ks.yaml
-  - ./silence-operator/silences/ks.yaml
