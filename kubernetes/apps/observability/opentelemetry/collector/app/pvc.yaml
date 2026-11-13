@@ -5,8 +5,7 @@ apiVersion: v1
 metadata:
   name: otel-cluster-collector
 spec:
-  accessModes:
-    - ReadWriteOnce
+  accessModes: [ReadWriteOncePod]
   resources:
     requests:
       storage: 1Gi

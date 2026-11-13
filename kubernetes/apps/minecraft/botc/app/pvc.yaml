@@ -5,8 +5,7 @@ apiVersion: v1
 metadata:
   name: botc
 spec:
-  accessModes:
-    - ReadWriteOnce
+  accessModes: [ReadWriteOncePod]
   resources:
     requests:
       storage: 5Gi

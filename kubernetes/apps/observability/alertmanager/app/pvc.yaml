@@ -5,7 +5,7 @@ kind: PersistentVolumeClaim
 metadata:
   name: alertmanager
 spec:
-  accessModes: [ReadWriteOnce]
+  accessModes: [ReadWriteOncePod]
   resources:
     requests:
       storage: 1Gi
