@@ -29,8 +29,6 @@ spec:
         # datasource in grafana's helmrelease.yaml
         - matchLabels:
             app.kubernetes.io/name: grafana
-        - matchLabels:
-            app.kubernetes.io/name: silence-operator
         # flux alerts
         - matchLabels:
             k8s:io.kubernetes.pod.namespace: flux-system
