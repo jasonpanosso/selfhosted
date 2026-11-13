@@ -16,6 +16,16 @@ spec:
       remediateLastFailure: true
       retries: 2
   values:
+    # standby operator (--leader-elect): primary failover needs a running operator
+    replicaCount: 2
+    affinity:
+      podAntiAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchLabels:
+                app.kubernetes.io/name: cloudnative-pg
+                app.kubernetes.io/instance: cloudnative-pg
+            topologyKey: kubernetes.io/hostname
     resources:
       requests:
         cpu: 15m
