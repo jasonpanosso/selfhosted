@@ -17,6 +17,11 @@ spec:
       retries: 2
   values:
     installScope: cluster
+    # no limit, can have pretty big spikes at startup
+    resources:
+      requests:
+        cpu: 50m
+        memory: 256Mi
     monitoring:
       serviceMonitor:
         enabled: true

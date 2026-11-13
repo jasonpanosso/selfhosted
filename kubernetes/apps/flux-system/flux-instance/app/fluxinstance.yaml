@@ -129,6 +129,55 @@ spec:
         target:
           kind: Deployment
           name: kustomize-controller
+      - # Resources: upstream requests 64Mi and limits CPU, which throttled kustomize-controller
+        target:
+          kind: Deployment
+          name: source-controller
+        patch: |
+          - op: replace
+            path: /spec/template/spec/containers/0/resources
+            value:
+              requests:
+                cpu: 50m
+                memory: 256Mi
+              limits:
+                memory: 256Mi
+      - target:
+          kind: Deployment
+          name: kustomize-controller
+        patch: |
+          - op: replace
+            path: /spec/template/spec/containers/0/resources
+            value:
+              requests:
+                cpu: 100m
+                memory: 320Mi
+              limits:
+                memory: 320Mi
+      - target:
+          kind: Deployment
+          name: helm-controller
+        patch: |
+          - op: replace
+            path: /spec/template/spec/containers/0/resources
+            value:
+              requests:
+                cpu: 100m
+                memory: 512Mi
+              limits:
+                memory: 512Mi
+      - target:
+          kind: Deployment
+          name: notification-controller
+        patch: |
+          - op: replace
+            path: /spec/template/spec/containers/0/resources
+            value:
+              requests:
+                cpu: 100m
+                memory: 128Mi
+              limits:
+                memory: 128Mi
       - # Controller-level SOPS decryption
         patch: |-
           - op: add

@@ -36,5 +36,12 @@ spec:
         storageClassName: rook-ceph-block
         size: 50Gi
       retentionPeriod: 30d
+      # caches size to memory.allowedPercent (60%) of the limit; with no limit they sized to the node
+      resources:
+        requests:
+          cpu: 50m
+          memory: 1Gi
+        limits:
+          memory: 1Gi
       serviceMonitor:
         enabled: true

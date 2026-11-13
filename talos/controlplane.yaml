@@ -84,6 +84,10 @@ kind: KubeAPIServerConfig
 image: registry.k8s.io/kube-apiserver:v1.36.6
 certExtraSANs:
   - 192.168.20.100
+resources:
+  requests:
+    cpu: 350m
+    memory: 3Gi
 ---
 apiVersion: v1alpha1
 kind: KubeAdmissionControlConfig
@@ -103,12 +107,20 @@ image: registry.k8s.io/kube-controller-manager:v1.36.6
 extraArgs:
   bind-address: 0.0.0.0
   terminated-pod-gc-threshold: "10"
+resources:
+  requests:
+    cpu: 50m
+    memory: 512Mi
 ---
 apiVersion: v1alpha1
 kind: KubeSchedulerConfig
 image: registry.k8s.io/kube-scheduler:v1.36.6
 extraArgs:
   bind-address: 0.0.0.0
+resources:
+  requests:
+    cpu: 10m
+    memory: 128Mi
 config:
   apiVersion: kubescheduler.config.k8s.io/v1
   kind: KubeSchedulerConfiguration

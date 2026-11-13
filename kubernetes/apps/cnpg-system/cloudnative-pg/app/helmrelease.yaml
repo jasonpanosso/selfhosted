@@ -16,5 +16,11 @@ spec:
       remediateLastFailure: true
       retries: 2
   values:
+    resources:
+      requests:
+        cpu: 15m
+        memory: 192Mi
+      limits:
+        memory: 192Mi
     monitoring:
       podMonitorEnabled: true

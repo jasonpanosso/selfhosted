@@ -102,8 +102,8 @@ spec:
           readinessProbe: *probes
           resources:
             requests:
-              cpu: 1000m
-              memory: 2Gi
+              cpu: 250m
+              memory: 4Gi
             limits:
               memory: 4Gi
           securityContext:

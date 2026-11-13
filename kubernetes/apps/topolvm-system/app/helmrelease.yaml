@@ -42,6 +42,43 @@ spec:
       priorityClassName: system-cluster-critical
     priorityClass:
       enabled: false
+    resources:
+      topolvm_node:
+        requests:
+          cpu: 10m
+          memory: 128Mi
+        limits:
+          memory: 128Mi
+      csi_registrar:
+        requests:
+          cpu: 10m
+          memory: 64Mi
+        limits:
+          memory: 64Mi
+      liveness_probe:
+        requests:
+          cpu: 10m
+          memory: 64Mi
+        limits:
+          memory: 64Mi
+      topolvm_controller:
+        requests:
+          cpu: 10m
+          memory: 64Mi
+        limits:
+          memory: 64Mi
+      csi_provisioner:
+        requests:
+          cpu: 10m
+          memory: 64Mi
+        limits:
+          memory: 64Mi
+      csi_resizer:
+        requests:
+          cpu: 10m
+          memory: 64Mi
+        limits:
+          memory: 64Mi
     # thick volumes can't be restored from snapshots; revisit once Talos can declare thin pools
     snapshot:
       enabled: false

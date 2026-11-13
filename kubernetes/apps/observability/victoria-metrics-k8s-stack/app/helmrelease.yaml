@@ -210,10 +210,10 @@ spec:
         retentionPeriod: 10d
         resources:
           requests:
-            cpu: 250m
-            memory: 2Gi
+            cpu: 500m
+            memory: 3Gi
           limits:
-            memory: 2Gi
+            memory: 3Gi
         storage:
           storageClassName: rook-ceph-block
           accessModes:
@@ -230,7 +230,7 @@ spec:
         scrapeInterval: 30s
         resources:
           requests:
-            cpu: 200m
+            cpu: 350m
             memory: 512Mi
           limits:
             memory: 512Mi

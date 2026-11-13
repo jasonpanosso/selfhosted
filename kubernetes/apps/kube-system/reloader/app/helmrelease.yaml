@@ -21,6 +21,12 @@ spec:
       enableHA: true
       deployment:
         replicas: 1
+        resources:
+          requests:
+            cpu: 10m
+            memory: 192Mi
+          limits:
+            memory: 192Mi
       readOnlyRootFileSystem: true
       podMonitor:
         enabled: true
