@@ -358,8 +358,15 @@ spec:
         sources:
           - pvc:
               name: << inputs.app >>
+            # TopoLVM mounts the device per pod (no staging bind mount) and the
+            # kernel refuses a ro mount of an XFS device already mounted rw, so
+            # the mover has to mount it rw like the server. fsGroup 65534 with
+            # OnRootMismatch matches the server, so the kubelet skips the chgrp
+            # walk.
+            readOnly: false
+            acknowledgeLiveMutation: true
         # thick TopoLVM has no CSI snapshots; the mover reads the live volume
-        # read-only on the server's node.
+        # on the server's node.
         copyMethod: Direct
         hooks:
           beforeSnapshot:
