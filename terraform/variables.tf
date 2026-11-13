@@ -21,8 +21,14 @@ variable "bitwarden_organization_id" {
   type        = string
 }
 
-variable "cloudflare_api_token" {
-  description = "API token for Cloudflare"
+variable "cloudflare_terraform_api_token" {
+  description = "Cloudflare API token for the tofu provider"
+  type        = string
+  sensitive   = true
+}
+
+variable "cloudflare_zone_name" {
+  description = "Cloudflare zone (domain) the cluster's public records live in"
   type        = string
   sensitive   = true
 }

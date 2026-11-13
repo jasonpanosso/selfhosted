@@ -2,9 +2,10 @@ module "bitwarden_secrets" {
   source       = "./bitwarden_secrets"
   project_name = "selfhosted_secrets"
 
-  organization_id          = var.bitwarden_organization_id
-  cloudflare_api_token     = var.cloudflare_api_token
-  vpn_firewall_input_ports = var.vpn_firewall_input_ports
+  organization_id                   = var.bitwarden_organization_id
+  cloudflare_api_token              = cloudflare_api_token.cert_manager.value
+  cloudflare_external_dns_api_token = cloudflare_api_token.external_dns.value
+  vpn_firewall_input_ports          = var.vpn_firewall_input_ports
 
   b2_bucket_id                      = b2_bucket.backups.bucket_id
   b2_cnpg_access_key_id             = b2_application_key.cnpg.application_key_id

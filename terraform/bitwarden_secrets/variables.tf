@@ -9,7 +9,13 @@ variable "project_name" {
 }
 
 variable "cloudflare_api_token" {
-  description = "API token for Cloudflare"
+  description = "Cloudflare API token for cert-manager DNS-01"
+  type        = string
+  sensitive   = true
+}
+
+variable "cloudflare_external_dns_api_token" {
+  description = "Cloudflare API token for external-dns"
   type        = string
   sensitive   = true
 }

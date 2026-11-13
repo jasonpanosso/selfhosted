@@ -5,6 +5,11 @@ terraform {
       version = "~> 0.14.1"
     }
 
+    cloudflare = {
+      source  = "cloudflare/cloudflare"
+      version = "~> 5.29.0"
+    }
+
     bitwarden = {
       source  = "maxlaverse/bitwarden"
       version = ">= 0.16.0"
@@ -30,6 +35,10 @@ terraform {
 provider "b2" {
   application_key_id = var.b2_application_key_id
   application_key    = var.b2_application_key
+}
+
+provider "cloudflare" {
+  api_token = var.cloudflare_terraform_api_token
 }
 
 provider "bitwarden" {
