@@ -20,20 +20,6 @@
       }
     },
     {
-      "description": "OpenTelemetry Group",
-      "groupName": "OpenTelemetry",
-      "matchDatasources": ["docker"],
-      "matchPackageNames": [
-        "/target-allocator/",
-        "/opentelemetry-operator/",
-        "/opentelemetry-collector-k8s/",
-        "/opentelemetry-collector-contrib/"
-      ],
-      "group": {
-        "commitMessageTopic": "{{{groupName}}} group"
-      }
-    },
-    {
       "description": "deadvalues Group: the action's digest and its version input",
       "groupName": "deadvalues",
       "matchPackageNames": ["guarnz/deadvalues"],
