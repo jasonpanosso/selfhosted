@@ -20,13 +20,6 @@ spec:
       type: RollingUpdate
     persistence:
       enabled: false
-      type: pvc
-      storageClassName: rook-ceph-block
-      accessModes:
-        - ReadWriteOnce
-      size: 5Gi
-      finalizers:
-        - kubernetes.io/pvc-protection
 
     podAnnotations:
       reloader.stakater.com/auto: "true"
