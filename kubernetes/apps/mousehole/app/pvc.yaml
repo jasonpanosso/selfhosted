@@ -5,7 +5,7 @@ kind: PersistentVolumeClaim
 metadata:
   name: mousehole
 spec:
-  accessModes: [ReadWriteOnce]
+  accessModes: [ReadWriteOncePod]
   dataSourceRef:
     apiGroup: kopiur.home-operations.com
     kind: Restore
