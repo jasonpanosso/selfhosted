@@ -5,8 +5,7 @@ apiVersion: v1
 metadata:
   name: seerr-cache
 spec:
-  accessModes:
-    - ReadWriteOnce
+  accessModes: [ReadWriteOncePod]
   resources:
     requests:
       storage: 10Gi
@@ -18,7 +17,7 @@ kind: PersistentVolumeClaim
 metadata:
   name: seerr
 spec:
-  accessModes: [ReadWriteOnce]
+  accessModes: [ReadWriteOncePod]
   dataSourceRef:
     apiGroup: kopiur.home-operations.com
     kind: Restore
