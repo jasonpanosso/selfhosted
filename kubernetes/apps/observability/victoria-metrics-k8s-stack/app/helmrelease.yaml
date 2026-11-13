@@ -217,7 +217,7 @@ spec:
         storage:
           storageClassName: rook-ceph-block
           accessModes:
-            - ReadWriteOnce
+            - ReadWriteOncePod
           resources:
             requests:
               storage: 20Gi
