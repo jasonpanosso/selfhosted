@@ -16,6 +16,12 @@ spec:
       remediateLastFailure: true
       retries: 2
   values:
+    resources:
+      requests:
+        cpu: 75m
+        memory: 128Mi
+      limits:
+        memory: 128Mi
     spegel:
       containerdSock: /run/containerd/containerd.sock
       # mirror setup in talos RegistryMirrorConfig

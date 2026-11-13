@@ -35,10 +35,10 @@ spec:
           type: RuntimeDefault
       resources:
         requests:
-          cpu: 50m
-          memory: 128Mi
+          cpu: 25m
+          memory: 160Mi
         limits:
-          memory: 256Mi
+          memory: 160Mi
       operator:
         disable_prometheus_converter: false
         # delete converted VM objects when the prometheus-operator object they came from is deleted
@@ -248,9 +248,9 @@ spec:
         resources:
           requests:
             cpu: 50m
-            memory: 256Mi
+            memory: 160Mi
           limits:
-            memory: 256Mi
+            memory: 160Mi
 
 
     alertmanager:

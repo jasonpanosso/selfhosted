@@ -25,11 +25,11 @@ spec:
         repository: ghcr.io/open-telemetry/opentelemetry-collector-releases/opentelemetry-collector-contrib
       resources:
         limits:
-          memory: 128Mi
+          memory: 160Mi
           ephemeral-storage: 50Mi
         requests:
-          cpu: 100m
-          memory: 128Mi
+          cpu: 10m
+          memory: 160Mi
           ephemeral-storage: 50Mi
       serviceMonitor:
         enabled: true

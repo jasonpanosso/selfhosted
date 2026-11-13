@@ -27,13 +27,13 @@ spec:
         - ALL
   resources:
     limits:
-      memory: 256Mi
+      memory: 160Mi
     requests:
-      cpu: 100m
-      memory: 256Mi
+      cpu: 25m
+      memory: 160Mi
   env:
     - name: GOMEMLIMIT
-      value: 200MiB
+      value: 128MiB
     - name: OTEL_RESOURCE_ATTRIBUTES
       value: "k8s.cluster.name=prod"
   config:

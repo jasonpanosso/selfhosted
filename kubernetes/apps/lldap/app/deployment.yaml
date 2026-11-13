@@ -97,10 +97,10 @@ spec:
                   key: SMTP_PASSWORD
           resources:
             requests:
-              cpu: 100m
-              memory: 256Mi
+              cpu: 50m
+              memory: 128Mi
             limits:
-              memory: 256Mi
+              memory: 128Mi
           livenessProbe: &probes
             exec:
               command:

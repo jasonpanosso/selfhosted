@@ -88,9 +88,9 @@ spec:
           resources:
             requests:
               cpu: 100m
-              memory: 512Mi
+              memory: 640Mi
             limits:
-              memory: 512Mi
+              memory: 640Mi
           securityContext: *securityContext
           volumeMounts:
             - name: server

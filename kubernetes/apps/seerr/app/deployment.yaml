@@ -33,10 +33,10 @@ spec:
           name: *app
           resources:
             requests:
-              cpu: 100m
+              cpu: 50m
               memory: 512Mi
             limits:
-              memory: 1Gi
+              memory: 512Mi
           env:
             - name: TZ
               value: Etc/UTC

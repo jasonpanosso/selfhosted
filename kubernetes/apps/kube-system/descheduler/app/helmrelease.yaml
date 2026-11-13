@@ -18,6 +18,14 @@ spec:
   values:
     replicas: 2
     kind: Deployment
+    resources:
+      requests:
+        cpu: 25m
+        memory: 160Mi
+      limits:
+        # chart default limits cpu to 500m
+        cpu: null
+        memory: 160Mi
     deschedulerPolicyAPIVersion: descheduler/v1alpha2
     deschedulerPolicy:
       profiles:

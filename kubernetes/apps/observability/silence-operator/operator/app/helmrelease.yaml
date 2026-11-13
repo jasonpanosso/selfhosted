@@ -17,6 +17,14 @@ spec:
       retries: 2
   values:
     alertmanagerAddress: http://alertmanager.observability.svc.cluster.local:9093
+    resources:
+      requests:
+        cpu: 10m
+        memory: 96Mi
+      limits:
+        # chart default limits cpu to 50m, which throttled it
+        cpu: null
+        memory: 96Mi
     crds:
       install: true
     networkPolicy:

@@ -16,6 +16,12 @@ spec:
       remediateLastFailure: true
       retries: 2
   values:
+    resources:
+      requests:
+        cpu: 25m
+        memory: 160Mi
+      limits:
+        memory: 160Mi
     args:
       - --kubelet-insecure-tls
       - --metric-resolution=10s

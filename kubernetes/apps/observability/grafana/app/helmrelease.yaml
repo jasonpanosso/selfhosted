@@ -26,10 +26,10 @@ spec:
 
     resources:
       requests:
-        cpu: 500m
-        memory: 1Gi
+        cpu: 100m
+        memory: 512Mi
       limits:
-        memory: 1Gi
+        memory: 512Mi
 
     env:
       GF_DATE_FORMATS_USE_BROWSER_LOCALE: true
@@ -217,6 +217,12 @@ spec:
             - {name: DS_PROMETHEUS, value: Prometheus}
 
     sidecar:
+      resources:
+        requests:
+          cpu: 10m
+          memory: 128Mi
+        limits:
+          memory: 128Mi
       alerts:
         enabled: true
         searchNamespace: ALL
