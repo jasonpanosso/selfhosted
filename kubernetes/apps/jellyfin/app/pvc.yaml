@@ -5,8 +5,7 @@ apiVersion: v1
 metadata:
   name: jellyfin-cache
 spec:
-  accessModes:
-    - ReadWriteOnce
+  accessModes: [ReadWriteOncePod]
   resources:
     requests:
       storage: 50Gi
@@ -18,7 +17,7 @@ kind: PersistentVolumeClaim
 metadata:
   name: jellyfin
 spec:
-  accessModes: [ReadWriteOnce]
+  accessModes: [ReadWriteOncePod]
   dataSourceRef:
     apiGroup: kopiur.home-operations.com
     kind: Restore
