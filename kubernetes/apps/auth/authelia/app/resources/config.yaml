@@ -45,7 +45,6 @@ session:
   cookies:
     - domain: ${domain}.${tld}
       authelia_url: https://auth.${domain}.${tld}
-      default_redirection_url: https://www.${domain}.${tld}
   redis:
     host: dragonfly.auth.svc.cluster.local
     port: 6379
