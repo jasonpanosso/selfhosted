@@ -8,6 +8,9 @@ metadata:
     app.kubernetes.io/name: *app
   annotations:
     lbipam.cilium.io/ips: 192.168.21.42
+    # velocity hosts
+    external-dns.kubernetes.io/hostname: cobblemon.${domain}.${tld},botc.${domain}.${tld},sunlit-valley.${domain}.${tld}
+    external-dns.kubernetes.io/target: kubernetes.${domain}.${tld}
 spec:
   type: LoadBalancer
   ports:
