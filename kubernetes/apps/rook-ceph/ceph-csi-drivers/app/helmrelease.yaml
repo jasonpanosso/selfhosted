@@ -20,6 +20,64 @@ spec:
       cephfs:
         enabled: true
         name: rook-ceph.cephfs.csi.ceph.com
+        nodePlugin:
+          resources:
+            plugin:
+              requests:
+                cpu: 25m
+                memory: 192Mi
+              limits:
+                memory: 192Mi
+            registrar:
+              requests:
+                cpu: 10m
+                memory: 32Mi
+              limits:
+                memory: 32Mi
+            logRotator:
+              requests:
+                cpu: 10m
+                memory: 32Mi
+              limits:
+                memory: 32Mi
+        controllerPlugin:
+          resources:
+            plugin:
+              requests:
+                cpu: 25m
+                memory: 192Mi
+              limits:
+                memory: 192Mi
+            provisioner:
+              requests:
+                cpu: 10m
+                memory: 128Mi
+              limits:
+                memory: 128Mi
+            attacher:
+              requests:
+                cpu: 10m
+                memory: 96Mi
+              limits:
+                memory: 96Mi
+            resizer:
+              requests:
+                cpu: 10m
+                memory: 96Mi
+              limits:
+                memory: 96Mi
+            snapshotter:
+              requests:
+                cpu: 10m
+                memory: 96Mi
+              limits:
+                memory: 96Mi
+            logRotator:
+              requests:
+                cpu: 10m
+                memory: 32Mi
+              limits:
+                memory: 32Mi
       nfs:
         enabled: false
       nvmeof:
@@ -28,3 +86,61 @@ spec:
         enabled: true
         name: rook-ceph.rbd.csi.ceph.com
         snapshotPolicy: volumeSnapshot
+        nodePlugin:
+          resources:
+            plugin:
+              requests:
+                cpu: 25m
+                memory: 192Mi
+              limits:
+                memory: 192Mi
+            registrar:
+              requests:
+                cpu: 10m
+                memory: 32Mi
+              limits:
+                memory: 32Mi
+            logRotator:
+              requests:
+                cpu: 10m
+                memory: 32Mi
+              limits:
+                memory: 32Mi
+        controllerPlugin:
+          resources:
+            plugin:
+              requests:
+                cpu: 25m
+                memory: 192Mi
+              limits:
+                memory: 192Mi
+            provisioner:
+              requests:
+                cpu: 10m
+                memory: 128Mi
+              limits:
+                memory: 128Mi
+            attacher:
+              requests:
+                cpu: 10m
+                memory: 96Mi
+              limits:
+                memory: 96Mi
+            resizer:
+              requests:
+                cpu: 10m
+                memory: 96Mi
+              limits:
+                memory: 96Mi
+            snapshotter:
+              requests:
+                cpu: 10m
+                memory: 96Mi
+              limits:
+                memory: 96Mi
+            logRotator:
+              requests:
+                cpu: 10m
+                memory: 32Mi
+              limits:
+                memory: 32Mi

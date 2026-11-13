@@ -25,6 +25,12 @@ spec:
             * on(cluster, instance) group_left(nodename) max by (cluster, instance, nodename) (node_uname_info) < 0
     toolbox:
       enabled: true
+      resources:
+        requests:
+          cpu: 10m
+          memory: 128Mi
+        limits:
+          memory: 128Mi
     cephClusterSpec:
       cephConfig:
         global:
@@ -95,22 +101,41 @@ spec:
             memory: 512Mi
         mgr:
           requests:
-            cpu: 500m
+            cpu: 150m
             memory: 2Gi
           limits:
             memory: 2Gi
+        mgr-sidecar:
+          requests:
+            cpu: 125m
+            memory: 64Mi
+          limits:
+            memory: 64Mi
         mon:
           requests:
-            cpu: 500m
+            cpu: 100m
             memory: 2Gi
           limits:
             memory: 2Gi
+        # rook derives osd_memory_target from the limit
         osd:
           requests:
-            cpu: 500m
+            cpu: 250m
             memory: 3Gi
           limits:
             memory: 3Gi
+        crashcollector:
+          requests:
+            cpu: 10m
+            memory: 48Mi
+          limits:
+            memory: 48Mi
+        exporter:
+          requests:
+            cpu: 25m
+            memory: 48Mi
+          limits:
+            memory: 48Mi
       priorityClassNames:
         mon: system-node-critical
         osd: system-node-critical
@@ -269,7 +294,7 @@ spec:
             priorityClassName: system-cluster-critical
             resources:
               requests:
-                cpu: 250m
+                cpu: 100m
                 memory: 1024Mi
               limits:
                 memory: 1024Mi

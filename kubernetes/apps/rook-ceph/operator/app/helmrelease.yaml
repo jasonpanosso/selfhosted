@@ -18,3 +18,29 @@ spec:
     enableDiscoveryDaemon: true
     monitoring:
       enabled: true
+    resources:
+      requests:
+        cpu: 100m
+        memory: 512Mi
+      limits:
+        memory: 512Mi
+    discover:
+      # rook parses this string, wrapped in a resources key
+      resources: |
+        resources:
+          requests:
+            cpu: 10m
+            memory: 160Mi
+          limits:
+            memory: 160Mi
+    ceph-csi-operator:
+      controllerManager:
+        manager:
+          resources:
+            requests:
+              cpu: 10m
+              memory: 96Mi
+            limits:
+              # chart default limits cpu to 500m
+              cpu: null
+              memory: 96Mi
