@@ -21,6 +21,8 @@ spec:
         cpu: 100m
         memory: 512Mi
       limits:
+        # chart default limits cpu to 2000m
+        cpu: null
         memory: 512Mi
     serviceMonitor:
       create: true
