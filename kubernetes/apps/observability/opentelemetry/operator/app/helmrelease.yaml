@@ -20,6 +20,9 @@ spec:
     crds:
       create: true
     manager:
+      # need contrib for tcp_log
+      collectorImage:
+        repository: ghcr.io/open-telemetry/opentelemetry-collector-releases/opentelemetry-collector-contrib
       resources:
         limits:
           memory: 128Mi
