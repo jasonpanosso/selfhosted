@@ -41,6 +41,8 @@ spec:
               limits:
                 memory: 32Mi
         controllerPlugin:
+          # operator adds required hostname anti-affinity; sidecars leader-elect
+          replicas: 2
           resources:
             plugin:
               requests:
@@ -107,6 +109,8 @@ spec:
               limits:
                 memory: 32Mi
         controllerPlugin:
+          # operator adds required hostname anti-affinity; sidecars leader-elect
+          replicas: 2
           resources:
             plugin:
               requests:
