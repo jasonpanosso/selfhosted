@@ -10,6 +10,7 @@
     "github>jasonpanosso/selfhosted//.renovate/groups.json",
     "github>jasonpanosso/selfhosted//.renovate/labels.json",
     "github>jasonpanosso/selfhosted//.renovate/minecraftModpacks.json",
+    "github>jasonpanosso/selfhosted//.renovate/rookCephCsi.json",
     "github>jasonpanosso/selfhosted//.renovate/semanticCommits.json",
     ":automergeBranch",
     ":disableRateLimiting",

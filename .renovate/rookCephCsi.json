@@ -1,0 +1,21 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "customDatasources": {
+    "rook-ceph-csi-operator": {
+      "description": "ceph-csi-operator versions bundled in stable rook-ceph releases (Rook's Helm repo index); Rook tests the ceph-csi-drivers chart of the same version",
+      "defaultRegistryUrlTemplate": "https://charts.rook.io/release/index.yaml",
+      "format": "yaml",
+      "transformTemplates": [
+        "{\"releases\": [$distinct(entries.\"rook-ceph\"[$not($contains(version, \"-\"))].dependencies[name=\"ceph-csi-operator\"].version).{\"version\": $}], \"sourceUrl\": \"https://github.com/ceph/ceph-csi-operator\"}"
+      ]
+    }
+  },
+  "packageRules": [
+    {
+      "description": "ceph-csi-drivers is tracked by custom.rook-ceph-csi-operator, not by the newest tag in the mirror",
+      "matchManagers": ["flux"],
+      "matchPackageNames": ["/ceph-csi-drivers/"],
+      "enabled": false
+    }
+  ]
+}

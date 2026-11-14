@@ -20,6 +20,14 @@
       }
     },
     {
+      "description": "Rook-Ceph Group: ceph-csi-drivers follows the ceph-csi-operator bundled in rook-ceph",
+      "groupName": "Rook-Ceph",
+      "matchDatasources": ["custom.rook-ceph-csi-operator"],
+      "group": {
+        "commitMessageTopic": "{{{groupName}}} group"
+      }
+    },
+    {
       "description": "deadvalues Group: the action's digest and its version input",
       "groupName": "deadvalues",
       "matchPackageNames": ["guarnz/deadvalues"],
