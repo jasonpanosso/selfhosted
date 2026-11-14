@@ -51,17 +51,6 @@ spec:
         - ports:
             - port: "443"
               protocol: TCP
-    # default_config's SSDP and mDNS discovery
-    - toCIDR:
-        - 224.0.0.251/32
-        - 239.255.255.250/32
-        - 255.255.255.255/32
-      toPorts:
-        - ports:
-            - port: "1900"
-              protocol: UDP
-            - port: "5353"
-              protocol: UDP
     # hourly UDP probe to the pod's gateway
     - toEntities:
         - host
