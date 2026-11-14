@@ -5,6 +5,8 @@ kind: Kustomization
 
 resources:
   - ./ciliumnetworkpolicy.yaml
+  - ./clusterrole.yaml
+  - ./clusterrolebinding.yaml
   - ./helmrelease.yaml
   - ./httproute.yaml
   - ./ocirepository.yaml

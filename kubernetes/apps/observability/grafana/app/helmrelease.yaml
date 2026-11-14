@@ -216,6 +216,10 @@ spec:
           datasource:
             - {name: DS_PROMETHEUS, value: Prometheus}
 
+    # use own rbac to block secret reading
+    rbac:
+      create: false
+
     sidecar:
       resources:
         requests:
@@ -225,9 +229,11 @@ spec:
           memory: 128Mi
       alerts:
         enabled: true
+        resource: configmap
         searchNamespace: ALL
       dashboards:
         enabled: true
+        resource: configmap
         searchNamespace: ALL
         labelValue: ""
         label: grafana_dashboard
@@ -237,10 +243,12 @@ spec:
           foldersFromFilesStructure: true
       datasources:
         enabled: true
+        resource: configmap
         label: grafana_datasource
         searchNamespace: ALL
       notifiers:
         enabled: true
+        resource: configmap
         label: grafana_notifier
         searchNamespace: ALL
 
