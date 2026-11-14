@@ -227,12 +227,16 @@ spec:
           memory: 128Mi
         limits:
           memory: 128Mi
-      alerts:
-        enabled: true
-        resource: configmap
-        searchNamespace: ALL
       dashboards:
         enabled: true
+        initDashboards: true
+        restartPolicy: Always
+        startupProbe:
+          httpGet:
+            path: /healthz
+            port: 8084
+          periodSeconds: 5
+          failureThreshold: 60
         resource: configmap
         searchNamespace: ALL
         labelValue: ""
@@ -241,16 +245,6 @@ spec:
         provider:
           disableDelete: true
           foldersFromFilesStructure: true
-      datasources:
-        enabled: true
-        resource: configmap
-        label: grafana_datasource
-        searchNamespace: ALL
-      notifiers:
-        enabled: true
-        resource: configmap
-        label: grafana_notifier
-        searchNamespace: ALL
 
     serviceMonitor:
       enabled: true
