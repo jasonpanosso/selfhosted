@@ -25,7 +25,9 @@ spec:
         tag: v3.18.2-rocky9
       # chart renders this empty; false makes rook delete the CephConnection and ClientProfile
       createCsiOperatorResources: true
-    enableDiscoveryDaemon: true
+    # 1.21 (rook d18ff0da) treats an empty partition sharing a serial with a used one as a
+    # device change, so every hourly probe triggers a full CephCluster reconcile
+    enableDiscoveryDaemon: false
     monitoring:
       enabled: true
     resources:
@@ -34,15 +36,6 @@ spec:
         memory: 512Mi
       limits:
         memory: 512Mi
-    discover:
-      # rook parses this string, wrapped in a resources key
-      resources: |
-        resources:
-          requests:
-            cpu: 10m
-            memory: 160Mi
-          limits:
-            memory: 160Mi
     ceph-csi-operator:
       controllerManager:
         manager:
