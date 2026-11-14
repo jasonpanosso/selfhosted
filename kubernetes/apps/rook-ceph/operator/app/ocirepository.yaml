@@ -11,4 +11,10 @@ spec:
     operation: copy
   ref:
     tag: 1.21.2
+    digest: sha256:57e04865cd2b34c2b099edcba7048d312fee0477b58f5f90a20c084ee44991df
   url: oci://ghcr.io/rook/rook-ceph
+  verify:
+    provider: cosign
+    matchOIDCIdentity:
+      - issuer: ^https://token\.actions\.githubusercontent\.com$
+        subject: ^https://github\.com/rook/rook/\.github/workflows/push-build\.yaml@refs/tags/v.+$

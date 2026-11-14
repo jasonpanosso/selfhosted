@@ -10,6 +10,12 @@ spec:
     mediaType: application/vnd.cncf.helm.chart.content.v1.tar+gzip
     operation: copy
   ref:
+    # no digest: the custom datasource only bumps the tag, and a stale digest would win over it
     # renovate: datasource=custom.rook-ceph-csi-operator depName=ceph-csi-drivers
     tag: 1.1.0
   url: oci://ghcr.io/home-operations/charts-mirror/ceph-csi-drivers
+  verify:
+    provider: cosign
+    matchOIDCIdentity:
+      - issuer: ^https://token\.actions\.githubusercontent\.com$
+        subject: ^https://github\.com/home-operations/charts-mirror/\.github/workflows/app-builder\.yaml@refs/heads/main$

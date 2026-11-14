@@ -11,4 +11,10 @@ spec:
     operation: copy
   ref:
     tag: 0.1.1
+    digest: sha256:2fd55978f957396e1eb8a8190317d5434d27e5e6fb354d6f4bffbe9666e1a87f
   url: oci://ghcr.io/home-operations/charts/multus
+  verify:
+    provider: cosign
+    matchOIDCIdentity:
+      - issuer: ^https://token\.actions\.githubusercontent\.com$
+        subject: ^https://github\.com/home-operations/helm-charts/\.github/workflows/release\.yaml@refs/tags/multus-.+$

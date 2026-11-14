@@ -11,4 +11,10 @@ spec:
     operation: copy
   ref:
     tag: 0.29.1
+    digest: sha256:3245fa051bb21d0dd9246272f57a2760b4234817a164a3167d2a1e7fb9f63fd9
   url: oci://ghcr.io/cloudnative-pg/charts/cloudnative-pg
+  verify:
+    provider: cosign
+    matchOIDCIdentity:
+      - issuer: ^https://token\.actions\.githubusercontent\.com$
+        subject: ^https://github\.com/cloudnative-pg/charts/\.github/workflows/release-publish\.yml@refs/heads/main$

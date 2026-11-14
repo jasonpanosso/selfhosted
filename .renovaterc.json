@@ -23,6 +23,12 @@
   "ignorePaths": ["**/*.sops.*", "**/*.md", "terraform"],
   "packageRules": [
     {
+      "description": "Pin OCIRepository chart digests (spec.ref.digest); Flux pulls the digest, so a re-pushed tag shows up as a digest PR",
+      "matchManagers": ["flux"],
+      "matchDatasources": ["docker"],
+      "pinDigests": true
+    },
+    {
       "description": "Eclipse Temurin JRE tags (e.g. 25.0.5_8-jre-noble, 25.0.4.1_1-jre-noble)",
       "matchDatasources": ["docker"],
       "matchPackageNames": ["/eclipse-temurin$/"],
