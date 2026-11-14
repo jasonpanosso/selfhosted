@@ -18,8 +18,14 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: *app
+      # IoT VLAN
+      annotations:
+        k8s.v1.cni.cncf.io/networks: |-
+          [{"name": "iot", "namespace": "kube-system", "interface": "net1", "ips": ["192.168.40.12/24"], "mac": "02:00:00:00:40:12"}]
     spec:
       automountServiceAccountToken: false
+      nodeSelector:
+        network.home.internal/vlan40: "true"
       securityContext:
         runAsUser: 65534
         runAsGroup: 65534

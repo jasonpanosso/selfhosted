@@ -83,3 +83,32 @@ spec:
         - fields:
             - type: EchoRequest
               family: IPv4
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/cilium.io/ciliumclusterwidenetworkpolicy_v2.json
+apiVersion: cilium.io/v2
+kind: CiliumClusterwideNetworkPolicy
+metadata:
+  name: private-networks
+spec:
+  # block all RFC1918 networks besides cluster pod/service subnets, and the LAN kubernetes subnet
+  endpointSelector:
+    matchExpressions:
+      - key: k8s:io.kubernetes.pod.namespace
+        operator: NotIn
+        # home-assistant needs traffic into IoT subnet
+        values:
+          - home-assistant
+  enableDefaultDeny:
+    egress: false
+    ingress: false
+  egressDeny:
+    - toCIDRSet:
+        - cidr: 10.0.0.0/8
+          except:
+            - 10.244.0.0/16
+            - 10.96.0.0/12
+        - cidr: 172.16.0.0/12
+        - cidr: 192.168.0.0/16
+          except:
+            - 192.168.20.0/24
+            - 192.168.21.0/24

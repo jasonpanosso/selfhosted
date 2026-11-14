@@ -1,6 +1,6 @@
 ---
 # yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/cilium.io/ciliumnetworkpolicy_v2.json
-# /api/prometheus has no auth, so no other pod may reach HA
+# only covers eth0; VLAN 40 devices (SLZB, BLE proxy) are reached directly over net1
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
 metadata:
@@ -37,26 +37,9 @@ spec:
         - ports:
             - port: "5580"
               protocol: TCP
-    # SLZB: SMLIGHT API (80), SMLIGHT events SSE (81), OTBR REST API (8080), BLE proxy (5050)
+    # IoT-cloud VLAN devices
     - toCIDR:
-        - 192.168.40.10/32
-      toPorts:
-        - ports:
-            - port: "80"
-              protocol: TCP
-            - port: "81"
-              protocol: TCP
-            - port: "8080"
-              protocol: TCP
-            - port: "5050"
-              protocol: UDP
-    # bluetooth proxy
-    - toCIDR:
-        - 192.168.40.13/32
-      toPorts:
-        - ports:
-            - port: "6053"
-              protocol: TCP
+        - 192.168.50.0/24
     # integrations, OIDC through the public auth hostname
     - toCIDRSet:
         - cidr: 0.0.0.0/0
