@@ -17,6 +17,9 @@ spec:
       retries: 2
   values:
     fullnameOverride: kube-state-metrics
+    # keep secret data out of kube-state-metrics
+    collectorsExclude:
+      - secrets
     priorityClassName: system-cluster-critical
     resources:
       limits:
