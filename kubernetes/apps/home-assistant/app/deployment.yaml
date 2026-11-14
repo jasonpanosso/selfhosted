@@ -49,6 +49,10 @@ spec:
                 secretKeyRef:
                   name: *app
                   key: OIDC_CLIENT_SECRET
+            # stop litterrobot's Cognito client (boto3, no AWS credentials)
+            # from trying to get EC2 instance metadata (wtf?)
+            - name: AWS_EC2_METADATA_DISABLED
+              value: "true"
           startupProbe:
             httpGet: &httpGet
               path: /
