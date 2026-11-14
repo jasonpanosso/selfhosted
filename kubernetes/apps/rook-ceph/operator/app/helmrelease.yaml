@@ -15,6 +15,16 @@ spec:
   values:
     crds:
       enabled: true # DO NOT CHANGE - WILL RESULT IN DATA LOSS
+    csi:
+      # cephcsi v3.18+ is built on Rocky Linux 10, which needs x86-64-v3.
+      # worker-3/4 are x86-64-v2 only.
+      # https://github.com/rook/rook/issues/18607
+      cephcsi:
+        repository: quay.io/cephcsi/cephcsi
+        # renovate: datasource=docker depName=quay.io/cephcsi/cephcsi
+        tag: v3.18.2-rocky9
+      # chart renders this empty; false makes rook delete the CephConnection and ClientProfile
+      createCsiOperatorResources: true
     enableDiscoveryDaemon: true
     monitoring:
       enabled: true
