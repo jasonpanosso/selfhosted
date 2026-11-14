@@ -1,6 +1,6 @@
 ---
 # yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/cilium.io/ciliumnetworkpolicy_v2.json
-# only covers eth0 (net1 is the VPN macvlan). eth0 egress is CoreDNS only, so nothing leaks if net1 is down
+# only covers eth0 (net1 is the VPN macvlan). eth0 egress is CoreDNS only
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
 metadata:
