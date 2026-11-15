@@ -1,0 +1,56 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
+name: nixfmt
+
+on:
+  pull_request:
+    branches: ["main"]
+    paths:
+      - flake.nix
+      - .github/workflows/nixfmt.yaml
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  fix:
+    name: nixfmt - Fix
+    runs-on: ubuntu-latest
+    # Renovate branches only: formats flake.nix and pushes the result back to the PR
+    if: ${{ github.event.pull_request.head.repo.full_name == github.repository && startsWith(github.head_ref, 'renovate/') }}
+    steps:
+      - name: Generate Token
+        uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
+        id: app-token
+        with:
+          client-id: "${{ secrets.BOT_CLIENT_ID }}"
+          private-key: "${{ secrets.BOT_APP_PRIVATE_KEY }}"
+
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: "${{ github.head_ref }}"
+          token: "${{ steps.app-token.outputs.token }}"
+
+      - name: Install Nix
+        uses: cachix/install-nix-action@3dc140bfc76c49fbd4dd958429132e3746bcb086 # v31.11.5
+
+      # nixfmt comes from the flake's `formatter` output, pinned by flake.lock
+      - name: Run nixfmt
+        run: nix fmt flake.nix
+
+      # Committed as the same app identity Renovate uses, so Renovate still
+      # treats the branch as its own and keeps rebasing it
+      - name: Push Changes
+        run: |
+          if git diff --quiet; then
+            exit 0
+          fi
+          git config user.name "bot-syl[bot]"
+          git config user.email "213080625+bot-syl[bot]@users.noreply.github.com"
+          git commit -am "style: nixfmt flake.nix"
+          git push

@@ -46,20 +46,19 @@
       }
     },
     {
-      "description": "Talos Group",
+      "description": "Talos Group: installer images and talosctl in flake.nix",
       "groupName": "Talos",
-      "matchDatasources": ["docker"],
-      "matchPackageNames": ["ghcr.io/siderolabs/installer"],
+      "matchPackageNames": ["ghcr.io/siderolabs/installer-base", "siderolabs/talos"],
       "separateMultipleMinor": true,
       "group": {
         "commitMessageTopic": "{{{groupName}}} group"
       }
     },
     {
-      "description": "Kubernetes Group",
+      "description": "Kubernetes Group: control plane images and kubectl in flake.nix",
       "groupName": "Kubernetes",
-      "matchDatasources": ["docker"],
       "matchPackageNames": [
+        "kubernetes/kubernetes",
         "ghcr.io/siderolabs/kubelet",
         "registry.k8s.io/kube-apiserver",
         "registry.k8s.io/kube-controller-manager",

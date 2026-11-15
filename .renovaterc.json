@@ -15,6 +15,7 @@
     ":automergeBranch",
     ":disableRateLimiting",
     ":dependencyDashboard",
+    ":maintainLockFilesWeekly",
     ":semanticCommits",
     ":timezone(America/Detroit)"
   ],
@@ -42,6 +43,16 @@
       "versioning": "regex:^velocity-(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)$"
     },
     {
+      "description": "flake.nix binaries: Renovate can't compute the new sha256, scripts/flake-hashes.sh downloads and hashes the changed urls",
+      "matchManagers": ["custom.regex"],
+      "matchFileNames": ["flake.nix"],
+      "postUpgradeTasks": {
+        "commands": ["bash scripts/flake-hashes.sh"],
+        "fileFilters": ["flake.nix"],
+        "executionMode": "update"
+      }
+    },
+    {
       "description": "Postgres majors run pg_upgrade in place; hold for dashboard approval",
       "matchDatasources": ["docker"],
       "matchPackageNames": ["ghcr.io/cloudnative-pg/postgresql"],
@@ -52,6 +63,9 @@
       ]
     }
   ],
+  "nix": {
+    "enabled": true
+  },
   "flux": {
     "managerFilePatterns": ["/(^|/)kubernetes/.+\\.ya?ml$/"]
   },

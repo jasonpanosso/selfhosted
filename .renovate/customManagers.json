@@ -29,8 +29,25 @@
       "description": "Talos installer images in Talos patches",
       "managerFilePatterns": ["/(^|/)talos/.+\\.ya?ml$/"],
       "matchStrings": ["factory\\.talos\\.dev/metal-installer/[0-9a-f]{64}:(?<currentValue>v\\d+\\.\\d+\\.\\d+)"],
-      "depNameTemplate": "ghcr.io/siderolabs/installer",
+      "depNameTemplate": "ghcr.io/siderolabs/installer-base",
       "datasourceTemplate": "docker"
+    },
+    {
+      "customType": "regex",
+      "description": "GitHub release binaries in flake.nix; the match runs to the end of the url so every version in it is replaced",
+      "managerFilePatterns": ["/(^|/)flake\\.nix$/"],
+      "matchStrings": ["https://github\\.com/(?<depName>[^/]+/[^/]+)/releases/download/v(?<currentValue>[^/]+)/[^\"]+"],
+      "datasourceTemplate": "github-releases",
+      "extractVersionTemplate": "^v(?<version>.+)$"
+    },
+    {
+      "customType": "regex",
+      "description": "kubectl binaries in flake.nix",
+      "managerFilePatterns": ["/(^|/)flake\\.nix$/"],
+      "matchStrings": ["https://dl\\.k8s\\.io/release/v(?<currentValue>[^/]+)/[^\"]+"],
+      "depNameTemplate": "kubernetes/kubernetes",
+      "datasourceTemplate": "github-releases",
+      "extractVersionTemplate": "^v(?<version>.+)$"
     },
     {
       "customType": "regex",
