@@ -23,20 +23,20 @@
           src = pkgs.fetchurl (
             {
               x86_64-linux = {
-                url = "https://github.com/opentofu/opentofu/releases/download/v1.13.2/tofu_1.13.2_linux_amd64.zip";
-                sha256 = "723bebb0df8411daff1e5fc3862e28ff5581fe5634087f4c29a9aa41d78208b5";
+                url = "https://github.com/opentofu/opentofu/releases/download/v1.13.9/tofu_1.13.9_linux_amd64.zip";
+                sha256 = "bc44eb6b06446ba83bd4072114891987f590f66cca712737a7f1147c50c539ce";
               };
               aarch64-linux = {
-                url = "https://github.com/opentofu/opentofu/releases/download/v1.13.2/tofu_1.13.2_linux_arm64.zip";
-                sha256 = "6e815c58a09ee957de606ff48cefad082942e70afc43b737ff975654c54ec453";
+                url = "https://github.com/opentofu/opentofu/releases/download/v1.13.9/tofu_1.13.9_linux_arm64.zip";
+                sha256 = "04f7c93828b859d420269ed30f923ffebf09157b5d7fb95bf8d88a4d208b7fa3";
               };
               x86_64-darwin = {
-                url = "https://github.com/opentofu/opentofu/releases/download/v1.13.2/tofu_1.13.2_darwin_amd64.zip";
-                sha256 = "2093d0f881d911eb133cf51d2d7e09f22da71b1e6465c60826a314d217b0b84e";
+                url = "https://github.com/opentofu/opentofu/releases/download/v1.13.9/tofu_1.13.9_darwin_amd64.zip";
+                sha256 = "ac5505dd19d896f327d0ab727d4b853413c694931a7602b31f93c3a3e9d46d00";
               };
               aarch64-darwin = {
-                url = "https://github.com/opentofu/opentofu/releases/download/v1.13.2/tofu_1.13.2_darwin_arm64.zip";
-                sha256 = "cb46112c095f1c4da721b6a18c8368f67341896a62205d1c117299e85993af61";
+                url = "https://github.com/opentofu/opentofu/releases/download/v1.13.9/tofu_1.13.9_darwin_arm64.zip";
+                sha256 = "29ba2f4c78556a8d25476e5070fe4745495ef649c4a3b827170eb7436d23feb3";
               };
             }
             .${system}
