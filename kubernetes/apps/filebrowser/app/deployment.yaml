@@ -29,7 +29,7 @@ spec:
         seccompProfile:
           type: RuntimeDefault
       containers:
-        - image: ghcr.io/gtsteffaniak/filebrowser:2.1.4-beta@sha256:d7ae18aa7e8ff81695a35a2c1af399f0c437339241ad90be446c5e71314c0c31
+        - image: ghcr.io/gtsteffaniak/filebrowser:2.1.5-beta@sha256:ad68b009f69e66d65a66d5f83f67b9bb5cae588614ac415dc0b23132b939f177
           name: *app
           # filebrowser chmods what it creates directly, but parent dirs made
           # during uploads go through the umask; match the media apps' 0002
