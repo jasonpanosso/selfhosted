@@ -13,7 +13,8 @@ spec:
   interval: 1h
   retryInterval: 2m
   timeout: 5m
-  prune: true
+  # never prune
+  prune: false
   wait: false
   healthChecks:
     - apiVersion: helm.toolkit.fluxcd.io/v2

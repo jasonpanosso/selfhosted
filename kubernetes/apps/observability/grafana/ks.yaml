@@ -12,7 +12,7 @@ spec:
   path: ./kubernetes/apps/observability/grafana/app
   interval: 1h
   retryInterval: 2m
-  timeout: 5m
+  timeout: 15m
   prune: true
   wait: false
   healthChecks:

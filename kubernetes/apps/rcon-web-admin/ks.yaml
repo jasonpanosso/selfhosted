@@ -30,3 +30,5 @@ spec:
       namespace: kopiur-system
     - name: gateway-api-crds
       namespace: kube-system
+    - name: secret-store
+      namespace: external-secrets

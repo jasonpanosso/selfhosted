@@ -12,7 +12,7 @@ spec:
   path: ./kubernetes/apps/qui/app
   interval: 1h
   retryInterval: 2m
-  timeout: 5m
+  timeout: 10m
   wait: false
   prune: true
   healthChecks:
@@ -30,6 +30,8 @@ spec:
       namespace: external-secrets
     - name: db
       namespace: db
+    - name: rook-ceph-cluster
+      namespace: rook-ceph
     - name: gateway-api-crds
       namespace: kube-system
     - name: prometheus-operator-crds

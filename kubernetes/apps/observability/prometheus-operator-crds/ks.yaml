@@ -13,7 +13,7 @@ spec:
   interval: 1h
   retryInterval: 2m
   timeout: 5m
-  # never prune: deleting these CRDs deletes every ServiceMonitor/PodMonitor/PrometheusRule in the cluster
+  # never prune
   prune: false
   wait: false
   healthChecks:

@@ -32,3 +32,5 @@ spec:
       namespace: *namespace
     - name: rook-ceph-cluster
       namespace: rook-ceph
+    - name: secret-store
+      namespace: external-secrets

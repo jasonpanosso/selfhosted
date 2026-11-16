@@ -15,7 +15,7 @@ spec:
   path: ./kubernetes/apps/minecraft/botc/app
   interval: 1h
   retryInterval: 2m
-  timeout: 5m
+  timeout: 10m
   wait: false
   prune: true
   healthChecks:

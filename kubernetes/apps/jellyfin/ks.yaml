@@ -12,7 +12,7 @@ spec:
   path: ./kubernetes/apps/jellyfin/app
   interval: 1h
   retryInterval: 2m
-  timeout: 5m
+  timeout: 20m
   wait: false
   prune: true
   healthChecks:

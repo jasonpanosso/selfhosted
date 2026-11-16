@@ -30,7 +30,7 @@ spec:
   interval: 1h
   retryInterval: 2m
   timeout: 5m
-  # never prune: deleting these CRDs deletes every Gateway API object in the cluster
+  # never prune
   prune: false
   wait: true
   sourceRef:

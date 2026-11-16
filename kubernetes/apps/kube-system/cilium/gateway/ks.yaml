@@ -12,9 +12,34 @@ spec:
   path: ./kubernetes/apps/kube-system/cilium/gateway/app
   interval: 1h
   retryInterval: 2m
-  timeout: 5m
+  timeout: 10m
   prune: true
   wait: false
+  healthChecks:
+    - apiVersion: gateway.networking.k8s.io/v1
+      kind: Gateway
+      name: cilium
+      namespace: *namespace
+    - apiVersion: gateway.networking.k8s.io/v1
+      kind: Gateway
+      name: cilium-internal
+      namespace: *namespace
+    - apiVersion: cert-manager.io/v1
+      kind: Certificate
+      name: wildcard
+      namespace: *namespace
+    - apiVersion: cert-manager.io/v1
+      kind: Certificate
+      name: wildcard-home
+      namespace: *namespace
+  # kstatus only reads Reconciling/Stalled, neither kind sets them
+  healthCheckExprs:
+    - apiVersion: gateway.networking.k8s.io/v1
+      kind: Gateway
+      current: status.conditions.exists(e, e.type == 'Programmed' && e.status == 'True' && e.observedGeneration == metadata.generation)
+    - apiVersion: cert-manager.io/v1
+      kind: Certificate
+      current: status.conditions.exists(e, e.type == 'Ready' && e.status == 'True' && e.observedGeneration == metadata.generation)
   sourceRef:
     kind: GitRepository
     name: flux-system

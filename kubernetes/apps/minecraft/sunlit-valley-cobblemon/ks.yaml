@@ -15,7 +15,7 @@ spec:
   path: ./kubernetes/apps/minecraft/sunlit-valley-cobblemon/app
   interval: 1h
   retryInterval: 2m
-  timeout: 5m
+  timeout: 15m
   wait: false
   prune: true
   healthChecks:

@@ -12,7 +12,7 @@ spec:
   path: ./kubernetes/apps/bookboss/app
   interval: 1h
   retryInterval: 2m
-  timeout: 5m
+  timeout: 10m
   wait: false
   prune: true
   healthChecks:

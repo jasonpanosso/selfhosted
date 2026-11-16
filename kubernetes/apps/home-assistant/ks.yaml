@@ -12,7 +12,7 @@ spec:
   path: ./kubernetes/apps/home-assistant/app
   interval: 1h
   retryInterval: 2m
-  timeout: 5m
+  timeout: 10m
   wait: false
   prune: true
   healthChecks:
@@ -34,3 +34,7 @@ spec:
       namespace: external-secrets
     - name: gateway-api-crds
       namespace: kube-system
+    - name: multus-networks
+      namespace: kube-system
+    - name: prometheus-operator-crds
+      namespace: observability
