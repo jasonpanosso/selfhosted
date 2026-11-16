@@ -46,8 +46,6 @@
           installPhase = "install -Dm755 tofu $out/bin/tofu";
         };
 
-        # tofu that passes terraform.sops.tfvars to commands taking -var-file,
-        # decrypted into a pipe so plaintext never hits disk
         tofu = pkgs.writeShellApplication {
           name = "tofu";
           runtimeInputs = [
@@ -57,7 +55,6 @@
           text = ''
             dir="$(git rev-parse --show-toplevel)/terraform"
             tfvars="$dir/terraform.sops.tfvars"
-            # run against terraform/ from anywhere, unless -chdir is given
             chdir=("-chdir=$dir")
             for arg in "$@"; do
               case "$arg" in -chdir=*) chdir=() ;; esac
@@ -158,7 +155,6 @@
         };
       in
       {
-        # `nix fmt flake.nix`; also run on Renovate PRs by .github/workflows/nixfmt.yaml
         formatter = pkgs.nixfmt;
 
         devShells.default = pkgs.mkShell {
