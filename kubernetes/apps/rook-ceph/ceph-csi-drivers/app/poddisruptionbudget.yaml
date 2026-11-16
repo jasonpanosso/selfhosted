@@ -6,6 +6,7 @@ metadata:
   name: rook-ceph.cephfs.csi.ceph.com-ctrlplugin
 spec:
   maxUnavailable: 1
+  unhealthyPodEvictionPolicy: AlwaysAllow
   selector:
     matchLabels:
       app: rook-ceph.cephfs.csi.ceph.com-ctrlplugin
@@ -17,6 +18,7 @@ metadata:
   name: rook-ceph.rbd.csi.ceph.com-ctrlplugin
 spec:
   maxUnavailable: 1
+  unhealthyPodEvictionPolicy: AlwaysAllow
   selector:
     matchLabels:
       app: rook-ceph.rbd.csi.ceph.com-ctrlplugin
