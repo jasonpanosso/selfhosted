@@ -102,7 +102,7 @@ kube-lint *args:
     (( ${#paths[@]} )) || { echo "no Flux Kustomization paths found" >&2; exit 1; }
     kube-linter lint {{ args }} "${paths[@]}"
 
-# Validate manifests against their schemas, as .github/workflows/kubeconform.yaml does (extra args go to kubeconform)
+# Run kubeconform against all kubernetes yamls
 [group('kubernetes')]
 kubeconform *args:
     #!/usr/bin/env bash
