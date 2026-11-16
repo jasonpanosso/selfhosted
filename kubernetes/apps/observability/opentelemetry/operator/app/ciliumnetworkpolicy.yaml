@@ -10,13 +10,17 @@ spec:
       app.kubernetes.io/component: controller-manager
       app.kubernetes.io/name: opentelemetry-operator
   ingress:
-    # admission webhook
+    # admission webhooks, failurePolicy: Fail and Ignore
     - fromEntities:
         - kube-apiserver
-      toPorts:
+      toPorts: &webhook
         - ports:
             - port: "9443"
               protocol: TCP
+    - fromNodes:
+        - matchLabels:
+            node-role.kubernetes.io/control-plane: ""
+      toPorts: *webhook
     # metrics
     - fromEndpoints:
         - matchLabels:
