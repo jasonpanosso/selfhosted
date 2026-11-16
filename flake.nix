@@ -192,7 +192,6 @@
             kubectl-view-secret
             kubectl-tree
             kubernetes-helm
-            kube-linter
             kustomize
             tflint
             tofu
