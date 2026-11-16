@@ -5,9 +5,8 @@ resource "random_password" "home_assistant_oidc_password" {
 }
 
 resource "random_password" "home_assistant_oidc_salt" {
-  length           = 8
-  special          = true
-  override_special = "!@#%&*()-_=+[]{}<>:"
+  length  = 8
+  special = false
 }
 
 resource "htpasswd_password" "home_assistant_oidc_hash" {
