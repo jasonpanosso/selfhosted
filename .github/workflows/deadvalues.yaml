@@ -35,11 +35,10 @@ jobs:
     name: deadvalues - Check
     runs-on: ubuntu-latest
     steps:
-      # The action diffs against the PR base, so it needs full history
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          fetch-depth: 0
+          fetch-depth: 2
           persist-credentials: false
 
       - name: Generate Token
@@ -49,9 +48,6 @@ jobs:
           client-id: ${{ secrets.BOT_CLIENT_ID }}
           private-key: ${{ secrets.BOT_APP_PRIVATE_KEY }}
 
-      # Diffs chart bumps (fails on BREAKING) and scans changed apps (reports
-      # only). Pinned to a SHA the action installs the latest release, so
-      # version is set explicitly.
       - name: Run deadvalues
         uses: guarnz/deadvalues@6ed0a88f1513ea7c3c93b3bb9a4b4fc71b951b25 # v0.1.9
         with:
