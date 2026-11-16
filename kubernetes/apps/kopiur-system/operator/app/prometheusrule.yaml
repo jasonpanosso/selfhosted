@@ -42,11 +42,12 @@ spec:
 
         - alert: KopiurRepositoryVolumeFilling
           expr: |-
-            max by (namespace, persistentvolumeclaim) (
-              last_over_time(kubelet_volume_stats_used_bytes{persistentvolumeclaim=~"kopiur-.+"}[7d])
-                /
-              last_over_time(kubelet_volume_stats_capacity_bytes{persistentvolumeclaim=~"kopiur-.+"}[7d])
-            ) > 0.8
+            last_over_time(
+              (max by (namespace, persistentvolumeclaim) (kubelet_volume_stats_used_bytes{persistentvolumeclaim=~"kopiur-.+"}))[7d:1m]
+            )
+              / on (namespace, persistentvolumeclaim)
+            max by (namespace, persistentvolumeclaim) (kube_persistentvolumeclaim_resource_requests_storage_bytes{persistentvolumeclaim=~"kopiur-.+"})
+              > 0.8
           for: 1h
           annotations:
             summary: >-
