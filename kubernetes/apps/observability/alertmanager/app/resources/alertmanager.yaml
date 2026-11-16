@@ -1,5 +1,5 @@
 ---
-# yaml-language-server: $schema=https://json.schemastore.org/prometheus.alertmanager.json
+# yaml-language-server: $schema=https://json.schemastore.org/prometheus-alertmanager.json
 route:
   group_by: ["alertname", "job"]
   group_interval: 10m

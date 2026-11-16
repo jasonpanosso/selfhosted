@@ -1,5 +1,5 @@
 ---
-# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/k8s.cni.cncf.io/networkattachmentdefinition_v1.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/k8s.cni.cncf.io/networkattachmentdefinition_v1.json
 # VPN VLAN
 # pods pick their own IP/MAC in the networks annotation.
 # Router routes all vlan30 traffic through wireguard
@@ -67,7 +67,7 @@ spec:
       ]
     }
 ---
-# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/k8s.cni.cncf.io/networkattachmentdefinition_v1.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/k8s.cni.cncf.io/networkattachmentdefinition_v1.json
 # IoT VLAN with the OTBR, no internet
 # pods pick their own IP/MAC in the networks annotation. IPv4 is on-link only (no routes)
 # sysctls:

@@ -160,6 +160,7 @@
         # for CI
         packages.opentofu = opentofu;
         packages.tflint = pkgs.tflint;
+        packages.kubeconform = pkgs.kubeconform;
 
         devShells.default = pkgs.mkShell {
           env = {
@@ -182,6 +183,7 @@
             kopia
             kube-linter
             kubecolor
+            kubeconform
             kubectl
             kubectl-cnpg
             kubectl-df-pv

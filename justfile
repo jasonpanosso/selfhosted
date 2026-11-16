@@ -102,6 +102,27 @@ kube-lint *args:
     (( ${#paths[@]} )) || { echo "no Flux Kustomization paths found" >&2; exit 1; }
     kube-linter lint {{ args }} "${paths[@]}"
 
+# Validate manifests against their schemas, as .github/workflows/kubeconform.yaml does (extra args go to kubeconform)
+[group('kubernetes')]
+kubeconform *args:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    # the substitutions below edit files in place, so work on a copy
+    tmp="$(mktemp -d)"
+    trap 'rm -rf "$tmp"' EXIT
+    cp -r kubernetes "$tmp/"
+    cd "$tmp"
+    # fill in postBuild substitutions
+    find kubernetes -name '*.yaml' -exec sed -i 's/\${domain}/example/g; s/\${tld}/com/g' {} +
+    kubeconform -strict -summary -output text \
+      -schema-location default \
+      -schema-location 'https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/{{{{.Group}}/{{{{.ResourceKind}}_{{{{.ResourceAPIVersion}}.json' \
+      -skip Kustomization/kustomize.config.k8s.io/v1beta1,Component/kustomize.config.k8s.io/v1alpha1 \
+      -ignore-filename-pattern '\.sops\.yaml$' \
+      -ignore-filename-pattern '/resources/' \
+      -ignore-filename-pattern 'kustomizeconfig\.yaml$' \
+      {{ args }} kubernetes
+
 # Print the decrypted Talos secrets bundle, for piping into `_render`
 _secrets:
     #!/usr/bin/env bash
