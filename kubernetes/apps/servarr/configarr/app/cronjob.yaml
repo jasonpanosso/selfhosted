@@ -6,10 +6,13 @@ metadata:
   name: &app configarr
 spec:
   schedule: 0 * * * *
+  concurrencyPolicy: Forbid
   successfulJobsHistoryLimit: 1
   failedJobsHistoryLimit: 1
   jobTemplate:
     spec:
+      # runs take ~10s
+      activeDeadlineSeconds: 600
       template:
         metadata:
           labels:
@@ -49,7 +52,7 @@ spec:
               resources:
                 requests:
                   cpu: 10m
-                  memory: 128Mi
+                  memory: 256Mi
                 limits:
                   memory: 256Mi
               securityContext:
