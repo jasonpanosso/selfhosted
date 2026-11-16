@@ -32,6 +32,7 @@ provider "registry.opentofu.org/bitwarden/bitwarden-secrets" {
     "zh:3eaa72e5e0f74a8e6eb8fbf5aa4225ea656e15f918d2009682c6e972796fe8f7",
     "zh:4d9ed40e06a1dc19956f10cfcb0d6820e32f2967bfdd292eff9e6d610b7e0964",
     "zh:84f426449d62e5883061d6ad9cb1344c334a05664c90f2ec560d35bd57f10f6b",
+    "zh:f809ab383cca0a5f83072981c64208cbd7fa67e986a86ee02dd2c82333221e32",
   ]
 }
 
@@ -157,5 +158,6 @@ provider "registry.opentofu.org/maxlaverse/bitwarden" {
     "zh:8688931906dfbd30363a61ad34c1b2735f2755e1a139c278c24c2c255eb91317",
     "zh:89388b85e25efd1f0fda2838c028d795ca1109d3c1f953cb92721485f3056267",
     "zh:9bce56fe3e047d84f378bfcccf40013f4893d392c18aad6d639309de855eb45b",
+    "zh:f809ab383cca0a5f83072981c64208cbd7fa67e986a86ee02dd2c82333221e32",
   ]
 }
