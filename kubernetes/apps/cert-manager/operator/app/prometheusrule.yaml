@@ -1,0 +1,31 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/monitoring.coreos.com/prometheusrule_v1.json
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: cert-manager-rules
+spec:
+  groups:
+    - name: cert-manager.rules
+      rules:
+        # cert-manager renews at 2/3 of the lifetime (30d left for Let's
+        # Encrypt). 14d left means renewal has been failing for 2+ weeks.
+        - alert: CertManagerCertificateExpiringSoon
+          expr: |
+            certmanager_certificate_expiration_timestamp_seconds - time() < 14 * 86400
+          for: 1h
+          annotations:
+            summary: >-
+              Certificate {{ $labels.exported_namespace }}/{{ $labels.name }} expires in {{ $value | humanizeDuration }}
+          labels:
+            severity: warning
+
+        - alert: CertManagerCertificateNotReady
+          expr: |
+            max by (exported_namespace, name) (certmanager_certificate_ready_status{condition="False"}) == 1
+          for: 30m
+          annotations:
+            summary: >-
+              Certificate {{ $labels.exported_namespace }}/{{ $labels.name }} has not been Ready for 30m; check `kubectl describe certificate`
+          labels:
+            severity: warning
