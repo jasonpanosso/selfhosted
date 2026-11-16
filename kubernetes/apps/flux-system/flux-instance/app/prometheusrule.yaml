@@ -27,3 +27,24 @@ spec:
               Flux instance {{ $labels.name }} is not ready
           labels:
             severity: critical
+
+        # Stuck reconciliations
+        - alert: FluxResourceNotReady
+          expr: |
+            flux_resource_info{ready!="True", reason!="DependencyNotReady"}
+          for: 30m
+          annotations:
+            summary: >-
+              {{ $labels.kind }} {{ $labels.exported_namespace }}/{{ $labels.name }} has not been Ready for 30m ({{ $labels.reason }})
+          labels:
+            severity: warning
+
+        - alert: FluxResourceSuspended
+          expr: |
+            flux_resource_info{suspended="True"}
+          for: 24h
+          annotations:
+            summary: >-
+              {{ $labels.kind }} {{ $labels.exported_namespace }}/{{ $labels.name }} has been suspended for a day
+          labels:
+            severity: warning
