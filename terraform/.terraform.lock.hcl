@@ -3,7 +3,7 @@
 
 provider "registry.opentofu.org/backblaze/b2" {
   version     = "0.14.1"
-  constraints = ">= 0.14.1, ~> 0.14.1"
+  constraints = "0.14.1"
   hashes = [
     "h1:/HHq6VZy+7bdFUv8+05v+xx8LaaqODtcX6vusgdHWWg=",
     "h1:RLHHf+Kp24lemw+ml7Y+XglcXS/EGdMIz1Bpk73dcg8=",
@@ -20,7 +20,7 @@ provider "registry.opentofu.org/backblaze/b2" {
 
 provider "registry.opentofu.org/bitwarden/bitwarden-secrets" {
   version     = "1.0.0"
-  constraints = ">= 1.0.0"
+  constraints = "1.0.0"
   hashes = [
     "h1:0/k3qxTpG5JN67f4fK0L7zkFgfr2/PfcoA9Pd2BpelY=",
     "h1:JwVsAEAbIp1e8H5qHcT9CR+j5oZz7LAgCyJTuwczlrA=",
@@ -38,7 +38,7 @@ provider "registry.opentofu.org/bitwarden/bitwarden-secrets" {
 
 provider "registry.opentofu.org/cloudflare/cloudflare" {
   version     = "5.29.0"
-  constraints = "~> 5.29.0"
+  constraints = "5.29.0"
   hashes = [
     "h1:1fDzIJCxqkosa3+q7RJA3e4CBxFoCHHtQDz0ZkHGUWg=",
     "h1:7snwBVH/8lU0VGPFJJbhY5gJaR7lr7QaHcMbaLUIfIE=",
@@ -89,7 +89,7 @@ provider "registry.opentofu.org/hashicorp/random" {
 
 provider "registry.opentofu.org/loafoe/htpasswd" {
   version     = "1.2.1"
-  constraints = ">= 1.2.1, 1.2.1"
+  constraints = "1.2.1"
   hashes = [
     "h1:+MFiU49btB5MWE5DazQ4+3jhN7VQ5f7Ry5vWa1Bl8GQ=",
     "h1:+wQyTeM4O/SUaE+mlLxMAoc/m9ehPbfjr2NAq856S28=",
@@ -124,7 +124,7 @@ provider "registry.opentofu.org/loafoe/htpasswd" {
 
 provider "registry.opentofu.org/maxlaverse/bitwarden" {
   version     = "0.17.6"
-  constraints = ">= 0.16.0"
+  constraints = "0.17.6"
   hashes = [
     "h1:2uNKNRtAkLqsHuH5myRwYSY73PdB9GHjlM0speXe32o=",
     "h1:6+bYEaaKzlyH7nKM+yKE0Om/6gHXzkujh1lYBUk7Eug=",
