@@ -170,3 +170,40 @@ spec:
             severity: critical
             namespace: db
             cnpg_cluster: pgcluster
+
+    - name: cloudnative-pg/pgcluster-backups
+      rules:
+        - alert: CNPGBackupStale
+          expr: |
+            time() - max(barman_cloud_cloudnative_pg_io_last_available_backup_timestamp{namespace="db", pod=~"pgcluster-([1-9][0-9]*)$"}) > 26 * 3600
+          for: 10m
+          annotations:
+            summary: >-
+              db/pgcluster has no base backup in B2 newer than {{ $value | humanizeDuration }}
+          labels:
+            severity: critical
+            namespace: db
+            cnpg_cluster: pgcluster
+
+        - alert: CNPGWALArchivingStale
+          expr: |
+            max(cnpg_pg_stat_archiver_seconds_since_last_archival{namespace="db", pod=~"pgcluster-([1-9][0-9]*)$"}) > 15 * 60
+          for: 5m
+          annotations:
+            summary: >-
+              db/pgcluster has not archived WAL to B2 in {{ $value | humanizeDuration }}
+          labels:
+            severity: critical
+            namespace: db
+            cnpg_cluster: pgcluster
+
+        - alert: CNPGWALArchivingFailing
+          expr: |
+            sum(increase(cnpg_pg_stat_archiver_failed_count{namespace="db", pod=~"pgcluster-([1-9][0-9]*)$"}[1h])) >= 3
+          annotations:
+            summary: >-
+              db/pgcluster failed to archive WAL to B2 {{ $value }} times in the last hour
+          labels:
+            severity: warning
+            namespace: db
+            cnpg_cluster: pgcluster
