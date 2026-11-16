@@ -23,18 +23,11 @@ jobs:
     # Renovate branches only: formats flake.nix and pushes the result back to the PR
     if: ${{ github.event.pull_request.head.repo.full_name == github.repository && startsWith(github.head_ref, 'renovate/') }}
     steps:
-      - name: Generate Token
-        uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
-        id: app-token
-        with:
-          client-id: "${{ secrets.BOT_CLIENT_ID }}"
-          private-key: "${{ secrets.BOT_APP_PRIVATE_KEY }}"
-
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           ref: "${{ github.head_ref }}"
-          token: "${{ steps.app-token.outputs.token }}"
+          persist-credentials: false
 
       - name: Install Nix
         uses: cachix/install-nix-action@3dc140bfc76c49fbd4dd958429132e3746bcb086 # v31.11.5
@@ -42,12 +35,31 @@ jobs:
       - name: Run nixfmt
         run: nix fmt flake.nix
 
-      - name: Push Changes
+      - name: Check for Changes
+        id: changes
         run: |
           if git diff --quiet; then
-            exit 0
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
           fi
+
+      - if: ${{ steps.changes.outputs.changed == 'true' }}
+        name: Generate Token
+        uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
+        id: app-token
+        with:
+          client-id: "${{ secrets.BOT_CLIENT_ID }}"
+          private-key: "${{ secrets.BOT_APP_PRIVATE_KEY }}"
+          permission-contents: write
+
+      - if: ${{ steps.changes.outputs.changed == 'true' }}
+        name: Push Changes
+        env:
+          TOKEN: "${{ steps.app-token.outputs.token }}"
+          HEAD_REF: "${{ github.head_ref }}"
+        run: |
           git config user.name "bot-syl[bot]"
           git config user.email "213080625+bot-syl[bot]@users.noreply.github.com"
-          git commit -am "style: nixfmt flake.nix"
-          git push
+          git -c core.hooksPath=/dev/null commit --no-verify -am "style: nixfmt flake.nix"
+          git -c core.hooksPath=/dev/null push "https://x-access-token:${TOKEN}@github.com/${GITHUB_REPOSITORY}.git" "HEAD:refs/heads/${HEAD_REF}"

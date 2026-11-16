@@ -134,6 +134,8 @@ jobs:
         with:
           client-id: ${{ secrets.BOT_CLIENT_ID }}
           private-key: ${{ secrets.BOT_APP_PRIVATE_KEY }}
+          # sticky diff comment on the PR
+          permission-pull-requests: write
 
       - if: ${{ steps.diff.outputs.changed == 'true' }}
         name: Add Comment
