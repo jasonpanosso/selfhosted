@@ -41,9 +41,9 @@ spec:
     resources:
       requests:
         cpu: 10m
-        memory: 192Mi
+        memory: 256Mi
       limits:
-        memory: 192Mi
+        memory: 256Mi
     leaderElect: true
     image:
       repository: ghcr.io/external-secrets/external-secrets
