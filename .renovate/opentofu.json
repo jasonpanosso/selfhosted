@@ -1,0 +1,25 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "packageRules": [
+    {
+      "description": "Use OpenTofu registry intead of Terraform registry",
+      "matchManagers": ["terraform"],
+      "matchDatasources": ["terraform-provider"],
+      "registryUrls": ["https://registry.opentofu.org"]
+    },
+    {
+      "description": "Child module providers only declare minimums and share the root lock file; the root providers.tf pins every provider they use",
+      "matchManagers": ["terraform"],
+      "matchFileNames": ["terraform/*/**"],
+      "matchDepTypes": ["required_provider"],
+      "enabled": false
+    },
+    {
+      "description": "required_version in `backend.tf` is checked against the tofu binary",
+      "matchManagers": ["terraform"],
+      "matchDepTypes": ["required_version"],
+      "overrideDepName": "opentofu/opentofu",
+      "overridePackageName": "opentofu/opentofu"
+    }
+  ]
+}

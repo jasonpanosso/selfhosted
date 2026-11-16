@@ -157,6 +157,10 @@
       {
         formatter = pkgs.nixfmt;
 
+        # for CI
+        packages.opentofu = opentofu;
+        packages.tflint = pkgs.tflint;
+
         devShells.default = pkgs.mkShell {
           env = {
             TF_CLI_ARGS_plan = "-parallelism=1";
@@ -176,6 +180,7 @@
             jq
             just
             kopia
+            kube-linter
             kubecolor
             kubectl
             kubectl-cnpg
@@ -189,6 +194,7 @@
             kubernetes-helm
             kube-linter
             kustomize
+            tflint
             tofu
             sops
             talosctl

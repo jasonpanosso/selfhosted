@@ -55,6 +55,14 @@
       }
     },
     {
+      "description": "OpenTofu Group: tofu in flake.nix and required_version in terraform/backend.tf",
+      "groupName": "OpenTofu",
+      "matchPackageNames": ["opentofu/opentofu"],
+      "group": {
+        "commitMessageTopic": "{{{groupName}}} group"
+      }
+    },
+    {
       "description": "Kubernetes Group: control plane images and kubectl in flake.nix",
       "groupName": "Kubernetes",
       "matchPackageNames": [

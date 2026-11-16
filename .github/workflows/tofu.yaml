@@ -1,0 +1,53 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
+name: tofu
+
+on:
+  pull_request:
+    branches: ["main"]
+    paths:
+      - flake.nix
+      - terraform/**
+      - .github/workflows/tofu.yaml
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    name: tofu - Validate
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Install Nix
+        uses: cachix/install-nix-action@3dc140bfc76c49fbd4dd958429132e3746bcb086 # v31.11.5
+
+      - name: Install tofu
+        run: echo "$(nix build .#opentofu --no-link --print-out-paths)/bin" >> "$GITHUB_PATH"
+
+      - name: Install tflint
+        run: echo "$(nix build .#tflint --no-link --print-out-paths)/bin" >> "$GITHUB_PATH"
+
+      # .tf files only
+      - name: Check formatting
+        working-directory: terraform
+        run: tofu fmt -check -diff ./*.tf ./*/*.tf
+
+      - name: tflint
+        working-directory: terraform
+        run: tflint --recursive --config "$PWD/.tflint.hcl"
+
+      # fails if lockfile would update
+      - name: Init
+        run: tofu -chdir=terraform init -backend=false -lockfile=readonly -input=false
+
+      - name: Validate
+        run: tofu -chdir=terraform validate

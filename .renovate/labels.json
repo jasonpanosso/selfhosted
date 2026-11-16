@@ -32,6 +32,10 @@
     {
       "matchDatasources": ["github-releases"],
       "addLabels": ["renovate/github-release"]
+    },
+    {
+      "matchDatasources": ["terraform-provider"],
+      "addLabels": ["renovate/terraform"]
     }
   ]
 }
