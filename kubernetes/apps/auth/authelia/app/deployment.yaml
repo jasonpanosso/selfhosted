@@ -36,32 +36,6 @@ spec:
               value: template
             - name: X_AUTHELIA_CONFIG
               value: /config/config.yaml
-            - name: AUTHELIA_IDENTITY_VALIDATION_RESET_PASSWORD_JWT_SECRET_FILE
-              value: /secrets/JWT_TOKEN
-            - name: AUTHELIA_SESSION_SECRET_FILE
-              value: /secrets/SESSION_KEY
-            - name: AUTHELIA_SESSION_REDIS_PASSWORD_FILE
-              value: /secrets/REDIS_PASSWORD
-            - name: AUTHELIA_AUTHENTICATION_BACKEND_LDAP_PASSWORD_FILE
-              value: /secrets/LDAP_PASSWORD
-            - name: AUTHELIA_STORAGE_ENCRYPTION_KEY_FILE
-              value: /secrets/ENCRYPTION_KEY
-            - name: AUTHELIA_STORAGE_POSTGRES_USERNAME
-              valueFrom:
-                secretKeyRef:
-                  name: authelia
-                  key: POSTGRES_USERNAME
-            - name: AUTHELIA_STORAGE_POSTGRES_PASSWORD_FILE
-              value: /secrets/POSTGRES_PASSWORD
-            - name: AUTHELIA_IDENTITY_PROVIDERS_OIDC_HMAC_SECRET_FILE
-              value: /secrets/OIDC_HMAC_SECRET
-            - name: AUTHELIA_NOTIFIER_SMTP_PASSWORD_FILE
-              value: /secrets/SMTP_PASSWORD
-            - name: AUTHELIA_NOTIFIER_SMTP_USERNAME
-              valueFrom:
-                secretKeyRef:
-                  name: authelia
-                  key: SMTP_USERNAME
           livenessProbe: &probes
             httpGet:
               path: /

@@ -38,6 +38,7 @@ access_control:
 
 session:
   name: authelia
+  secret: {{ secret "/secrets/SESSION_KEY" | msquote }}
   same_site: lax
   expiration: 1h
   inactivity: 5m
@@ -48,6 +49,7 @@ session:
   redis:
     host: dragonfly.auth.svc.cluster.local
     port: 6379
+    password: {{ secret "/secrets/REDIS_PASSWORD" | msquote }}
     max_retries: 10
 
 ntp:
@@ -55,9 +57,12 @@ ntp:
   address: udp://time.google.com:123
 
 storage:
+  encryption_key: {{ secret "/secrets/ENCRYPTION_KEY" | msquote }}
   postgres:
     address: tcp://pgcluster-rw.db.svc.cluster.local:5432
     database: authelia
+    username: {{ secret "/secrets/POSTGRES_USERNAME" | msquote }}
+    password: {{ secret "/secrets/POSTGRES_PASSWORD" | msquote }}
 
 notifier:
   disable_startup_check: false
@@ -66,6 +71,8 @@ notifier:
     identifier: ${domain}.${tld}
     sender: admin@${domain}.${tld}
     subject: "[Authelia] {title}"
+    username: {{ secret "/secrets/SMTP_USERNAME" | msquote }}
+    password: {{ secret "/secrets/SMTP_PASSWORD" | msquote }}
 
 authentication_backend:
   password_reset:
@@ -79,6 +86,7 @@ authentication_backend:
     additional_users_dn: ou=people
     additional_groups_dn: ou=groups
     user: cn=admin,ou=people,dc=${domain},dc=${tld}
+    password: {{ secret "/secrets/LDAP_PASSWORD" | msquote }}
     users_filter: (&(|({username_attribute}={input})({mail_attribute}={input}))(objectClass=person))
     groups_filter: (member={dn})
     attributes:
@@ -100,11 +108,13 @@ totp:
 
 identity_validation:
   reset_password:
+    jwt_secret: {{ secret "/secrets/JWT_TOKEN" | msquote }}
     jwt_lifespan: 5 minutes
     jwt_algorithm: HS256
 
 identity_providers:
   oidc:
+    hmac_secret: {{ secret "/secrets/OIDC_HMAC_SECRET" | msquote }}
     jwks:
       - algorithm: RS256
         key: {{ secret "/secrets/OIDC_JWKS_PRIVATE_KEY" | mindent 10 "|" | msquote }}
