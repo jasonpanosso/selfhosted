@@ -8,12 +8,6 @@
       "registryUrls": ["https://registry.opentofu.org"]
     },
     {
-      "description": "Raise provider minimums in child modules",
-      "matchManagers": ["terraform"],
-      "matchDepTypes": ["required_provider"],
-      "rangeStrategy": "bump"
-    },
-    {
       "description": "required_version in `backend.tf` is checked against the tofu binary",
       "matchManagers": ["terraform"],
       "matchDepTypes": ["required_version"],
