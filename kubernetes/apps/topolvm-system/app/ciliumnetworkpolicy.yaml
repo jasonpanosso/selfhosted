@@ -23,3 +23,12 @@ spec:
               protocol: TCP
             - port: "9809"
               protocol: TCP
+    # metrics
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: observability
+            app.kubernetes.io/name: vmagent
+      toPorts:
+        - ports:
+            - port: "8080"
+              protocol: TCP

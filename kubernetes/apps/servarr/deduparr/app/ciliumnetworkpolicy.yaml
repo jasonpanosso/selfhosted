@@ -11,6 +11,16 @@ spec:
   enableDefaultDeny:
     ingress: true
     egress: true
+  ingress:
+    # metrics
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: observability
+            app.kubernetes.io/name: vmagent
+      toPorts:
+        - ports:
+            - port: "80"
+              protocol: TCP
   egress:
     - toEndpoints:
         - matchLabels:

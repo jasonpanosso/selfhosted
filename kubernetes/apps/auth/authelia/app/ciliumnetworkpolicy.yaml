@@ -24,6 +24,15 @@ spec:
         - ports:
             - port: "80"
               protocol: TCP
+    # metrics
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: observability
+            app.kubernetes.io/name: vmagent
+      toPorts:
+        - ports:
+            - port: "9959"
+              protocol: TCP
   egress:
     - toEndpoints:
         - matchLabels:

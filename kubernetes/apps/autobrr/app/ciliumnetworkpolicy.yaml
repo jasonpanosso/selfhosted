@@ -28,6 +28,15 @@ spec:
             k8s:io.kubernetes.pod.namespace: servarr
             app.kubernetes.io/name: sonarr
       toPorts: *http
+    # metrics
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: observability
+            app.kubernetes.io/name: vmagent
+      toPorts:
+        - ports:
+            - port: "9094"
+              protocol: TCP
   egress:
     - toEndpoints:
         - matchLabels:

@@ -19,6 +19,15 @@ spec:
         - ports:
             - port: "9403"
               protocol: TCP
+    # metrics
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: observability
+            app.kubernetes.io/name: vmagent
+      toPorts:
+        - ports:
+            - port: "9402"
+              protocol: TCP
   egress:
     # ACME and the Cloudflare API.
     - toCIDRSet:
@@ -61,6 +70,16 @@ spec:
         - ports:
             - port: "6443"
               protocol: TCP
+  ingress:
+    # metrics
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: observability
+            app.kubernetes.io/name: vmagent
+      toPorts:
+        - ports:
+            - port: "9402"
+              protocol: TCP
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/cilium.io/ciliumnetworkpolicy_v2.json
 apiVersion: cilium.io/v2
@@ -93,3 +112,12 @@ spec:
         - matchLabels:
             node-role.kubernetes.io/control-plane: ""
       toPorts: *webhook
+    # metrics
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: observability
+            app.kubernetes.io/name: vmagent
+      toPorts:
+        - ports:
+            - port: "9402"
+              protocol: TCP

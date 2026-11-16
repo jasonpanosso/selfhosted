@@ -19,6 +19,15 @@ spec:
               protocol: TCP
             - port: "8443"
               protocol: TCP
+    # metrics
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: observability
+            app.kubernetes.io/name: vmagent
+      toPorts:
+        - ports:
+            - port: "8443"
+              protocol: TCP
   egress:
     - toEntities:
         - kube-apiserver

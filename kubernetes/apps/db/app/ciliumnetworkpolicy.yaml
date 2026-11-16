@@ -73,6 +73,15 @@ spec:
         - ports:
             - port: "5432"
               protocol: TCP
+    # metrics
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: observability
+            app.kubernetes.io/name: vmagent
+      toPorts:
+        - ports:
+            - port: "9187"
+              protocol: TCP
   egress:
     # toFQDNs only learns IPs from DNS that goes through the proxy
     - toEndpoints:

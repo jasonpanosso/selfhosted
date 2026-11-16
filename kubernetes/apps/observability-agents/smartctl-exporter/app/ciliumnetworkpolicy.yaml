@@ -14,5 +14,14 @@ spec:
   # vmagent scrape covered by baseline policy
   ingress:
     - {}
+    # metrics
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: observability
+            app.kubernetes.io/name: vmagent
+      toPorts:
+        - ports:
+            - port: "9633"
+              protocol: TCP
   egress:
     - {}

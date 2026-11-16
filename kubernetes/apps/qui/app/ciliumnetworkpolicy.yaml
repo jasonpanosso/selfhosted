@@ -33,6 +33,15 @@ spec:
             k8s:io.kubernetes.pod.namespace: upbrr
             app.kubernetes.io/name: upbrr
       toPorts: *http
+    # metrics
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: observability
+            app.kubernetes.io/name: vmagent
+      toPorts:
+        - ports:
+            - port: "9094"
+              protocol: TCP
   egress:
     - toEndpoints:
         - matchLabels:

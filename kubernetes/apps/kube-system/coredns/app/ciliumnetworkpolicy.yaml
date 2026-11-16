@@ -30,6 +30,15 @@ spec:
               protocol: TCP
             - port: "8181"
               protocol: TCP
+    # metrics
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: observability
+            app.kubernetes.io/name: vmagent
+      toPorts:
+        - ports:
+            - port: "9153"
+              protocol: TCP
   egress:
     # forward plugin -> /etc/resolv.conf (dnsPolicy Default) -> Talos ResolverConfig nameserver
     - toCIDR:

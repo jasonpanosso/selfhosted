@@ -23,6 +23,15 @@ spec:
         - matchLabels:
             node-role.kubernetes.io/control-plane: ""
       toPorts: *webhook
+    # metrics
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: observability
+            app.kubernetes.io/name: vmagent
+      toPorts:
+        - ports:
+            - port: "8080"
+              protocol: TCP
   egress:
     # instance manager status
     - toEndpoints:
