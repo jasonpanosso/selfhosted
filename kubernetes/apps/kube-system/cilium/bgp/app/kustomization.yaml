@@ -8,3 +8,4 @@ resources:
   - ./ciliumbgpclusterconfig.yaml
   - ./ciliumbgppeerconfig.yaml
   - ./externalsecret.yaml
+  - ./prometheusrule.yaml

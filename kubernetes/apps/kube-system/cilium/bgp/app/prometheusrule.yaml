@@ -1,0 +1,34 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/monitoring.coreos.com/prometheusrule_v1.json
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: cilium-bgp-rules
+spec:
+  groups:
+    - name: cilium-bgp.rules
+      rules:
+        # LB IPs only exist as BGP routes on the router, so a down session takes that node out of ECMP
+        - alert: CiliumBGPSessionDown
+          expr: |
+            cilium_bgp_control_plane_session_state != 1
+          for: 5m
+          annotations:
+            summary: >-
+              BGP session from {{ $labels.node }} to {{ $labels.neighbor }} is not established
+          labels:
+            severity: critical
+
+        # every LB Service is externalTrafficPolicy Cluster, so each established session should advertise every LB IP;
+        # the advertised_routes series only exists while the session is up
+        - alert: CiliumBGPNoAdvertisedRoutes
+          expr: |
+            cilium_bgp_control_plane_session_state == 1
+              unless on (node, neighbor)
+            cilium_bgp_control_plane_advertised_routes > 0
+          for: 5m
+          annotations:
+            summary: >-
+              {{ $labels.node }} advertises no routes to {{ $labels.neighbor }} although the session is up
+          labels:
+            severity: critical
