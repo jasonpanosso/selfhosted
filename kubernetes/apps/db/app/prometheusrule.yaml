@@ -197,6 +197,21 @@ spec:
             namespace: db
             cnpg_cluster: pgcluster
 
+        # the two stale alerts above go silent if their metrics disappear
+        - alert: CNPGBackupMetricsMissing
+          expr: |
+            absent(barman_cloud_cloudnative_pg_io_last_available_backup_timestamp{namespace="db"})
+              or
+            absent(cnpg_pg_stat_archiver_seconds_since_last_archival{namespace="db"})
+          for: 1h
+          annotations:
+            summary: >-
+              db/pgcluster backup or WAL archiving metrics are missing, so the backup alerts can't fire
+          labels:
+            severity: warning
+            namespace: db
+            cnpg_cluster: pgcluster
+
         - alert: CNPGWALArchivingFailing
           expr: |
             sum(increase(cnpg_pg_stat_archiver_failed_count{namespace="db", pod=~"pgcluster-([1-9][0-9]*)$"}[1h])) >= 3
