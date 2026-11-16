@@ -30,8 +30,7 @@ spec:
   healthCheckExprs:
     - apiVersion: ceph.rook.io/v1
       kind: CephCluster
-      failed: status.ceph.health == 'HEALTH_ERR'
-      current: status.ceph.health in ['HEALTH_OK', 'HEALTH_WARN']
+      current: status.phase == 'Ready'
     - apiVersion: ceph.rook.io/v1
       kind: CephFilesystem
       current: status.phase == 'Ready'
