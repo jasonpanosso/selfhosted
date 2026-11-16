@@ -47,6 +47,12 @@ spec:
             periodSeconds: 10
             timeoutSeconds: 3
           readinessProbe: *probes
+          startupProbe:
+            httpGet:
+              path: /web/index.html
+              port: 8096
+            periodSeconds: 10
+            failureThreshold: 30
           resources:
             requests:
               cpu: 100m

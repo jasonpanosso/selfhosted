@@ -6,6 +6,8 @@ metadata:
   name: &app bookboss
   labels:
     app.kubernetes.io/name: *app
+  annotations:
+    reloader.stakater.com/auto: "true"
 spec:
   strategy:
     type: Recreate
@@ -91,6 +93,12 @@ spec:
             periodSeconds: 10
             timeoutSeconds: 3
           readinessProbe: *probes
+          startupProbe:
+            httpGet:
+              path: /
+              port: *port
+            periodSeconds: 10
+            failureThreshold: 30
           resources:
             requests:
               cpu: 25m
