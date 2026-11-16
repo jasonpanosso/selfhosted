@@ -23,6 +23,8 @@ spec:
           [{"name": "vpn", "namespace": "kube-system", "interface": "net1", "ips": ["192.168.30.10/24"], "mac": "02:00:00:00:30:10"}]
     spec:
       automountServiceAccountToken: false
+      # on SIGTERM qbittorrent writes resume data for every torrent to CephFS before exiting
+      terminationGracePeriodSeconds: 120
       # need vlan30 for the VPN
       nodeSelector:
         network.home.internal/vlan30: "true"
