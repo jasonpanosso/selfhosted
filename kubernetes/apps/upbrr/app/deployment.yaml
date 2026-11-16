@@ -63,6 +63,8 @@ spec:
             - name: media
               mountPath: /data/downloads
               subPath: downloads
+            - name: cache
+              mountPath: /tmp
       volumes:
         - name: config
           persistentVolumeClaim:
@@ -70,3 +72,5 @@ spec:
         - name: media
           persistentVolumeClaim:
             claimName: media
+        - name: cache
+          emptyDir: {}
