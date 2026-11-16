@@ -10,6 +10,7 @@ spec:
     provider: sops
   deletionPolicy: MirrorPrune
   interval: 1h
+  retryInterval: 2m
   prune: true
   path: ./kubernetes/apps
   sourceRef:
