@@ -39,12 +39,9 @@ jobs:
       - name: Install Nix
         uses: cachix/install-nix-action@3dc140bfc76c49fbd4dd958429132e3746bcb086 # v31.11.5
 
-      # nixfmt comes from the flake's `formatter` output, pinned by flake.lock
       - name: Run nixfmt
         run: nix fmt flake.nix
 
-      # Committed as the same app identity Renovate uses, so Renovate still
-      # treats the branch as its own and keeps rebasing it
       - name: Push Changes
         run: |
           if git diff --quiet; then

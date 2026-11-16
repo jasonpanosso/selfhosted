@@ -46,8 +46,7 @@ jobs:
 
       - name: Run flate test
         run: |
-          # The setup action exports FLATE_BASE, which would put `test` in
-          # changed-only mode; test the full tree instead.
+          # unset FLATE_BASE to test entire tree
           unset FLATE_BASE
           flate test all --path ./kubernetes/clusters/prod
 
@@ -60,8 +59,6 @@ jobs:
       contents: read
       pull-requests: write
     steps:
-      # Depth 2 pulls in the merge commit's first parent, the base SHA; flate
-      # can't fetch a bare SHA from origin on its own.
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -73,9 +70,6 @@ jobs:
         with:
           cache: "true"
 
-      # The checkout is the PR merge ref, so diffing against the base SHA shows
-      # exactly what merging would change. Render failures are reported by the
-      # test job; here they only annotate the comment.
       - name: Run flate diff
         id: diff
         env:
