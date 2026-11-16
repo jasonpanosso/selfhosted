@@ -112,3 +112,40 @@ spec:
           except:
             - 192.168.20.0/24
             - 192.168.21.0/24
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/cilium.io/ciliumclusterwidenetworkpolicy_v2.json
+apiVersion: cilium.io/v2
+kind: CiliumClusterwideNetworkPolicy
+metadata:
+  name: router
+specs:
+  # pods masquerade to their node IP, making router firewall rules awkward.
+  # deny all traffic from pods to router besides DNS traffic from coredns
+  - endpointSelector:
+      matchExpressions:
+        - key: k8s:io.kubernetes.pod.namespace
+          operator: NotIn
+          values:
+            - kube-system
+    enableDefaultDeny:
+      egress: false
+      ingress: false
+    egressDeny:
+      - toCIDR:
+          - 192.168.20.1/32
+  - endpointSelector:
+      matchExpressions:
+        - key: k8s:io.kubernetes.pod.namespace
+          operator: In
+          values:
+            - kube-system
+        - key: app.kubernetes.io/name
+          operator: NotIn
+          values:
+            - coredns
+    enableDefaultDeny:
+      egress: false
+      ingress: false
+    egressDeny:
+      - toCIDR:
+          - 192.168.20.1/32
