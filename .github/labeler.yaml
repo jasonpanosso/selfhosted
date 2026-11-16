@@ -9,7 +9,7 @@ area/renovate:
   - changed-files:
       - any-glob-to-any-file:
           - ".renovate/**/*"
-          - ".renovaterc.jsonc"
+          - ".renovaterc.json"
 area/talos:
   - changed-files:
       - any-glob-to-any-file: "talos/**/*"
