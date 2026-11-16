@@ -27,6 +27,13 @@ spec:
         - ports:
             - port: "3890"
               protocol: TCP
+    - fromEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: lldap-bootstrap
+      toPorts:
+        - ports:
+            - port: "17170"
+              protocol: TCP
   egress:
     - toEndpoints:
         - matchLabels:
@@ -46,4 +53,26 @@ spec:
       toPorts:
         - ports:
             - port: "587"
+              protocol: TCP
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/cilium.io/ciliumnetworkpolicy_v2.json
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: lldap-bootstrap
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: lldap-bootstrap
+  enableDefaultDeny:
+    ingress: true
+    egress: true
+  # DNS comes from the baseline CCNP
+  egress:
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: lldap
+      toPorts:
+        - ports:
+            - port: "17170"
               protocol: TCP

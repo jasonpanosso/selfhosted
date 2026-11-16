@@ -19,6 +19,10 @@ spec:
       kind: Deployment
       name: *app
       namespace: *namespace
+    - apiVersion: batch/v1
+      kind: Job
+      name: lldap-bootstrap
+      namespace: *namespace
   sourceRef:
     kind: GitRepository
     name: flux-system

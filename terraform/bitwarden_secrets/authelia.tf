@@ -88,3 +88,15 @@ resource "bitwarden-secrets_secret" "authelia_oidc_jwks_private_key" {
   project_id = bitwarden_project.this.id
   note       = "JWKS private key for Authelia OIDC"
 }
+
+resource "random_password" "authelia_ldap_password" {
+  length  = 128
+  special = true
+}
+
+resource "bitwarden-secrets_secret" "authelia_ldap_password" {
+  key        = "AUTHELIA_LDAP_PASSWORD"
+  value      = random_password.authelia_ldap_password.result
+  project_id = bitwarden_project.this.id
+  note       = "Password for the authelia LLDAP bind user (lldap_strict_readonly)"
+}

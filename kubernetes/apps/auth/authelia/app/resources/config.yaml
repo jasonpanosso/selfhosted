@@ -91,7 +91,7 @@ authentication_backend:
     base_dn: dc=${domain},dc=${tld}
     additional_users_dn: ou=people
     additional_groups_dn: ou=groups
-    user: cn=admin,ou=people,dc=${domain},dc=${tld}
+    user: uid=authelia,ou=people,dc=${domain},dc=${tld}
     password: {{ secret "/secrets/LDAP_PASSWORD" | msquote }}
     users_filter: (&(|({username_attribute}={input})({mail_attribute}={input}))(objectClass=person))
     groups_filter: (member={dn})

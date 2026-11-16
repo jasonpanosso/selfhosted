@@ -1,0 +1,7 @@
+{
+  "id": "authelia",
+  "email": "authelia@${domain}.${tld}",
+  "displayName": "Authelia",
+  "password_file": "/secrets/AUTHELIA_LDAP_PASSWORD",
+  "groups": ["lldap_strict_readonly"]
+}

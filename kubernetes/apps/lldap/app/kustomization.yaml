@@ -8,5 +8,11 @@ resources:
   - ./deployment.yaml
   - ./externalsecret.yaml
   - ./httproute.yaml
+  - ./job.yaml
   - ./poddisruptionbudget.yaml
   - ./service.yaml
+
+configMapGenerator:
+  - name: lldap-bootstrap-user-configs
+    files:
+      - ./resources/user-configs/authelia.json

@@ -1,0 +1,71 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/master-standalone-strict/job-batch-v1.json
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: &app lldap-bootstrap
+  labels:
+    app.kubernetes.io/name: *app
+  annotations:
+    kustomize.toolkit.fluxcd.io/force: enabled
+    ignore-check.kube-linter.io/job-ttl-seconds-after-finished: "Flux would recreate a TTL-deleted Job on every reconcile"
+spec:
+  backoffLimit: 3
+  activeDeadlineSeconds: 600
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: *app
+    spec:
+      restartPolicy: Never
+      automountServiceAccountToken: false
+      securityContext:
+        runAsUser: 65534
+        runAsGroup: 65534
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - image: ghcr.io/lldap/lldap:v0.6.3@sha256:2a8454b668c1aba7157e832eab0e242e1e7eb5fb7591d7e7774ba05286511ca8
+          name: *app
+          command:
+            - /app/bootstrap.sh
+          env:
+            - name: LLDAP_URL
+              value: http://lldap.lldap.svc.cluster.local:17170
+            - name: LLDAP_ADMIN_USERNAME
+              value: admin
+            - name: LLDAP_ADMIN_PASSWORD_FILE
+              value: /secrets/LLDAP_ADMIN_PASSWORD
+            - name: USER_CONFIGS_DIR
+              value: /bootstrap/user-configs
+            - name: DO_CLEANUP
+              value: "false"
+          resources:
+            requests:
+              cpu: 10m
+              memory: 128Mi
+            limits:
+              memory: 128Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities: {drop: [ALL]}
+          volumeMounts:
+            - name: user-configs
+              mountPath: /bootstrap/user-configs
+              readOnly: true
+            - name: secrets
+              mountPath: /secrets
+              readOnly: true
+            - name: tmp
+              mountPath: /tmp
+      volumes:
+        - name: user-configs
+          configMap:
+            name: lldap-bootstrap-user-configs
+        - name: secrets
+          secret:
+            secretName: lldap-bootstrap
+        - name: tmp
+          emptyDir: {}
