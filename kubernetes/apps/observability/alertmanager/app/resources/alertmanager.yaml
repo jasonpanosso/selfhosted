@@ -17,9 +17,18 @@ route:
       repeat_interval: 5m
       matchers:
         - alertname="Watchdog"
+    # alert when pushover is down
+    - receiver: heartbeat-fail
+      continue: true
+      repeat_interval: 1h
+      matchers:
+        - alertname=~"Alertmanager(Cluster)?FailedToSendAlerts"
+        - integration="pushover"
     - receiver: pushover
       matchers:
         - severity="critical"
+    # quiet fallback
+    - receiver: pushover-quiet
 inhibit_rules:
   - equal: ["alertname", "namespace"]
     source_matchers:
@@ -31,6 +40,11 @@ receivers:
   - name: heartbeat
     webhook_configs:
       - url_file: /etc/alertmanager/secrets/ALERTMANAGER_HEARTBEAT_URL
+  - name: heartbeat-fail
+    webhook_configs:
+      - url_file: /etc/alertmanager/secrets/ALERTMANAGER_HEARTBEAT_FAIL_URL
+        # a resolved notification would be another /fail ping
+        send_resolved: false
   - name: pushover
     pushover_configs:
       - html: true
