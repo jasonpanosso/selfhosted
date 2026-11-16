@@ -1,0 +1,20 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/monitoring.coreos.com/prometheusrule_v1.json
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: external-secrets-rules
+spec:
+  groups:
+    - name: external-secrets.rules
+      rules:
+        # condition="Ready" only: stale condition="Deleted" series also exist
+        - alert: ExternalSecretSyncFailed
+          expr: |
+            externalsecret_status_condition{condition="Ready", status="False"} == 1
+          for: 30m
+          annotations:
+            summary: >-
+              ExternalSecret {{ $labels.exported_namespace }}/{{ $labels.name }} has not synced for 30m; check `kubectl describe externalsecret`
+          labels:
+            severity: warning

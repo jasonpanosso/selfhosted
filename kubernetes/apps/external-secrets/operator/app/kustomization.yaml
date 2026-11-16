@@ -9,3 +9,4 @@ resources:
   - ./helmrelease.yaml
   - ./issuer.yaml
   - ./ocirepository.yaml
+  - ./prometheusrule.yaml
