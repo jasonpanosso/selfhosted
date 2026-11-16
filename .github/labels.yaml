@@ -17,10 +17,14 @@
   color: "027fa0"
 - name: renovate/github-release
   color: "027fa0"
+- name: renovate/grafana-dashboard
+  color: "027fa0"
 - name: renovate/helm
   color: "027fa0"
 - name: renovate/modpack
   color: "7b42bc"
+- name: renovate/terraform
+  color: "027fa0"
 # Semantic Types
 - name: type/digest
   color: "ffeC19"
