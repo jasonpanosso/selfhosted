@@ -34,6 +34,10 @@ spec:
             memory: 192Mi
           limits:
             memory: 192Mi
+        containerSecurityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop: [ALL]
       readOnlyRootFileSystem: true
       podDisruptionBudget:
         enabled: true

@@ -18,6 +18,9 @@ spec:
   values:
     replicas: 2
     kind: Deployment
+    podSecurityContext:
+      seccompProfile:
+        type: RuntimeDefault
     resources:
       requests:
         cpu: 25m

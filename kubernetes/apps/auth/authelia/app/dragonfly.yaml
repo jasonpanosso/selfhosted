@@ -9,6 +9,8 @@ spec:
     - --proactor_threads=1
     # checks for releases daily and reports anonymous data; its network policy blocks this anyway
     - --version_check=false
+    # sessions are ephemeral: no snapshot on shutdown (the root filesystem is read-only)
+    - --dbfilename=
   authentication:
     passwordFromSecret:
       name: authelia
@@ -23,6 +25,7 @@ spec:
       type: RuntimeDefault
   containerSecurityContext:
     allowPrivilegeEscalation: false
+    readOnlyRootFilesystem: true
     capabilities:
       drop:
         - ALL

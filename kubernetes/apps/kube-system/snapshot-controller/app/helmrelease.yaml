@@ -18,6 +18,12 @@ spec:
   values:
     controller:
       replicaCount: 2
+      podSecurityContext:
+        seccompProfile:
+          type: RuntimeDefault
+      # merged into the chart's default (drop ALL, read-only root, non-root)
+      securityContext:
+        allowPrivilegeEscalation: false
       resources:
         requests:
           cpu: 10m

@@ -34,6 +34,7 @@ spec:
           type: RuntimeDefault
       securityContext:
         allowPrivilegeEscalation: false
+        readOnlyRootFilesystem: true
         capabilities:
           drop:
             - ALL
