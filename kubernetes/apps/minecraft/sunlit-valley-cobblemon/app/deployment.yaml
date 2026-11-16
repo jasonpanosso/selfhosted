@@ -78,8 +78,6 @@ spec:
                 https://cdn.modrinth.com/data/9eGKb6K1/versions/nHtyikTv/voicechat-forge-1.20.1-2.4.32.jar
             - name: PATCH_DEFINITIONS
               value: /patches
-            - name: CFG_PROXY_SECRET_FILE
-              value: /secrets/MINECRAFT_PROXY_SECRET
             - name: MEMORY
               value: "65%"
             - name: JVM_XX_OPTS
@@ -150,6 +148,10 @@ spec:
               mountPath: /data/crash-reports
             - name: secrets
               mountPath: /secrets
+              readOnly: true
+            - name: secrets
+              mountPath: /config/proxy-compatible-forge.toml
+              subPath: proxy-compatible-forge.toml
               readOnly: true
             - name: patches
               mountPath: /patches
