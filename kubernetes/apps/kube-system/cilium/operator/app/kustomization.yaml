@@ -5,10 +5,10 @@ kind: Kustomization
 
 resources:
   - ./ciliumclusterwidenetworkpolicy.yaml
+  - ./ciliumloadbalancerippool.yaml
   - ./ciliumnetworkpolicy.yaml
   - ./ciliumnodeconfig.yaml
   - ./helmrelease.yaml
   - ./httproute.yaml
-  - ./network.yaml
   - ./ocirepository.yaml
   - ./prometheusrule.yaml

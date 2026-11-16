@@ -1,0 +1,19 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/cilium.io/ciliumbgpclusterconfig_v2.json
+apiVersion: cilium.io/v2
+kind: CiliumBGPClusterConfig
+metadata:
+  name: l3-bgp-cluster-config
+spec:
+  nodeSelector:
+    matchExpressions:
+      - {key: node-role.kubernetes.io/control-plane, operator: DoesNotExist}
+  bgpInstances:
+    - name: cilium
+      localASN: 64514
+      peers:
+        - name: gateway
+          peerASN: 64513
+          peerAddress: 192.168.20.1
+          peerConfigRef:
+            name: l3-bgp-peer-config

@@ -5,7 +5,7 @@ kind: HTTPRoute
 metadata:
   name: httpsredirect
   annotations:
-    # no hostnames, so external-dns would publish the listener's *.${domain}.${tld} as a wildcard record
+    # no hostnames, external-dns would publish the listener's *.${domain}.${tld} as a wildcard record
     external-dns.kubernetes.io/controller: none
 spec:
   parentRefs:
