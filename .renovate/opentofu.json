@@ -8,11 +8,10 @@
       "registryUrls": ["https://registry.opentofu.org"]
     },
     {
-      "description": "Child module providers only declare minimums and share the root lock file; the root providers.tf pins every provider they use",
+      "description": "Raise provider minimums in child modules",
       "matchManagers": ["terraform"],
-      "matchFileNames": ["terraform/*/**"],
       "matchDepTypes": ["required_provider"],
-      "enabled": false
+      "rangeStrategy": "bump"
     },
     {
       "description": "required_version in `backend.tf` is checked against the tofu binary",
