@@ -29,9 +29,11 @@ spec:
     - namespace: servarr
       app: prowlarr
       capacity: 1Gi
+      compressor: zstd
     - namespace: qbittorrent
       app: qbittorrent
       capacity: 1Gi
+      compressor: zstd
     - namespace: servarr
       app: radarr
       capacity: 5Gi
@@ -55,6 +57,7 @@ spec:
     - namespace: home-assistant
       app: home-assistant
       capacity: 5Gi
+      compressor: zstd
   # Populator Restores stay unready until a PVC claims them, so health is
   # reported by Kopiur's own alerts rather than by waiting here.
   wait: false
