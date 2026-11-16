@@ -30,3 +30,5 @@ spec:
       namespace: kube-system
     - name: prometheus-operator-crds
       namespace: *namespace
+    - name: rook-ceph-cluster
+      namespace: rook-ceph

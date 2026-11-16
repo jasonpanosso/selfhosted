@@ -38,3 +38,5 @@ spec:
       namespace: external-secrets
     - name: gateway-api-crds
       namespace: kube-system
+    - name: intel-gpu-resource-driver
+      namespace: intel-gpu-resource-driver
