@@ -30,5 +30,11 @@ spec:
       dashboards:
         enabled: true
     webhook:
+      resources:
+        requests:
+          cpu: 25m
+          memory: 32Mi
+        limits:
+          memory: 32Mi
       serviceMonitor:
         enabled: true

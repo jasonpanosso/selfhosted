@@ -28,6 +28,32 @@ spec:
           labels:
             severity: warning
 
+        # 1 RepositoryReplication per repo per day
+        - alert: KopiurReplicationStale
+          expr: |-
+            (sum(increase(kopiur_replication_runs_total{outcome="succeeded"}[24h])) or vector(0))
+              < count(kopiur_resource_phase{kind="Repository"})
+          for: 2h
+          annotations:
+            summary: >-
+              Only {{ $value }} offsite replications succeeded in the last 24h; check `kubectl get repositoryreplication -A` for an old LAST
+          labels:
+            severity: warning
+
+        - alert: KopiurRepositoryVolumeFilling
+          expr: |-
+            max by (namespace, persistentvolumeclaim) (
+              last_over_time(kubelet_volume_stats_used_bytes{persistentvolumeclaim=~"kopiur-.+"}[7d])
+                /
+              last_over_time(kubelet_volume_stats_capacity_bytes{persistentvolumeclaim=~"kopiur-.+"}[7d])
+            ) > 0.8
+          for: 1h
+          annotations:
+            summary: >-
+              {{ $labels.namespace }}/{{ $labels.persistentvolumeclaim }} was {{ $value | humanizePercentage }} full at its last kubelet sample
+          labels:
+            severity: warning
+
         # Quick verification runs daily, so a verify older than two days means
         # verification stopped succeeding or stopped running. Individual failed
         # quick/deep runs surface sooner through KubeJobFailed.
