@@ -52,9 +52,6 @@ spec:
     - namespace: matter-server
       app: matter-server
       capacity: 1Gi
-    - namespace: mousehole
-      app: mousehole
-      capacity: 1Gi
     - namespace: home-assistant
       app: home-assistant
       capacity: 5Gi

@@ -55,6 +55,12 @@ variable "vpn_firewall_input_ports" {
   sensitive   = true
 }
 
+variable "mam_id" {
+  description = "myanonamouse IP-locked dynamic seedbox session cookie value (mam_id)"
+  type        = string
+  sensitive   = true
+}
+
 variable "smtp_username" {
   description = "SMTP username"
   type        = string

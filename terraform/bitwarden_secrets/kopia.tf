@@ -16,7 +16,6 @@ locals {
     "upbrr",
     "filebrowser",
     "matter-server",
-    "mousehole",
     "home-assistant",
     "sunlit-valley-cobblemon",
     "sunlit-valley",

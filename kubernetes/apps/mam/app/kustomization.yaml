@@ -1,0 +1,21 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/kustomization
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ./ciliumnetworkpolicy.yaml
+  - ./externalsecret.yaml
+  - ./pvc.yaml
+  - ./cronjob.yaml
+
+configMapGenerator:
+  - name: mam
+    files:
+      - mam.sh=./resources/mam.sh
+    options:
+      annotations:
+        kustomize.toolkit.fluxcd.io/substitute: disabled
+
+configurations:
+  - ./resources/kustomizeconfig.yaml
