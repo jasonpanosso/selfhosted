@@ -20,7 +20,14 @@ spec:
     reloader:
       enableHA: true
       deployment:
-        replicas: 1
+        replicas: 2
+        affinity:
+          podAntiAffinity:
+            requiredDuringSchedulingIgnoredDuringExecution:
+              - labelSelector:
+                  matchLabels:
+                    app.kubernetes.io/name: reloader
+                topologyKey: kubernetes.io/hostname
         resources:
           requests:
             cpu: 10m
@@ -28,6 +35,9 @@ spec:
           limits:
             memory: 192Mi
       readOnlyRootFileSystem: true
+      podDisruptionBudget:
+        enabled: true
+        maxUnavailable: 1
       podMonitor:
         enabled: true
         namespace: "{{ .Release.Namespace }}"
