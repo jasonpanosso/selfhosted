@@ -120,7 +120,7 @@ spec:
             exec:
               command: [mc-health]
             periodSeconds: 10
-            failureThreshold: 30
+            failureThreshold: 60
           livenessProbe: &probes
             exec:
               command: [mc-health]
