@@ -65,6 +65,8 @@ spec:
         - matchName: artworks.thetvdb.com
         # the Pushover connection
         - matchName: api.pushover.net
+        # contacted at startup even with SONARR__LOG__ANALYTICSENABLED=False
+        - matchName: sentry.sonarr.tv
       toPorts:
         - ports:
             - port: "443"
