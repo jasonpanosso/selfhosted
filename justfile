@@ -91,6 +91,17 @@ upgrade-k8s *args:
     echo "== kubernetes -> $version"
     talosctl -n controlplane-1 upgrade-k8s --to "${version#v}" {{ args }}
 
+# Lint every Flux Kustomization
+[group('kubernetes')]
+kube-lint *args:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    # get all kubernetes .yamls from Kustomizations
+    mapfile -t paths < <(find kubernetes -name ks.yaml -print0 | xargs -0 yq -N \
+      'select(.kind == "Kustomization" and .spec.sourceRef.name == "flux-system") | .spec.path')
+    (( ${#paths[@]} )) || { echo "no Flux Kustomization paths found" >&2; exit 1; }
+    kube-linter lint {{ args }} "${paths[@]}"
+
 # Print the decrypted Talos secrets bundle, for piping into `_render`
 _secrets:
     #!/usr/bin/env bash
