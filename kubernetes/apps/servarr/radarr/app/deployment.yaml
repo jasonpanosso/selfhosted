@@ -47,6 +47,8 @@ spec:
                 secretKeyRef:
                   name: radarr
                   key: token
+            - name: RADARR__LOG__LEVEL
+              value: info
             - name: RADARR__LOG__DBENABLED
               value: "False"
             # crash reports and telemetry

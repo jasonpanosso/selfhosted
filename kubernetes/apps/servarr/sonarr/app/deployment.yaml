@@ -47,6 +47,8 @@ spec:
                 secretKeyRef:
                   name: sonarr
                   key: token
+            - name: SONARR__LOG__LEVEL
+              value: info
             - name: SONARR__LOG__DBENABLED
               value: "False"
             # crash reports and telemetry
