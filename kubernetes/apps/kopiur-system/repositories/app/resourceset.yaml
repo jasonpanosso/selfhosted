@@ -6,7 +6,8 @@ metadata:
   name: kopiur-repositories
 spec:
   # one repository per app, matches terraform/bitwarden_secrets/kopia.tf.
-  # set bootstrap: true until first offsite replication has succeeded.
+  # set bootstrap: true for a new app until first offsite replication has
+  # succeeded: it leaves out the seed and lets the Restore provision an empty volume.
   # compressor (optional) turns on kopia compression; kopia stores uncompressed by default.
   inputs:
     - namespace: thelounge
@@ -33,13 +34,15 @@ spec:
       capacity: 1Gi
     - namespace: servarr
       app: radarr
-      capacity: 1Gi
+      capacity: 5Gi
+      compressor: zstd
     - namespace: seerr
       app: seerr
       capacity: 1Gi
     - namespace: servarr
       app: sonarr
-      capacity: 1Gi
+      capacity: 5Gi
+      compressor: zstd
     - namespace: upbrr
       app: upbrr
       capacity: 1Gi
@@ -159,7 +162,10 @@ spec:
         target:
           populator: {}
         policy:
-          onMissingSnapshot: Continue
+          # A brand-new app (bootstrap: true) has no snapshot yet and starts empty.
+          # Otherwise never hand an app an empty volume: replication's
+          # deleteExtra would then mirror that loss to B2.
+          onMissingSnapshot: << if get inputs "bootstrap" >>Continue<< else >>Fail<< end >>
 
   # leave seed out while bootstrapping.
   resourcesTemplate: |
