@@ -9,6 +9,8 @@ metadata:
   annotations:
     reloader.stakater.com/auto: "true"
 spec:
+  # above the startupProbe budget (600s)
+  progressDeadlineSeconds: 900
   strategy:
     type: Recreate
   selector:
