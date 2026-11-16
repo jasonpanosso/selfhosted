@@ -30,8 +30,11 @@ spec:
       name: kube-dns
       clusterIP: 10.96.0.10
 
+    priorityClassName: system-cluster-critical
     resources:
       limits:
+        # drop the chart's default cpu limit
+        cpu: null
         memory: 128Mi
       requests:
         cpu: 100m
