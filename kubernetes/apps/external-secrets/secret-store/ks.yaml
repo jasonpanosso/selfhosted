@@ -15,6 +15,10 @@ spec:
   timeout: 15m
   prune: true
   wait: false
+  healthChecks:
+    - apiVersion: external-secrets.io/v1
+      kind: ClusterSecretStore
+      name: bitwarden
   healthCheckExprs:
     - apiVersion: external-secrets.io/v1
       kind: ClusterSecretStore
