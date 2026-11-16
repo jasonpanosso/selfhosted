@@ -25,6 +25,11 @@ terraform {
       version = "3.9.1"
     }
 
+    tls = {
+      source  = "hashicorp/tls"
+      version = "4.4.2"
+    }
+
     htpasswd = {
       source  = "loafoe/htpasswd"
       version = "2.3.0"
@@ -53,5 +58,7 @@ provider "bitwarden-secrets" {
 }
 
 provider "random" {}
+
+provider "tls" {}
 
 provider "htpasswd" {}

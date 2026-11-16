@@ -51,12 +51,6 @@ variable "smtp_password" {
   sensitive   = true
 }
 
-variable "authelia_oidc_jwks_private_key" {
-  description = "JWKS private key for Authelia OIDC"
-  type        = string
-  sensitive   = true
-}
-
 variable "pushover_user_key" {
   description = "User key for Pushover(push notifications)"
   type        = string

@@ -77,9 +77,14 @@ resource "bitwarden-secrets_secret" "redis_password" {
   note       = "Redis backend password for authelia"
 }
 
+resource "tls_private_key" "authelia_oidc_jwks" {
+  algorithm = "RSA"
+  rsa_bits  = 4096
+}
+
 resource "bitwarden-secrets_secret" "authelia_oidc_jwks_private_key" {
   key        = "AUTHELIA_OIDC_JWKS_PRIVATE_KEY"
-  value      = var.authelia_oidc_jwks_private_key
+  value      = tls_private_key.authelia_oidc_jwks.private_key_pem
   project_id = bitwarden_project.this.id
   note       = "JWKS private key for Authelia OIDC"
 }
