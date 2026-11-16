@@ -16,7 +16,11 @@ spec:
       remediateLastFailure: true
       retries: 2
   values:
-    replicaCount: 3
+    # leader elected
+    replicaCount: 2
+    podDisruptionBudget:
+      enabled: true
+      minAvailable: 1
     podSecurityContext:
       runAsNonRoot: true
       seccompProfile:
@@ -25,6 +29,13 @@ spec:
       # TODO: reenable after https://github.com/dragonflydb/dragonfly-operator/issues/404
       enabled: false
     manager:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchLabels:
+                  app.kubernetes.io/name: dragonfly-operator
+              topologyKey: kubernetes.io/hostname
       resources:
         requests:
           cpu: 10m
