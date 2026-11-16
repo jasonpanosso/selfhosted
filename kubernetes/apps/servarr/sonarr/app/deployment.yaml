@@ -77,7 +77,15 @@ spec:
           ports:
             - containerPort: 8989
               name: http
-          livenessProbe: &probes
+          # handle pg going down without failing liveness
+          livenessProbe:
+            tcpSocket:
+              port: 8989
+            initialDelaySeconds: 10
+            periodSeconds: 15
+            timeoutSeconds: 1
+            failureThreshold: 3
+          readinessProbe:
             httpGet:
               path: /ping
               port: 8989
@@ -88,7 +96,6 @@ spec:
             periodSeconds: 15
             timeoutSeconds: 1
             failureThreshold: 3
-          readinessProbe: *probes
           startupProbe:
             httpGet:
               path: /ping

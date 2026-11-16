@@ -84,7 +84,14 @@ spec:
                 secretKeyRef:
                   name: *app
                   key: BOOKBOSS_OIDC_PASSWORD
-          livenessProbe: &probes
+          livenessProbe:
+            tcpSocket:
+              port: *port
+            failureThreshold: 5
+            initialDelaySeconds: 15
+            periodSeconds: 10
+            timeoutSeconds: 3
+          readinessProbe:
             httpGet:
               path: /
               port: *port
@@ -92,7 +99,6 @@ spec:
             initialDelaySeconds: 15
             periodSeconds: 10
             timeoutSeconds: 3
-          readinessProbe: *probes
           startupProbe:
             httpGet:
               path: /

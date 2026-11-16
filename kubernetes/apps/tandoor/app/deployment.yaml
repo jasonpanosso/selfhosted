@@ -77,7 +77,15 @@ spec:
                 secretKeyRef:
                   name: tandoor
                   key: TANDOOR_ENCRYPTION_SECRET
-          livenessProbe: &probes
+          # get liveness from tcpSocket in case pg is down
+          livenessProbe:
+            tcpSocket:
+              port: *port
+            failureThreshold: 5
+            initialDelaySeconds: 15
+            periodSeconds: 10
+            timeoutSeconds: 10
+          readinessProbe:
             httpGet:
               path: /
               port: *port
@@ -85,7 +93,6 @@ spec:
             initialDelaySeconds: 15
             periodSeconds: 10
             timeoutSeconds: 10
-          readinessProbe: *probes
           # takes forever to startup
           startupProbe:
             httpGet:
