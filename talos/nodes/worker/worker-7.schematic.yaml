@@ -5,7 +5,7 @@ customization:
     - irqaffinity=4-7
     # latent orange pi 5 plus bug not fixed upstream, details: https://forum.armbian.com/topic/33360-orangepi-5-plus-rtc-hym8563-irq-issue/
     # updated by renovate postUpgradeTasks on image update
-    - initcall_blacklist=__initstub__kmod_rtc_hym8563__905_588_hym8563_driver_init6
+    - initcall_blacklist=__initstub__kmod_rtc_hym8563__904_588_hym8563_driver_init6
   systemExtensions:
     officialExtensions:
       - siderolabs/panfrost
