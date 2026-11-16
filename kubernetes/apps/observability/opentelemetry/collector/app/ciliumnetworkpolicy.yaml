@@ -9,10 +9,19 @@ spec:
     matchLabels:
       app.kubernetes.io/name: opentelemetry-collector
       app.kubernetes.io/instance: observability.cluster
-  # ingress on 8888 (metrics) comes from the operator's NetworkPolicy
   enableDefaultDeny:
     ingress: true
     egress: true
+  ingress:
+    # metrics
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: observability
+            app.kubernetes.io/name: vmagent
+      toPorts:
+        - ports:
+            - port: "8888"
+              protocol: TCP
   egress:
     # otlp_http/victoria-logs exporter
     - toEndpoints:

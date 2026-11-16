@@ -10,3 +10,4 @@ resources:
   - ./clusterrolebinding.yaml
   - ./pvc.yaml
   - ./opentelemetrycollector.yaml
+  - ./podmonitor.yaml

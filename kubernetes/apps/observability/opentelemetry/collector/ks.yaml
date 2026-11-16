@@ -30,3 +30,5 @@ spec:
       namespace: *namespace
     - name: opentelemetry-operator
       namespace: *namespace
+    - name: prometheus-operator-crds
+      namespace: *namespace

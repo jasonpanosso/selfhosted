@@ -6,6 +6,9 @@ metadata:
   name: cluster
 spec:
   mode: deployment
+  # see ./ciliumnetworkpolicy.yaml
+  networkPolicy:
+    enabled: false
   priorityClassName: system-cluster-critical
   # single replica: k8s_objects resumes from its persisted resourceVersion instead of leader election
   replicas: 1
