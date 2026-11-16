@@ -9,6 +9,7 @@ spec:
   events: ["ping", "push"]
   secretRef:
     name: github-webhook-token
+  resourceFilter: has(req.ref) && req.ref == 'refs/heads/main'
   resources:
     - apiVersion: source.toolkit.fluxcd.io/v1
       kind: GitRepository
