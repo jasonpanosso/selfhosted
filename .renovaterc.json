@@ -54,6 +54,16 @@
       }
     },
     {
+      "description": "worker-7 initcall_blacklist names an LTO initcall stub whose counter shifts between kernel builds: scripts/talos-initcall-blacklist.sh finds it in the new kernel, rewrites the schematic and installer image",
+      "matchManagers": ["custom.regex"],
+      "matchFileNames": ["talos/nodes/worker/worker-7.yaml"],
+      "postUpgradeTasks": {
+        "commands": ["bash scripts/talos-initcall-blacklist.sh worker-7 arm64"],
+        "fileFilters": ["talos/nodes/worker/worker-7.yaml", "talos/nodes/worker/worker-7.schematic.yaml"],
+        "executionMode": "update"
+      }
+    },
+    {
       "description": "Postgres majors run pg_upgrade in place; hold for dashboard approval",
       "matchDatasources": ["docker"],
       "matchPackageNames": ["ghcr.io/cloudnative-pg/postgresql"],

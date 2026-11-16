@@ -9,8 +9,8 @@ spec:
     - name: node-exporter.rules
       rules:
         # orange pi 5 is naughty: https://forum.armbian.com/topic/33360-orangepi-5-plus-rtc-hym8563-irq-issue/
-        # hym8563 RTC initcall_blacklist symbol can change between kernel versions,
-        # this will alert if it changes and the nodes kernel args need to be updated
+        # hym8563 RTC initcall_blacklist symbol can change between kernel versions; renovate rewrites it
+        # on talos bumps (scripts/talos-initcall-blacklist.sh), this alerts if a node boots without it
         - alert: NodeCPUHighHardIRQ
           expr: |
             rate(node_cpu_seconds_total{mode="irq"}[15m]) > 0.10

@@ -161,6 +161,7 @@
         packages.opentofu = opentofu;
         packages.tflint = pkgs.tflint;
         packages.kubeconform = pkgs.kubeconform;
+        packages.crane = pkgs.crane;
 
         devShells.default = pkgs.mkShell {
           env = {
@@ -175,6 +176,7 @@
             bws # bitwarden cli
             cilium-cli
             cmctl # cert-manager
+            crane
             deadvalues
             fluxcd
             hubble
