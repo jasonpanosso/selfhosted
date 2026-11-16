@@ -8,7 +8,7 @@ metadata:
 spec:
   decryption:
     provider: sops
-  deletionPolicy: WaitForTermination
+  deletionPolicy: MirrorPrune
   interval: 1h
   prune: true
   path: ./kubernetes/apps
@@ -30,7 +30,8 @@ spec:
         spec:
           decryption:
             provider: sops
-          deletionPolicy: WaitForTermination
+          # on deletion, objects are removed only when the child has prune: true
+          deletionPolicy: MirrorPrune
           patches:
             - patch: |-
                 apiVersion: helm.toolkit.fluxcd.io/v2
