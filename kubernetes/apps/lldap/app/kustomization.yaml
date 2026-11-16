@@ -8,4 +8,5 @@ resources:
   - ./deployment.yaml
   - ./externalsecret.yaml
   - ./httproute.yaml
+  - ./poddisruptionbudget.yaml
   - ./service.yaml
