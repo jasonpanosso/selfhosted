@@ -32,5 +32,3 @@ spec:
   dependsOn:
     - name: flux-operator
       namespace: *namespace
-    - name: secret-store
-      namespace: external-secrets

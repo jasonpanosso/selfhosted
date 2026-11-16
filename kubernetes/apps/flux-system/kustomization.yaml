@@ -10,5 +10,6 @@ components:
 resources:
   - ./flux-instance/ks.yaml
   - ./flux-operator/ks.yaml
+  - ./flux-webhook/ks.yaml
   - ./namespace.yaml
   - ./sops-age.sops.yaml

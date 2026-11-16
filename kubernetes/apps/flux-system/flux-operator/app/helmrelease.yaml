@@ -26,3 +26,5 @@ spec:
         memory: 512Mi
     serviceMonitor:
       create: true
+    web:
+      enabled: false

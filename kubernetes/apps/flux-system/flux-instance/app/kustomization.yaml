@@ -7,6 +7,3 @@ resources:
   - ./ciliumnetworkpolicy.yaml
   - ./fluxinstance.yaml
   - ./prometheusrule.yaml
-  - ./externalsecret.yaml
-  - ./receiver.yaml
-  - ./httproute.yaml
