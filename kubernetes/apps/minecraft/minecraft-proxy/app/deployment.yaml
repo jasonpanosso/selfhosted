@@ -32,7 +32,6 @@ spec:
           command:
             - cp
             - /opt/plugins/ambassador/ambassador.jar
-            - /opt/plugins/simple-voice-chat/simple-voice-chat.jar
             - /server/plugins/
           resources:
             requests:
@@ -50,9 +49,29 @@ spec:
             - name: ambassador
               mountPath: /opt/plugins/ambassador
               readOnly: true
-            - name: simple-voice-chat
-              mountPath: /opt/plugins/simple-voice-chat
-              readOnly: true
+        - name: download-simple-voice-chat
+          image: docker.io/curlimages/curl:8.23.0@sha256:3fb7e13e5d179a845c97d78204f3f1064d1907037f26a3ebf91710571151fd93
+          command:
+            - curl
+            - --fail
+            - --silent
+            - --show-error
+            - --location
+            - --user-agent
+            - jasonpanosso/selfhosted (https://github.com/jasonpanosso/selfhosted)
+            - --output
+            - /server/plugins/simple-voice-chat.jar
+            - https://cdn.modrinth.com/data/9eGKb6K1/versions/Ue35nhwF/voicechat-velocity-2.6.26.jar
+          resources:
+            requests:
+              cpu: 10m
+              memory: 32Mi
+            limits:
+              memory: 32Mi
+          securityContext: *securityContext
+          volumeMounts:
+            - name: plugins
+              mountPath: /server/plugins
       containers:
         - name: *app
           image: docker.io/library/eclipse-temurin:25.0.5_8-jre-noble@sha256:e3b6f7887a50f20d8f07abf279d8a81a5953fb398a9555bd9edd56b9bd15968c
@@ -121,10 +140,6 @@ spec:
         - name: ambassador
           image:
             reference: ghcr.io/jasonpanosso/ambassador:1.4.5@sha256:039a867267dba134727ddd60d244ea728b461e2c0abb32a432073fcb6a44416f
-            pullPolicy: IfNotPresent
-        - name: simple-voice-chat
-          image:
-            reference: ghcr.io/jasonpanosso/simple-voice-chat:velocity-2.6.26@sha256:d0fbac2191d4df27ef31087eaee24edb63a15be88a33eb3f8e5cb107e0bda138
             pullPolicy: IfNotPresent
         - name: tmp
           emptyDir: {}

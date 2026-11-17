@@ -9,6 +9,14 @@
         "{\"releases\": [files[type=\"release\"].{\"version\": name, \"releaseTimestamp\": uploaded_at}], \"homepage\": urls.curseforge}"
       ]
     },
+    "modrinth-velocity": {
+      "description": "Modrinth version id is passed as the digest, since CDN URLs carry it next to the version number",
+      "defaultRegistryUrlTemplate": "https://api.modrinth.com/v2/project/{{packageName}}/version?loaders=%5B%22velocity%22%5D",
+      "format": "json",
+      "transformTemplates": [
+        "{\"releases\": [$.{\"version\": version_number, \"releaseTimestamp\": date_published, \"digest\": id}]}"
+      ]
+    },
     "modrinth-modpacks": {
       "defaultRegistryUrlTemplate": "https://api.modrinth.com/v2/project/{{packageName}}/version",
       "format": "json",
@@ -36,6 +44,18 @@
         "- name: MODRINTH_MODPACK\\n\\s+value: https://modrinth\\.com/modpack/(?<depName>[^/\\s]+)/version/(?<currentValue>\\S+)"
       ],
       "datasourceTemplate": "custom.modrinth-modpacks"
+    },
+    {
+      "description": "Simple Voice Chat Velocity plugin downloaded from the Modrinth CDN; the URL's version id is tracked as the digest",
+      "customType": "regex",
+      "managerFilePatterns": ["/(^|/)kubernetes/apps/minecraft/minecraft-proxy/.+\\.ya?ml$/"],
+      "matchStrings": [
+        "https://cdn\\.modrinth\\.com/data/9eGKb6K1/versions/(?<currentDigest>[^/]+)/voicechat-(?<currentValue>velocity-[^/]+)\\.jar"
+      ],
+      "depNameTemplate": "simple-voice-chat",
+      "packageNameTemplate": "simple-voice-chat",
+      "datasourceTemplate": "custom.modrinth-velocity",
+      "versioningTemplate": "regex:^velocity-(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)$"
     }
   ],
   "packageRules": [
@@ -59,12 +79,6 @@
       "matchPackageNames": ["/eclipse-temurin$/"],
       "versioning": "regex:^(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)(?:\\.(?<build>\\d+))?_(?<revision>\\d+)(?<compatibility>-jre-noble)$",
       "allowedVersions": "/^25\\./"
-    },
-    {
-      "description": "Simple Voice Chat tags carry Modrinth's loader prefix (e.g. velocity-2.6.26)",
-      "matchDatasources": ["docker"],
-      "matchPackageNames": ["ghcr.io/jasonpanosso/simple-voice-chat"],
-      "versioning": "regex:^velocity-(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)$"
     }
   ]
 }
