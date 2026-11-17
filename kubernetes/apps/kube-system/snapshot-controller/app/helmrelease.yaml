@@ -16,20 +16,15 @@ spec:
       remediateLastFailure: true
       retries: 2
   values:
-    keepCRDs: true
-    controller:
-      replicaCount: 2
-      podSecurityContext:
-        seccompProfile:
-          type: RuntimeDefault
-      # merged into the chart's default (drop ALL, read-only root, non-root)
-      securityContext:
-        allowPrivilegeEscalation: false
-      resources:
-        requests:
-          cpu: 10m
-          memory: 128Mi
-        limits:
-          memory: 128Mi
+    replicaCount: 2
+    podDisruptionBudget:
+      maxUnavailable: 1
+    resources:
+      requests:
+        cpu: 10m
+        memory: 128Mi
+      limits:
+        memory: 128Mi
+    monitoring:
       serviceMonitor:
-        create: true
+        enabled: true
