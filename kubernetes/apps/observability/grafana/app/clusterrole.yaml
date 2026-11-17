@@ -5,7 +5,7 @@ kind: ClusterRole
 metadata:
   name: grafana-sidecar
 rules:
-  # dashboard/datasource/alert/notifier sidecars, all namespaces
+  # dashboard sidecar, all namespaces
   - apiGroups:
       - ""
     resources:
