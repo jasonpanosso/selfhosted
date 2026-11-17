@@ -21,7 +21,7 @@ spec:
               protocol: TCP
             - port: "8081"
               protocol: TCP
-    # metrics
+    # metrics and telemetry
     - fromEndpoints:
         - matchLabels:
             k8s:io.kubernetes.pod.namespace: observability
@@ -29,4 +29,6 @@ spec:
       toPorts:
         - ports:
             - port: "8080"
+              protocol: TCP
+            - port: "8081"
               protocol: TCP

@@ -28,6 +28,9 @@ spec:
         cpu: 10m
         memory: 256Mi
     prometheusScrape: false
+    # adds the telemetry port (8081, kube_state_metrics_list_total etc.) to the Service and ServiceMonitor
+    selfMonitor:
+      enabled: true
     prometheus:
       monitor:
         enabled: true
