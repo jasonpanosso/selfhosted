@@ -19,6 +19,9 @@ spec:
   instances: 3
   primaryUpdateMethod: switchover
   priorityClassName: system-cluster-critical
+  affinity:
+    podAntiAffinityType: required
+    topologyKey: kubernetes.io/hostname
   resources:
     requests:
       cpu: 100m
@@ -63,10 +66,7 @@ spec:
         passwordSecret:
           name: prowlarr-db
       - name: jellyfin
-        ensure: present
-        login: true
-        passwordSecret:
-          name: jellyfin-db
+        ensure: absent
       - name: seerr
         ensure: present
         login: true

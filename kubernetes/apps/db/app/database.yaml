@@ -73,6 +73,7 @@ metadata:
 spec:
   name: jellyfin
   owner: jellyfin
+  ensure: absent
   cluster:
     name: pgcluster
 ---
