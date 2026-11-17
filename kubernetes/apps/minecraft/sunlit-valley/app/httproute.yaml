@@ -5,9 +5,14 @@ kind: HTTPRoute
 metadata:
   name: &app sunlit-valley-rcon
 spec:
+  # both parents until the ListenerSet's certificate is serving; then only the ListenerSet
   parentRefs:
     - name: cilium
       namespace: kube-system
+      sectionName: https
+    - group: gateway.networking.k8s.io
+      kind: ListenerSet
+      name: sunlit-valley-rcon
       sectionName: https
   hostnames:
     - rcon.sunlit-valley.${domain}.${tld}
