@@ -1,0 +1,13 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/cert-manager.io/certificate_v1.json
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: jellyfin
+spec:
+  secretName: jellyfin-tls
+  issuerRef:
+    name: letsencrypt
+    kind: ClusterIssuer
+  commonName: watch.home.${domain}.${tld}
+  dnsNames: ["watch.home.${domain}.${tld}"]
