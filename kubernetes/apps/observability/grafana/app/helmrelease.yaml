@@ -87,6 +87,11 @@ spec:
             url: http://alertmanager.observability.svc.cluster.local:9093
             jsonData:
               implementation: prometheus
+          - name: VictoriaLogs
+            type: victoriametrics-logs-datasource
+            uid: victorialogs
+            access: proxy
+            url: http://victoria-logs.observability.svc.cluster.local:9428
 
     dashboardProviders:
       dashboardproviders.yaml:
@@ -256,6 +261,7 @@ spec:
       - grafana-clock-panel
       - pr0ps-trackmap-panel
       - vonage-status-panel
+      - victoriametrics-logs-datasource
 
     topologySpreadConstraints:
       - maxSkew: 1

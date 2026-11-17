@@ -52,6 +52,13 @@ spec:
         - ports:
             - port: "9093"
               protocol: TCP
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: victoria-logs-single
+      toPorts:
+        - ports:
+            - port: "9428"
+              protocol: TCP
     # plugins and dashboards downloaded at startup. private ranges excluded so a
     # dashboard or datasource URL can't reach the LAN
     - toCIDRSet:
