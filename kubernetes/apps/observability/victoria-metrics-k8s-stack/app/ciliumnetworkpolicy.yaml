@@ -107,6 +107,14 @@ spec:
               protocol: TCP
             - port: "8435"
               protocol: TCP
+    # vmsingle's /vmalert/ proxy (-vmalert.proxyURL) for the vmui alerts and rules pages
+    - fromEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: vmsingle
+      toPorts:
+        - ports:
+            - port: "8080"
+              protocol: TCP
   egress:
     # datasource, remoteRead and remoteWrite
     - toEndpoints:
