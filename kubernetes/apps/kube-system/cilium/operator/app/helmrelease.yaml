@@ -58,6 +58,9 @@ spec:
     gatewayAPI:
       enabled: true
       enableAlpn: true
+      # can't configure parametersRef for charts created gatewayclass
+      gatewayClass:
+        create: "false"
     hubble:
       enabled: true
       # about ~3-4 minutes of flows stored on workers
