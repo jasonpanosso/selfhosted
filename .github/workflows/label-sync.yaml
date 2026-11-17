@@ -27,8 +27,23 @@ jobs:
           persist-credentials: false
           sparse-checkout: .github/labels.yaml
 
+      # labels.yaml is the full set: creates or updates every label in it, deletes the rest
       - name: Sync Labels
-        # deletes labels missing from the file unless skip-delete is set
-        uses: crazy-max/ghaction-github-labeler@548a7c3603594ec17c819e1239f281a3b801ab4d # v6.0.0
-        with:
-          yaml-file: .github/labels.yaml
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          set -o pipefail
+          yq -r '.[] | [.name, .color, .description // ""] | @tsv' .github/labels.yaml \
+            | while IFS=$'\t' read -r name color description; do
+                gh label create "$name" --color "$color" --description "$description" --force
+              done
+
+          # an empty or unreadable file must not delete every label
+          wanted=$(yq -r '.[].name' .github/labels.yaml)
+          test -n "$wanted"
+          existing=$(gh label list --limit 1000 --json name --jq '.[].name')
+          comm -13 <(sort <<< "$wanted") <(sort <<< "$existing") \
+            | while read -r name; do
+                gh label delete "$name" --yes
+              done
