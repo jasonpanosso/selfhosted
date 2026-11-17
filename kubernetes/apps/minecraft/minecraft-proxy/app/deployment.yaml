@@ -33,6 +33,8 @@ spec:
             - cp
             - /opt/plugins/ambassador/ambassador.jar
             - /opt/plugins/minimotd/minimotd.jar
+            - /opt/plugins/tab/tab.jar
+            - /opt/plugins/velocity-scoreboard-api/velocity-scoreboard-api.jar
             - /server/plugins/
           resources:
             requests:
@@ -52,6 +54,12 @@ spec:
               readOnly: true
             - name: minimotd-jar
               mountPath: /opt/plugins/minimotd
+              readOnly: true
+            - name: tab-jar
+              mountPath: /opt/plugins/tab
+              readOnly: true
+            - name: velocity-scoreboard-api-jar
+              mountPath: /opt/plugins/velocity-scoreboard-api
               readOnly: true
         - name: download-simple-voice-chat
           image: docker.io/curlimages/curl:8.23.0@sha256:3fb7e13e5d179a845c97d78204f3f1064d1907037f26a3ebf91710571151fd93
@@ -102,6 +110,28 @@ spec:
             - name: minimotd-config
               mountPath: /opt/minimotd
               readOnly: true
+        # TAB inserts missing options into its config and saves it, so it can't be a read-only mount
+        - name: copy-tab-config
+          image: docker.io/library/eclipse-temurin:25.0.5_8-jre-noble@sha256:e3b6f7887a50f20d8f07abf279d8a81a5953fb398a9555bd9edd56b9bd15968c
+          command:
+            - cp
+            - --dereference
+            - /opt/tab/config.yml
+            - /opt/tab/groups.yml
+            - /server/plugins/tab/
+          resources:
+            requests:
+              cpu: 10m
+              memory: 64Mi
+            limits:
+              memory: 64Mi
+          securityContext: *securityContext
+          volumeMounts:
+            - name: tab
+              mountPath: /server/plugins/tab
+            - name: tab-config
+              mountPath: /opt/tab
+              readOnly: true
       containers:
         - name: *app
           image: docker.io/library/eclipse-temurin:25.0.5_8-jre-noble@sha256:e3b6f7887a50f20d8f07abf279d8a81a5953fb398a9555bd9edd56b9bd15968c
@@ -148,6 +178,8 @@ spec:
               mountPath: /server/plugins
             - name: minimotd
               mountPath: /server/plugins/minimotd-velocity
+            - name: tab
+              mountPath: /server/plugins/tab
             - name: velocity
               mountPath: /opt/velocity
               readOnly: true
@@ -171,6 +203,8 @@ spec:
           emptyDir: {}
         - name: minimotd
           emptyDir: {}
+        - name: tab
+          emptyDir: {}
         - name: ambassador
           image:
             reference: ghcr.io/jasonpanosso/ambassador:v1.4.5@sha256:c08cce3fb6094cb0ca22a4fb2bb7dfc602aa9b52ac2181d9dbdd72567bf0de70
@@ -178,6 +212,14 @@ spec:
         - name: minimotd-jar
           image:
             reference: ghcr.io/jasonpanosso/minimotd:v2.2.5@sha256:255fa3b637a4d991f0b0a497a5efb7eab3fbb4e68ec6f736c61c340ee136bbe9
+            pullPolicy: IfNotPresent
+        - name: tab-jar
+          image:
+            reference: ghcr.io/jasonpanosso/tab:6.2.1@sha256:2b3943e209a777ff3bc42f2b587481801cc9ad3dac480714a73c0995589079b7
+            pullPolicy: IfNotPresent
+        - name: velocity-scoreboard-api-jar
+          image:
+            reference: ghcr.io/jasonpanosso/velocity-scoreboard-api:2.1.1@sha256:1b2d5d4e47a54513477ae86be8ff7f3e916ad41484b4f1f7b81deb582e21b6e5
             pullPolicy: IfNotPresent
         - name: tmp
           emptyDir: {}
@@ -204,6 +246,14 @@ spec:
                 path: icons/sunlit-valley.png
               - key: minimotd-sunlit-valley-cobblemon.png
                 path: icons/sunlit-valley-cobblemon.png
+        - name: tab-config
+          configMap:
+            name: *app
+            items:
+              - key: tab-config.yml
+                path: config.yml
+              - key: tab-groups.yml
+                path: groups.yml
         - name: forwarding-secret
           secret:
             secretName: *app

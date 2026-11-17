@@ -21,5 +21,7 @@ configMapGenerator:
       - minimotd-botc.png=./resources/minimotd/icons/botc.png
       - minimotd-sunlit-valley.png=./resources/minimotd/icons/sunlit-valley.png
       - minimotd-sunlit-valley-cobblemon.png=./resources/minimotd/icons/sunlit-valley-cobblemon.png
+      - tab-config.yml=./resources/tab/config.yml
+      - tab-groups.yml=./resources/tab/groups.yml
     options:
       disableNameSuffixHash: true

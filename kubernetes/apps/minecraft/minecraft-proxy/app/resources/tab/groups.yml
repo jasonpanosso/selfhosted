@@ -1,0 +1,17 @@
+---
+# https://github.com/NEZNAMY/TAB/wiki/Feature-guide:-Tablist-name-formatting
+_DEFAULT_:
+  tabprefix: "<dark_gray>» </dark_gray>"
+  customtabname: "%player%"
+  tabsuffix: ""
+
+per-server:
+  botc:
+    _DEFAULT_:
+      customtabname: "<#ff4d6d>%player%</#ff4d6d>"
+  sunlit-valley:
+    _DEFAULT_:
+      customtabname: "<#ffd166>%player%</#ffd166>"
+  sunlit-valley-cobblemon:
+    _DEFAULT_:
+      customtabname: "<#06d6a0>%player%</#06d6a0>"

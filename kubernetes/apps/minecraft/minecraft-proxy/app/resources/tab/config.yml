@@ -1,0 +1,53 @@
+---
+# https://github.com/NEZNAMY/TAB/wiki/Feature-guide:-Header-&-Footer
+header-footer:
+  enabled: true
+  designs:
+    botc:
+      display-condition: "%server%=botc"
+      header:
+        - "<bold><gradient:#a4161a:#ff4d6d>Blood on the Clocktower</gradient></bold>"
+      footer:
+        - "<gray>Ping: <white>%ping%ms"
+    sunlit-valley:
+      display-condition: "%server%=sunlit-valley"
+      header:
+        - "<bold><gradient:#ffd166:#f77f00>Society: Sunlit Valley</gradient></bold>"
+      footer:
+        - "<gray>Ping: <white>%ping%ms"
+    sunlit-valley-cobblemon:
+      display-condition: "%server%=sunlit-valley-cobblemon"
+      header:
+        - "<bold><gradient:#06d6a0:#118ab2>Society: Sunlit Cobblemon</gradient></bold>"
+      footer:
+        - "<gray>Ping: <white>%ping%ms"
+
+# https://github.com/NEZNAMY/TAB/wiki/Feature-guide:-Playerlist-Objective
+# 1.20.3+ clients see fancy-value, older clients see value as a yellow number
+playerlist-objective:
+  enabled: true
+  value: "%ping%"
+  fancy-value: "<gray>%ping%ms"
+  render-type: INTEGER
+
+# https://github.com/NEZNAMY/TAB/wiki/Feature-guide:-Tablist-name-formatting
+# prefix/name/suffix come from groups.yml
+tablist-name-formatting:
+  enabled: true
+
+# https://github.com/NEZNAMY/TAB/wiki/Feature-guide:-Nametags
+# also turns off sorting, which would otherwise send scoreboard teams that the modpacks may use themselves
+scoreboard-teams:
+  enabled: false
+
+# https://github.com/NEZNAMY/TAB/wiki/Feature-guide:-Multi-server-support
+# single proxy, nothing to sync with
+proxy-support:
+  enabled: false
+
+components:
+  minimessage-support: true
+  disable-shadow-for-heads: true
+
+# Internal value, do not change this
+config-version: 7
