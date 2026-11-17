@@ -28,7 +28,7 @@ jobs:
           sparse-checkout: .github/labels.yaml
 
       - name: Sync Labels
-        uses: EndBug/label-sync@52074158190acb45f3077f9099fea818aa43f97a # v2.3.3
+        # deletes labels missing from the file unless skip-delete is set
+        uses: crazy-max/ghaction-github-labeler@548a7c3603594ec17c819e1239f281a3b801ab4d # v6.0.0
         with:
-          config-file: .github/labels.yaml
-          delete-other-labels: true
+          yaml-file: .github/labels.yaml
