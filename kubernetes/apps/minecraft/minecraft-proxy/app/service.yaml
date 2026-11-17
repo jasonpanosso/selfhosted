@@ -13,6 +13,8 @@ metadata:
     external-dns.kubernetes.io/target: kubernetes.${domain}.${tld}
 spec:
   type: LoadBalancer
+  # Cilium serves the LB IP in eBPF
+  allocateLoadBalancerNodePorts: false
   ports:
     - name: proxy
       port: 25565
