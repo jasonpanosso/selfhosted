@@ -16,6 +16,7 @@ spec:
       remediateLastFailure: true
       retries: 2
   values:
+    keepCRDs: true
     controller:
       replicaCount: 2
       podSecurityContext:
