@@ -36,6 +36,9 @@ spec:
           bdev_async_discard_threads: "1"
           # msgr2 only
           ms_bind_msgr1: "false"
+        mon:
+          # stop spam from debug logs
+          mon_cluster_log_level: info
       dataDirHostPath: /var/lib/rook
       skipUpgradeChecks: false
       continueUpgradeAfterChecksEvenIfNotHealthy: false
