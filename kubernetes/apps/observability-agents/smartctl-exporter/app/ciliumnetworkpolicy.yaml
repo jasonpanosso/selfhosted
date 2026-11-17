@@ -11,9 +11,7 @@ spec:
   enableDefaultDeny:
     ingress: true
     egress: true
-  # vmagent scrape covered by baseline policy
   ingress:
-    - {}
     # metrics
     - fromEndpoints:
         - matchLabels:
@@ -23,5 +21,3 @@ spec:
         - ports:
             - port: "9633"
               protocol: TCP
-  egress:
-    - {}

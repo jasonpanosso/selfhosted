@@ -8,9 +8,11 @@ spec:
   groups:
     - name: smartctl-exporter.rules
       rules:
+        # SSDs and NVMe; HDDs have their own lower limit below
         - alert: SmartDeviceHighTemperature
           expr: |
             smartctl_device_temperature{temperature_type="current"} > 80
+              unless on (instance, device) (smartctl_device_rotation_rate > 0)
           for: 5m
           annotations:
             summary: >-
@@ -18,9 +20,21 @@ spec:
           labels:
             severity: critical
 
+        # rotation_rate only exists for spinning drives
+        - alert: SmartHddHighTemperature
+          expr: |
+            smartctl_device_temperature{temperature_type="current"} > 55
+              and on (instance, device) (smartctl_device_rotation_rate > 0)
+          for: 15m
+          annotations:
+            summary: >-
+              Hard drive {{ $labels.device }} on device {{ $labels.instance }} has been above 55°C for 15m ({{ $value }}°C)
+          labels:
+            severity: critical
+
         - alert: SmartDeviceTestFailed
           expr: |
-            (smartctl_device_smart_status != 1 or smartctl_device_status != 1)
+            smartctl_device_smart_status != 1
           for: 5m
           annotations:
             summary: >-
@@ -67,3 +81,25 @@ spec:
           for: 5m
           labels:
             severity: critical
+
+        # SATA (ATA) only; NVMe reports media_errors and available_spare instead
+        - alert: SmartDeviceBadSectors
+          expr: |
+            smartctl_device_attribute{attribute_name=~"Reallocated_Sector_Ct|Current_Pending_Sector|Offline_Uncorrectable", attribute_value_type="raw"} > 0
+          for: 5m
+          annotations:
+            summary: >-
+              Drive {{ $labels.device }} on device {{ $labels.instance }} has {{ $value }} {{ $labels.attribute_name }}
+          labels:
+            severity: warning
+
+        # NVMe endurance estimate; 100 = rated write endurance used up
+        - alert: SmartDeviceWearHigh
+          expr: |
+            smartctl_device_percentage_used > 80
+          for: 1h
+          annotations:
+            summary: >-
+              Drive {{ $labels.device }} on device {{ $labels.instance }} has used {{ $value }}% of its rated endurance
+          labels:
+            severity: warning
