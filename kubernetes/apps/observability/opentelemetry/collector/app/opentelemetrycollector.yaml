@@ -39,8 +39,23 @@ spec:
       value: 128MiB
     - name: OTEL_RESOURCE_ATTRIBUTES
       value: "k8s.cluster.name=prod"
+  startupProbe:
+    periodSeconds: 10
+    failureThreshold: 30
+  livenessProbe:
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 3
+  readinessProbe:
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 3
   config:
     extensions:
+      # kubelet probes
+      health_check:
+        endpoint: 0.0.0.0:13133
+        path: /
       # persists the k8s_objects resourceVersion and the exporter queue across restarts
       file_storage:
         directory: /var/lib/otelcol
@@ -104,6 +119,7 @@ spec:
 
     service:
       extensions:
+        - health_check
         - file_storage
       pipelines:
         logs:

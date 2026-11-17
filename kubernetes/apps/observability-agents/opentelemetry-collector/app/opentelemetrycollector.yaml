@@ -56,8 +56,23 @@ spec:
       effect: NoSchedule
   nodeSelector:
     kubernetes.io/os: linux
+  startupProbe:
+    periodSeconds: 10
+    failureThreshold: 30
+  livenessProbe:
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 3
+  readinessProbe:
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 3
   config:
     extensions:
+      # kubelet probes
+      health_check:
+        endpoint: 0.0.0.0:13133
+        path: /
       # persists file_log offsets and the exporter queue across collector restarts
       file_storage:
         directory: /var/lib/otelcol
@@ -227,6 +242,7 @@ spec:
 
     service:
       extensions:
+        - health_check
         - file_storage
       pipelines:
         logs:
