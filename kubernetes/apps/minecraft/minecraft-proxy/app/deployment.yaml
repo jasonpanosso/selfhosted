@@ -139,7 +139,7 @@ spec:
           emptyDir: {}
         - name: ambassador
           image:
-            reference: ghcr.io/jasonpanosso/ambassador:1.4.5@sha256:039a867267dba134727ddd60d244ea728b461e2c0abb32a432073fcb6a44416f
+            reference: ghcr.io/jasonpanosso/ambassador:v1.4.5@sha256:c08cce3fb6094cb0ca22a4fb2bb7dfc602aa9b52ac2181d9dbdd72567bf0de70
             pullPolicy: IfNotPresent
         - name: tmp
           emptyDir: {}
