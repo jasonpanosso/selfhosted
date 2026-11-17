@@ -30,6 +30,13 @@ route:
     # quiet fallback
     - receiver: pushover-quiet
 inhibit_rules:
+  # info alerts only notify alongside a warning/critical alert in the same namespace:
+  # InfoInhibitor fires per namespace that has info alerts but nothing worse
+  - equal: ["namespace"]
+    source_matchers:
+      - alertname="InfoInhibitor"
+    target_matchers:
+      - severity="info"
   - equal: ["alertname", "namespace"]
     source_matchers:
       - severity="critical"
