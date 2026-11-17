@@ -22,7 +22,7 @@ spec:
       cephcsi:
         repository: quay.io/cephcsi/cephcsi
         # renovate: datasource=docker depName=quay.io/cephcsi/cephcsi
-        tag: v3.18.2-rocky9
+        tag: v3.18.2-rocky9@sha256:c5081aaac2cc50043b9e45f126aa310e41402aee0284d588234df2074c6b25b0
       # chart renders this empty; false makes rook delete the CephConnection and ClientProfile
       createCsiOperatorResources: true
     # 1.21 (rook d18ff0da) treats an empty partition sharing a serial with a used one as a
