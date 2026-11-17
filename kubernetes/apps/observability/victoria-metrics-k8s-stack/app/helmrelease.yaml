@@ -200,6 +200,16 @@ spec:
         # fires for count:up0, which is empty whenever no target is down
         RecordingRulesNoData:
           enabled: false
+        # talos kubelets don't rotate their serving certificate (no serverTLSBootstrap)
+        KubeletServerCertificateExpiration:
+          enabled: false
+        KubeletServerCertificateRenewalErrors:
+          enabled: false
+        # talos has no systemd, so node-exporter has no node_systemd_* metrics
+        NodeSystemdServiceFailed:
+          enabled: false
+        NodeSystemdServiceCrashlooping:
+          enabled: false
 
     vmsingle:
       enabled: true

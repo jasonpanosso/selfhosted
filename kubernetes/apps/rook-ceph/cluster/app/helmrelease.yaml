@@ -21,6 +21,56 @@ spec:
         # covered by NodeFilesystemSpaceFillingUp, which also requires low free space
         CephNodeDiskspaceWarning:
           disabled: true
+        # no rbd-mirror daemons (no CephRBDMirror): ceph_rbd_mirror_* metrics never exist
+        CephRBDMirrorImagesPerDaemonHigh:
+          disabled: true
+        CephRBDMirrorImagesNotInSync:
+          disabled: true
+        CephRBDMirrorImagesNotInSyncVeryHigh:
+          disabled: true
+        CephRBDMirrorImageTransferBandwidthHigh:
+          disabled: true
+        # no NVMe-oF gateways (no CephNVMeOFGateway): ceph_nvmeof_* metrics never exist
+        NVMeoFSubsystemNamespaceLimit:
+          disabled: true
+        NVMeoFMultipleNamespacesOfRBDImage:
+          disabled: true
+        NVMeoFTooManyGateways:
+          disabled: true
+        NVMeoFMaxGatewayGroupSize:
+          disabled: true
+        NVMeoFMaxGatewayGroups:
+          disabled: true
+        NVMeoFSingleGateway:
+          disabled: true
+        NVMeoFHighGatewayCPU:
+          disabled: true
+        NVMeoFGatewayOpenSecurity:
+          disabled: true
+        NVMeoFTooManySubsystems:
+          disabled: true
+        NVMeoFTooManyNamespaces:
+          disabled: true
+        NVMeoFVersionMismatch:
+          disabled: true
+        NVMeoFHighClientCount:
+          disabled: true
+        NVMeoFMissingListener:
+          disabled: true
+        NVMeoFZeroListenerSubsystem:
+          disabled: true
+        NVMeoFHighHostCPU:
+          disabled: true
+        NVMeoFInterfaceDown:
+          disabled: true
+        NVMeoFInterfaceDuplex:
+          disabled: true
+        NVMeoFHighReadLatency:
+          disabled: true
+        NVMeoFHighWriteLatency:
+          disabled: true
+        NVMeoFHostKeepAliveTimeout:
+          disabled: true
     toolbox:
       enabled: true
       resources:
