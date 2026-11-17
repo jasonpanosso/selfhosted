@@ -14,6 +14,7 @@ spec:
   hostnames:
     - flux.${domain}.${tld}
   rules:
+    # no ExternalAuth, strip identity headers so they can't be spoofed
     - matches:
         - path:
             type: PathPrefix
@@ -24,6 +25,16 @@ spec:
             set:
               - name: X-Forwarded-For
                 value: "%DOWNSTREAM_REMOTE_ADDRESS_WITHOUT_PORT%"
+            remove:
+              - Remote-User
+              - Remote-Name
+              - Remote-Groups
+              - Remote-Email
+        - type: ResponseHeaderModifier
+          responseHeaderModifier:
+            set:
+              - name: Strict-Transport-Security
+                value: max-age=31536000
       backendRefs:
         - name: webhook-receiver
           port: 80

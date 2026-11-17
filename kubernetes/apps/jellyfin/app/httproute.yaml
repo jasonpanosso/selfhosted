@@ -14,12 +14,23 @@ spec:
   hostnames:
     - watch.home.${domain}.${tld}
   rules:
+    # no ExternalAuth, strip identity headers so they can't be spoofed
     - filters:
         - type: RequestHeaderModifier
           requestHeaderModifier:
             set:
               - name: X-Forwarded-For
                 value: "%DOWNSTREAM_REMOTE_ADDRESS_WITHOUT_PORT%"
+            remove:
+              - Remote-User
+              - Remote-Name
+              - Remote-Groups
+              - Remote-Email
+        - type: ResponseHeaderModifier
+          responseHeaderModifier:
+            set:
+              - name: Strict-Transport-Security
+                value: max-age=31536000
       backendRefs:
         - name: *app
           port: 80
