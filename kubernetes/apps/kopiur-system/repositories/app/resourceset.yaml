@@ -19,7 +19,7 @@ spec:
       capacity: 1Gi
     - namespace: bookboss
       app: bookboss
-      capacity: 5Gi
+      capacity: 10Gi
     - namespace: tandoor
       app: tandoor
       capacity: 1Gi
