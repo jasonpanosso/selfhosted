@@ -254,6 +254,12 @@ spec:
             memory: 512Mi
           limits:
             memory: 512Mi
+        configReloaderResources:
+          requests:
+            cpu: 10m
+            memory: 32Mi
+          limits:
+            memory: 32Mi
 
     vmalert:
       enabled: true
@@ -271,6 +277,12 @@ spec:
             memory: 160Mi
           limits:
             memory: 160Mi
+        configReloaderResources:
+          requests:
+            cpu: 10m
+            memory: 32Mi
+          limits:
+            memory: 32Mi
 
 
     alertmanager:
