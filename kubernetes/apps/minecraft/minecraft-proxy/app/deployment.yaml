@@ -197,7 +197,7 @@ spec:
           emptyDir: {}
         - name: velocity
           image:
-            reference: ghcr.io/jasonpanosso/velocity:v4.3.1@sha256:164bc0dc3aea477f9dfa068fce43072b92f4aafa491f41d010f194dd0991ef60
+            reference: ghcr.io/jasonpanosso/velocity:v4.3.1@sha256:1e98cfad73411b60cea4ee1e65520f5338e144252ebd617eb5f5dbe8f74c1e3d
             pullPolicy: IfNotPresent
         - name: plugins
           emptyDir: {}
@@ -207,19 +207,19 @@ spec:
           emptyDir: {}
         - name: ambassador
           image:
-            reference: ghcr.io/jasonpanosso/ambassador:v1.4.5@sha256:c08cce3fb6094cb0ca22a4fb2bb7dfc602aa9b52ac2181d9dbdd72567bf0de70
+            reference: ghcr.io/jasonpanosso/ambassador:v1.4.5@sha256:e42d6968889342cce5d45ce87c9e10c60e445e917cc647b2811d154296540fcd
             pullPolicy: IfNotPresent
         - name: minimotd-jar
           image:
-            reference: ghcr.io/jasonpanosso/minimotd:v2.2.5@sha256:255fa3b637a4d991f0b0a497a5efb7eab3fbb4e68ec6f736c61c340ee136bbe9
+            reference: ghcr.io/jasonpanosso/minimotd-velocity:v2.2.5@sha256:dfc2933bd040d36b7b053d17bb1baa4831869410e39956c40a1e9ef16eeae8fc
             pullPolicy: IfNotPresent
         - name: tab-jar
           image:
-            reference: ghcr.io/jasonpanosso/tab:6.2.1@sha256:2b3943e209a777ff3bc42f2b587481801cc9ad3dac480714a73c0995589079b7
+            reference: ghcr.io/jasonpanosso/tab-velocity:6.2.1@sha256:1b418e2a1456363413cbdde0ba305ac51decf51ca037ea3abda70450bffb68dc
             pullPolicy: IfNotPresent
         - name: velocity-scoreboard-api-jar
           image:
-            reference: ghcr.io/jasonpanosso/velocity-scoreboard-api:2.1.1@sha256:1b2d5d4e47a54513477ae86be8ff7f3e916ad41484b4f1f7b81deb582e21b6e5
+            reference: ghcr.io/jasonpanosso/velocity-scoreboard-api:2.1.1@sha256:39baf330cdda9117063815860ad74d541735e310f579b317c8d224204f3f1174
             pullPolicy: IfNotPresent
         - name: tmp
           emptyDir: {}

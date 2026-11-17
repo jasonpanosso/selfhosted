@@ -198,7 +198,7 @@ spec:
           type: RuntimeDefault
       containers:
         - name: *app
-          image: ghcr.io/jasonpanosso/minecraft-rcon:2.8.7@sha256:4c428a1f8b4bc08eb6834bda413b0a834dafa49f41a9bfc8bdeba532f8079655
+          image: ghcr.io/jasonpanosso/minecraft-rcon-console:2.8.7@sha256:207552a2daa224d644b3447ea442bd19b3d0682243c3a09805498d4fcc60c21d
           env:
             - name: RCON_HOST
               value: sunlit-valley-cobblemon.minecraft.svc.cluster.local
