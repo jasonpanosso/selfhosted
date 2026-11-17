@@ -26,8 +26,6 @@ spec:
     namespace: flux-system
   targetNamespace: *namespace
   dependsOn:
-    - name: db
-      namespace: db
     - name: lldap
       namespace: lldap
     - name: kopiur-repositories
