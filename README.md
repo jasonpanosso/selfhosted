@@ -33,3 +33,9 @@ just upgrade-k8s
 just diff controlplane-1
 just diff worker-5
 ```
+
+4. run apply-role
+```sh
+just apply-role controlplane
+just apply-role worker
+```
