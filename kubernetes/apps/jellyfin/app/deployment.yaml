@@ -97,6 +97,7 @@ spec:
           persistentVolumeClaim:
             claimName: jellyfin-cache
         - name: transcode-cache
-          emptyDir: {}
+          emptyDir:
+            sizeLimit: 30Gi
         - name: scratch
           emptyDir: {}
