@@ -6,8 +6,6 @@ metadata:
   name: &app upbrr
   labels:
     app.kubernetes.io/name: *app
-  annotations:
-    reloader.stakater.com/auto: "true"
 spec:
   strategy:
     type: Recreate
