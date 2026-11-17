@@ -15,6 +15,21 @@ spec:
     remediation:
       remediateLastFailure: true
       retries: 2
+  # the chart's Service template has no allocateLoadBalancerNodePorts value
+  postRenderers:
+    - kustomize:
+        patches:
+          - target:
+              kind: Service
+              name: k8s-gateway
+            patch: |-
+              apiVersion: v1
+              kind: Service
+              metadata:
+                name: k8s-gateway
+              spec:
+                # Cilium serves the LB IP in eBPF
+                allocateLoadBalancerNodePorts: false
   values:
     fullnameOverride: k8s-gateway
     replicaCount: 2
