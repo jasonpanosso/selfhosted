@@ -3,7 +3,7 @@
 _DEFAULT_:
   tabprefix: "<dark_gray>» </dark_gray>"
   customtabname: "%player%"
-  tabsuffix: " <gray>%ping%ms</gray>"
+  tabsuffix: ""
 
 per-server:
   botc:
