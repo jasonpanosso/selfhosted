@@ -8,6 +8,5 @@ resources:
   - ./deployment.yaml
   - ./externalsecret.yaml
   - ./httproute.yaml
-  - ./listenerset.yaml
   - ./pvc.yaml
   - ./service.yaml

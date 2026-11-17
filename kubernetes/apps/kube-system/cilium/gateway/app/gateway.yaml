@@ -11,10 +11,6 @@ spec:
   addresses:
     - type: IPAddress
       value: 192.168.21.11
-  # each app attaches its own HTTPS listener and certificate through a ListenerSet
-  allowedListeners:
-    namespaces:
-      from: All
   listeners:
     - name: http
       protocol: HTTP

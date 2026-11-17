@@ -46,8 +46,6 @@ spec:
       - service
     # cilium-internal routes (*.home) are served on the LAN by k8s-gateway, never published
     gatewayNamespace: kube-system
-    # follow HTTPRoutes whose parent is an app's ListenerSet
-    enableGatewayListenerSets: true
     extraArgs:
       gateway-name: cilium
 

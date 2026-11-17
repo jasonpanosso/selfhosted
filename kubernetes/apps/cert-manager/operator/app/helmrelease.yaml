@@ -26,14 +26,6 @@ spec:
   values:
     crds:
       enabled: true
-    # certificates from annotated Gateways and ListenerSets (per-app TLS)
-    config:
-      gatewayAPI:
-        enabled: true
-        enableListenerSet: true
-      featureGates:
-        # alpha, default off in v1.21
-        ListenerSets: true
     extraArgs:
       - "--enable-certificate-owner-ref=true"
       - "--dns01-recursive-nameservers-only"
