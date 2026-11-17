@@ -1,0 +1,20 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/monitoring.coreos.com/prometheusrule_v1.json
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: victoria-logs-rules
+spec:
+  groups:
+    - name: victoria-logs.rules
+      rules:
+        # every node collector ships Talos logs continuously, so a quiet half hour means ingestion is broken
+        - alert: VictoriaLogsIngestionStopped
+          expr: |
+            sum by (namespace, job) (rate(vl_rows_ingested_total[30m])) == 0
+          for: 5m
+          annotations:
+            summary: >-
+              {{ $labels.namespace }}/{{ $labels.job }} has ingested no log rows for 30m
+          labels:
+            severity: warning

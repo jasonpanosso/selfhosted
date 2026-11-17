@@ -36,6 +36,22 @@ spec:
         storageClassName: rook-ceph-block
         size: 50Gi
       retentionPeriod: 30d
+      extraArgs:
+        deleteAuthKey: &authKey file:///etc/vm/secrets/victoria-logs/VICTORIA_LOGS_AUTH_KEY
+        forceMergeAuthKey: *authKey
+        forceFlushAuthKey: *authKey
+        logNewStreamsAuthKey: *authKey
+        partitionManageAuthKey: *authKey
+        flagsAuthKey: *authKey
+        pprofAuthKey: *authKey
+      extraVolumes:
+        - name: auth-key
+          secret:
+            secretName: victoria-logs
+      extraVolumeMounts:
+        - name: auth-key
+          mountPath: /etc/vm/secrets/victoria-logs
+          readOnly: true
       # caches size to memory.allowedPercent (60%) of the limit; with no limit they sized to the node
       resources:
         requests:
