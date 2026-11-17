@@ -47,6 +47,9 @@ spec:
     txtOwnerId: selfhosted
     triggerLoopOnEvent: true
 
+    serviceMonitor:
+      enabled: true
+
     resources:
       requests:
         cpu: 10m

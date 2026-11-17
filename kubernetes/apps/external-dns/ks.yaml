@@ -30,3 +30,5 @@ spec:
       namespace: external-secrets
     - name: gateway-api-crds
       namespace: kube-system
+    - name: prometheus-operator-crds
+      namespace: observability
