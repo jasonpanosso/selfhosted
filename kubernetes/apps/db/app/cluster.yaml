@@ -65,8 +65,6 @@ spec:
         login: true
         passwordSecret:
           name: prowlarr-db
-      - name: jellyfin
-        ensure: absent
       - name: seerr
         ensure: present
         login: true
