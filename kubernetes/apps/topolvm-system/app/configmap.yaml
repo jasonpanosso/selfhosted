@@ -1,0 +1,11 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/master-standalone-strict/configmap-v1.json
+# The topolvm image has no /etc/selinux/config.
+# Without it libselinux reports SELinux disabled and the StorageClass `context=` option
+# is silently dropped
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: topolvm-selinux-config
+data:
+  config: ""

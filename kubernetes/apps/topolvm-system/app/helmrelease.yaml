@@ -19,6 +19,30 @@ spec:
     remediation:
       remediateLastFailure: true
       retries: 2
+  # the chart has no additive volumeMounts for topolvm-node, append here instead
+  postRenderers:
+    - kustomize:
+        patches:
+          - target:
+              kind: DaemonSet
+              name: topolvm-node
+            patch: |-
+              apiVersion: apps/v1
+              kind: DaemonSet
+              metadata:
+                name: topolvm-node
+              spec:
+                template:
+                  spec:
+                    containers:
+                      - name: topolvm-node
+                        volumeMounts:
+                          - name: selinuxfs
+                            mountPath: /sys/fs/selinux
+                          - name: selinux-config
+                            mountPath: /etc/selinux/config
+                            subPath: config
+                            readOnly: true
   values:
     lvmd:
       # lvmd runs embedded in the node plugin (node.lvmdEmbedded), no separate DaemonSet
@@ -35,6 +59,17 @@ spec:
       priorityClassName: system-node-critical
       nodeSelector:
         storage.home.internal/topolvm: "true"
+      # mount(8) only keeps the context= option when libselinux sees SELinux enabled:
+      # selinuxfs mounted read-write (a read-only one counts as disabled) and /etc/selinux/config present.
+      # mounted into topolvm-node by the postRenderers patch below
+      additionalVolumes:
+        - name: selinuxfs
+          hostPath:
+            path: /sys/fs/selinux
+            type: Directory
+        - name: selinux-config
+          configMap:
+            name: topolvm-selinux-config
       prometheus:
         podMonitor:
           enabled: true

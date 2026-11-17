@@ -21,6 +21,17 @@ spec:
         enabled: true
         name: rook-ceph.cephfs.csi.ceph.com
         nodePlugin:
+          # see configmap.yaml: keeps the context= mount option (operator mounts it into csi-cephfsplugin only)
+          volumes:
+            - volume:
+                name: selinux-config
+                configMap:
+                  name: cephcsi-selinux-config
+              mount:
+                name: selinux-config
+                mountPath: /etc/selinux/config
+                subPath: config
+                readOnly: true
           resources:
             plugin:
               requests:
@@ -89,6 +100,17 @@ spec:
         name: rook-ceph.rbd.csi.ceph.com
         snapshotPolicy: volumeSnapshot
         nodePlugin:
+          # see configmap.yaml: keeps the context= mount option (operator mounts it into csi-rbdplugin only)
+          volumes:
+            - volume:
+                name: selinux-config
+                configMap:
+                  name: cephcsi-selinux-config
+              mount:
+                name: selinux-config
+                mountPath: /etc/selinux/config
+                subPath: config
+                readOnly: true
           resources:
             plugin:
               requests:

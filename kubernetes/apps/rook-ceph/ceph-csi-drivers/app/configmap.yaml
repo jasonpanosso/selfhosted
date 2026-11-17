@@ -1,0 +1,10 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/master-standalone-strict/configmap-v1.json
+# cephcsi >= 3.18 images no longer ship /etc/selinux/config.
+# Without it the StorageClass/PV `context=` option is silently dropped
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cephcsi-selinux-config
+data:
+  config: ""
