@@ -45,6 +45,9 @@ spec:
       namespace: matter-server
     - group: gateway.networking.k8s.io
       kind: HTTPRoute
+      namespace: minecraft
+    - group: gateway.networking.k8s.io
+      kind: HTTPRoute
       namespace: observability
     - group: gateway.networking.k8s.io
       kind: HTTPRoute
@@ -52,9 +55,6 @@ spec:
     - group: gateway.networking.k8s.io
       kind: HTTPRoute
       namespace: qui
-    - group: gateway.networking.k8s.io
-      kind: HTTPRoute
-      namespace: rcon-web-admin
     - group: gateway.networking.k8s.io
       kind: HTTPRoute
       namespace: rook-ceph

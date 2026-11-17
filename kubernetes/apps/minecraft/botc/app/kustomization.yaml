@@ -7,5 +7,6 @@ resources:
   - ./ciliumnetworkpolicy.yaml
   - ./deployment.yaml
   - ./externalsecret.yaml
+  - ./httproute.yaml
   - ./pvc.yaml
   - ./service.yaml

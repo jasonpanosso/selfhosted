@@ -14,9 +14,6 @@ spec:
       app: thelounge
       capacity: 20Gi
       compressor: zstd
-    - namespace: rcon-web-admin
-      app: rcon-web-admin
-      capacity: 1Gi
     - namespace: bookboss
       app: bookboss
       capacity: 10Gi

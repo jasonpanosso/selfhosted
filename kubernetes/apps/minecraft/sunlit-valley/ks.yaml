@@ -10,6 +10,9 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   postBuild:
+    substituteFrom:
+      - kind: Secret
+        name: post-build-substitutions
     substitute:
       APP: *app
   path: ./kubernetes/apps/minecraft/sunlit-valley/app
@@ -23,6 +26,10 @@ spec:
       kind: Deployment
       name: *app
       namespace: *namespace
+    - apiVersion: apps/v1
+      kind: Deployment
+      name: sunlit-valley-rcon
+      namespace: *namespace
   sourceRef:
     kind: GitRepository
     name: flux-system
@@ -31,6 +38,8 @@ spec:
   dependsOn:
     - name: secret-store
       namespace: external-secrets
+    - name: gateway-api-crds
+      namespace: kube-system
     - name: rook-ceph-cluster
       namespace: rook-ceph
     - name: kopiur-repositories

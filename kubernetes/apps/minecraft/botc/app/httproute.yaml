@@ -1,0 +1,50 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/gateway.networking.k8s.io/httproute_v1.json
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: &app botc-rcon
+spec:
+  parentRefs:
+    - name: cilium
+      namespace: kube-system
+      sectionName: https
+  hostnames:
+    - rcon.botc.${domain}.${tld}
+  rules:
+    # the console has no auth of its own
+    - filters:
+        - type: ExternalAuth
+          externalAuth:
+            protocol: HTTP
+            backendRef:
+              name: authelia
+              namespace: auth
+              port: 80
+            http:
+              path: /api/authz/ext-authz/
+              allowedHeaders:
+                - accept
+                - cookie
+                - x-forwarded-proto
+                - x-requested-with
+              allowedResponseHeaders:
+                - Remote-User
+                - Remote-Name
+                - Remote-Groups
+                - Remote-Email
+        - type: RequestHeaderModifier
+          requestHeaderModifier:
+            set:
+              - name: X-Forwarded-For
+                value: "%DOWNSTREAM_REMOTE_ADDRESS_WITHOUT_PORT%"
+        - type: ResponseHeaderModifier
+          responseHeaderModifier:
+            set:
+              - name: Strict-Transport-Security
+                value: max-age=31536000
+      backendRefs:
+        - name: *app
+          port: 80
+      timeouts:
+        request: 0s

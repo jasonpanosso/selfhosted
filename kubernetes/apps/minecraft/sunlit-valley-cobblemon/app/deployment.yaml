@@ -89,7 +89,7 @@ spec:
             - name: ENABLE_RCON
               value: "true"
             - name: RCON_PASSWORD_FILE
-              value: /secrets/MINECRAFT_COBBLEMON_RCON_PASSWORD
+              value: /secrets/MINECRAFT_SUNLIT_VALLEY_COBBLEMON_RCON_PASSWORD
             - name: LEVEL
               value: sunlit-cobblemon
             - name: MOTD
@@ -176,3 +176,58 @@ spec:
             name: sunlit-valley-cobblemon-patches
         - name: tmp
           emptyDir: {}
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/master-standalone-strict/deployment-apps-v1.json
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: &app sunlit-valley-cobblemon-rcon
+  annotations:
+    reloader.stakater.com/auto: "true"
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: *app
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: *app
+    spec:
+      automountServiceAccountToken: false
+      securityContext:
+        runAsUser: 65532
+        runAsGroup: 65532
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: *app
+          image: ghcr.io/jasonpanosso/minecraft-rcon:2.8.7@sha256:cd83a321e50916baa3b4fc9f2f31df39e469827558ddb1febecde9f7b308ce34
+          env:
+            - name: RCON_HOST
+              value: sunlit-valley-cobblemon.minecraft.svc.cluster.local
+            - name: RCON_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: sunlit-valley-cobblemon
+                  key: MINECRAFT_SUNLIT_VALLEY_COBBLEMON_RCON_PASSWORD
+          ports:
+            - name: http
+              containerPort: 8888
+              protocol: TCP
+          livenessProbe: &probes
+            httpGet:
+              path: /
+              port: http
+            periodSeconds: 15
+          readinessProbe: *probes
+          resources:
+            requests:
+              cpu: 10m
+              memory: 64Mi
+            limits:
+              memory: 64Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities: {drop: [ALL]}
