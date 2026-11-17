@@ -7,8 +7,6 @@ metadata:
   labels:
     app.kubernetes.io/name: *app
 spec:
-  # minecraft-proxy's velocity.toml points at this address
-  clusterIP: 10.96.0.41
   selector:
     app.kubernetes.io/name: *app
   ports:

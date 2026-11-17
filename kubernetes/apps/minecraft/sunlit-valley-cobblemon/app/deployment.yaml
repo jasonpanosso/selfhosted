@@ -92,10 +92,6 @@ spec:
               value: /secrets/MINECRAFT_SUNLIT_VALLEY_COBBLEMON_RCON_PASSWORD
             - name: LEVEL
               value: sunlit-cobblemon
-            - name: MOTD
-              value: GULP im dead lock in
-            - name: ICON
-              value: https://cdn2.steamgriddb.com/logo_thumb/804a8294a8f33203683b3e6ed46fe092.png
             - name: DIFFICULTY
               value: normal
             - name: MODE

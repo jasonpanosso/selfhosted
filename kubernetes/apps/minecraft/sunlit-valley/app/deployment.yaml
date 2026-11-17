@@ -91,10 +91,6 @@ spec:
               value: "true"
             - name: RCON_PASSWORD_FILE
               value: /secrets/MINECRAFT_SUNLIT_VALLEY_RCON_PASSWORD
-            - name: MOTD
-              value: pour one out for cobblemon academy
-            - name: ICON
-              value: https://i.imgur.com/xCwev3X.png
             - name: DIFFICULTY
               value: normal
             - name: MODE

@@ -68,10 +68,10 @@ decompressed-bytes-per-second = 5242880
 
 [servers]
 # Configure your servers here. Each key represents the server's name, and the value
-# represents the IP address of the server to connect to.
-sunlit-valley-cobblemon = "10.96.0.40:25565"
-botc = "10.96.0.41:25565"
-sunlit-valley = "10.96.0.42:25565"
+# represents the address of the server to connect to.
+sunlit-valley-cobblemon = "sunlit-valley-cobblemon.minecraft.svc.cluster.local:25565"
+botc = "botc.minecraft.svc.cluster.local:25565"
+sunlit-valley = "sunlit-valley.minecraft.svc.cluster.local:25565"
 
 # In what order we should try servers when a player logs in or is kicked from a server.
 try = []
@@ -177,8 +177,10 @@ version = true
 # Should Velocity pass the player count from the backend server when responding to server list ping requests?
 players = true
 # Should Velocity pass the description from the backend server when responding to server list ping requests?
-description = true
+# MiniMOTD sets it per forced host, also while the backend is down
+description = false
 # Should Velocity pass the favicon (also known as the server icon) from the backend server when responding to server list ping requests?
-favicon = true
+# MiniMOTD sets it per forced host, also while the backend is down
+favicon = false
 # Should Velocity pass the mod list from the backend server when responding to server list ping requests?
 modinfo = true

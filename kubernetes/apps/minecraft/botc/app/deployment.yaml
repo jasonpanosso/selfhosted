@@ -59,10 +59,6 @@ spec:
               value: "true"
             - name: RCON_PASSWORD_FILE
               value: /secrets/MINECRAFT_BOTC_RCON_PASSWORD
-            - name: MOTD
-              value: mingee is lying
-            - name: ICON
-              value: https://cdn.modrinth.com/data/nihni4Eg/feaeb4d5f738be51be30085b610884639af99b8a.png
             - name: DIFFICULTY
               value: normal
             - name: MODE

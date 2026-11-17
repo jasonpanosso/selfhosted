@@ -32,6 +32,7 @@ spec:
           command:
             - cp
             - /opt/plugins/ambassador/ambassador.jar
+            - /opt/plugins/minimotd/minimotd.jar
             - /server/plugins/
           resources:
             requests:
@@ -48,6 +49,9 @@ spec:
               mountPath: /server/plugins
             - name: ambassador
               mountPath: /opt/plugins/ambassador
+              readOnly: true
+            - name: minimotd-jar
+              mountPath: /opt/plugins/minimotd
               readOnly: true
         - name: download-simple-voice-chat
           image: docker.io/curlimages/curl:8.23.0@sha256:3fb7e13e5d179a845c97d78204f3f1064d1907037f26a3ebf91710571151fd93
@@ -72,6 +76,31 @@ spec:
           volumeMounts:
             - name: plugins
               mountPath: /server/plugins
+        # MiniMOTD rewrites its config files on load, so they can't be read-only mounts
+        - name: copy-minimotd-config
+          image: docker.io/library/eclipse-temurin:25.0.5_8-jre-noble@sha256:e3b6f7887a50f20d8f07abf279d8a81a5953fb398a9555bd9edd56b9bd15968c
+          command:
+            - cp
+            - --recursive
+            - --dereference
+            - /opt/minimotd/main.conf
+            - /opt/minimotd/plugin_settings.conf
+            - /opt/minimotd/extra-configs
+            - /opt/minimotd/icons
+            - /server/plugins/minimotd/
+          resources:
+            requests:
+              cpu: 10m
+              memory: 64Mi
+            limits:
+              memory: 64Mi
+          securityContext: *securityContext
+          volumeMounts:
+            - name: minimotd
+              mountPath: /server/plugins/minimotd
+            - name: minimotd-config
+              mountPath: /opt/minimotd
+              readOnly: true
       containers:
         - name: *app
           image: docker.io/library/eclipse-temurin:25.0.5_8-jre-noble@sha256:e3b6f7887a50f20d8f07abf279d8a81a5953fb398a9555bd9edd56b9bd15968c
@@ -116,6 +145,8 @@ spec:
               mountPath: /server
             - name: plugins
               mountPath: /server/plugins
+            - name: minimotd
+              mountPath: /server/plugins/minimotd
             - name: velocity
               mountPath: /opt/velocity
               readOnly: true
@@ -137,15 +168,41 @@ spec:
             pullPolicy: IfNotPresent
         - name: plugins
           emptyDir: {}
+        - name: minimotd
+          emptyDir: {}
         - name: ambassador
           image:
             reference: ghcr.io/jasonpanosso/ambassador:v1.4.5@sha256:c08cce3fb6094cb0ca22a4fb2bb7dfc602aa9b52ac2181d9dbdd72567bf0de70
+            pullPolicy: IfNotPresent
+        - name: minimotd-jar
+          image:
+            reference: ghcr.io/jasonpanosso/minimotd:v2.2.5@sha256:255fa3b637a4d991f0b0a497a5efb7eab3fbb4e68ec6f736c61c340ee136bbe9
             pullPolicy: IfNotPresent
         - name: tmp
           emptyDir: {}
         - name: config
           configMap:
             name: *app
+        - name: minimotd-config
+          configMap:
+            name: *app
+            items:
+              - key: minimotd-main.conf
+                path: main.conf
+              - key: minimotd-plugin_settings.conf
+                path: plugin_settings.conf
+              - key: minimotd-botc.conf
+                path: extra-configs/botc.conf
+              - key: minimotd-sunlit-valley.conf
+                path: extra-configs/sunlit-valley.conf
+              - key: minimotd-sunlit-valley-cobblemon.conf
+                path: extra-configs/sunlit-valley-cobblemon.conf
+              - key: minimotd-botc.png
+                path: icons/botc.png
+              - key: minimotd-sunlit-valley.png
+                path: icons/sunlit-valley.png
+              - key: minimotd-sunlit-valley-cobblemon.png
+                path: icons/sunlit-valley-cobblemon.png
         - name: forwarding-secret
           secret:
             secretName: *app
