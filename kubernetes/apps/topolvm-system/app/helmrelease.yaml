@@ -75,6 +75,13 @@ spec:
           enabled: true
     controller:
       priorityClassName: system-cluster-critical
+    # chart hardcodes the container securityContexts, can't set readOnlyRootFilesystem
+    securityContext:
+      runAsNonRoot: true
+      runAsUser: 10000
+      runAsGroup: 10000
+      seccompProfile:
+        type: RuntimeDefault
     priorityClass:
       enabled: false
     resources:
