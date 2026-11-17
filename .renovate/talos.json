@@ -1,0 +1,64 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "customManagers": [
+    {
+      "customType": "regex",
+      "description": "Talos installer images in Talos patches",
+      "managerFilePatterns": ["/(^|/)talos/.+\\.ya?ml$/"],
+      "matchStrings": ["factory\\.talos\\.dev/metal-installer/[0-9a-f]{64}:v(?<currentValue>\\d+\\.\\d+\\.\\d+)"],
+      "depNameTemplate": "ghcr.io/siderolabs/installer-base",
+      "datasourceTemplate": "docker",
+      "extractVersionTemplate": "^v(?<version>.+)$"
+    },
+    {
+      "customType": "regex",
+      "description": "Kubernetes images in Talos patches",
+      "managerFilePatterns": ["/(^|/)talos/.+\\.ya?ml$/"],
+      "matchStrings": [
+        "image: (?<depName>(ghcr\\.io/siderolabs/kubelet|registry\\.k8s\\.io/kube-(apiserver|controller-manager|scheduler|proxy))):(?<currentValue>v\\d+\\.\\d+\\.\\d+)"
+      ],
+      "datasourceTemplate": "docker"
+    }
+  ],
+  "packageRules": [
+    {
+      "description": "Talos Group: installer images and talosctl in flake.nix. Upgrades go through the latest patch of each minor, so patches keep their own PR after the next minor ships",
+      "groupName": "Talos",
+      "matchPackageNames": ["ghcr.io/siderolabs/installer-base", "siderolabs/talos"],
+      "separateMultipleMinor": true,
+      "separateMinorPatch": true,
+      "group": {
+        "commitMessageTopic": "{{{groupName}}} group"
+      }
+    },
+    {
+      "description": "Kubernetes Group: control plane images and kubectl in flake.nix",
+      "groupName": "Kubernetes",
+      "matchPackageNames": [
+        "kubernetes/kubernetes",
+        "ghcr.io/siderolabs/kubelet",
+        "registry.k8s.io/kube-apiserver",
+        "registry.k8s.io/kube-controller-manager",
+        "registry.k8s.io/kube-scheduler",
+        "registry.k8s.io/kube-proxy"
+      ],
+      "separateMultipleMinor": true,
+      "group": {
+        "commitMessageTopic": "{{{groupName}}} group"
+      }
+    },
+    {
+      "description": "worker-7 initcall_blacklist names an LTO initcall stub whose counter shifts between kernel builds: scripts/talos-initcall-blacklist.sh finds it in the new kernel, rewrites the schematic and installer image",
+      "matchManagers": ["custom.regex"],
+      "matchFileNames": ["talos/nodes/worker/worker-7.yaml"],
+      "postUpgradeTasks": {
+        "commands": ["bash scripts/talos-initcall-blacklist.sh worker-7 arm64"],
+        "fileFilters": [
+          "talos/nodes/worker/worker-7.yaml",
+          "talos/nodes/worker/worker-7.schematic.yaml"
+        ],
+        "executionMode": "update"
+      }
+    }
+  ]
+}

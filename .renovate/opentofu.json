@@ -13,6 +13,14 @@
       "matchDepTypes": ["required_version"],
       "overrideDepName": "opentofu/opentofu",
       "overridePackageName": "opentofu/opentofu"
+    },
+    {
+      "description": "OpenTofu Group: tofu in flake.nix and required_version in terraform/backend.tf",
+      "groupName": "OpenTofu",
+      "matchPackageNames": ["opentofu/opentofu"],
+      "group": {
+        "commitMessageTopic": "{{{groupName}}} group"
+      }
     }
   ]
 }

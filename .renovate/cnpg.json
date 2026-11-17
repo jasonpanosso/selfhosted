@@ -1,0 +1,26 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "customManagers": [
+    {
+      "customType": "regex",
+      "description": "CloudNativePG Cluster imageName",
+      "managerFilePatterns": ["/(^|/)kubernetes/.+\\.ya?ml$/"],
+      "matchStrings": [
+        "imageName: (?<depName>[^\\s:@]+):(?<currentValue>[^\\s@]+)(@(?<currentDigest>sha256:[0-9a-f]{64}))?"
+      ],
+      "datasourceTemplate": "docker"
+    }
+  ],
+  "packageRules": [
+    {
+      "description": "Postgres majors run pg_upgrade in place; hold for dashboard approval",
+      "matchDatasources": ["docker"],
+      "matchPackageNames": ["ghcr.io/cloudnative-pg/postgresql"],
+      "matchUpdateTypes": ["major"],
+      "dependencyDashboardApproval": true,
+      "prBodyNotes": [
+        "Major upgrade: change `serverName` in both `plugins` and `externalClusters` of `db/app/cluster.yaml` in this PR, or the new timeline 1 overwrites the old archive."
+      ]
+    }
+  ]
+}

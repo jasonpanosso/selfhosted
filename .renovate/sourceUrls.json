@@ -1,0 +1,39 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "packageRules": [
+    {
+      "description": "Chart source points at grafana/grafana, whose app releases share version numbers with the chart",
+      "matchDatasources": ["docker"],
+      "matchPackageNames": ["ghcr.io/grafana-community/helm-charts/grafana"],
+      "sourceUrl": "https://github.com/grafana-community/helm-charts"
+    },
+    {
+      "description": "Chart source points at the operator repo",
+      "matchDatasources": ["docker"],
+      "matchPackageNames": [
+        "ghcr.io/open-telemetry/opentelemetry-helm-charts/opentelemetry-operator"
+      ],
+      "sourceUrl": "https://github.com/open-telemetry/opentelemetry-helm-charts"
+    },
+    {
+      "description": "Chart has no source, chart version matches the app's v<version> tags",
+      "matchDatasources": ["docker"],
+      "matchPackageNames": ["ghcr.io/spegel-org/helm-charts/spegel"],
+      "sourceUrl": "https://github.com/spegel-org/spegel"
+    },
+    {
+      "description": "Chart has no source, chart version matches the operator's v<version> tags",
+      "matchDatasources": ["docker"],
+      "matchPackageNames": [
+        "ghcr.io/dragonflydb/dragonfly-operator/helm/dragonfly-operator"
+      ],
+      "sourceUrl": "https://github.com/dragonflydb/dragonfly-operator"
+    },
+    {
+      "description": "Image has no source label, only the jellyfin.org homepage",
+      "matchDatasources": ["docker"],
+      "matchPackageNames": ["ghcr.io/jellyfin/jellyfin"],
+      "sourceUrl": "https://github.com/jellyfin/jellyfin"
+    }
+  ]
+}

@@ -36,39 +36,6 @@
       "group": {
         "commitMessageTopic": "{{{groupName}}} group"
       }
-    },
-    {
-      "description": "Talos Group: installer images and talosctl in flake.nix",
-      "groupName": "Talos",
-      "matchPackageNames": ["ghcr.io/siderolabs/installer-base", "siderolabs/talos"],
-      "separateMultipleMinor": true,
-      "group": {
-        "commitMessageTopic": "{{{groupName}}} group"
-      }
-    },
-    {
-      "description": "OpenTofu Group: tofu in flake.nix and required_version in terraform/backend.tf",
-      "groupName": "OpenTofu",
-      "matchPackageNames": ["opentofu/opentofu"],
-      "group": {
-        "commitMessageTopic": "{{{groupName}}} group"
-      }
-    },
-    {
-      "description": "Kubernetes Group: control plane images and kubectl in flake.nix",
-      "groupName": "Kubernetes",
-      "matchPackageNames": [
-        "kubernetes/kubernetes",
-        "ghcr.io/siderolabs/kubelet",
-        "registry.k8s.io/kube-apiserver",
-        "registry.k8s.io/kube-controller-manager",
-        "registry.k8s.io/kube-scheduler",
-        "registry.k8s.io/kube-proxy"
-      ],
-      "separateMultipleMinor": true,
-      "group": {
-        "commitMessageTopic": "{{{groupName}}} group"
-      }
     }
   ]
 }

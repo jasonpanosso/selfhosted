@@ -1,0 +1,33 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "customManagers": [
+    {
+      "customType": "regex",
+      "description": "GitHub release binaries in flake.nix; the match runs to the end of the url so every version in it is replaced",
+      "managerFilePatterns": ["/(^|/)flake\\.nix$/"],
+      "matchStrings": ["https://github\\.com/(?<depName>[^/]+/[^/]+)/releases/download/v(?<currentValue>[^/]+)/[^\"]+"],
+      "datasourceTemplate": "github-releases",
+      "extractVersionTemplate": "^v(?<version>.+)$"
+    },
+    {
+      "customType": "regex",
+      "description": "kubectl binaries in flake.nix",
+      "managerFilePatterns": ["/(^|/)flake\\.nix$/"],
+      "matchStrings": ["https://dl\\.k8s\\.io/release/(?<currentValue>v[^/]+)/[^\"]+"],
+      "depNameTemplate": "kubernetes/kubernetes",
+      "datasourceTemplate": "github-releases"
+    }
+  ],
+  "packageRules": [
+    {
+      "description": "flake.nix binaries: Renovate can't compute the new sha256, scripts/flake-hashes.sh downloads and hashes the changed urls",
+      "matchManagers": ["custom.regex"],
+      "matchFileNames": ["flake.nix"],
+      "postUpgradeTasks": {
+        "commands": ["bash scripts/flake-hashes.sh"],
+        "fileFilters": ["flake.nix"],
+        "executionMode": "update"
+      }
+    }
+  ]
+}
