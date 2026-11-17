@@ -10,13 +10,7 @@ spec:
     name: letsencrypt
     kind: ClusterIssuer
   commonName: ${domain}.${tld}
-  dnsNames:
-    - ${domain}.${tld}
-    - "*.${domain}.${tld}"
-    # minecraft rcon consoles, one level below each server's hostname
-    - rcon.botc.${domain}.${tld}
-    - rcon.cobblemon.${domain}.${tld}
-    - rcon.sunlit-valley.${domain}.${tld}
+  dnsNames: ["${domain}.${tld}", "*.${domain}.${tld}"]
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/cert-manager.io/certificate_v1.json
 apiVersion: cert-manager.io/v1
