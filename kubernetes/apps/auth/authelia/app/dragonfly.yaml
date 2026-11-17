@@ -16,6 +16,8 @@ spec:
       name: authelia
       key: REDIS_PASSWORD
   replicas: 2
+  # automountServiceAccountToken: false is set on the ServiceAccount
+  serviceAccountName: dragonfly
   affinity:
     podAntiAffinity:
       requiredDuringSchedulingIgnoredDuringExecution:

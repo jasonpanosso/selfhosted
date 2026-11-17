@@ -12,6 +12,7 @@ resources:
   - ./poddisruptionbudget.yaml
   - ./referencegrant.yaml
   - ./service.yaml
+  - ./serviceaccount.yaml
   - ./servicemonitor.yaml
 
 configMapGenerator:
