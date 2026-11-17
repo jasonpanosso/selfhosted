@@ -24,6 +24,10 @@ spec:
       kind: Gateway
       name: cilium-internal
       namespace: *namespace
+    - apiVersion: gateway.networking.k8s.io/v1
+      kind: Gateway
+      name: cilium-jellyfin
+      namespace: *namespace
     - apiVersion: cert-manager.io/v1
       kind: Certificate
       name: wildcard

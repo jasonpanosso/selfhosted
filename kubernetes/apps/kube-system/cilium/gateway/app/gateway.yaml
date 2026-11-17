@@ -61,3 +61,37 @@ spec:
         certificateRefs:
           - kind: Secret
             name: wildcard-home-tls
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/gateway.networking.k8s.io/gateway_v1.json
+# jellyfin only, for random wireguard + vlan 50 access
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: cilium-jellyfin
+spec:
+  gatewayClassName: cilium
+  addresses:
+    - type: IPAddress
+      value: 192.168.21.13
+  listeners:
+    - name: http
+      protocol: HTTP
+      port: 80
+      hostname: watch.home.${domain}.${tld}
+      allowedRoutes:
+        namespaces:
+          from: Same
+    - name: https
+      protocol: HTTPS
+      port: 443
+      hostname: watch.home.${domain}.${tld}
+      allowedRoutes:
+        namespaces:
+          from: Selector
+          selector:
+            matchLabels:
+              kubernetes.io/metadata.name: jellyfin
+      tls:
+        certificateRefs:
+          - kind: Secret
+            name: wildcard-home-tls

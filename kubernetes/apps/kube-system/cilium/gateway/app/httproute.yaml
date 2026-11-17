@@ -15,6 +15,9 @@ spec:
     - name: cilium-internal
       namespace: kube-system
       sectionName: http
+    - name: cilium-jellyfin
+      namespace: kube-system
+      sectionName: http
   rules:
     - filters:
         - requestRedirect:
