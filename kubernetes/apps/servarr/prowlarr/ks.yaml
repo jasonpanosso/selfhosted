@@ -15,6 +15,10 @@ spec:
   timeout: 10m
   wait: false
   prune: true
+  postBuild:
+    substituteFrom:
+      - kind: Secret
+        name: post-build-substitutions
   healthChecks:
     - apiVersion: apps/v1
       kind: Deployment

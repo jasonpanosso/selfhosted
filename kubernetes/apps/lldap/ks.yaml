@@ -14,6 +14,10 @@ spec:
   timeout: 5m
   path: ./kubernetes/apps/lldap/app
   prune: true
+  postBuild:
+    substituteFrom:
+      - kind: Secret
+        name: post-build-substitutions
   wait: false
   healthChecks:
     - apiVersion: apps/v1

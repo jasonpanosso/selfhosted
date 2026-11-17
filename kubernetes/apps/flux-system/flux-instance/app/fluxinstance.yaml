@@ -98,18 +98,16 @@ spec:
         patch: |
           - op: add
             path: /spec/template/spec/containers/0/args/-
-            value: --feature-gates=OOMWatch=true
-          - op: add
-            path: /spec/template/spec/containers/0/args/-
             value: --oom-watch-memory-threshold=95
           - op: add
             path: /spec/template/spec/containers/0/args/-
             value: --oom-watch-interval=500ms
-      - # Disable chart digest tracking
+      - # Feature gates: near OOM detection, no chart digest tracking, and
+        # RetryOnFailure for HelmReleases that don't set an install/upgrade strategy
         patch: |
           - op: add
             path: /spec/template/spec/containers/0/args/-
-            value: --feature-gates=DisableChartDigestTracking=true
+            value: --feature-gates=OOMWatch=true,DisableChartDigestTracking=true,DefaultToRetryOnFailure=true
         target:
           kind: Deployment
           name: helm-controller

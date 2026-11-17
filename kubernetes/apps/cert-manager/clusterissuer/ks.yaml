@@ -14,6 +14,10 @@ spec:
   retryInterval: 2m
   path: ./kubernetes/apps/cert-manager/clusterissuer/app
   prune: true
+  postBuild:
+    substituteFrom:
+      - kind: Secret
+        name: post-build-substitutions
   wait: false
   healthChecks:
     - apiVersion: cert-manager.io/v1

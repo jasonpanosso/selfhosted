@@ -13,12 +13,20 @@ spec:
         kind: HelmRepository
         name: *app
   interval: 1h
-  upgrade:
+  driftDetection:
+    mode: enabled
+  install:
+    crds: CreateReplace
     strategy:
-      name: RemediateOnFailure
-    remediation:
-      remediateLastFailure: true
-      retries: 2
+      name: RetryOnFailure
+  rollback:
+    cleanupOnFail: true
+  upgrade:
+    cleanupOnFail: true
+    crds: CreateReplace
+    # never roll back: a rollback re-applies this chart's older (templated) CRDs
+    strategy:
+      name: RetryOnFailure
   # the chart has no additive volumeMounts for topolvm-node, append here instead
   postRenderers:
     - kustomize:

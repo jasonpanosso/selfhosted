@@ -8,7 +8,6 @@ metadata:
 spec:
   decryption:
     provider: sops
-  deletionPolicy: MirrorPrune
   interval: 1h
   retryInterval: 2m
   prune: true
@@ -18,43 +17,3 @@ spec:
     name: flux-system
     namespace: flux-system
   wait: false
-  patches:
-    - # Add Sops decryption & substitutions to child Kustomizations
-      target:
-        group: kustomize.toolkit.fluxcd.io
-        kind: Kustomization
-      patch: |-
-        apiVersion: kustomize.toolkit.fluxcd.io/v1
-        kind: Kustomization
-        metadata:
-          name: _
-        spec:
-          decryption:
-            provider: sops
-          # on deletion, objects are removed only when the child has prune: true
-          deletionPolicy: MirrorPrune
-          patches:
-            - patch: |-
-                apiVersion: helm.toolkit.fluxcd.io/v2
-                kind: HelmRelease
-                metadata:
-                  name: _
-                spec:
-                  driftDetection:
-                    mode: enabled
-                  install:
-                    crds: CreateReplace
-                    strategy:
-                      name: RetryOnFailure
-                  rollback:
-                    cleanupOnFail: true
-                  upgrade:
-                    cleanupOnFail: true
-                    crds: CreateReplace
-              target:
-                group: helm.toolkit.fluxcd.io
-                kind: HelmRelease
-          postBuild:
-            substituteFrom:
-              - kind: Secret
-                name: post-build-substitutions

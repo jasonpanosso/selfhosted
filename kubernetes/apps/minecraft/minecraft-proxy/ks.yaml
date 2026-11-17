@@ -10,6 +10,9 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   postBuild:
+    substituteFrom:
+      - kind: Secret
+        name: post-build-substitutions
     substitute:
       APP: *app
   path: ./kubernetes/apps/minecraft/minecraft-proxy/app

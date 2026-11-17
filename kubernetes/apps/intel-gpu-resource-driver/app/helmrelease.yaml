@@ -9,7 +9,17 @@ spec:
     kind: OCIRepository
     name: *app
   interval: 1h
+  driftDetection:
+    mode: enabled
+  install:
+    crds: CreateReplace
+    strategy:
+      name: RetryOnFailure
+  rollback:
+    cleanupOnFail: true
   upgrade:
+    cleanupOnFail: true
+    crds: CreateReplace
     strategy:
       name: RemediateOnFailure
     remediation:

@@ -11,7 +11,17 @@ spec:
   interval: 1h
   # above the dashboard sidecar startupProbe budget (300s)
   timeout: 10m
+  driftDetection:
+    mode: enabled
+  install:
+    crds: CreateReplace
+    strategy:
+      name: RetryOnFailure
+  rollback:
+    cleanupOnFail: true
   upgrade:
+    cleanupOnFail: true
+    crds: CreateReplace
     strategy:
       name: RemediateOnFailure
     remediation:

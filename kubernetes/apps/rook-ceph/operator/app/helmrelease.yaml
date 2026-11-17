@@ -9,7 +9,18 @@ spec:
     kind: OCIRepository
     name: *app
   interval: 1h
+  driftDetection:
+    mode: enabled
+  install:
+    crds: CreateReplace
+    strategy:
+      name: RetryOnFailure
+  rollback:
+    cleanupOnFail: true
   upgrade:
+    cleanupOnFail: true
+    crds: CreateReplace
+    # never roll back: a rollback can downgrade Ceph or the operator mid-upgrade
     strategy:
       name: RetryOnFailure
   values:
