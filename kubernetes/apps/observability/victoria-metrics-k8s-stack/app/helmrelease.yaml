@@ -208,6 +208,26 @@ spec:
         disableAutomountServiceAccountToken: true
         useStrictSecurity: true
         retentionPeriod: 10d
+        extraArgs:
+          deleteAuthKey: &authKey file:///etc/vm/secrets/vmsingle/VMSINGLE_AUTH_KEY
+          snapshotAuthKey: *authKey
+          forceMergeAuthKey: *authKey
+          forceFlushAuthKey: *authKey
+          logNewSeriesAuthKey: *authKey
+          search.resetCacheAuthKey: *authKey
+          metricNamesStatsResetAuthKey: *authKey
+          reloadAuthKey: *authKey
+          configAuthKey: *authKey
+          flagsAuthKey: *authKey
+          pprofAuthKey: *authKey
+        volumes:
+          - name: auth-key
+            secret:
+              secretName: vmsingle
+        volumeMounts:
+          - name: auth-key
+            mountPath: /etc/vm/secrets/vmsingle
+            readOnly: true
         resources:
           requests:
             cpu: 500m
