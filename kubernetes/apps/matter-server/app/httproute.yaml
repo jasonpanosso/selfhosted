@@ -1,6 +1,5 @@
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/gateway.networking.k8s.io/httproute_v1.json
-# dashboard and unauthenticated websocket API share 5580
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
 metadata:
@@ -9,11 +8,11 @@ metadata:
     app.kubernetes.io/name: *app
 spec:
   parentRefs:
-    - name: cilium
+    - name: cilium-internal
       namespace: kube-system
       sectionName: https
   hostnames:
-    - matter.${domain}.${tld}
+    - matter.home.${domain}.${tld}
   rules:
     - filters:
         - type: ExternalAuth
