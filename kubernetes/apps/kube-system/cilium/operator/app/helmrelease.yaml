@@ -137,7 +137,7 @@ spec:
     resources:
       requests:
         cpu: 150m
-        memory: 512Mi
+        memory: 640Mi
     rollOutCiliumPods: true
     routingMode: native
     securityContext:
