@@ -6,8 +6,6 @@ metadata:
   name: &app jellyfin
   labels:
     app.kubernetes.io/name: *app
-  annotations:
-    reloader.stakater.com/auto: "true"
 spec:
   # above the startupProbe budget (900s)
   progressDeadlineSeconds: 1200
