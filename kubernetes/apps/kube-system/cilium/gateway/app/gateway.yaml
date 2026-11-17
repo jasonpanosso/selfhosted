@@ -7,7 +7,7 @@ metadata:
   annotations:
     external-dns.kubernetes.io/target: kubernetes.${domain}.${tld}
 spec:
-  gatewayClassName: cilium
+  gatewayClassName: cilium-lb
   addresses:
     - type: IPAddress
       value: 192.168.21.11
@@ -37,7 +37,7 @@ kind: Gateway
 metadata:
   name: cilium-internal
 spec:
-  gatewayClassName: cilium
+  gatewayClassName: cilium-lb
   addresses:
     - type: IPAddress
       value: 192.168.21.12
@@ -69,7 +69,7 @@ kind: Gateway
 metadata:
   name: cilium-jellyfin
 spec:
-  gatewayClassName: cilium
+  gatewayClassName: cilium-lb
   addresses:
     - type: IPAddress
       value: 192.168.21.13

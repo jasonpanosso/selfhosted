@@ -5,9 +5,11 @@ kind: Kustomization
 
 resources:
   - ./ciliumclusterwidenetworkpolicy.yaml
+  - ./ciliumgatewayclassconfig.yaml
   - ./ciliumloadbalancerippool.yaml
   - ./ciliumnetworkpolicy.yaml
   - ./ciliumnodeconfig.yaml
+  - ./gatewayclass.yaml
   - ./helmrelease.yaml
   - ./httproute.yaml
   - ./ocirepository.yaml
