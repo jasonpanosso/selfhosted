@@ -9,3 +9,5 @@ resources:
   - ./clusterrole.yaml
   - ./clusterrolebinding.yaml
   - ./opentelemetrycollector.yaml
+  - ./podmonitor.yaml
+  - ./prometheusrule.yaml

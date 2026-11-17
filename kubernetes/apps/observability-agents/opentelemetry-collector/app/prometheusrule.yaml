@@ -1,0 +1,43 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/monitoring.coreos.com/prometheusrule_v1.json
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: opentelemetry-collector-rules
+spec:
+  groups:
+    # covers both log collectors: node (observability-agents) and cluster (observability)
+    - name: opentelemetry-collector.rules
+      rules:
+        # sending_queue is sized in bytes, so size and capacity are both bytes
+        - alert: OtelCollectorExporterQueueFilling
+          expr: |
+            otelcol_exporter_queue_size / otelcol_exporter_queue_capacity > 0.8
+          for: 5m
+          annotations:
+            summary: >-
+              {{ $labels.namespace }}/{{ $labels.pod }} exporter {{ $labels.exporter }} queue is {{ $value | humanizePercentage }} full
+          labels:
+            severity: warning
+
+        # retry_on_failure never gives up, so these are permanent errors (records dropped);
+        # the counter only exists after the first failure
+        - alert: OtelCollectorExporterSendFailed
+          expr: |
+            sum by (namespace, pod, exporter) (increase(otelcol_exporter_send_failed_log_records[15m])) > 0
+          for: 0m
+          annotations:
+            summary: >-
+              {{ $labels.namespace }}/{{ $labels.pod }} exporter {{ $labels.exporter }} dropped {{ $value | humanize }} log records in 15m
+          labels:
+            severity: warning
+
+        - alert: OtelCollectorNoLogsSent
+          expr: |
+            rate(otelcol_exporter_sent_log_records[30m]) == 0
+          for: 5m
+          annotations:
+            summary: >-
+              {{ $labels.namespace }}/{{ $labels.pod }} exporter {{ $labels.exporter }} has sent no log records for 30m
+          labels:
+            severity: warning
