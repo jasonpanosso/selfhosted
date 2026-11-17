@@ -6,6 +6,11 @@ on:
   pull_request:
     branches:
       - main
+    paths:
+      - .github/workflows/kubeconform.yaml
+      - flake.lock
+      - flake.nix
+      - kubernetes/**
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.number || github.ref }}
@@ -15,25 +20,7 @@ permissions:
   contents: read
 
 jobs:
-  filter:
-    name: kubeconform - Filter
-    runs-on: ubuntu-latest
-    outputs:
-      changed-files: ${{ steps.changed-files.outputs.changed_files }}
-    steps:
-      - name: Get Changed Files
-        id: changed-files
-        uses: bjw-s-labs/action-changed-files@147be9638332cf68fd60714a610509d7a9360d60 # v0.7.0
-        with:
-          patterns: |
-            .github/workflows/kubeconform.yaml
-            flake.lock
-            flake.nix
-            kubernetes/**/*
-
   validate:
-    if: ${{ needs.filter.outputs.changed-files != '[]' }}
-    needs: filter
     name: kubeconform - Validate
     runs-on: ubuntu-latest
     steps:
