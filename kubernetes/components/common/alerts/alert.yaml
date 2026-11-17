@@ -21,6 +21,8 @@ spec:
       name: "*"
     - kind: OCIRepository
       name: "*"
+    - kind: ResourceSet
+      name: "*"
   exclusionList:
     - error.*lookup.*github
     - dial.*tcp.*timeout
