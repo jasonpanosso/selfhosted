@@ -77,6 +77,7 @@ spec:
             - name: plugins
               mountPath: /server/plugins
         # MiniMOTD rewrites its config files on load, so they can't be read-only mounts
+        # Velocity names the data directory after the plugin id, minimotd-velocity
         - name: copy-minimotd-config
           image: docker.io/library/eclipse-temurin:25.0.5_8-jre-noble@sha256:e3b6f7887a50f20d8f07abf279d8a81a5953fb398a9555bd9edd56b9bd15968c
           command:
@@ -87,7 +88,7 @@ spec:
             - /opt/minimotd/plugin_settings.conf
             - /opt/minimotd/extra-configs
             - /opt/minimotd/icons
-            - /server/plugins/minimotd/
+            - /server/plugins/minimotd-velocity/
           resources:
             requests:
               cpu: 10m
@@ -97,7 +98,7 @@ spec:
           securityContext: *securityContext
           volumeMounts:
             - name: minimotd
-              mountPath: /server/plugins/minimotd
+              mountPath: /server/plugins/minimotd-velocity
             - name: minimotd-config
               mountPath: /opt/minimotd
               readOnly: true
@@ -146,7 +147,7 @@ spec:
             - name: plugins
               mountPath: /server/plugins
             - name: minimotd
-              mountPath: /server/plugins/minimotd
+              mountPath: /server/plugins/minimotd-velocity
             - name: velocity
               mountPath: /opt/velocity
               readOnly: true
