@@ -75,6 +75,9 @@ spec:
           enabled: true
     controller:
       priorityClassName: system-cluster-critical
+      prometheus:
+        podMonitor:
+          enabled: true
     # chart hardcodes the container securityContexts, can't set readOnlyRootFilesystem
     securityContext:
       runAsNonRoot: true
