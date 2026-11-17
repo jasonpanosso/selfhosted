@@ -1,0 +1,54 @@
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
+name: rook-ceph-csi
+
+on:
+  pull_request:
+    branches:
+      - main
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  filter:
+    name: rook-ceph-csi - Filter
+    runs-on: ubuntu-latest
+    outputs:
+      changed-files: ${{ steps.changed-files.outputs.changed_files }}
+    steps:
+      - name: Get Changed Files
+        id: changed-files
+        uses: bjw-s-labs/action-changed-files@147be9638332cf68fd60714a610509d7a9360d60 # v0.7.0
+        with:
+          patterns: |
+            .github/workflows/rook-ceph-csi.yaml
+            kubernetes/apps/rook-ceph/operator/app/ocirepository.yaml
+            kubernetes/apps/rook-ceph/ceph-csi-drivers/app/ocirepository.yaml
+
+  check:
+    if: ${{ needs.filter.outputs.changed-files != '[]' }}
+    needs: filter
+    name: rook-ceph-csi - Check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      # ceph-csi-drivers must be the ceph-csi-operator version that the rook-ceph release bundles
+      - name: Check ceph-csi-drivers version
+        run: |
+          rook=$(yq '.spec.ref.tag' kubernetes/apps/rook-ceph/operator/app/ocirepository.yaml)
+          drivers=$(yq '.spec.ref.tag' kubernetes/apps/rook-ceph/ceph-csi-drivers/app/ocirepository.yaml)
+          bundled=$(curl -fsSL https://charts.rook.io/release/index.yaml \
+            | yq ".entries.\"rook-ceph\"[] | select(.version == \"$rook\") | .dependencies[] | select(.name == \"ceph-csi-operator\") | .version")
+          echo "rook-ceph $rook bundles ceph-csi-operator ${bundled:-<none>}, ceph-csi-drivers is $drivers"
+          if [ "$drivers" != "$bundled" ]; then
+            echo "::error file=kubernetes/apps/rook-ceph/ceph-csi-drivers/app/ocirepository.yaml::ceph-csi-drivers $drivers is not the ceph-csi-operator version bundled with rook-ceph $rook (${bundled:-not found in charts.rook.io index})"
+            exit 1
+          fi

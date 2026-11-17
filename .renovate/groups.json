@@ -14,15 +14,7 @@
       "description": "Rook-Ceph Group",
       "groupName": "Rook-Ceph",
       "matchDatasources": ["docker"],
-      "matchPackageNames": ["/rook-ceph/", "/rook-ceph-cluster/"],
-      "group": {
-        "commitMessageTopic": "{{{groupName}}} group"
-      }
-    },
-    {
-      "description": "Rook-Ceph Group: ceph-csi-drivers follows the ceph-csi-operator bundled in rook-ceph",
-      "groupName": "Rook-Ceph",
-      "matchDatasources": ["custom.rook-ceph-csi-operator"],
+      "matchPackageNames": ["/rook-ceph/", "/rook-ceph-cluster/", "/ceph-csi-drivers/"],
       "group": {
         "commitMessageTopic": "{{{groupName}}} group"
       }

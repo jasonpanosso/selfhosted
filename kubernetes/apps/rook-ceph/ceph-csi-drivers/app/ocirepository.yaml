@@ -10,9 +10,9 @@ spec:
     mediaType: application/vnd.cncf.helm.chart.content.v1.tar+gzip
     operation: copy
   ref:
-    # no digest: the custom datasource only bumps the tag, and a stale digest would win over it
-    # renovate: datasource=custom.rook-ceph-csi-operator depName=ceph-csi-drivers
+    # must equal the ceph-csi-operator version bundled with rook-ceph (rook-ceph-csi CI check)
     tag: 1.1.0
+    digest: sha256:8c9ddb89e991889a41876b4eac85908a04dbe007b3766843bdac5db59ccab2a2
   url: oci://ghcr.io/home-operations/charts-mirror/ceph-csi-drivers
   verify:
     provider: cosign
