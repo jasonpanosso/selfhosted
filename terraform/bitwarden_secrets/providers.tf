@@ -7,7 +7,7 @@ terraform {
 
     bitwarden = {
       source  = "maxlaverse/bitwarden"
-      version = "0.22.0"
+      version = "0.23.0"
     }
 
     bitwarden-secrets = {
