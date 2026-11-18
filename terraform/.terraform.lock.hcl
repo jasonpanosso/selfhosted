@@ -194,6 +194,7 @@ provider "registry.opentofu.org/maxlaverse/bitwarden" {
     "zh:a63e6c56918011bf1340ac4ddb89dc6a5fad29202beb235f0c9c546f3dc7427b",
     "zh:d70d868ed09999fde1f11ac78f60b674a5d787dbaaa3e539a5dfb3192a3cedc5",
     "zh:df794e4eb1bfc7c7e752ff59f61e95784526f84e0341694b38d54b2ea7c83b16",
+    "zh:f809ab383cca0a5f83072981c64208cbd7fa67e986a86ee02dd2c82333221e32",
     "zh:ff919bc4dda39d8879bf9d659d61ec02ed65908781cf220cfb9a7265d360aea4",
   ]
 }
