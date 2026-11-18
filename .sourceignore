@@ -1,0 +1,3 @@
+# Only sync the kubernetes directory
+/*
+!/kubernetes
