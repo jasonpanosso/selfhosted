@@ -84,6 +84,12 @@ spec:
               value: /dev/dri/renderD128
             - name: SILO_TRUSTED_PROXIES
               value: 10.244.0.0/16
+            - name: SILO_DB_MAX_CONNECTIONS
+              value: "10"
+            - name: SILO_SCANNER_WORKERS
+              value: "4"
+            - name: SILO_MATCHER_WORKERS
+              value: "4"
             # forcing a larger send buffer needs NET_ADMIN, keep kernel autotuning
             - name: SILO_NET_TCP_SEND_BUFFER
               value: "off"
