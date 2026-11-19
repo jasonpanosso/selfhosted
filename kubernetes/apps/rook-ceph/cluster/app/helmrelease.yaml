@@ -399,10 +399,8 @@ spec:
               requireSafeReplicaSize: true
           preservePoolsOnDelete: true
           hosting:
-            advertiseEndpoint:
-              dnsName: s3.home.${domain}.${tld}
-              port: 443
-              useTls: true
+            dnsNames:
+              - s3.home.${domain}.${tld}
           gateway:
             port: 80
             instances: 1
