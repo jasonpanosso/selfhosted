@@ -22,7 +22,10 @@
       "description": "Silo has no releases before 1.0, only build-N tags off main",
       "matchDatasources": ["docker"],
       "matchPackageNames": ["ghcr.io/silo-server/silo-server"],
-      "versioning": "regex:^build-(?<major>\\d+)$"
+      "versioning": "regex:^build-(?<major>\\d+)$",
+      "maxMajorIncrement": 0,
+      "schedule": ["* * * * 1"],
+      "updateNotScheduled": false
     }
   ],
   "flux": {
