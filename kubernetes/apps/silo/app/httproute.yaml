@@ -1,0 +1,76 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/gateway.networking.k8s.io/httproute_v1.json
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: &app silo
+  labels:
+    app.kubernetes.io/name: *app
+spec:
+  parentRefs:
+    - name: cilium-internal
+      namespace: kube-system
+      sectionName: https
+  hostnames:
+    - silo.home.${domain}.${tld}
+  rules:
+    # no ExternalAuth: silo has its own login (OIDC plugin) and native apps
+    - filters:
+        - type: RequestHeaderModifier
+          requestHeaderModifier:
+            set:
+              - name: X-Forwarded-For
+                value: "%DOWNSTREAM_REMOTE_ADDRESS_WITHOUT_PORT%"
+            remove:
+              - Remote-User
+              - Remote-Name
+              - Remote-Groups
+              - Remote-Email
+        - type: ResponseHeaderModifier
+          responseHeaderModifier:
+            set:
+              - name: Strict-Transport-Security
+                value: max-age=31536000
+      backendRefs:
+        - name: *app
+          port: 80
+      timeouts:
+        request: 0s
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/gateway.networking.k8s.io/httproute_v1.json
+# jellyfin-compatible API for jellyfin clients (Infuse, Findroid), on its own listener
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: silo-jellyfin
+  labels:
+    app.kubernetes.io/name: silo
+spec:
+  parentRefs:
+    - name: cilium-internal
+      namespace: kube-system
+      sectionName: https
+  hostnames:
+    - silo-jellyfin.home.${domain}.${tld}
+  rules:
+    - filters:
+        - type: RequestHeaderModifier
+          requestHeaderModifier:
+            set:
+              - name: X-Forwarded-For
+                value: "%DOWNSTREAM_REMOTE_ADDRESS_WITHOUT_PORT%"
+            remove:
+              - Remote-User
+              - Remote-Name
+              - Remote-Groups
+              - Remote-Email
+        - type: ResponseHeaderModifier
+          responseHeaderModifier:
+            set:
+              - name: Strict-Transport-Security
+                value: max-age=31536000
+      backendRefs:
+        - name: silo
+          port: 8096
+      timeouts:
+        request: 0s

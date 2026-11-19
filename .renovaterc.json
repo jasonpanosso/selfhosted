@@ -17,6 +17,12 @@
       "matchManagers": ["flux", "kubernetes"],
       "matchDatasources": ["docker"],
       "pinDigests": true
+    },
+    {
+      "description": "Silo has no releases before 1.0, only build-N tags off main",
+      "matchDatasources": ["docker"],
+      "matchPackageNames": ["ghcr.io/silo-server/silo-server"],
+      "versioning": "regex:^build-(?<major>\\d+)$"
     }
   ],
   "flux": {

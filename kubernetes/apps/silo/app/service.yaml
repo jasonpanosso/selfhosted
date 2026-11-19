@@ -1,0 +1,18 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/master-standalone-strict/service-v1.json
+apiVersion: v1
+kind: Service
+metadata:
+  name: &app silo
+  labels:
+    app.kubernetes.io/name: *app
+spec:
+  ports:
+    - name: http
+      port: 80
+      targetPort: http
+    - name: jellyfin
+      port: 8096
+      targetPort: jellyfin
+  selector:
+    app.kubernetes.io/name: *app

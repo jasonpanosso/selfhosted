@@ -9,6 +9,15 @@
         "imageName: (?<depName>[^\\s:@]+):(?<currentValue>[^\\s@]+)(@(?<currentDigest>sha256:[0-9a-f]{64}))?"
       ],
       "datasourceTemplate": "docker"
+    },
+    {
+      "customType": "regex",
+      "description": "CloudNativePG Cluster extension image volumes (postgresql.extensions[].image.reference)",
+      "managerFilePatterns": ["/(^|/)kubernetes/.+\\.ya?ml$/"],
+      "matchStrings": [
+        "reference: (?<depName>ghcr\\.io/cloudnative-pg/[^\\s:@]+):(?<currentValue>[^\\s@]+)(@(?<currentDigest>sha256:[0-9a-f]{64}))?"
+      ],
+      "datasourceTemplate": "docker"
     }
   ],
   "packageRules": [

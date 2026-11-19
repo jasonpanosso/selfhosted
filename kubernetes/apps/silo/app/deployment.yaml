@@ -1,0 +1,143 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/master-standalone-strict/deployment-apps-v1.json
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: &app silo
+  labels:
+    app.kubernetes.io/name: *app
+  annotations:
+    reloader.stakater.com/auto: "true"
+spec:
+  # above the startupProbe budget
+  progressDeadlineSeconds: 1500
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: *app
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: *app
+    spec:
+      automountServiceAccountToken: false
+      securityContext:
+        runAsUser: 65534
+        runAsGroup: 65534
+        fsGroup: 65534
+        fsGroupChangePolicy: OnRootMismatch
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+      resourceClaims:
+        - name: gpu
+          resourceClaimTemplateName: silo-gpu
+      containers:
+        - image: ghcr.io/silo-server/silo-server:build-1302@sha256:f84ff66c707f70f3a6ba006743161bc468095b66829d60613fe4aa000a7a813c
+          name: *app
+          # do not use bundled init, run binary directly
+          command: [silo]
+          ports:
+            - containerPort: 8080
+              name: http
+            - containerPort: 8096
+              name: jellyfin
+          env:
+            - name: SILO_DB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: silo
+                  key: SILO_DB_USERNAME
+            - name: SILO_DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: silo
+                  key: SILO_DB_PASSWORD
+            - name: DATABASE_URL
+              value: postgres://$(SILO_DB_USERNAME):$(SILO_DB_PASSWORD)@pgcluster-rw.db.svc.cluster.local:5432/silo?sslmode=require
+            - name: SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: silo
+                  key: SILO_SECRET_KEY
+            # no REDIS_URL: optional in integrated mode, only watch party rooms need it
+            - name: SILO_PUBLIC_URL
+              value: https://silo.home.${domain}.${tld}
+            - name: SILO_JELLYFIN_ENABLED
+              value: "true"
+            - name: SILO_JELLYFIN_PUBLIC_URL
+              value: https://silo-jellyfin.home.${domain}.${tld}
+            - name: SILO_AUDIOBOOKSHELF_ENABLED
+              value: "false"
+            - name: SILO_SIGNUP_ENABLED
+              value: "false"
+            # UDP discovery doesn't cross the gateway
+            - name: SILO_LAN_DISCOVERY
+              value: "false"
+            - name: SILO_LOG_FORMAT
+              value: json
+            - name: SILO_HW_ACCEL
+              value: qsv
+            # worker-5 and worker-8 have one iGPU each, so it's always the first render node
+            - name: SILO_HW_DEVICE
+              value: /dev/dri/renderD128
+          livenessProbe:
+            httpGet:
+              path: /api/v1/health
+              port: 8080
+            failureThreshold: 5
+            periodSeconds: 10
+            timeoutSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /api/v1/health
+              port: 8080
+            failureThreshold: 3
+            periodSeconds: 10
+            timeoutSeconds: 5
+          # migrations run before the listener answers
+          startupProbe:
+            httpGet:
+              path: /api/v1/health
+              port: 8080
+            periodSeconds: 10
+            failureThreshold: 120
+          resources:
+            requests:
+              cpu: 100m
+              memory: 2Gi
+            limits:
+              memory: 2Gi
+            claims:
+              - name: gpu
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: [ALL]
+          volumeMounts:
+            - name: media
+              mountPath: /media/movies
+              subPath: movies
+              readOnly: true
+            - name: media
+              mountPath: /media/shows
+              subPath: shows
+              readOnly: true
+            # /var/lib/silo is a symlink to /config/silo in the image
+            - name: config
+              mountPath: /config/silo
+            # transcode segments, prepared downloads, and the plugin binary cache
+            - name: tmp
+              mountPath: /tmp
+      volumes:
+        - name: media
+          persistentVolumeClaim:
+            claimName: media
+        - name: config
+          persistentVolumeClaim:
+            claimName: *app
+        - name: tmp
+          emptyDir:
+            sizeLimit: 30Gi

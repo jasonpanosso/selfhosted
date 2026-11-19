@@ -1,0 +1,43 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/kustomize.toolkit.fluxcd.io/kustomization_v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: &app silo
+  namespace: &namespace silo
+spec:
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: *app
+  path: ./kubernetes/apps/silo/app
+  interval: 1h
+  retryInterval: 2m
+  # above the deployment's progressDeadlineSeconds
+  timeout: 30m
+  wait: false
+  prune: true
+  postBuild:
+    substituteFrom:
+      - kind: Secret
+        name: post-build-substitutions
+  healthChecks:
+    - apiVersion: apps/v1
+      kind: Deployment
+      name: *app
+      namespace: *namespace
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+    namespace: flux-system
+  targetNamespace: *namespace
+  dependsOn:
+    - name: db
+      namespace: db
+    - name: rook-ceph-cluster
+      namespace: rook-ceph
+    - name: secret-store
+      namespace: external-secrets
+    - name: gateway-api-crds
+      namespace: kube-system
+    - name: intel-gpu-resource-driver
+      namespace: intel-gpu-resource-driver

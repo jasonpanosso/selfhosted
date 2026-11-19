@@ -1,0 +1,62 @@
+resource "bitwarden-secrets_secret" "silo_db_username" {
+  key        = "SILO_DB_USERNAME"
+  value      = "silo"
+  project_id = bitwarden_project.this.id
+  note       = "Postgres database username for the silo user"
+}
+
+# no special characters, it's interpolated into silo's DATABASE_URL
+resource "random_password" "silo_db_password" {
+  length  = 128
+  special = false
+}
+
+resource "bitwarden-secrets_secret" "silo_db_password" {
+  key        = "SILO_DB_PASSWORD"
+  value      = random_password.silo_db_password.result
+  project_id = bitwarden_project.this.id
+  note       = "Postgres database password for the silo user"
+}
+
+# encrypts plugin configs (OIDC client secret) and other secrets at rest.
+resource "random_password" "silo_secret_key" {
+  length  = 64
+  special = false
+}
+
+resource "bitwarden-secrets_secret" "silo_secret_key" {
+  key        = "SILO_SECRET_KEY"
+  value      = random_password.silo_secret_key.result
+  project_id = bitwarden_project.this.id
+  note       = "silo SECRET_KEY, master key for at-rest credential encryption"
+}
+
+resource "random_password" "silo_oidc_password" {
+  length           = 30
+  special          = true
+  override_special = "!@#%&*()-_=+[]{}<>:"
+}
+
+resource "random_password" "silo_oidc_salt" {
+  length  = 8
+  special = false
+}
+
+resource "htpasswd_password" "silo_oidc_hash" {
+  password = random_password.silo_oidc_password.result
+  salt     = random_password.silo_oidc_salt.result
+}
+
+resource "bitwarden-secrets_secret" "silo_oidc_password" {
+  key        = "SILO_OIDC_PASSWORD"
+  value      = random_password.silo_oidc_password.result
+  project_id = bitwarden_project.this.id
+  note       = "silo OIDC client secret, entered in silo's OIDC plugin settings"
+}
+
+resource "bitwarden-secrets_secret" "silo_oidc_hash" {
+  key        = "SILO_OIDC_HASH"
+  value      = htpasswd_password.silo_oidc_hash.sha512
+  project_id = bitwarden_project.this.id
+  note       = "silo OIDC SHA512 password hash"
+}

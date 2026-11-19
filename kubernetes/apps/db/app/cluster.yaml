@@ -16,6 +16,12 @@ spec:
           barmanObjectName: b2-store
           serverName: pgcluster-pg18
   imageName: ghcr.io/cloudnative-pg/postgresql:18.7-minimal-trixie@sha256:452a15584e2aa1ce658c4ae8538b5dc157eb031d41b82fd19882e0c03bcec01d
+  postgresql:
+    extensions:
+      # for silo
+      - name: pgvector
+        image:
+          reference: ghcr.io/cloudnative-pg/pgvector:0.8.7-18-trixie@sha256:d00bec5031990855e70b8dfaab136fb961787e81b7b0d2f3939020a68de1961f
   instances: 3
   primaryUpdateMethod: switchover
   priorityClassName: system-cluster-critical
@@ -90,3 +96,8 @@ spec:
         login: true
         passwordSecret:
           name: tandoor-db
+      - name: silo
+        ensure: present
+        login: true
+        passwordSecret:
+          name: silo-db

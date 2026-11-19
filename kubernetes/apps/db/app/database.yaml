@@ -108,3 +108,19 @@ spec:
   owner: tandoor
   cluster:
     name: pgcluster
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/postgresql.cnpg.io/database_v1.json
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
+  name: silo
+spec:
+  name: silo
+  owner: silo
+  cluster:
+    name: pgcluster
+  # pgvector isn't a trusted extension, so the silo role can't create it.
+  # silo's first migration runs CREATE EXTENSION IF NOT EXISTS and finds it here
+  extensions:
+    - name: vector
+      ensure: present
