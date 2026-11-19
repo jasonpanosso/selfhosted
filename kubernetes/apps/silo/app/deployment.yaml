@@ -36,6 +36,16 @@ spec:
           - name: net.ipv4.tcp_wmem
             value: "4096 16384 67108864"
       affinity:
+        # plugin binaries are installed for the platform of the API server that installed them and
+        # restored from the database as-is: these are x86-64, so an arm64 pod can't run them
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: kubernetes.io/arch
+                    operator: In
+                    values:
+                      - amd64
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
             - weight: 100
