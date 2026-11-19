@@ -11,7 +11,9 @@ metadata:
 spec:
   # above the startupProbe budget
   progressDeadlineSeconds: 1500
-  replicas: 2
+  # Silo bug causes multiple API replicas without sticky sessions to start
+  # transcoding on the api server (lol)
+  replicas: 1
   strategy:
     type: RollingUpdate
   selector:
