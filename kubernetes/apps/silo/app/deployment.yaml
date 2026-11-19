@@ -82,6 +82,8 @@ spec:
             # worker-5 and worker-8 have one iGPU each, so it's always the first render node
             - name: SILO_HW_DEVICE
               value: /dev/dri/renderD128
+            - name: SILO_TRUSTED_PROXIES
+              value: 10.244.0.0/16
             # forcing a larger send buffer needs NET_ADMIN, keep kernel autotuning
             - name: SILO_NET_TCP_SEND_BUFFER
               value: "off"
