@@ -8,9 +8,8 @@ metadata:
     app.kubernetes.io/name: *app
 spec:
   parentRefs:
-    - name: cilium-internal
-      namespace: kube-system
-      sectionName: https
+    - name: silo
+      sectionName: silo-https
   hostnames:
     - silo.home.${domain}.${tld}
   rules:
@@ -47,9 +46,8 @@ metadata:
     app.kubernetes.io/name: silo
 spec:
   parentRefs:
-    - name: cilium-internal
-      namespace: kube-system
-      sectionName: https
+    - name: silo
+      sectionName: silo-jellyfin-https
   hostnames:
     - silo-jellyfin.home.${domain}.${tld}
   rules:
@@ -74,3 +72,24 @@ spec:
           port: 8096
       timeouts:
         request: 0s
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/gateway.networking.k8s.io/httproute_v1.json
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: silo-httpsredirect
+spec:
+  parentRefs:
+    - name: silo
+      sectionName: silo-http
+    - name: silo
+      sectionName: silo-jellyfin-http
+  hostnames:
+    - silo.home.${domain}.${tld}
+    - silo-jellyfin.home.${domain}.${tld}
+  rules:
+    - filters:
+        - requestRedirect:
+            scheme: https
+            statusCode: 301
+          type: RequestRedirect

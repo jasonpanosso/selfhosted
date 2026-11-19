@@ -25,6 +25,22 @@ spec:
       kind: Deployment
       name: *app
       namespace: *namespace
+    - apiVersion: gateway.networking.k8s.io/v1
+      kind: Gateway
+      name: *app
+      namespace: *namespace
+    - apiVersion: cert-manager.io/v1
+      kind: Certificate
+      name: *app
+      namespace: *namespace
+  # kstatus only reads Reconciling/Stalled, neither kind sets them
+  healthCheckExprs:
+    - apiVersion: gateway.networking.k8s.io/v1
+      kind: Gateway
+      current: status.conditions.exists(e, e.type == 'Programmed' && e.status == 'True' && e.observedGeneration == metadata.generation)
+    - apiVersion: cert-manager.io/v1
+      kind: Certificate
+      current: status.conditions.exists(e, e.type == 'Ready' && e.status == 'True' && e.observedGeneration == metadata.generation)
   sourceRef:
     kind: GitRepository
     name: flux-system
@@ -41,3 +57,5 @@ spec:
       namespace: kube-system
     - name: intel-gpu-resource-driver
       namespace: intel-gpu-resource-driver
+    - name: clusterissuer
+      namespace: cert-manager

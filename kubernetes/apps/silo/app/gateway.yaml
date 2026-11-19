@@ -1,0 +1,49 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/gateway.networking.k8s.io/gateway_v1.json
+# is exposed to VLAN 50 (fire tv), needs to be separate from cilium-internal.
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: silo
+spec:
+  gatewayClassName: cilium-lb
+  addresses:
+    - type: IPAddress
+      value: 192.168.21.14
+  listeners:
+    - name: silo-http
+      protocol: HTTP
+      port: 80
+      hostname: silo.home.${domain}.${tld}
+      allowedRoutes:
+        namespaces:
+          from: Same
+    - name: silo-https
+      protocol: HTTPS
+      port: 443
+      hostname: silo.home.${domain}.${tld}
+      allowedRoutes:
+        namespaces:
+          from: Same
+      tls:
+        certificateRefs:
+          - kind: Secret
+            name: silo-tls
+    - name: silo-jellyfin-http
+      protocol: HTTP
+      port: 80
+      hostname: silo-jellyfin.home.${domain}.${tld}
+      allowedRoutes:
+        namespaces:
+          from: Same
+    - name: silo-jellyfin-https
+      protocol: HTTPS
+      port: 443
+      hostname: silo-jellyfin.home.${domain}.${tld}
+      allowedRoutes:
+        namespaces:
+          from: Same
+      tls:
+        certificateRefs:
+          - kind: Secret
+            name: silo-tls
