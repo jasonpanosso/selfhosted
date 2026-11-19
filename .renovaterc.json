@@ -23,9 +23,9 @@
       "matchDatasources": ["docker"],
       "matchPackageNames": ["ghcr.io/silo-server/silo-server"],
       "versioning": "regex:^build-(?<major>\\d+)$",
-      "maxMajorIncrement": 0,
       "schedule": ["* * * * 1"],
-      "updateNotScheduled": false
+      "updateNotScheduled": false,
+      "branchTopic": "{{{depNameSanitized}}}"
     }
   ],
   "flux": {
