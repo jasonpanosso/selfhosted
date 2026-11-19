@@ -1,0 +1,53 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/dragonflydb.io/dragonfly_v1alpha1.json
+apiVersion: dragonflydb.io/v1alpha1
+kind: Dragonfly
+metadata:
+  name: dragonfly
+spec:
+  args:
+    - --proactor_threads=1
+    # checks for releases daily and reports anonymous data; its network policy blocks this anyway
+    - --version_check=false
+    # pub/sub and short-lived keys only: no snapshot on shutdown (the root filesystem is read-only)
+    - --dbfilename=
+  authentication:
+    passwordFromSecret:
+      name: silo
+      key: SILO_REDIS_PASSWORD
+  replicas: 2
+  # automountServiceAccountToken: false is set on the ServiceAccount
+  serviceAccountName: dragonfly
+  affinity:
+    podAntiAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        - labelSelector:
+            matchLabels:
+              app.kubernetes.io/name: dragonfly
+          topologyKey: kubernetes.io/hostname
+  podSecurityContext:
+    runAsNonRoot: true
+    runAsUser: 999
+    runAsGroup: 999
+    fsGroup: 999
+    seccompProfile:
+      type: RuntimeDefault
+  containerSecurityContext:
+    allowPrivilegeEscalation: false
+    readOnlyRootFilesystem: true
+    capabilities:
+      drop:
+        - ALL
+  resources:
+    requests:
+      cpu: 50m
+      memory: 320Mi
+    limits:
+      memory: 320Mi
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/master-standalone-strict/serviceaccount-v1.json
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: dragonfly
+automountServiceAccountToken: false

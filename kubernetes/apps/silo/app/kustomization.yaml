@@ -5,9 +5,12 @@ kind: Kustomization
 
 resources:
   - ./ciliumnetworkpolicy.yaml
+  - ./deployment.yaml
+  - ./dragonfly.yaml
   - ./externalsecret.yaml
+  - ./httproute.yaml
+  - ./objectbucketclaim.yaml
   - ./pvc.yaml
   - ./resourceclaimtemplate.yaml
-  - ./deployment.yaml
   - ./service.yaml
-  - ./httproute.yaml
+  - ./statefulset.yaml

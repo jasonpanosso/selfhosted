@@ -21,6 +21,14 @@ spec:
               protocol: TCP
             - port: "8096"
               protocol: TCP
+    # transcode node control plane: config, reports, logs, source grants
+    - fromEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: silo-transcode
+      toPorts:
+        - ports:
+            - port: "8080"
+              protocol: TCP
   egress:
     - toEndpoints:
         - matchLabels:
@@ -29,6 +37,30 @@ spec:
       toPorts:
         - ports:
             - port: "5432"
+              protocol: TCP
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: dragonfly
+      toPorts:
+        - ports:
+            - port: "6379"
+              protocol: TCP
+    # transcode starts, manifest and segment relays
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: silo-transcode
+      toPorts:
+        - ports:
+            - port: "8080"
+              protocol: TCP
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: rook-ceph
+            app: rook-ceph-rgw
+            rgw: objectstore
+      toPorts:
+        - ports:
+            - port: "8080"
               protocol: TCP
     # autoscan plugin polls the arr history APIs
     - toEndpoints:
@@ -57,4 +89,60 @@ spec:
       toPorts:
         - ports:
             - port: "443"
+              protocol: TCP
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/cilium.io/ciliumnetworkpolicy_v2.json
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: silo-transcode
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: silo-transcode
+  enableDefaultDeny:
+    ingress: true
+    egress: true
+  ingress:
+    # signed requests from the API pods; clients never reach the node
+    - fromEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: silo
+      toPorts:
+        - ports:
+            - port: "8080"
+              protocol: TCP
+  egress:
+    # node control plane on the API pods, through the silo Service
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: silo
+      toPorts:
+        - ports:
+            - port: "8080"
+              protocol: TCP
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/cilium.io/ciliumnetworkpolicy_v2.json
+# ingress comes from the operator's own NetworkPolicy, which cilium adds to this
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: dragonfly
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: dragonfly
+  enableDefaultDeny:
+    ingress: true
+    egress: true
+  egress:
+    # replication
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: dragonfly
+      toPorts:
+        - ports:
+            - port: "6379"
+              protocol: TCP
+            - port: "9999"
               protocol: TCP

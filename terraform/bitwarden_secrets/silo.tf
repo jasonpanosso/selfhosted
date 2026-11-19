@@ -18,6 +18,19 @@ resource "bitwarden-secrets_secret" "silo_db_password" {
   note       = "Postgres database password for the silo user"
 }
 
+# no special characters, it's interpolated into silo's REDIS_URL
+resource "random_password" "silo_redis_password" {
+  length  = 64
+  special = false
+}
+
+resource "bitwarden-secrets_secret" "silo_redis_password" {
+  key        = "SILO_REDIS_PASSWORD"
+  value      = random_password.silo_redis_password.result
+  project_id = bitwarden_project.this.id
+  note       = "Dragonfly password for silo's event bus"
+}
+
 # encrypts plugin configs (OIDC client secret) and other secrets at rest.
 resource "random_password" "silo_secret_key" {
   length  = 64

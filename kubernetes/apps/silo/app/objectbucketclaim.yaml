@@ -1,0 +1,20 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/objectbucket.io/objectbucketclaim_v1alpha1.json
+# artwork, trickplay, chapter images, markers, subtitles: silo hands clients presigned URLs into it
+apiVersion: objectbucket.io/v1alpha1
+kind: ObjectBucketClaim
+metadata:
+  name: silo-public
+spec:
+  bucketName: silo-public
+  storageClassName: rook-ceph-bucket
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/objectbucket.io/objectbucketclaim_v1alpha1.json
+# avatars, backups, diagnostic bundles, job artifacts
+apiVersion: objectbucket.io/v1alpha1
+kind: ObjectBucketClaim
+metadata:
+  name: silo-private
+spec:
+  bucketName: silo-private
+  storageClassName: rook-ceph-bucket

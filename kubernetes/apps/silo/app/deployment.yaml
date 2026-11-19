@@ -34,9 +34,6 @@ spec:
           # get rid of startup warning
           - name: net.ipv4.tcp_wmem
             value: "4096 16384 67108864"
-      resourceClaims:
-        - name: gpu
-          resourceClaimTemplateName: silo-gpu
       containers:
         - image: ghcr.io/silo-server/silo-server:build-2573@sha256:7b6aa63aa00aeb133489848869b7bde07738f86fcccbc341afcbae26aaf8ca3f
           name: *app
@@ -65,7 +62,13 @@ spec:
                 secretKeyRef:
                   name: silo
                   key: SILO_SECRET_KEY
-            # no REDIS_URL: optional in integrated mode, only watch party rooms need it
+            - name: SILO_REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: silo
+                  key: SILO_REDIS_PASSWORD
+            - name: REDIS_URL
+              value: redis://:$(SILO_REDIS_PASSWORD)@dragonfly.silo.svc.cluster.local:6379/0
             - name: SILO_PUBLIC_URL
               value: https://silo.home.${domain}.${tld}
             - name: SILO_JELLYFIN_ENABLED
@@ -81,11 +84,9 @@ spec:
               value: "false"
             - name: SILO_LOG_FORMAT
               value: json
+            # no GPU on the API pods
             - name: SILO_HW_ACCEL
-              value: qsv
-            # worker-5 and worker-8 have one iGPU each, so it's always the first render node
-            - name: SILO_HW_DEVICE
-              value: /dev/dri/renderD128
+              value: none
             # cilium-envoy on the pod's own node connects from the node IP, envoy on any other
             # node from that node's ingress IP in the pod CIDR.
             - name: SILO_TRUSTED_PROXIES
@@ -123,11 +124,9 @@ spec:
           resources:
             requests:
               cpu: 100m
-              memory: 2Gi
+              memory: 1Gi
             limits:
-              memory: 2Gi
-            claims:
-              - name: gpu
+              memory: 1Gi
           securityContext:
             allowPrivilegeEscalation: false
             readOnlyRootFilesystem: true

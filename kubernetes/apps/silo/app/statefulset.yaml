@@ -1,0 +1,122 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/master-standalone-strict/statefulset-apps-v1.json
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: &app silo-transcode
+  labels:
+    app.kubernetes.io/name: *app
+  annotations:
+    reloader.stakater.com/auto: "true"
+spec:
+  replicas: 1
+  # the node is registered at this pod's own address
+  serviceName: *app
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: *app
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: *app
+    spec:
+      automountServiceAccountToken: false
+      # above SILO_NODE_DRAIN_TIMEOUT plus a minute for shutdown
+      terminationGracePeriodSeconds: 660
+      securityContext:
+        runAsUser: 65534
+        runAsGroup: 65534
+        fsGroup: 65534
+        fsGroupChangePolicy: OnRootMismatch
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+      resourceClaims:
+        - name: gpu
+          resourceClaimTemplateName: silo-gpu
+      containers:
+        - image: ghcr.io/silo-server/silo-server:build-2573@sha256:7b6aa63aa00aeb133489848869b7bde07738f86fcccbc341afcbae26aaf8ca3f
+          name: *app
+          # do not use bundled init, run binary directly
+          command: [silo]
+          ports:
+            - containerPort: 8080
+              name: http
+          env:
+            - name: MODE
+              value: transcode
+            - name: SILO_CORE_URL
+              value: http://silo.silo.svc.cluster.local
+            - name: SILO_NODE_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: silo-transcode
+                  key: SILO_NODE_KEY
+            - name: SILO_NODE_NAME
+              value: silo-transcode-0
+            - name: SILO_NODE_URL
+              value: http://silo-transcode-0.silo-transcode.silo.svc.cluster.local:8080
+            # reads the library through its own mount, at the same paths as the API pods
+            - name: SILO_NODE_SOURCE_ACCESS
+              value: local
+            - name: SILO_NODE_HW_ACCEL
+              value: qsv
+            # worker-5 and worker-8 have one iGPU each, so it's always the first render node
+            - name: SILO_NODE_HW_DEVICE
+              value: /dev/dri/renderD128
+            - name: SILO_NODE_DRAIN_TIMEOUT
+              value: 10m
+          # answers 200 while draining, so a draining node is not restarted
+          livenessProbe:
+            httpGet:
+              path: /api/v1/health
+              port: 8080
+            failureThreshold: 5
+            periodSeconds: 10
+            timeoutSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /api/v1/health
+              port: 8080
+            failureThreshold: 3
+            periodSeconds: 10
+            timeoutSeconds: 5
+          # the listener opens after the first configuration read from the API succeeds
+          startupProbe:
+            httpGet:
+              path: /api/v1/health
+              port: 8080
+            periodSeconds: 10
+            failureThreshold: 60
+          resources:
+            requests:
+              cpu: 100m
+              memory: 2Gi
+            limits:
+              memory: 2Gi
+            claims:
+              - name: gpu
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: [ALL]
+          volumeMounts:
+            - name: media
+              mountPath: /media/movies
+              subPath: movies
+              readOnly: true
+            - name: media
+              mountPath: /media/shows
+              subPath: shows
+              readOnly: true
+            # transcode segments and prepared downloads
+            - name: tmp
+              mountPath: /tmp
+      volumes:
+        - name: media
+          persistentVolumeClaim:
+            claimName: media
+        - name: tmp
+          emptyDir:
+            sizeLimit: 30Gi
