@@ -19,6 +19,16 @@ spec:
   # automountServiceAccountToken: false is set on the ServiceAccount
   serviceAccountName: dragonfly
   affinity:
+    # worker-3/4 have no AVX2: a replica dies with "the root cause might be an old hardware" when its full sync starts
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+              - key: kubernetes.io/hostname
+                operator: NotIn
+                values:
+                  - worker-3
+                  - worker-4
     podAntiAffinity:
       requiredDuringSchedulingIgnoredDuringExecution:
         - labelSelector:
