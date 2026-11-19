@@ -32,12 +32,19 @@ spec:
       kind: CephFilesystem
       name: mediafs
       namespace: *namespace
+    - apiVersion: ceph.rook.io/v1
+      kind: CephObjectStore
+      name: objectstore
+      namespace: *namespace
   healthCheckExprs:
     - apiVersion: ceph.rook.io/v1
       kind: CephCluster
       current: status.phase == 'Ready'
     - apiVersion: ceph.rook.io/v1
       kind: CephFilesystem
+      current: status.phase == 'Ready'
+    - apiVersion: ceph.rook.io/v1
+      kind: CephObjectStore
       current: status.phase == 'Ready'
   sourceRef:
     kind: GitRepository

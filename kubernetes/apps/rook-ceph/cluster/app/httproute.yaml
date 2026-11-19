@@ -51,3 +51,42 @@ spec:
           port: 7000
       timeouts:
         request: 0s
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/gateway.networking.k8s.io/httproute_v1.json
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: rook-ceph-rgw-objectstore
+  labels:
+    app: rook-ceph-rgw
+    rook_cluster: rook-ceph
+spec:
+  parentRefs:
+    - name: cilium-home
+      namespace: kube-system
+      sectionName: s3-https
+  hostnames:
+    - s3.home.${domain}.${tld}
+  rules:
+    # no ExternalAuth: S3 requests carry their own SigV4 signature
+    - filters:
+        - type: RequestHeaderModifier
+          requestHeaderModifier:
+            set:
+              - name: X-Forwarded-For
+                value: "%DOWNSTREAM_REMOTE_ADDRESS_WITHOUT_PORT%"
+            remove:
+              - Remote-User
+              - Remote-Name
+              - Remote-Groups
+              - Remote-Email
+        - type: ResponseHeaderModifier
+          responseHeaderModifier:
+            set:
+              - name: Strict-Transport-Security
+                value: max-age=31536000
+      backendRefs:
+        - name: rook-ceph-rgw-objectstore
+          port: 80
+      timeouts:
+        request: 0s

@@ -380,4 +380,44 @@ spec:
     cephFileSystemVolumeSnapshotClass:
       enabled: false
 
-    cephObjectStores: []
+    cephObjectStores:
+      - name: objectstore
+        spec:
+          metadataPool:
+            failureDomain: host
+            enableCrushUpdates: true
+            deviceClass: nvme
+            replicated:
+              size: 3
+              requireSafeReplicaSize: true
+          dataPool:
+            failureDomain: host
+            enableCrushUpdates: true
+            deviceClass: nvme
+            replicated:
+              size: 3
+              requireSafeReplicaSize: true
+          preservePoolsOnDelete: true
+          gateway:
+            port: 80
+            instances: 1
+            priorityClassName: system-cluster-critical
+            resources:
+              requests:
+                cpu: 100m
+                memory: 512Mi
+              limits:
+                memory: 512Mi
+        storageClass:
+          enabled: true
+          name: rook-ceph-bucket
+          # deleting an ObjectBucketClaim keeps the bucket and its objects
+          reclaimPolicy: Retain
+          volumeBindingMode: Immediate
+          parameters:
+            region: us-east-1
+        # HTTPRoute is in httproute.yaml
+        ingress:
+          enabled: false
+        route:
+          enabled: false
