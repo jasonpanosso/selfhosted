@@ -38,6 +38,10 @@ spec:
         - matchLabels:
             k8s:io.kubernetes.pod.namespace: upbrr
             app.kubernetes.io/name: upbrr
+        # silo autoscan polls /api/v3/history
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: silo
+            app.kubernetes.io/name: silo
       toPorts: *http
   egress:
     # toFQDNs only learns IPs from DNS that goes through the proxy
