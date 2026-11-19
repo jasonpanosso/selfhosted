@@ -82,6 +82,9 @@ spec:
             # worker-5 and worker-8 have one iGPU each, so it's always the first render node
             - name: SILO_HW_DEVICE
               value: /dev/dri/renderD128
+            # forcing a larger send buffer needs NET_ADMIN, keep kernel autotuning
+            - name: SILO_NET_TCP_SEND_BUFFER
+              value: "off"
           livenessProbe:
             httpGet:
               path: /api/v1/health
