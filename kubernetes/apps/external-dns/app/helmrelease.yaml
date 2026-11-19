@@ -44,7 +44,6 @@ spec:
       - gateway-httproute
       # LoadBalancer Services with an external-dns.kubernetes.io/hostname annotation
       - service
-    # cilium-internal routes (*.home) are served on the LAN by k8s-gateway, never published
     gatewayNamespace: kube-system
     extraArgs:
       gateway-name: cilium

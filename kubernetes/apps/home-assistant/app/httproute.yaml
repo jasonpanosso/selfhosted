@@ -59,7 +59,7 @@ metadata:
     app.kubernetes.io/name: &app home-assistant
 spec:
   parentRefs:
-    - name: cilium-internal
+    - name: cilium-iot
       namespace: kube-system
       sectionName: https
   hostnames:

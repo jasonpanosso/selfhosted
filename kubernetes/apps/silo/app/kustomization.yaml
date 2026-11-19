@@ -10,6 +10,4 @@ resources:
   - ./resourceclaimtemplate.yaml
   - ./deployment.yaml
   - ./service.yaml
-  - ./certificate.yaml
-  - ./gateway.yaml
   - ./httproute.yaml
