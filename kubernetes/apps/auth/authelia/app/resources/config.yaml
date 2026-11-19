@@ -222,8 +222,8 @@ identity_providers:
         authorization_policy: admins_two_factor
         pre_configured_consent_duration: 1y
         redirect_uris:
-          # TODO: the plugin's installation id, shown on silo's Sign-in settings page after install
-          - https://silo.home.${domain}.${tld}/api/v2/auth/oauth/INSTALLATION_ID/callback
+          # 35 = the OIDC plugin's installation id (plugin_installations.id). reinstalling the plugin changes it
+          - https://silo.home.${domain}.${tld}/api/v2/auth/oauth/35/callback
         scopes:
           - openid
           - groups
