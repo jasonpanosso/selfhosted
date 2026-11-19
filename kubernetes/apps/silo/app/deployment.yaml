@@ -30,6 +30,10 @@ spec:
         runAsNonRoot: true
         seccompProfile:
           type: RuntimeDefault
+        sysctls:
+          # get rid of startup warning
+          - name: net.ipv4.tcp_wmem
+            value: "4096 16384 67108864"
       resourceClaims:
         - name: gpu
           resourceClaimTemplateName: silo-gpu
