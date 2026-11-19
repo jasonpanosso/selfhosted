@@ -1,16 +1,4 @@
 ---
-# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/master-standalone-strict/persistentvolumeclaim-v1.json
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: silo
-spec:
-  accessModes: [ReadWriteOncePod]
-  resources:
-    requests:
-      storage: 10Gi
-  storageClassName: rook-ceph-block
----
 # yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/master-standalone-strict/persistentvolume-v1.json
 apiVersion: v1
 kind: PersistentVolume

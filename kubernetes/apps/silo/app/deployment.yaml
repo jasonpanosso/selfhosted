@@ -11,8 +11,9 @@ metadata:
 spec:
   # above the startupProbe budget
   progressDeadlineSeconds: 1500
+  replicas: 2
   strategy:
-    type: Recreate
+    type: RollingUpdate
   selector:
     matchLabels:
       app.kubernetes.io/name: *app
@@ -34,6 +35,18 @@ spec:
           # get rid of startup warning
           - name: net.ipv4.tcp_wmem
             value: "4096 16384 67108864"
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                    - key: app.kubernetes.io/name
+                      operator: In
+                      values:
+                        - silo
+                topologyKey: kubernetes.io/hostname
       containers:
         - image: ghcr.io/silo-server/silo-server:build-2573@sha256:7b6aa63aa00aeb133489848869b7bde07738f86fcccbc341afcbae26aaf8ca3f
           name: *app
@@ -69,6 +82,46 @@ spec:
                   key: SILO_REDIS_PASSWORD
             - name: REDIS_URL
               value: redis://:$(SILO_REDIS_PASSWORD)@dragonfly.silo.svc.cluster.local:6379/0
+            - name: SILO_ARTWORK_STORAGE
+              value: s3
+            - name: SILO_S3_PUBLIC_ENDPOINT
+              value: https://s3.home.${domain}.${tld}
+            - name: SILO_S3_PUBLIC_REGION
+              value: us-east-1
+            - name: SILO_S3_PUBLIC_BUCKET
+              value: silo-public
+            - name: SILO_S3_PUBLIC_PATH_STYLE
+              value: "true"
+            - name: SILO_S3_PUBLIC_URL_AUTH
+              value: presigned
+            - name: SILO_S3_PUBLIC_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: silo-public
+                  key: AWS_ACCESS_KEY_ID
+            - name: SILO_S3_PUBLIC_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: silo-public
+                  key: AWS_SECRET_ACCESS_KEY
+            - name: SILO_S3_PRIVATE_ENDPOINT
+              value: https://s3.home.${domain}.${tld}
+            - name: SILO_S3_PRIVATE_REGION
+              value: us-east-1
+            - name: SILO_S3_PRIVATE_BUCKET
+              value: silo-private
+            - name: SILO_S3_PRIVATE_PATH_STYLE
+              value: "true"
+            - name: SILO_S3_PRIVATE_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: silo-private
+                  key: AWS_ACCESS_KEY_ID
+            - name: SILO_S3_PRIVATE_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: silo-private
+                  key: AWS_SECRET_ACCESS_KEY
             - name: SILO_PUBLIC_URL
               value: https://silo.home.${domain}.${tld}
             - name: SILO_JELLYFIN_ENABLED
@@ -141,7 +194,8 @@ spec:
               mountPath: /media/shows
               subPath: shows
               readOnly: true
-            # /var/lib/silo is a symlink to /config/silo in the image
+            # /var/lib/silo is a symlink to /config/silo in the image. nothing to keep: artwork is in S3,
+            # plugin binaries are restored from the database
             - name: config
               mountPath: /config/silo
             # transcode segments, prepared downloads, and the plugin binary cache
@@ -152,8 +206,8 @@ spec:
           persistentVolumeClaim:
             claimName: media
         - name: config
-          persistentVolumeClaim:
-            claimName: *app
+          emptyDir:
+            sizeLimit: 1Gi
         - name: tmp
           emptyDir:
             sizeLimit: 30Gi

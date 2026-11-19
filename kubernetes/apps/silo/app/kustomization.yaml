@@ -10,6 +10,7 @@ resources:
   - ./externalsecret.yaml
   - ./httproute.yaml
   - ./objectbucketclaim.yaml
+  - ./poddisruptionbudget.yaml
   - ./pvc.yaml
   - ./resourceclaimtemplate.yaml
   - ./service.yaml

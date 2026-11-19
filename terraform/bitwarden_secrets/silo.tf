@@ -31,6 +31,23 @@ resource "bitwarden-secrets_secret" "silo_redis_password" {
   note       = "Dragonfly password for silo's event bus"
 }
 
+# currently imported, keys must be generated in Silo UI
+resource "random_password" "silo_node_key" {
+  length = 50
+
+  lifecycle {
+    # a replacement would generate a key silo rejects
+    prevent_destroy = true
+  }
+}
+
+resource "bitwarden-secrets_secret" "silo_node_key" {
+  key        = "SILO_NODE_KEY"
+  value      = random_password.silo_node_key.result
+  project_id = bitwarden_project.this.id
+  note       = "silo transcode node key; reissuing it in silo invalidates this one (drain the node first)"
+}
+
 # encrypts plugin configs (OIDC client secret) and other secrets at rest.
 resource "random_password" "silo_secret_key" {
   length  = 64
