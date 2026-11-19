@@ -31,9 +31,9 @@ spec:
   resources:
     requests:
       cpu: 100m
-      memory: 512Mi
+      memory: 1Gi
     limits:
-      memory: 512Mi
+      memory: 1Gi
   storage:
     size: 10Gi
     storageClass: topolvm
