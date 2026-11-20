@@ -48,7 +48,9 @@
     {
       "description": "Simple Voice Chat Velocity plugin downloaded from the Modrinth CDN; the URL's version id is tracked as the digest",
       "customType": "regex",
-      "managerFilePatterns": ["/(^|/)kubernetes/apps/minecraft/minecraft-proxy/.+\\.ya?ml$/"],
+      "managerFilePatterns": [
+        "/(^|/)kubernetes/apps/minecraft/minecraft-proxy/.+\\.ya?ml$/"
+      ],
       "matchStrings": [
         "https://cdn\\.modrinth\\.com/data/9eGKb6K1/versions/(?<currentDigest>[^/]+)/voicechat-(?<currentValue>velocity-[^/]+)\\.jar"
       ],
@@ -65,7 +67,10 @@
       "extractVersion": "-(?<version>\\d+\\.\\S+)\\.zip$"
     },
     {
-      "matchDatasources": ["custom.curseforge-modpacks", "custom.modrinth-modpacks"],
+      "matchDatasources": [
+        "custom.curseforge-modpacks",
+        "custom.modrinth-modpacks"
+      ],
       "addLabels": ["renovate/modpack"],
       "semanticCommitScope": "modpack",
       "commitMessageTopic": "modpack {{depName}}",
@@ -81,10 +86,9 @@
       "allowedVersions": "/^25\\./"
     },
     {
-      "description": "Only open eclipse temurin digest bumps on Mondays",
+      "description": "Only open eclipse temurin updates on Mondays",
       "matchDatasources": ["docker"],
       "matchPackageNames": ["/eclipse-temurin$/"],
-      "matchUpdateTypes": ["digest"],
       "schedule": ["* * * * 1"]
     }
   ]
