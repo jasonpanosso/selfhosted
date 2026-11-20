@@ -41,6 +41,12 @@
       "matchPackageNames": ["ghcr.io/home-operations/charts-mirror/external-dns"],
       "sourceUrl": "https://github.com/kubernetes-sigs/external-dns",
       "sourceDirectory": "charts/external-dns"
+    },
+    {
+      "description": "Proper source for flux changelogs",
+      "matchDatasources": ["github-releases"],
+      "matchPackageNames": ["controlplaneio-fluxcd/distribution"],
+      "sourceUrl": "https://github.com/fluxcd/flux2"
     }
   ]
 }
