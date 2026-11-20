@@ -30,6 +30,13 @@
       "prBodyNotes": [
         "Major upgrade: change `serverName` in both `plugins` and `externalClusters` of `db/app/cluster.yaml` in this PR, or the new timeline 1 overwrites the old archive."
       ]
+    },
+    {
+      "description": "Only open pgvector digest bumps on Mondays",
+      "matchDatasources": ["docker"],
+      "matchPackageNames": ["ghcr.io/cloudnative-pg/pgvector"],
+      "matchUpdateTypes": ["digest"],
+      "schedule": ["* * * * 1"]
     }
   ]
 }
