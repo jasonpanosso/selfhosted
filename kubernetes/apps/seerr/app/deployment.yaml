@@ -9,6 +9,8 @@ metadata:
   annotations:
     reloader.stakater.com/auto: "true"
 spec:
+  # scaled down
+  replicas: 0
   strategy:
     type: Recreate
   selector:
