@@ -10,7 +10,7 @@ spec:
   parentRefs:
     - name: cilium-home
       namespace: kube-system
-      sectionName: jellyfin-https
+      sectionName: https
   hostnames:
     - watch.home.${domain}.${tld}
   rules:

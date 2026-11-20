@@ -64,7 +64,7 @@ spec:
   parentRefs:
     - name: cilium-home
       namespace: kube-system
-      sectionName: s3-https
+      sectionName: https
   hostnames:
     - s3.home.${domain}.${tld}
   rules:

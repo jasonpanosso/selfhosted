@@ -26,10 +26,6 @@ spec:
       namespace: *namespace
     - apiVersion: gateway.networking.k8s.io/v1
       kind: Gateway
-      name: cilium-iot
-      namespace: *namespace
-    - apiVersion: gateway.networking.k8s.io/v1
-      kind: Gateway
       name: cilium-home
       namespace: *namespace
     - apiVersion: cert-manager.io/v1

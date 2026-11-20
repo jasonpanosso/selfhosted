@@ -10,7 +10,7 @@ spec:
   parentRefs:
     - name: cilium-home
       namespace: kube-system
-      sectionName: silo-https
+      sectionName: https
   hostnames:
     - silo.home.${domain}.${tld}
   rules:
@@ -49,7 +49,7 @@ spec:
   parentRefs:
     - name: cilium-home
       namespace: kube-system
-      sectionName: silo-jellyfin-https
+      sectionName: https
   hostnames:
     - silo-jellyfin.home.${domain}.${tld}
   rules:

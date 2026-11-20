@@ -35,14 +35,14 @@ spec:
 apiVersion: gateway.networking.k8s.io/v1
 kind: Gateway
 metadata:
-  name: cilium-iot
+  name: cilium-home
 spec:
   gatewayClassName: cilium-lb
   addresses:
     - type: IPAddress
-      value: 192.168.21.12
+      value: 192.168.21.13
   listeners:
-    # LAN-only: names resolve via k8s-gateway
+    # LAN only: names resolve via k8s-gateway
     - name: http
       protocol: HTTP
       port: 80
@@ -57,81 +57,6 @@ spec:
       allowedRoutes:
         namespaces:
           from: All
-      tls:
-        certificateRefs:
-          - kind: Secret
-            name: wildcard-home-tls
----
-# yaml-language-server: $schema=https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/gateway.networking.k8s.io/gateway_v1.json
-apiVersion: gateway.networking.k8s.io/v1
-kind: Gateway
-metadata:
-  name: cilium-home
-spec:
-  gatewayClassName: cilium-lb
-  addresses:
-    - type: IPAddress
-      value: 192.168.21.13
-  listeners:
-    - name: http
-      protocol: HTTP
-      port: 80
-      hostname: "*.home.${domain}.${tld}"
-      allowedRoutes:
-        namespaces:
-          from: Same
-    - name: jellyfin-https
-      protocol: HTTPS
-      port: 443
-      hostname: watch.home.${domain}.${tld}
-      allowedRoutes:
-        namespaces:
-          from: Selector
-          selector:
-            matchLabels:
-              kubernetes.io/metadata.name: jellyfin
-      tls:
-        certificateRefs:
-          - kind: Secret
-            name: wildcard-home-tls
-    - name: silo-https
-      protocol: HTTPS
-      port: 443
-      hostname: silo.home.${domain}.${tld}
-      allowedRoutes:
-        namespaces:
-          from: Selector
-          selector:
-            matchLabels:
-              kubernetes.io/metadata.name: silo
-      tls:
-        certificateRefs:
-          - kind: Secret
-            name: wildcard-home-tls
-    - name: silo-jellyfin-https
-      protocol: HTTPS
-      port: 443
-      hostname: silo-jellyfin.home.${domain}.${tld}
-      allowedRoutes:
-        namespaces:
-          from: Selector
-          selector:
-            matchLabels:
-              kubernetes.io/metadata.name: silo
-      tls:
-        certificateRefs:
-          - kind: Secret
-            name: wildcard-home-tls
-    - name: s3-https
-      protocol: HTTPS
-      port: 443
-      hostname: s3.home.${domain}.${tld}
-      allowedRoutes:
-        namespaces:
-          from: Selector
-          selector:
-            matchLabels:
-              kubernetes.io/metadata.name: rook-ceph
       tls:
         certificateRefs:
           - kind: Secret
