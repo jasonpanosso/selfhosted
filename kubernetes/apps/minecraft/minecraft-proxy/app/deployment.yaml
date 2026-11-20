@@ -28,7 +28,7 @@ spec:
           type: RuntimeDefault
       initContainers:
         - name: copy-plugins
-          image: docker.io/library/eclipse-temurin:25.0.5_8-jre-noble@sha256:23481dc33a759b79d62814ceb1ec27a0d1a84da9d7aab0609577427176fbb1b7
+          image: docker.io/library/eclipse-temurin:25.0.5.1_2-jre-noble@sha256:2ec98aa522c472deadfd2b7c5b39bca680e33ef522a53a72f10789bdf89a6bb5
           command:
             - cp
             - /opt/plugins/ambassador/ambassador.jar
@@ -87,7 +87,7 @@ spec:
         # MiniMOTD rewrites its config files on load, so they can't be read-only mounts
         # Velocity names the data directory after the plugin id, minimotd-velocity
         - name: copy-minimotd-config
-          image: docker.io/library/eclipse-temurin:25.0.5_8-jre-noble@sha256:23481dc33a759b79d62814ceb1ec27a0d1a84da9d7aab0609577427176fbb1b7
+          image: docker.io/library/eclipse-temurin:25.0.5.1_2-jre-noble@sha256:2ec98aa522c472deadfd2b7c5b39bca680e33ef522a53a72f10789bdf89a6bb5
           command:
             - cp
             - --recursive
@@ -112,7 +112,7 @@ spec:
               readOnly: true
         # TAB inserts missing options into its config and saves it, so it can't be a read-only mount
         - name: copy-tab-config
-          image: docker.io/library/eclipse-temurin:25.0.5_8-jre-noble@sha256:23481dc33a759b79d62814ceb1ec27a0d1a84da9d7aab0609577427176fbb1b7
+          image: docker.io/library/eclipse-temurin:25.0.5.1_2-jre-noble@sha256:2ec98aa522c472deadfd2b7c5b39bca680e33ef522a53a72f10789bdf89a6bb5
           command:
             - cp
             - --dereference
@@ -134,7 +134,7 @@ spec:
               readOnly: true
       containers:
         - name: *app
-          image: docker.io/library/eclipse-temurin:25.0.5_8-jre-noble@sha256:23481dc33a759b79d62814ceb1ec27a0d1a84da9d7aab0609577427176fbb1b7
+          image: docker.io/library/eclipse-temurin:25.0.5.1_2-jre-noble@sha256:2ec98aa522c472deadfd2b7c5b39bca680e33ef522a53a72f10789bdf89a6bb5
           workingDir: /server
           command:
             - java
