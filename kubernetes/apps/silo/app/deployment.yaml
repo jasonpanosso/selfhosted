@@ -15,7 +15,7 @@ spec:
   # transcoding on the api server (lol)
   replicas: 1
   strategy:
-    type: RollingUpdate
+    type: Recreate
   selector:
     matchLabels:
       app.kubernetes.io/name: *app
@@ -60,7 +60,7 @@ spec:
                         - silo
                 topologyKey: kubernetes.io/hostname
       containers:
-        - image: ghcr.io/silo-server/silo-server:build-2573@sha256:7b6aa63aa00aeb133489848869b7bde07738f86fcccbc341afcbae26aaf8ca3f
+        - image: ghcr.io/silo-server/silo-server:build-2619@sha256:41f439cb545acf7d8cfb6216759822e97f97007338e3bc3bd132a3b848d9b0a9
           name: *app
           # do not use bundled init, run binary directly
           command: [silo]
@@ -136,6 +136,8 @@ spec:
                   key: AWS_SECRET_ACCESS_KEY
             - name: SILO_PUBLIC_URL
               value: https://silo.home.${domain}.${tld}
+            - name: SILO_PLUGINS_FILE
+              value: /run/silo-provisioning/plugins.yaml
             - name: SILO_JELLYFIN_ENABLED
               value: "true"
             - name: SILO_JELLYFIN_PUBLIC_URL
@@ -213,7 +215,22 @@ spec:
             # transcode segments, prepared downloads, and the plugin binary cache
             - name: tmp
               mountPath: /tmp
+            - name: plugins
+              mountPath: /run/silo-provisioning
+              readOnly: true
+            - name: plugin-secrets
+              mountPath: /run/secrets/silo
+              readOnly: true
       volumes:
+        - name: plugins
+          configMap:
+            name: silo-plugins
+        - name: plugin-secrets
+          secret:
+            secretName: silo
+            items:
+              - key: SILO_OIDC_PASSWORD
+                path: oidc_client_secret
         - name: media
           persistentVolumeClaim:
             claimName: media

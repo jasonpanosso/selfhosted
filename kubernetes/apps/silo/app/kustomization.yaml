@@ -15,3 +15,10 @@ resources:
   - ./resourceclaimtemplate.yaml
   - ./service.yaml
   - ./statefulset.yaml
+
+configMapGenerator:
+  - name: silo-plugins
+    options:
+      disableNameSuffixHash: true
+    files:
+      - plugins.yaml=./resources/plugins.yaml

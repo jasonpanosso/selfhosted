@@ -81,7 +81,7 @@ resource "bitwarden-secrets_secret" "silo_oidc_password" {
   key        = "SILO_OIDC_PASSWORD"
   value      = random_password.silo_oidc_password.result
   project_id = bitwarden_project.this.id
-  note       = "silo OIDC client secret, entered in silo's OIDC plugin settings"
+  note       = "silo OIDC client secret, mounted as a file for silo's plugins.yaml"
 }
 
 resource "bitwarden-secrets_secret" "silo_oidc_hash" {
