@@ -165,6 +165,15 @@ spec:
             # forcing a larger send buffer needs NET_ADMIN, keep kernel autotuning
             - name: SILO_NET_TCP_SEND_BUFFER
               value: "off"
+            - name: SILO_SEARCH_PROVIDER
+              value: meilisearch
+            - name: SILO_MEILISEARCH_URL
+              value: http://meilisearch.silo.svc.cluster.local:7700
+            - name: SILO_MEILISEARCH_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: silo
+                  key: SILO_MEILISEARCH_MASTER_KEY
           livenessProbe:
             httpGet:
               path: /api/v1/health
@@ -238,3 +247,102 @@ spec:
         - name: tmp
           emptyDir:
             sizeLimit: 30Gi
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/master-standalone-strict/deployment-apps-v1.json
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: &app meilisearch
+  labels:
+    app.kubernetes.io/name: *app
+  annotations:
+    reloader.stakater.com/auto: "true"
+spec:
+  replicas: 1
+  # a second pod would start with an empty index and split silo's rebuild across both
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: *app
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: *app
+    spec:
+      automountServiceAccountToken: false
+      securityContext:
+        runAsUser: 65534
+        runAsGroup: 65534
+        fsGroup: 65534
+        fsGroupChangePolicy: OnRootMismatch
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - image: docker.io/getmeili/meilisearch:v1.57.0@sha256:91bf09897482c17205c8faeca8daa8d57999fb9de20d862763cdfa92ba4ec790
+          name: *app
+          # skip the image's tini + sh wrapper, meilisearch handles SIGTERM itself
+          command: [/bin/meilisearch]
+          ports:
+            - containerPort: 7700
+              name: http
+          env:
+            # requires a master key and keeps the search preview UI off
+            - name: MEILI_ENV
+              value: production
+            - name: MEILI_MASTER_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: silo
+                  key: SILO_MEILISEARCH_MASTER_KEY
+            - name: MEILI_HTTP_ADDR
+              value: 0.0.0.0:7700
+            - name: MEILI_DB_PATH
+              value: /meili_data/data.ms
+            - name: MEILI_NO_ANALYTICS
+              value: "true"
+            # the default budget is 2/3 of the memory meilisearch detects, which can be the node's
+            # rather than the container limit. 128 MiB
+            - name: MEILI_MAX_INDEXING_MEMORY
+              value: "134217728"
+            - name: MEILI_MAX_INDEXING_THREADS
+              value: "1"
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 7700
+            failureThreshold: 5
+            periodSeconds: 10
+            timeoutSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 7700
+            failureThreshold: 3
+            periodSeconds: 10
+            timeoutSeconds: 5
+          resources:
+            requests:
+              cpu: 50m
+              memory: 256Mi
+            limits:
+              memory: 256Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: [ALL]
+          volumeMounts:
+            - name: data
+              mountPath: /meili_data
+            - name: tmp
+              mountPath: /tmp
+      volumes:
+        # use emptyDir, let silo rebuild to avoid migration/upgrading bs
+        - name: data
+          emptyDir:
+            sizeLimit: 1Gi
+        - name: tmp
+          emptyDir:
+            sizeLimit: 1Gi

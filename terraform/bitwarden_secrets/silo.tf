@@ -90,3 +90,16 @@ resource "bitwarden-secrets_secret" "silo_oidc_hash" {
   project_id = bitwarden_project.this.id
   note       = "silo OIDC SHA512 password hash"
 }
+
+# silo search provider
+resource "random_password" "silo_meilisearch_master_key" {
+  length  = 64
+  special = false
+}
+
+resource "bitwarden-secrets_secret" "silo_meilisearch_master_key" {
+  key        = "SILO_MEILISEARCH_MASTER_KEY"
+  value      = random_password.silo_meilisearch_master_key.result
+  project_id = bitwarden_project.this.id
+  note       = "silo's Meilisearch master key, also silo's Meilisearch API key"
+}
