@@ -9,8 +9,25 @@ plugins:
         client_id: silo
         client_secret:
           fromFile: /run/secrets/silo/oidc_client_secret
+        token_endpoint_auth_method: client_secret_basic
+        scopes: openid profile email
         # authelia only sends groups when asked for the scope
         request_groups_scope: true
+        request_offline_access: false
+        # blank: no refresh tokens without offline_access
+        refresh_token_lifetime: ""
+        refresh_token_max_lifetime: ""
+        # provider default
+        prompt: ""
+        # authelia has no end-session endpoint
+        provider_logout: false
+      claims:
+        username: preferred_username
+        email: email
+        display_name: name
+        groups: groups
+        picture: picture
+        subject: auto
       access:
         allowed_groups: admins
         admin_groups: admins
