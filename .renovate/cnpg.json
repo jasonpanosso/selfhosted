@@ -32,9 +32,15 @@
       ]
     },
     {
-      "description": "Only open pgvector digest bumps on Mondays",
+      "description": "Only open pgvector updates (tags and digests) on Mondays",
       "matchDatasources": ["docker"],
       "matchPackageNames": ["ghcr.io/cloudnative-pg/pgvector"],
+      "schedule": ["* * * * 1"]
+    },
+    {
+      "description": "Only open postgresql digest bumps on Mondays",
+      "matchDatasources": ["docker"],
+      "matchPackageNames": ["ghcr.io/cloudnative-pg/postgresql"],
       "matchUpdateTypes": ["digest"],
       "schedule": ["* * * * 1"]
     }
