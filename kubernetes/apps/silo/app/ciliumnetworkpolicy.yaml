@@ -29,6 +29,18 @@ spec:
         - ports:
             - port: "8080"
               protocol: TCP
+    # autoscan webhooks
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: servarr
+            app.kubernetes.io/name: radarr
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: servarr
+            app.kubernetes.io/name: sonarr
+      toPorts:
+        - ports:
+            - port: "8080"
+              protocol: TCP
   egress:
     - toEndpoints:
         - matchLabels:

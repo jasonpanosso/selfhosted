@@ -111,3 +111,16 @@ spec:
         - ports:
             - port: "8096"
               protocol: TCP
+    # silo autoscan webhook
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: silo
+            app.kubernetes.io/name: silo
+      toPorts:
+        - ports:
+            - port: "8080"
+              protocol: TCP
+          rules:
+            http:
+              - method: POST
+                path: /api/v2/autoscan/webhooks/[^/]+
