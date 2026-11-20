@@ -224,8 +224,6 @@ identity_providers:
         redirect_uris:
           # stable callback from silo's plugins.yaml (auth_binding.callback: stable)
           - https://silo.home.${domain}.${tld}/api/v2/auth/oauth/callback
-          # TODO: remove once sign-in works through the stable callback. 35 = the OIDC plugin's installation id
-          - https://silo.home.${domain}.${tld}/api/v2/auth/oauth/35/callback
         scopes:
           - openid
           - groups
