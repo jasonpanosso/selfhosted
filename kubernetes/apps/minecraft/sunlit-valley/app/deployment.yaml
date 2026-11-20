@@ -68,7 +68,7 @@ spec:
             - name: CF_SLUG
               value: society-sunlit-valley
             - name: CF_FILENAME_MATCHER
-              value: "4.1.5A"
+              value: "4.2.0"
             - name: CF_EXCLUDE_MODS
               # better-compatibility-checker does not work on 1.20.1 with velocity
               # create-schematicchecker phones home and disables TLS verification for the whole JVM
