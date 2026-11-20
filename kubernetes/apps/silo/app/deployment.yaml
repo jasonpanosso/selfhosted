@@ -138,8 +138,6 @@ spec:
               value: https://silo.home.${domain}.${tld}
             - name: SILO_PLUGINS_FILE
               value: /run/silo-provisioning/plugins.yaml
-            - name: SILO_JELLYFIN_ENABLED
-              value: "true"
             - name: SILO_JELLYFIN_PUBLIC_URL
               value: https://silo-jellyfin.home.${domain}.${tld}
             - name: SILO_AUDIOBOOKSHELF_ENABLED
