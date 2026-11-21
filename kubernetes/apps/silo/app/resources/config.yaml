@@ -50,3 +50,5 @@ plugins:
       account:
         api_key:
           fromFile: /run/secrets/silo/theintrodb_api_key
+  silo.tmdb: {}
+  silo.tvdb: {}
