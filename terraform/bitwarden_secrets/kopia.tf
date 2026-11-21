@@ -3,7 +3,6 @@ locals {
   # holding a single app, or an app in a namespace with a repository per app.
   # Removing an entry is blocked by prevent_destroy: retire a repository deliberately.
   kopia_repositories = toset([
-    "thelounge",
     "bookboss",
     "tandoor",
     "jellyfin",

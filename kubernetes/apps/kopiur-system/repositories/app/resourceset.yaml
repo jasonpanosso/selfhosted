@@ -10,10 +10,6 @@ spec:
   # succeeded: it leaves out the seed and lets the Restore provision an empty volume.
   # compressor (optional) turns on kopia compression; kopia stores uncompressed by default.
   inputs:
-    - namespace: thelounge
-      app: thelounge
-      capacity: 20Gi
-      compressor: zstd
     - namespace: bookboss
       app: bookboss
       capacity: 10Gi
@@ -59,7 +55,6 @@ spec:
       app: soju
       capacity: 20Gi
       compressor: zstd
-      bootstrap: true
   # Populator Restores stay unready until a PVC claims them, so health is
   # reported by Kopiur's own alerts rather than by waiting here.
   wait: false

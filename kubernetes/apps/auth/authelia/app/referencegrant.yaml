@@ -72,9 +72,6 @@ spec:
       namespace: tandoor
     - group: gateway.networking.k8s.io
       kind: HTTPRoute
-      namespace: thelounge
-    - group: gateway.networking.k8s.io
-      kind: HTTPRoute
       namespace: upbrr
   to:
     - group: ""

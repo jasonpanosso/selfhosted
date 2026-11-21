@@ -12,8 +12,7 @@ spec:
       namespace: kube-system
       sectionName: https
   hostnames:
-    # trial host while thelounge keeps irc.
-    - soju.${domain}.${tld}
+    - irc.${domain}.${tld}
   rules:
     # gamja's default WebSocket URL, served by soju
     - matches:
