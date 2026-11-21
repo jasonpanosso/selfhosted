@@ -35,6 +35,7 @@ resource "bitwarden-secrets_secret" "silo_redis_password" {
 locals {
   silo_transcode_node_ids = {
     "0" = 34
+    "1" = 35
   }
 }
 

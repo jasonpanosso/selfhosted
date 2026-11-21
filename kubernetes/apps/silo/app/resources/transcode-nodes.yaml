@@ -9,3 +9,7 @@ nodes:
     url: http://silo-transcode-0.silo-transcode.silo.svc.cluster.local:8080
     key:
       fromFile: /run/secrets/silo/silo-transcode-0
+  silo-transcode-1:
+    url: http://silo-transcode-1.silo-transcode.silo.svc.cluster.local:8080
+    key:
+      fromFile: /run/secrets/silo/silo-transcode-1

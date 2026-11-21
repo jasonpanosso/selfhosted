@@ -9,7 +9,7 @@ metadata:
   annotations:
     reloader.stakater.com/auto: "true"
 spec:
-  replicas: 1
+  replicas: 2
   serviceName: *app
   selector:
     matchLabels:
@@ -95,9 +95,9 @@ spec:
           resources:
             requests:
               cpu: 100m
-              memory: 2Gi
+              memory: 768Mi
             limits:
-              memory: 2Gi
+              memory: 768Mi
             claims:
               - name: gpu
           securityContext:
