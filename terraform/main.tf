@@ -14,8 +14,7 @@ module "bitwarden_secrets" {
   b2_talos_backup_access_key_id     = b2_application_key.talos_backup.application_key_id
   b2_talos_backup_secret_access_key = b2_application_key.talos_backup.application_key
 
-  smtp_username = var.smtp_username
-  smtp_password = var.smtp_password
+  resend_api_key = var.resend_api_key
 
   pushover_user_key            = var.pushover_user_key
   pushover_api_token           = var.pushover_api_token

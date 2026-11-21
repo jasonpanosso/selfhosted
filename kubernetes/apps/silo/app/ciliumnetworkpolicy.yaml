@@ -109,6 +109,26 @@ spec:
         - ports:
             - port: "443"
               protocol: TCP
+    # toFQDNs only learns IPs from DNS that goes through the proxy
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: kube-system
+            k8s-app: kube-dns
+      toPorts:
+        - ports:
+            - port: "53"
+              protocol: UDP
+            - port: "53"
+              protocol: TCP
+          rules:
+            dns:
+              - matchPattern: "*"
+    - toFQDNs:
+        - matchName: smtp.resend.com
+      toPorts:
+        - ports:
+            - port: "587"
+              protocol: TCP
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/cilium.io/ciliumnetworkpolicy_v2.json
 apiVersion: cilium.io/v2

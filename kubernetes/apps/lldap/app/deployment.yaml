@@ -92,21 +92,20 @@ spec:
             - name: LLDAP_SMTP_OPTIONS__ENABLE_PASSWORD_RESET
               value: "true"
             - name: LLDAP_SMTP_OPTIONS__SERVER
-              value: smtp.gmail.com
+              value: smtp.resend.com
             - name: LLDAP_SMTP_OPTIONS__PORT
               value: "587"
             - name: LLDAP_SMTP_OPTIONS__SMTP_ENCRYPTION
               value: STARTTLS
             - name: LLDAP_SMTP_OPTIONS__USER
-              valueFrom:
-                secretKeyRef:
-                  name: lldap
-                  key: SMTP_USERNAME
+              value: resend
+            - name: LLDAP_SMTP_OPTIONS__FROM
+              value: LLDAP <lldap@notify.jasonpanosso.com>
             - name: LLDAP_SMTP_OPTIONS__PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: lldap
-                  key: SMTP_PASSWORD
+                  key: RESEND_API_KEY
           resources:
             requests:
               cpu: 50m

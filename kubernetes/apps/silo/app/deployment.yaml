@@ -148,6 +148,22 @@ spec:
               value: silo_media_items
             - name: SILO_RECOMMENDATIONS_ENABLED
               value: "true"
+            - name: SILO_SMTP_ENABLED
+              value: "true"
+            - name: SILO_SMTP_HOST
+              value: smtp.resend.com
+            - name: SILO_SMTP_PORT
+              value: "587"
+            - name: SILO_SMTP_SECURITY
+              value: starttls
+            - name: SILO_SMTP_USER
+              value: resend
+            - name: SILO_SMTP_PASSWORD_FILE
+              value: /run/secrets/silo/resend_api_key
+            - name: SILO_SMTP_FROM_ADDRESS
+              value: silo@notify.jasonpanosso.com
+            - name: SILO_SMTP_FROM_NAME
+              value: Silo
             # the ai_providers id in config.yaml
             - name: SILO_RECOMMENDATIONS_PROVIDER
               value: openrouter-002b54
@@ -232,6 +248,8 @@ spec:
                       path: theintrodb_api_key
                     - key: SILO_OPENROUTER_API_KEY
                       path: openrouter_api_key
+                    - key: RESEND_API_KEY
+                      path: resend_api_key
               # every transcode node's key, one file per pod name (transcode-nodes.yaml)
               - secret:
                   name: silo-transcode

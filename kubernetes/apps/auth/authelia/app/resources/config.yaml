@@ -59,8 +59,8 @@ session:
     max_retries: 10
 
 ntp:
-  # same source as the nodes (talos/common.yaml);
-  address: udp://time.google.com:123
+  # pod uses the node clock
+  disable_startup_check: true
 
 storage:
   encryption_key: {{ secret "/secrets/ENCRYPTION_KEY" | msquote }}
@@ -73,16 +73,16 @@ storage:
 notifier:
   disable_startup_check: false
   smtp:
-    address: submission://smtp.gmail.com:587
+    address: submission://smtp.resend.com:587
     identifier: ${domain}.${tld}
-    sender: admin@${domain}.${tld}
+    sender: Authelia <authelia@notify.jasonpanosso.com>
     subject: "[Authelia] {title}"
-    username: {{ secret "/secrets/SMTP_USERNAME" | msquote }}
-    password: {{ secret "/secrets/SMTP_PASSWORD" | msquote }}
+    username: resend
+    password: {{ secret "/secrets/RESEND_API_KEY" | msquote }}
 
 authentication_backend:
   password_reset:
-    disable: true
+    disable: false
   password_change:
     disable: true
   ldap:

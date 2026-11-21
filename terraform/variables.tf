@@ -45,14 +45,8 @@ variable "mam_id" {
   sensitive   = true
 }
 
-variable "smtp_username" {
-  description = "SMTP username"
-  type        = string
-  sensitive   = true
-}
-
-variable "smtp_password" {
-  description = "SMTP password"
+variable "resend_api_key" {
+  description = "Resend API key (sending access), used as the SMTP password"
   type        = string
   sensitive   = true
 }

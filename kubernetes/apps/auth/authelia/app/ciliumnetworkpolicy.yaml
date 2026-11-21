@@ -57,19 +57,27 @@ spec:
         - ports:
             - port: "5432"
               protocol: TCP
-    # SMTP and NTP. both are checked at startup, so authelia may not boot without them
-    - toCIDRSet:
-        - cidr: 0.0.0.0/0
-          except:
-            - 10.0.0.0/8
-            - 172.16.0.0/12
-            - 192.168.0.0/16
+    # toFQDNs only learns IPs from DNS that goes through the proxy
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: kube-system
+            k8s-app: kube-dns
+      toPorts:
+        - ports:
+            - port: "53"
+              protocol: UDP
+            - port: "53"
+              protocol: TCP
+          rules:
+            dns:
+              - matchPattern: "*"
+    # SMTP is checked at startup, so authelia may not boot without it
+    - toFQDNs:
+        - matchName: smtp.resend.com
       toPorts:
         - ports:
             - port: "587"
               protocol: TCP
-            - port: "123"
-              protocol: UDP
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/cilium.io/ciliumnetworkpolicy_v2.json
 # ingress comes from the operator's own NetworkPolicy, which cilium adds to this
