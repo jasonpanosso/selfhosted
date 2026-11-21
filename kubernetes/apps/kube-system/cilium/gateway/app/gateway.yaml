@@ -3,7 +3,7 @@
 apiVersion: gateway.networking.k8s.io/v1
 kind: Gateway
 metadata:
-  name: cilium
+  name: cilium-public
   annotations:
     external-dns.kubernetes.io/target: kubernetes.${domain}.${tld}
 spec:
@@ -12,6 +12,37 @@ spec:
     - type: IPAddress
       value: 192.168.21.11
   listeners:
+    - name: http
+      protocol: HTTP
+      port: 80
+      hostname: flux.${domain}.${tld}
+      allowedRoutes:
+        namespaces:
+          from: Same
+    - name: https
+      protocol: HTTPS
+      port: 443
+      hostname: flux.${domain}.${tld}
+      allowedRoutes:
+        namespaces:
+          from: All
+      tls:
+        certificateRefs:
+          - kind: Secret
+            name: wildcard-tls
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/gateway.networking.k8s.io/gateway_v1.json
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: cilium-internal
+spec:
+  gatewayClassName: cilium-lb
+  addresses:
+    - type: IPAddress
+      value: 192.168.21.13
+  listeners:
+    # LAN only: the router forwards ${domain}.${tld} to k8s-gateway
     - name: http
       protocol: HTTP
       port: 80
@@ -30,34 +61,3 @@ spec:
         certificateRefs:
           - kind: Secret
             name: wildcard-tls
----
-# yaml-language-server: $schema=https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/gateway.networking.k8s.io/gateway_v1.json
-apiVersion: gateway.networking.k8s.io/v1
-kind: Gateway
-metadata:
-  name: cilium-home
-spec:
-  gatewayClassName: cilium-lb
-  addresses:
-    - type: IPAddress
-      value: 192.168.21.13
-  listeners:
-    # LAN only: names resolve via k8s-gateway
-    - name: http
-      protocol: HTTP
-      port: 80
-      hostname: "*.home.${domain}.${tld}"
-      allowedRoutes:
-        namespaces:
-          from: Same
-    - name: https
-      protocol: HTTPS
-      port: 443
-      hostname: "*.home.${domain}.${tld}"
-      allowedRoutes:
-        namespaces:
-          from: All
-      tls:
-        certificateRefs:
-          - kind: Secret
-            name: wildcard-home-tls

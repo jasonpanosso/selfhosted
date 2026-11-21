@@ -46,7 +46,7 @@ spec:
       - service
     gatewayNamespace: kube-system
     extraArgs:
-      gateway-name: cilium
+      gateway-name: cilium-public
 
     domainFilters:
       - ${domain}.${tld}

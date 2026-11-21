@@ -8,11 +8,11 @@ metadata:
     app.kubernetes.io/name: *app
 spec:
   parentRefs:
-    - name: cilium-home
+    - name: cilium-internal
       namespace: kube-system
       sectionName: https
   hostnames:
-    - watch.home.${domain}.${tld}
+    - watch.${domain}.${tld}
   rules:
     # no ExternalAuth, strip identity headers so they can't be spoofed
     - filters:

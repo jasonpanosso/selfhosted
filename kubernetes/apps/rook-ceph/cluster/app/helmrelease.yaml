@@ -400,7 +400,7 @@ spec:
           preservePoolsOnDelete: true
           hosting:
             dnsNames:
-              - s3.home.${domain}.${tld}
+              - s3.${domain}.${tld}
           gateway:
             port: 80
             instances: 1

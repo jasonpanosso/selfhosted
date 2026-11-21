@@ -10,7 +10,7 @@ metadata:
     rook_cluster: rook-ceph
 spec:
   parentRefs:
-    - name: cilium
+    - name: cilium-internal
       namespace: kube-system
       sectionName: https
   hostnames:
@@ -62,11 +62,11 @@ metadata:
     rook_cluster: rook-ceph
 spec:
   parentRefs:
-    - name: cilium-home
+    - name: cilium-internal
       namespace: kube-system
       sectionName: https
   hostnames:
-    - s3.home.${domain}.${tld}
+    - s3.${domain}.${tld}
   rules:
     # no ExternalAuth: S3 requests carry their own SigV4 signature
     - filters:

@@ -8,11 +8,11 @@ metadata:
     app.kubernetes.io/name: *app
 spec:
   parentRefs:
-    - name: cilium-home
+    - name: cilium-internal
       namespace: kube-system
       sectionName: https
   hostnames:
-    - silo.home.${domain}.${tld}
+    - silo.${domain}.${tld}
   rules:
     # no ExternalAuth: silo has its own login (OIDC plugin) and native apps
     - filters:
@@ -47,11 +47,11 @@ metadata:
     app.kubernetes.io/name: silo
 spec:
   parentRefs:
-    - name: cilium-home
+    - name: cilium-internal
       namespace: kube-system
       sectionName: https
   hostnames:
-    - silo-jellyfin.home.${domain}.${tld}
+    - silo-jellyfin.${domain}.${tld}
   rules:
     - filters:
         - type: RequestHeaderModifier

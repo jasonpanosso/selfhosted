@@ -6,7 +6,7 @@ metadata:
   name: &app sunlit-valley-cobblemon-rcon
 spec:
   parentRefs:
-    - name: cilium
+    - name: cilium-internal
       namespace: kube-system
       sectionName: https
   hostnames:

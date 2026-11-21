@@ -31,7 +31,7 @@ access_control:
   rules:
     # one factor for jellyfin clients to function
     - domain:
-        - watch.home.${domain}.${tld}
+        - watch.${domain}.${tld}
       subject:
         - group:admins
         - group:jellyfin_users
@@ -206,7 +206,6 @@ identity_providers:
         pre_configured_consent_duration: 1y
         redirect_uris:
           - https://hass.${domain}.${tld}/auth/oidc/callback
-          - https://hass.home.${domain}.${tld}/auth/oidc/callback
         scopes:
           - openid
           - groups
@@ -223,7 +222,7 @@ identity_providers:
         pre_configured_consent_duration: 1y
         redirect_uris:
           # stable callback from silo's plugins.yaml (auth_binding.callback: stable)
-          - https://silo.home.${domain}.${tld}/api/v2/auth/oauth/callback
+          - https://silo.${domain}.${tld}/api/v2/auth/oauth/callback
         scopes:
           - openid
           - groups

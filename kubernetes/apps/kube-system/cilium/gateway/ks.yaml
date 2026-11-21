@@ -22,19 +22,15 @@ spec:
   healthChecks:
     - apiVersion: gateway.networking.k8s.io/v1
       kind: Gateway
-      name: cilium
+      name: cilium-public
       namespace: *namespace
     - apiVersion: gateway.networking.k8s.io/v1
       kind: Gateway
-      name: cilium-home
+      name: cilium-internal
       namespace: *namespace
     - apiVersion: cert-manager.io/v1
       kind: Certificate
       name: wildcard
-      namespace: *namespace
-    - apiVersion: cert-manager.io/v1
-      kind: Certificate
-      name: wildcard-home
       namespace: *namespace
   # kstatus only reads Reconciling/Stalled, neither kind sets them
   healthCheckExprs:

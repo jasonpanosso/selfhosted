@@ -6,7 +6,7 @@ metadata:
   name: &app botc-rcon
 spec:
   parentRefs:
-    - name: cilium
+    - name: cilium-internal
       namespace: kube-system
       sectionName: https
   hostnames:

@@ -8,7 +8,7 @@ metadata:
     app.kubernetes.io/name: qbittorrent
 spec:
   parentRefs:
-    - name: cilium
+    - name: cilium-internal
       namespace: kube-system
       sectionName: https
   hostnames:

@@ -8,11 +8,11 @@ metadata:
     app.kubernetes.io/name: *app
 spec:
   parentRefs:
-    - name: cilium-home
+    - name: cilium-internal
       namespace: kube-system
       sectionName: https
   hostnames:
-    - matter.home.${domain}.${tld}
+    - matter.${domain}.${tld}
   rules:
     - filters:
         - type: ExternalAuth

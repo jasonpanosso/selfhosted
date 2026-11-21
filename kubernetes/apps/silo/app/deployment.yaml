@@ -79,7 +79,7 @@ spec:
             - name: SILO_ARTWORK_STORAGE
               value: s3
             - name: SILO_S3_PUBLIC_ENDPOINT
-              value: https://s3.home.${domain}.${tld}
+              value: https://s3.${domain}.${tld}
             - name: SILO_S3_PUBLIC_REGION
               value: us-east-1
             - name: SILO_S3_PUBLIC_BUCKET
@@ -93,7 +93,7 @@ spec:
             - name: SILO_S3_PUBLIC_SECRET_KEY_FILE
               value: /run/secrets/silo/s3_public_secret_key
             - name: SILO_S3_PRIVATE_ENDPOINT
-              value: https://s3.home.${domain}.${tld}
+              value: https://s3.${domain}.${tld}
             - name: SILO_S3_PRIVATE_REGION
               value: us-east-1
             - name: SILO_S3_PRIVATE_BUCKET
@@ -105,14 +105,14 @@ spec:
             - name: SILO_S3_PRIVATE_SECRET_KEY_FILE
               value: /run/secrets/silo/s3_private_secret_key
             - name: SILO_PUBLIC_URL
-              value: https://silo.home.${domain}.${tld}
+              value: https://silo.${domain}.${tld}
             # plugins and AI providers
             - name: SILO_CONFIG_FILE
               value: /run/silo-config/config.yaml
             - name: SILO_TRANSCODE_NODES_FILE
               value: /run/silo-config/transcode-nodes.yaml
             - name: SILO_JELLYFIN_PUBLIC_URL
-              value: https://silo-jellyfin.home.${domain}.${tld}
+              value: https://silo-jellyfin.${domain}.${tld}
             - name: SILO_AUDIOBOOKSHELF_ENABLED
               value: "false"
             - name: SILO_SIGNUP_ENABLED
