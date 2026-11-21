@@ -60,7 +60,7 @@ spec:
                         - silo
                 topologyKey: kubernetes.io/hostname
       containers:
-        - image: ghcr.io/silo-server/silo-server:build-2619@sha256:41f439cb545acf7d8cfb6216759822e97f97007338e3bc3bd132a3b848d9b0a9
+        - image: ghcr.io/silo-server/silo-server:build-2872@sha256:caf474ef4c857b60b0d10b641772d6afc23bb3c7c236c2c1174d385e8b654ff6
           name: *app
           # do not use bundled init, run binary directly
           command: [silo]
@@ -70,30 +70,12 @@ spec:
             - containerPort: 8096
               name: jellyfin
           env:
-            - name: SILO_DB_USERNAME
-              valueFrom:
-                secretKeyRef:
-                  name: silo
-                  key: SILO_DB_USERNAME
-            - name: SILO_DB_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: silo
-                  key: SILO_DB_PASSWORD
-            - name: DATABASE_URL
-              value: postgres://$(SILO_DB_USERNAME):$(SILO_DB_PASSWORD)@pgcluster-rw.db.svc.cluster.local:5432/silo?sslmode=require
-            - name: SECRET_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: silo
-                  key: SILO_SECRET_KEY
-            - name: SILO_REDIS_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: silo
-                  key: SILO_REDIS_PASSWORD
-            - name: REDIS_URL
-              value: redis://:$(SILO_REDIS_PASSWORD)@dragonfly.silo.svc.cluster.local:6379/0
+            - name: DATABASE_URL_FILE
+              value: /run/secrets/silo/database_url
+            - name: SECRET_KEY_FILE
+              value: /run/secrets/silo/secret_key
+            - name: REDIS_URL_FILE
+              value: /run/secrets/silo/redis_url
             - name: SILO_ARTWORK_STORAGE
               value: s3
             - name: SILO_S3_PUBLIC_ENDPOINT
@@ -106,16 +88,10 @@ spec:
               value: "true"
             - name: SILO_S3_PUBLIC_URL_AUTH
               value: presigned
-            - name: SILO_S3_PUBLIC_ACCESS_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: silo-public
-                  key: AWS_ACCESS_KEY_ID
-            - name: SILO_S3_PUBLIC_SECRET_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: silo-public
-                  key: AWS_SECRET_ACCESS_KEY
+            - name: SILO_S3_PUBLIC_ACCESS_KEY_FILE
+              value: /run/secrets/silo/s3_public_access_key
+            - name: SILO_S3_PUBLIC_SECRET_KEY_FILE
+              value: /run/secrets/silo/s3_public_secret_key
             - name: SILO_S3_PRIVATE_ENDPOINT
               value: https://s3.home.${domain}.${tld}
             - name: SILO_S3_PRIVATE_REGION
@@ -124,20 +100,17 @@ spec:
               value: silo-private
             - name: SILO_S3_PRIVATE_PATH_STYLE
               value: "true"
-            - name: SILO_S3_PRIVATE_ACCESS_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: silo-private
-                  key: AWS_ACCESS_KEY_ID
-            - name: SILO_S3_PRIVATE_SECRET_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: silo-private
-                  key: AWS_SECRET_ACCESS_KEY
+            - name: SILO_S3_PRIVATE_ACCESS_KEY_FILE
+              value: /run/secrets/silo/s3_private_access_key
+            - name: SILO_S3_PRIVATE_SECRET_KEY_FILE
+              value: /run/secrets/silo/s3_private_secret_key
             - name: SILO_PUBLIC_URL
               value: https://silo.home.${domain}.${tld}
-            - name: SILO_PLUGINS_FILE
-              value: /run/silo-provisioning/plugins.yaml
+            # plugins and AI providers
+            - name: SILO_CONFIG_FILE
+              value: /run/silo-config/config.yaml
+            - name: SILO_TRANSCODE_NODES_FILE
+              value: /run/silo-config/transcode-nodes.yaml
             - name: SILO_JELLYFIN_PUBLIC_URL
               value: https://silo-jellyfin.home.${domain}.${tld}
             - name: SILO_AUDIOBOOKSHELF_ENABLED
@@ -169,11 +142,17 @@ spec:
               value: meilisearch
             - name: SILO_MEILISEARCH_URL
               value: http://meilisearch.silo.svc.cluster.local:7700
-            - name: SILO_MEILISEARCH_API_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: silo
-                  key: SILO_MEILISEARCH_MASTER_KEY
+            - name: SILO_MEILISEARCH_API_KEY_FILE
+              value: /run/secrets/silo/meilisearch_api_key
+            - name: SILO_MEILISEARCH_INDEX
+              value: silo_media_items
+            - name: SILO_RECOMMENDATIONS_ENABLED
+              value: "true"
+            # the ai_providers id in config.yaml
+            - name: SILO_RECOMMENDATIONS_PROVIDER
+              value: openrouter-002b54
+            - name: SILO_RECOMMENDATIONS_MODEL
+              value: baai/bge-m3
           livenessProbe:
             httpGet:
               path: /api/v1/health
@@ -222,22 +201,54 @@ spec:
             # transcode segments, prepared downloads, and the plugin binary cache
             - name: tmp
               mountPath: /tmp
-            - name: plugins
-              mountPath: /run/silo-provisioning
+            - name: silo-config
+              mountPath: /run/silo-config
               readOnly: true
-            - name: plugin-secrets
+            - name: secrets
               mountPath: /run/secrets/silo
               readOnly: true
       volumes:
-        - name: plugins
+        - name: silo-config
           configMap:
-            name: silo-plugins
-        - name: plugin-secrets
-          secret:
-            secretName: silo
-            items:
-              - key: SILO_OIDC_PASSWORD
-                path: oidc_client_secret
+            name: silo-config
+        # every secret silo reads, through the *_FILE variables and the config documents' fromFile
+        - name: secrets
+          projected:
+            sources:
+              - secret:
+                  name: silo
+                  items:
+                    - key: DATABASE_URL
+                      path: database_url
+                    - key: SILO_SECRET_KEY
+                      path: secret_key
+                    - key: REDIS_URL
+                      path: redis_url
+                    - key: SILO_MEILISEARCH_MASTER_KEY
+                      path: meilisearch_api_key
+                    - key: SILO_OIDC_PASSWORD
+                      path: oidc_client_secret
+                    - key: SILO_THEINTRODB_API_KEY
+                      path: theintrodb_api_key
+                    - key: SILO_OPENROUTER_API_KEY
+                      path: openrouter_api_key
+              # every transcode node's key, one file per pod name (transcode-nodes.yaml)
+              - secret:
+                  name: silo-transcode
+              - secret:
+                  name: silo-public
+                  items:
+                    - key: AWS_ACCESS_KEY_ID
+                      path: s3_public_access_key
+                    - key: AWS_SECRET_ACCESS_KEY
+                      path: s3_public_secret_key
+              - secret:
+                  name: silo-private
+                  items:
+                    - key: AWS_ACCESS_KEY_ID
+                      path: s3_private_access_key
+                    - key: AWS_SECRET_ACCESS_KEY
+                      path: s3_private_secret_key
         - name: media
           persistentVolumeClaim:
             claimName: media

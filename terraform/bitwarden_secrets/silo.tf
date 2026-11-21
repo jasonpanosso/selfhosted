@@ -31,21 +31,25 @@ resource "bitwarden-secrets_secret" "silo_redis_password" {
   note       = "Dragonfly password for silo's event bus"
 }
 
-# currently imported, keys must be generated in Silo UI
-resource "random_password" "silo_node_key" {
-  length = 50
-
-  lifecycle {
-    # a replacement would generate a key silo rejects
-    prevent_destroy = true
+# silo-transcode StatefulSet ordinal => silo node id (34 is arbitrary, however required)
+locals {
+  silo_transcode_node_ids = {
+    "0" = 34
   }
 }
 
-resource "bitwarden-secrets_secret" "silo_node_key" {
-  key        = "SILO_NODE_KEY"
-  value      = random_password.silo_node_key.result
+# key format is snk1_<node id>_<32 random bytes as unpadded base64url>
+resource "random_bytes" "silo_transcode_node_key" {
+  for_each = local.silo_transcode_node_ids
+  length   = 32
+}
+
+resource "bitwarden-secrets_secret" "silo_transcode_node_key" {
+  for_each   = local.silo_transcode_node_ids
+  key        = "SILO_TRANSCODE_${each.key}_NODE_KEY"
+  value      = "snk1_${each.value}_${replace(replace(trimsuffix(random_bytes.silo_transcode_node_key[each.key].base64, "="), "+", "-"), "/", "_")}"
   project_id = bitwarden_project.this.id
-  note       = "silo transcode node key; reissuing it in silo invalidates this one (drain the node first)"
+  note       = "node key for silo-transcode-${each.key} (node id ${each.value})"
 }
 
 # encrypts plugin configs (OIDC client secret) and other secrets at rest.
@@ -102,4 +106,18 @@ resource "bitwarden-secrets_secret" "silo_meilisearch_master_key" {
   value      = random_password.silo_meilisearch_master_key.result
   project_id = bitwarden_project.this.id
   note       = "silo's Meilisearch master key, also silo's Meilisearch API key"
+}
+
+resource "bitwarden-secrets_secret" "silo_theintrodb_api_key" {
+  key        = "SILO_THEINTRODB_API_KEY"
+  value      = var.theintrodb_api_key
+  project_id = bitwarden_project.this.id
+  note       = "TheIntroDB API key, mounted as a file for silo's config.yaml"
+}
+
+resource "bitwarden-secrets_secret" "silo_openrouter_api_key" {
+  key        = "SILO_OPENROUTER_API_KEY"
+  value      = var.openrouter_api_key
+  project_id = bitwarden_project.this.id
+  note       = "OpenRouter API key, mounted as a file for silo's config.yaml ai_providers"
 }

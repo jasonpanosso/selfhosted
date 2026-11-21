@@ -17,8 +17,9 @@ resources:
   - ./statefulset.yaml
 
 configMapGenerator:
-  - name: silo-plugins
+  - name: silo-config
     options:
       disableNameSuffixHash: true
     files:
-      - plugins.yaml=./resources/plugins.yaml
+      - config.yaml=./resources/config.yaml
+      - transcode-nodes.yaml=./resources/transcode-nodes.yaml

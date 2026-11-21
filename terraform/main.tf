@@ -22,6 +22,8 @@ module "bitwarden_secrets" {
   healthchecksio_heartbeat_url = var.healthchecksio_heartbeat_url
   curseforge_api_key           = var.curseforge_api_key
   hardcover_api_key            = var.hardcover_api_key
+  theintrodb_api_key           = var.theintrodb_api_key
+  openrouter_api_key           = var.openrouter_api_key
 }
 
 module "cluster_secrets" {

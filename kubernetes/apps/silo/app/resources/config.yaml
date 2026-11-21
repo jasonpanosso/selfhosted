@@ -1,6 +1,13 @@
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/Silo-Server/silo-server/main/contracts/plugins/provisioning/v1/schema.json
 apiVersion: 1
+ai_providers:
+  openrouter-002b54:
+    type: openrouter
+    name: OpenRouter
+    base_url: https://openrouter.ai/api/v1
+    api_key:
+      fromFile: /run/secrets/silo/openrouter_api_key
 plugins:
   silo.auth.oidc:
     config:
@@ -38,3 +45,8 @@ plugins:
       # /api/v2/auth/oauth/callback instead of the installation id route
       callback: stable
   silo.autoscan.arr: {}
+  silo.theintrodb:
+    config:
+      account:
+        api_key:
+          fromFile: /run/secrets/silo/theintrodb_api_key

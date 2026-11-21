@@ -10,7 +10,6 @@ metadata:
     reloader.stakater.com/auto: "true"
 spec:
   replicas: 1
-  # the node is registered at this pod's own address
   serviceName: *app
   selector:
     matchLabels:
@@ -35,7 +34,7 @@ spec:
         - name: gpu
           resourceClaimTemplateName: silo-gpu
       containers:
-        - image: ghcr.io/silo-server/silo-server:build-2619@sha256:41f439cb545acf7d8cfb6216759822e97f97007338e3bc3bd132a3b848d9b0a9
+        - image: ghcr.io/silo-server/silo-server:build-2872@sha256:caf474ef4c857b60b0d10b641772d6afc23bb3c7c236c2c1174d385e8b654ff6
           name: *app
           # do not use bundled init, run binary directly
           command: [silo]
@@ -47,25 +46,30 @@ spec:
               value: transcode
             - name: SILO_CORE_URL
               value: http://silo.silo.svc.cluster.local
-            - name: SILO_NODE_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: silo-transcode
-                  key: SILO_NODE_KEY
             - name: SILO_NODE_NAME
-              value: silo-transcode-0
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
             - name: SILO_NODE_URL
-              value: http://silo-transcode-0.silo-transcode.silo.svc.cluster.local:8080
-            # reads the library through its own mount, at the same paths as the API pods
+              value: http://$(SILO_NODE_NAME).silo-transcode.silo.svc.cluster.local:8080
+            - name: SILO_NODE_KEY_FILE
+              value: /run/secrets/silo/$(SILO_NODE_NAME)
+            - name: SILO_NODE_GROUP
+              value: kubernetes
             - name: SILO_NODE_SOURCE_ACCESS
               value: local
             - name: SILO_NODE_HW_ACCEL
               value: qsv
-            # worker-5 and worker-8 have one iGPU each, so it's always the first render node
             - name: SILO_NODE_HW_DEVICE
               value: /dev/dri/renderD128
             - name: SILO_NODE_DRAIN_TIMEOUT
               value: 10m
+            # hdd volume for biggly downloads kept off of ephemeral
+            - name: SILO_NODE_DOWNLOAD_ARTIFACT_DIR
+              value: /var/cache/silo-downloads
+            # 80 GiB of the 100Gi volume
+            - name: SILO_NODE_DOWNLOAD_ARTIFACT_MAX_BYTES
+              value: "85899345920"
           # answers 200 while draining, so a draining node is not restarted
           livenessProbe:
             httpGet:
@@ -110,13 +114,31 @@ spec:
               mountPath: /media/shows
               subPath: shows
               readOnly: true
-            # transcode segments and prepared downloads
+            # transcode segments
             - name: tmp
               mountPath: /tmp
+            - name: downloads
+              mountPath: /var/cache/silo-downloads
+            - name: secrets
+              mountPath: /run/secrets/silo
+              readOnly: true
       volumes:
+        # every node's key, one file per pod name
+        - name: secrets
+          secret:
+            secretName: silo-transcode
         - name: media
           persistentVolumeClaim:
             claimName: media
         - name: tmp
           emptyDir:
             sizeLimit: 30Gi
+  volumeClaimTemplates:
+    - metadata:
+        name: downloads
+      spec:
+        accessModes: [ReadWriteOncePod]
+        storageClassName: rook-ceph-block-hdd
+        resources:
+          requests:
+            storage: 100Gi

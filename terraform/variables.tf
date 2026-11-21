@@ -87,6 +87,18 @@ variable "hardcover_api_key" {
   sensitive   = true
 }
 
+variable "theintrodb_api_key" {
+  description = "TheIntroDB API key for silo's theintrodb plugin"
+  type        = string
+  sensitive   = true
+}
+
+variable "openrouter_api_key" {
+  description = "OpenRouter API key for silo's embeddings provider"
+  type        = string
+  sensitive   = true
+}
+
 variable "cluster_id" {
   description = "Kubernetes Cluster ID"
   type        = string

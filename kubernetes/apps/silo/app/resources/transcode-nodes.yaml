@@ -1,0 +1,11 @@
+---
+# read by the API server (SILO_TRANSCODE_NODES_FILE), which creates each listed node that has no
+# row yet. the node id is the one in its key (snk1_<id>_...), keys are generated in
+# terraform/bitwarden_secrets/silo.tf. name and url are only used to create the row; after that the
+# node's own SILO_NODE_* variables own them
+apiVersion: 1
+nodes:
+  silo-transcode-0:
+    url: http://silo-transcode-0.silo-transcode.silo.svc.cluster.local:8080
+    key:
+      fromFile: /run/secrets/silo/silo-transcode-0
