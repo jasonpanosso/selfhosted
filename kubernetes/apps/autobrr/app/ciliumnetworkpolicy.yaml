@@ -70,7 +70,16 @@ spec:
         - ports:
             - port: "8989"
               protocol: TCP
-    # sites and OIDC on 443, IRC over TLS on 6697 and 7000, filter webhook action on 14896
+    # authelia OIDC
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: auth
+            app.kubernetes.io/name: authelia
+      toPorts:
+        - ports:
+            - port: "80"
+              protocol: TCP
+    # sites on 443, IRC over TLS on 6697 and 7000, filter webhook action on 14896
     - toCIDRSet:
         - cidr: 0.0.0.0/0
           except:

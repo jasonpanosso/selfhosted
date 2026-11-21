@@ -98,7 +98,16 @@ spec:
         - ports:
             - port: "8989"
               protocol: TCP
-    # metadata, artwork, plugin catalog and downloads, and authelia OIDC through the public hostname
+    # authelia OIDC
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: auth
+            app.kubernetes.io/name: authelia
+      toPorts:
+        - ports:
+            - port: "80"
+              protocol: TCP
+    # metadata, artwork, plugin catalog and downloads
     - toCIDRSet:
         - cidr: 0.0.0.0/0
           except:

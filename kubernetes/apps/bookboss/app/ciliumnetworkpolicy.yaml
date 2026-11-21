@@ -28,7 +28,16 @@ spec:
         - ports:
             - port: "5432"
               protocol: TCP
-    # hardcover and other book providers, and OIDC through the public auth hostname
+    # authelia OIDC
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: auth
+            app.kubernetes.io/name: authelia
+      toPorts:
+        - ports:
+            - port: "80"
+              protocol: TCP
+    # hardcover and other book providers
     - toCIDRSet:
         - cidr: 0.0.0.0/0
           except:

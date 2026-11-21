@@ -83,7 +83,16 @@ spec:
         - ports:
             - port: "9696"
               protocol: TCP
-    # OIDC through the public auth hostname, and qui's other external requests
+    # authelia OIDC
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: auth
+            app.kubernetes.io/name: authelia
+      toPorts:
+        - ports:
+            - port: "80"
+              protocol: TCP
+    # qui's external requests
     - toCIDRSet:
         - cidr: 0.0.0.0/0
           except:
