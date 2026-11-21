@@ -1,0 +1,71 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/master-standalone-strict/deployment-apps-v1.json
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: &app gamja
+  labels:
+    app.kubernetes.io/name: *app
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: *app
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: *app
+    spec:
+      automountServiceAccountToken: false
+      securityContext:
+        runAsUser: 65534
+        runAsGroup: 65534
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        # serves gamja's static files only; the browser opens /socket, which
+        # the HTTPRoute sends to soju
+        - image: docker.io/library/caddy:2.11.9@sha256:4851e54a46b206517c574821bb5cc67f170d2156041e9fbc4c9193b45e84a75b
+          name: *app
+          # file-server mode runs with the admin API off and config persistence off
+          command: ["caddy", "file-server", "--root", "/srv/gamja", "--listen", ":8080"]
+          ports:
+            - containerPort: 8080
+              name: http
+          livenessProbe: &probes
+            httpGet:
+              path: /
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 15
+          readinessProbe: *probes
+          resources:
+            requests:
+              cpu: 10m
+              memory: 64Mi
+            limits:
+              memory: 64Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities: {drop: [ALL]}
+          volumeMounts:
+            - name: gamja
+              mountPath: /srv/gamja
+              subPath: gamja
+              readOnly: true
+            # the image's XDG_DATA_HOME and XDG_CONFIG_HOME
+            - name: caddy-data
+              mountPath: /data
+            - name: caddy-config
+              mountPath: /config
+      volumes:
+        # upstream's gamja image: kimchi plus the built files under /gamja
+        - name: gamja
+          image:
+            reference: codeberg.org/emersion/gamja:v1.0.0-beta.11@sha256:9650c193b9148c6f68a920d7e066a8507a30e3cb1b8bee5dfd0496b5bee75759
+            pullPolicy: IfNotPresent
+        - name: caddy-data
+          emptyDir: {}
+        - name: caddy-config
+          emptyDir: {}

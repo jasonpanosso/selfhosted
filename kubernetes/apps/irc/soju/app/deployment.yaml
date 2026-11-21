@@ -1,0 +1,87 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/master-standalone-strict/deployment-apps-v1.json
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: &app soju
+  labels:
+    app.kubernetes.io/name: *app
+  annotations:
+    reloader.stakater.com/auto: "true"
+spec:
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: *app
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: *app
+    spec:
+      automountServiceAccountToken: false
+      securityContext:
+        runAsUser: 65534
+        runAsGroup: 65534
+        fsGroup: 65534
+        fsGroupChangePolicy: OnRootMismatch
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - image: codeberg.org/emersion/soju:v0.11.1@sha256:c695fb996dce168fb39449415c7523b17189ed81b48c107d4728fc93fb30e799
+          name: *app
+          args: ["-config", "/etc/soju/config"]
+          ports:
+            - containerPort: 8080
+              name: http
+            - containerPort: 6697
+              name: ircs
+          env:
+            - name: TZ
+              value: Etc/UTC
+          livenessProbe: &probes
+            tcpSocket:
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 15
+          readinessProbe: *probes
+          resources:
+            requests:
+              cpu: 10m
+              memory: 128Mi
+            limits:
+              memory: 128Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities: {drop: [ALL]}
+          volumeMounts:
+            - name: data
+              mountPath: /var/lib/soju
+            - name: config
+              mountPath: /etc/soju
+              readOnly: true
+            # renewals restart soju via reloader
+            - name: tls
+              mountPath: /etc/soju-tls
+              readOnly: true
+            - name: run
+              mountPath: /run/soju
+            # SQLite temp files
+            - name: tmp
+              mountPath: /tmp
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: *app
+        - name: config
+          configMap:
+            name: *app
+        - name: tls
+          secret:
+            secretName: soju-tls
+        - name: run
+          emptyDir: {}
+        - name: tmp
+          emptyDir: {}

@@ -1,0 +1,26 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/gateway.networking.k8s.io/gateway_v1.json
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: soju
+spec:
+  gatewayClassName: cilium-lb
+  addresses:
+    - type: IPAddress
+      value: 192.168.21.14
+  infrastructure:
+    annotations:
+      coredns.io/hostname: bouncer.${domain}.${tld}
+  listeners:
+    - name: ircs
+      protocol: TLS
+      port: 443
+      hostname: bouncer.${domain}.${tld}
+      tls:
+        mode: Passthrough
+      allowedRoutes:
+        namespaces:
+          from: Same
+        kinds:
+          - kind: TLSRoute

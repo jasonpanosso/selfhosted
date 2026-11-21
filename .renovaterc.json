@@ -26,6 +26,12 @@
       "schedule": ["* * * * 1"],
       "updateNotScheduled": false,
       "branchTopic": "{{{depNameSanitized}}}"
+    },
+    {
+      "description": "gamja tags are v1.0.0-beta.N; docker versioning reads -beta.N as an incompatible suffix",
+      "matchDatasources": ["docker"],
+      "matchPackageNames": ["codeberg.org/emersion/gamja"],
+      "versioning": "semver"
     }
   ],
   "flux": {

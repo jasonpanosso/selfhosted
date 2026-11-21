@@ -16,6 +16,7 @@ locals {
     "filebrowser",
     "matter-server",
     "home-assistant",
+    "soju",
     "sunlit-valley-cobblemon",
     "sunlit-valley",
   ])

@@ -1,0 +1,14 @@
+# gamja through the internal gateway, which terminates TLS
+listen ws+insecure://:8080
+# IRC clients through the soju Gateway, which passes TLS through
+listen ircs://:6697
+tls /etc/soju-tls/tls.crt /etc/soju-tls/tls.key
+# sojuctl, via kubectl exec
+listen unix+admin:///run/soju/admin
+
+hostname irc.${domain}.${tld}
+
+db sqlite3 /var/lib/soju/soju.db
+# db store: needed for chathistory and search
+message-store db
+message-expiry 7d

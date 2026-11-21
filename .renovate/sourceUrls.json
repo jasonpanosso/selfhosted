@@ -47,6 +47,18 @@
       "matchDatasources": ["github-releases"],
       "matchPackageNames": ["controlplaneio-fluxcd/distribution"],
       "sourceUrl": "https://github.com/fluxcd/flux2"
+    },
+    {
+      "description": "Image source label points at the shared soju-containers build repo",
+      "matchDatasources": ["docker"],
+      "matchPackageNames": ["codeberg.org/emersion/soju"],
+      "sourceUrl": "https://codeberg.org/emersion/soju"
+    },
+    {
+      "description": "Image source label points at the shared soju-containers build repo",
+      "matchDatasources": ["docker"],
+      "matchPackageNames": ["codeberg.org/emersion/gamja"],
+      "sourceUrl": "https://codeberg.org/emersion/gamja"
     }
   ]
 }

@@ -1,0 +1,16 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/gateway.networking.k8s.io/tlsroute_v1.json
+apiVersion: gateway.networking.k8s.io/v1
+kind: TLSRoute
+metadata:
+  name: soju
+spec:
+  parentRefs:
+    - name: soju
+      sectionName: ircs
+  hostnames:
+    - bouncer.${domain}.${tld}
+  rules:
+    - backendRefs:
+        - name: soju
+          port: 6697
