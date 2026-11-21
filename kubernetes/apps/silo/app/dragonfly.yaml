@@ -13,8 +13,8 @@ spec:
     - --dbfilename=
   authentication:
     passwordFromSecret:
-      name: silo
-      key: SILO_REDIS_PASSWORD
+      name: dragonfly
+      key: DRAGONFLY_PASSWORD
   replicas: 2
   # automountServiceAccountToken: false is set on the ServiceAccount
   serviceAccountName: dragonfly

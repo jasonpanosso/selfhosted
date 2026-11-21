@@ -305,8 +305,8 @@ spec:
             - name: MEILI_MASTER_KEY
               valueFrom:
                 secretKeyRef:
-                  name: silo
-                  key: SILO_MEILISEARCH_MASTER_KEY
+                  name: meilisearch
+                  key: MEILI_MASTER_KEY
             - name: MEILI_HTTP_ADDR
               value: 0.0.0.0:7700
             - name: MEILI_DB_PATH
