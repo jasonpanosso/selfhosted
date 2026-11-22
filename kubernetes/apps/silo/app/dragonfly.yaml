@@ -7,6 +7,8 @@ metadata:
 spec:
   args:
     - --proactor_threads=1
+    # Dragonfly requires > 256mb or else it refuses to launch
+    - --maxmemory=256mb
     # checks for releases daily and reports anonymous data; its network policy blocks this anyway
     - --version_check=false
     # pub/sub and short-lived keys only: no snapshot on shutdown (the root filesystem is read-only)
@@ -51,9 +53,9 @@ spec:
   resources:
     requests:
       cpu: 50m
-      memory: 320Mi
+      memory: 64Mi
     limits:
-      memory: 320Mi
+      memory: 64Mi
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/master-standalone-strict/serviceaccount-v1.json
 apiVersion: v1
