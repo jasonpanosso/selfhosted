@@ -9,6 +9,22 @@ ai_providers:
     api_key:
       fromFile: /run/secrets/silo/openrouter_api_key
 plugins:
+  silo.audiobook-metadata:
+    config:
+      sources:
+        audnexus: true
+        itunes: true
+        audiobookcovers: true
+        # scrapers, 6 requests/minute each
+        audible: false
+        storytel: false
+        bookbeat: false
+        audioteka: false
+        # unavailable
+        audimeta: false
+      limits:
+        # 300/minute rate limit
+        audnexus_per_minute: 100
   silo.auth.oidc:
     config:
       connection:

@@ -114,6 +114,10 @@ spec:
               mountPath: /media/shows
               subPath: shows
               readOnly: true
+            - name: media
+              mountPath: /media/audiobooks
+              subPath: audiobooks
+              readOnly: true
             # transcode segments
             - name: tmp
               mountPath: /tmp

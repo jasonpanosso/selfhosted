@@ -135,6 +135,12 @@ spec:
               value: "4"
             - name: SILO_MATCHER_WORKERS
               value: "4"
+            - name: SILO_AUDIOBOOK_SCAN_WORKERS
+              value: "2"
+            - name: SILO_AUDIOBOOK_ENRICH_WORKERS
+              value: "2"
+            - name: SILO_AUDIOBOOK_ENRICH_BATCH_SIZE
+              value: "50"
             # forcing a larger send buffer needs NET_ADMIN, keep kernel autotuning
             - name: SILO_NET_TCP_SEND_BUFFER
               value: "off"
@@ -209,6 +215,10 @@ spec:
             - name: media
               mountPath: /media/shows
               subPath: shows
+              readOnly: true
+            - name: media
+              mountPath: /media/audiobooks
+              subPath: audiobooks
               readOnly: true
             # /var/lib/silo is a symlink to /config/silo in the image. nothing to keep: artwork is in S3,
             # plugin binaries are restored from the database
