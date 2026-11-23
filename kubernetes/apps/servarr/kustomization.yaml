@@ -9,6 +9,7 @@ components:
 
 resources:
   - ./namespace.yaml
+  - ./chaptarr/ks.yaml
   - ./configarr/ks.yaml
   - ./deduparr/ks.yaml
   - ./prowlarr/ks.yaml

@@ -1,0 +1,73 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/cilium.io/ciliumnetworkpolicy_v2.json
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: chaptarr
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: chaptarr
+  enableDefaultDeny:
+    ingress: true
+    egress: true
+  ingress:
+    # cilium gateway envoy
+    - fromEntities:
+        - ingress
+      toPorts: &http
+        - ports:
+            - port: "8789"
+              protocol: TCP
+    # application sync, as a Readarr app
+    - fromEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: prowlarr
+      toPorts: *http
+  egress:
+    # toFQDNs only learns IPs from DNS that goes through the proxy
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: kube-system
+            k8s-app: kube-dns
+      toPorts:
+        - ports:
+            - port: "53"
+              protocol: UDP
+            - port: "53"
+              protocol: TCP
+          rules:
+            dns:
+              - matchPattern: "*"
+    - toFQDNs:
+        # metadata server and server-side health notifications
+        - matchName: api2.chaptarr.com
+        # update checks, time check
+        - matchName: services.chaptarr.com
+        # metadata and covers
+        - matchName: api.hardcover.app
+        - matchName: assets.hardcover.app
+        - matchName: api.audible.com
+        - matchName: www.goodreads.com
+        - matchName: i.gr-assets.com
+        - matchName: m.media-amazon.com
+      toPorts:
+        - ports:
+            - port: "443"
+              protocol: TCP
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: prowlarr
+      toPorts:
+        - ports:
+            - port: "9696"
+              protocol: TCP
+    # download client
+    - toEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: qui
+            app.kubernetes.io/name: qui
+      toPorts:
+        - ports:
+            - port: "80"
+              protocol: TCP

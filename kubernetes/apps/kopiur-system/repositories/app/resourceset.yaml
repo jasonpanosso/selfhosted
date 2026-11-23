@@ -20,6 +20,11 @@ spec:
       app: jellyfin
       capacity: 5Gi
     - namespace: servarr
+      app: chaptarr
+      capacity: 5Gi
+      compressor: zstd
+      bootstrap: true
+    - namespace: servarr
       app: prowlarr
       capacity: 1Gi
       compressor: zstd

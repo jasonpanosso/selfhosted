@@ -22,6 +22,9 @@ spec:
     - fromEndpoints:
         - matchLabels:
             k8s:io.kubernetes.pod.namespace: servarr
+            app.kubernetes.io/name: chaptarr
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: servarr
             app.kubernetes.io/name: radarr
         - matchLabels:
             k8s:io.kubernetes.pod.namespace: servarr

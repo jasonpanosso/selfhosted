@@ -21,6 +21,8 @@ spec:
               protocol: TCP
     - fromEndpoints:
         - matchLabels:
+            app.kubernetes.io/name: chaptarr
+        - matchLabels:
             app.kubernetes.io/name: radarr
         - matchLabels:
             app.kubernetes.io/name: sonarr
@@ -49,6 +51,13 @@ spec:
             - port: "5432"
               protocol: TCP
     # application sync
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: chaptarr
+      toPorts:
+        - ports:
+            - port: "8789"
+              protocol: TCP
     - toEndpoints:
         - matchLabels:
             app.kubernetes.io/name: radarr

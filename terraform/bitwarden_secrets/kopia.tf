@@ -6,6 +6,7 @@ locals {
     "bookboss",
     "tandoor",
     "jellyfin",
+    "chaptarr",
     "prowlarr",
     "qbittorrent",
     "radarr",
