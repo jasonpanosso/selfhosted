@@ -34,7 +34,7 @@ spec:
         - name: gpu
           resourceClaimTemplateName: silo-gpu
       containers:
-        - image: ghcr.io/silo-server/silo-server:build-2972@sha256:47f1f9e991a01921fe1ed17beb19f483589a34e53d6ac0139676f5144136ff2c
+        - image: ghcr.io/silo-server/silo-server:build-2996@sha256:0a37e2923e754c260a56c6f2793645aa32ead4257f16bd1c82cce541a4beb4cb
           name: *app
           # do not use bundled init, run binary directly
           command: [silo]
