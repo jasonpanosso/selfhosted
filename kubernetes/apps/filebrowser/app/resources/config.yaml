@@ -12,6 +12,7 @@ server:
           - includeRootItem: movies
           - includeRootItem: shows
           - includeRootItem: audiobooks
+          - includeRootItem: books
           - includeRootItem: bookdrop
           - includeRootItem: backups
         defaultUserScope: /
