@@ -30,6 +30,12 @@
       "sourceUrl": "https://github.com/dragonflydb/dragonfly-operator"
     },
     {
+      "description": "qBittorrent tags releases release-<version>",
+      "matchDatasources": ["docker"],
+      "matchPackageNames": ["ghcr.io/home-operations/qbittorrent"],
+      "extractVersion": "^(?:release-)?(?<version>.+)$"
+    },
+    {
       "description": "Image has no source label, only the jellyfin.org homepage",
       "matchDatasources": ["docker"],
       "matchPackageNames": ["ghcr.io/jellyfin/jellyfin"],
