@@ -99,6 +99,15 @@
       ]
     },
     {
+      "description": "cfwidget has no changelogs, get changelogs from modrinth",
+      "matchDatasources": ["custom.curseforge-modpacks"],
+      "matchPackageNames": [
+        "society-sunlit-valley",
+        "society-sunlit-cobblemon"
+      ],
+      "changelogUrl": "https://modrinth.com/modpack/{{depName}}/changelog"
+    },
+    {
       "description": "Eclipse Temurin JRE tags (e.g. 25.0.5_8-jre-noble, 25.0.4.1_1-jre-noble)",
       "matchDatasources": ["docker"],
       "matchPackageNames": ["/eclipse-temurin$/"],
