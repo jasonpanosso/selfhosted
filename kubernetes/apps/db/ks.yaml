@@ -28,6 +28,8 @@ spec:
   dependsOn:
     - name: cloudnative-pg
       namespace: cnpg-system
+    - name: cnpg-image-catalog
+      namespace: cnpg-system
     - name: plugin-barman-cloud
       namespace: cnpg-system
     - name: secret-store

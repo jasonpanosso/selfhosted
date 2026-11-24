@@ -3,16 +3,7 @@
   "customManagers": [
     {
       "customType": "regex",
-      "description": "CloudNativePG Cluster imageName",
-      "managerFilePatterns": ["/(^|/)kubernetes/.+\\.ya?ml$/"],
-      "matchStrings": [
-        "imageName: (?<depName>[^\\s:@]+):(?<currentValue>[^\\s@]+)(@(?<currentDigest>sha256:[0-9a-f]{64}))?"
-      ],
-      "datasourceTemplate": "docker"
-    },
-    {
-      "customType": "regex",
-      "description": "CloudNativePG Cluster extension image volumes (postgresql.extensions[].image.reference)",
+      "description": "CloudNativePG extension image volumes (ClusterImageCatalog images[].extensions[].image.reference)",
       "managerFilePatterns": ["/(^|/)kubernetes/.+\\.ya?ml$/"],
       "matchStrings": [
         "reference: (?<depName>ghcr\\.io/cloudnative-pg/[^\\s:@]+):(?<currentValue>[^\\s@]+)(@(?<currentDigest>sha256:[0-9a-f]{64}))?"
@@ -22,14 +13,11 @@
   ],
   "packageRules": [
     {
-      "description": "Postgres majors run pg_upgrade in place; hold for dashboard approval",
+      "description": "ClusterImageCatalog entries are keyed by major; a new major is a new catalog entry plus a Cluster imageCatalogRef.major bump, done by hand",
       "matchDatasources": ["docker"],
       "matchPackageNames": ["ghcr.io/cloudnative-pg/postgresql"],
       "matchUpdateTypes": ["major"],
-      "dependencyDashboardApproval": true,
-      "prBodyNotes": [
-        "Major upgrade: change `serverName` in both `plugins` and `externalClusters` of `db/app/cluster.yaml` in this PR, or the new timeline 1 overwrites the old archive."
-      ]
+      "enabled": false
     },
     {
       "description": "Only open pgvector updates (tags and digests) on Mondays",

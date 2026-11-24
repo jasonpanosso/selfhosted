@@ -15,13 +15,15 @@ spec:
         parameters:
           barmanObjectName: b2-store
           serverName: pgcluster-pg18
-  imageName: ghcr.io/cloudnative-pg/postgresql:18.7-minimal-trixie@sha256:c8caac9817d2b5e5e66297a3ccf86d9fcbd68f097aa6cc00161d83f9635e88cc
+  imageCatalogRef:
+    apiGroup: postgresql.cnpg.io
+    kind: ClusterImageCatalog
+    name: postgresql
+    major: 18
   postgresql:
     extensions:
       # for silo
       - name: pgvector
-        image:
-          reference: ghcr.io/cloudnative-pg/pgvector:0.8.7-18-trixie@sha256:eef3dd247157d53acc8e6ac53b5b610474eaedcd93f722c89245a3171b58e10f
   instances: 3
   primaryUpdateMethod: switchover
   priorityClassName: system-cluster-critical
