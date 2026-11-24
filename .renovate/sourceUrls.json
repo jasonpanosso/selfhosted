@@ -44,7 +44,9 @@
     {
       "description": "Point chart source to kubernetes-sigs/external-dns",
       "matchDatasources": ["docker"],
-      "matchPackageNames": ["ghcr.io/home-operations/charts-mirror/external-dns"],
+      "matchPackageNames": [
+        "ghcr.io/home-operations/charts-mirror/external-dns"
+      ],
       "sourceUrl": "https://github.com/kubernetes-sigs/external-dns",
       "sourceDirectory": "charts/external-dns"
     },
