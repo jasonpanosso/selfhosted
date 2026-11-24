@@ -55,9 +55,6 @@ spec:
             k8s:io.kubernetes.pod.namespace: qui
             app.kubernetes.io/name: qui
         - matchLabels:
-            k8s:io.kubernetes.pod.namespace: seerr
-            app.kubernetes.io/name: seerr
-        - matchLabels:
             k8s:io.kubernetes.pod.namespace: silo
             app.kubernetes.io/name: silo
         - matchLabels:

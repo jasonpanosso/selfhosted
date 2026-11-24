@@ -19,11 +19,8 @@ spec:
         - ports:
             - port: "8096"
               protocol: TCP
-    # seerr, and the refresh webhook from radarr and sonarr
+    # the refresh webhook from radarr and sonarr
     - fromEndpoints:
-        - matchLabels:
-            k8s:io.kubernetes.pod.namespace: seerr
-            app.kubernetes.io/name: seerr
         - matchLabels:
             k8s:io.kubernetes.pod.namespace: servarr
             app.kubernetes.io/name: radarr

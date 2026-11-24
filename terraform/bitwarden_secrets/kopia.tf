@@ -10,7 +10,6 @@ locals {
     "prowlarr",
     "qbittorrent",
     "radarr",
-    "seerr",
     "sonarr",
     "upbrr",
     "filebrowser",

@@ -36,9 +36,6 @@ spec:
       app: radarr
       capacity: 5Gi
       compressor: zstd
-    - namespace: seerr
-      app: seerr
-      capacity: 1Gi
     - namespace: servarr
       app: sonarr
       capacity: 5Gi
