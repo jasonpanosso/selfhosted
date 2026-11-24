@@ -11,8 +11,6 @@ metadata:
 spec:
   # above the startupProbe budget
   progressDeadlineSeconds: 1500
-  # Silo bug causes multiple API replicas without sticky sessions to start
-  # transcoding on the api server (lol)
   replicas: 1
   strategy:
     type: Recreate
@@ -50,7 +48,7 @@ spec:
                         - silo
                 topologyKey: kubernetes.io/hostname
       containers:
-        - image: ghcr.io/silo-server/silo-server:build-2996@sha256:0a37e2923e754c260a56c6f2793645aa32ead4257f16bd1c82cce541a4beb4cb
+        - image: ghcr.io/silo-server/silo-server:build-3019@sha256:575fb4dcd9406d2fe958526fe45f0aa7fe395c8c36cacb57ea341b99c436078d
           name: *app
           # do not use bundled init, run binary directly
           command: [silo]
