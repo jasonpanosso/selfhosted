@@ -86,6 +86,9 @@ spec:
               value: -XX:+UseShenandoahGC
             - name: STOP_DURATION
               value: "60"
+            # flaky plugins taking a long time at startup
+            - name: MAX_TICK_TIME
+              value: "300000"
             - name: ENABLE_RCON
               value: "true"
             - name: RCON_PASSWORD_FILE
