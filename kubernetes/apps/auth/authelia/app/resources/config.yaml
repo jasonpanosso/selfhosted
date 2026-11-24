@@ -11,12 +11,6 @@ server:
         implementation: ExtAuthz
         authn_strategies:
           - name: CookieSession
-      # used by the jellyfin authelia plugin, which logs in via /api/firstfactor and then
-      # checks access here with the resulting session cookie (no Proxy-Authorization)
-      auth-request:
-        implementation: AuthRequest
-        authn_strategies:
-          - name: CookieSession
 
 # user bans on too many failures
 regulation:
@@ -29,11 +23,6 @@ regulation:
 access_control:
   default_policy: deny
   rules:
-    - domain:
-        - silo.${domain}.${tld}
-      subject: group:admins
-      policy: one_factor
-
     - domain: "*.${domain}.${tld}"
       subject: group:admins
       policy: two_factor
