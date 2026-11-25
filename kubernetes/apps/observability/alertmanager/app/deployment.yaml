@@ -29,7 +29,7 @@ spec:
         seccompProfile:
           type: RuntimeDefault
       containers:
-        - image: ghcr.io/prometheus/alertmanager:v0.35.0@sha256:f093d4dc92bc01323f2aa4fb48899d6586406b8c4b882491cd24841ab85f11ff
+        - image: ghcr.io/prometheus/alertmanager:v0.35.1@sha256:65808bcf1b989e96a49d57abb26122440f93742f0f4fd4fc0b62eae98dd2361b
           name: *app
           args:
             - --config.file=/etc/alertmanager/config/alertmanager.yaml
