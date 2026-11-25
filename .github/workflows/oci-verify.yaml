@@ -1,0 +1,62 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
+name: oci-verify
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - .github/workflows/oci-verify.yaml
+      - kubernetes/**/ocirepository.yaml
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    name: oci-verify - Verify
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          # The PR merge commit plus the base branch
+          fetch-depth: 2
+          persist-credentials: false
+
+      - name: Install cosign
+        uses: sigstore/cosign-installer@881c63bd87e38389154debd8331404ce7ca8a3ab # v4.1.4
+
+      # cosign verify the chart
+      - name: Verify OCIRepository signatures
+        run: |
+          failed=0
+          for file in $(git diff --name-only --diff-filter=d HEAD^1 HEAD -- 'kubernetes/*/ocirepository.yaml' \
+            | xargs -r grep -l 'provider: cosign'); do
+            url=$(yq '.spec.url | sub("^oci://", "")' "$file")
+            digest=$(yq '.spec.ref.digest // ""' "$file")
+            tag=$(yq '.spec.ref.tag // ""' "$file")
+            if [ -n "$digest" ]; then ref="$url@$digest"; else ref="$url:$tag"; fi
+            verified=false
+            for i in $(seq 0 $(( $(yq '.spec.verify.matchOIDCIdentity | length' "$file") - 1 ))); do
+              if cosign verify "$ref" \
+                --certificate-oidc-issuer-regexp "$(yq ".spec.verify.matchOIDCIdentity[$i].issuer" "$file")" \
+                --certificate-identity-regexp "$(yq ".spec.verify.matchOIDCIdentity[$i].subject" "$file")" \
+                > /dev/null; then
+                verified=true
+                break
+              fi
+            done
+            if $verified; then
+              echo "verified $ref"
+            else
+              echo "::error file=$file::no cosign signature matching spec.verify.matchOIDCIdentity for $ref"
+              failed=1
+            fi
+          done
+          exit $failed
