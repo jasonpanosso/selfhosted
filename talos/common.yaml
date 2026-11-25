@@ -14,7 +14,7 @@ url: tcp://127.0.0.1:6051
 ---
 apiVersion: v1alpha1
 kind: KubeletConfig
-image: ghcr.io/siderolabs/kubelet:v1.36.6
+image: ghcr.io/siderolabs/kubelet:v1.37.3
 defaultRuntimeSeccompProfileEnabled: true
 config:
   serializeImagePulls: false

@@ -81,7 +81,7 @@ ingress:
 ---
 apiVersion: v1alpha1
 kind: KubeAPIServerConfig
-image: registry.k8s.io/kube-apiserver:v1.36.6
+image: registry.k8s.io/kube-apiserver:v1.37.3
 certExtraSANs:
   - 192.168.20.100
 resources:
@@ -103,7 +103,7 @@ configuration:
 ---
 apiVersion: v1alpha1
 kind: KubeControllerManagerConfig
-image: registry.k8s.io/kube-controller-manager:v1.36.6
+image: registry.k8s.io/kube-controller-manager:v1.37.3
 extraArgs:
   bind-address: 0.0.0.0
   terminated-pod-gc-threshold: "10"
@@ -114,7 +114,7 @@ resources:
 ---
 apiVersion: v1alpha1
 kind: KubeSchedulerConfig
-image: registry.k8s.io/kube-scheduler:v1.36.6
+image: registry.k8s.io/kube-scheduler:v1.37.3
 extraArgs:
   bind-address: 0.0.0.0
 resources:
@@ -143,7 +143,7 @@ config:
 apiVersion: v1alpha1
 kind: KubeProxyConfig
 enabled: false
-image: registry.k8s.io/kube-proxy:v1.36.6
+image: registry.k8s.io/kube-proxy:v1.37.3
 ---
 apiVersion: v1alpha1
 kind: KubeCoreDNSConfig
