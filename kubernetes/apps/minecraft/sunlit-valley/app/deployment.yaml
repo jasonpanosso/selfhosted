@@ -200,7 +200,7 @@ spec:
           type: RuntimeDefault
       containers:
         - name: *app
-          image: ghcr.io/jasonpanosso/minecraft-rcon-console:2.8.7@sha256:ae2a55244b7c9fc27679eba0cfa32e76a9913535095575968e533c030bc6300b
+          image: ghcr.io/jasonpanosso/minecraft-rcon-console:2.8.8@sha256:d437357fecc2e6192fa2b375f4ed76e168b1be6b9787f8d775501bdde6fc36ee
           env:
             - name: RCON_HOST
               value: sunlit-valley.minecraft.svc.cluster.local
