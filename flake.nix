@@ -78,20 +78,20 @@
           src = pkgs.fetchurl (
             {
               x86_64-linux = {
-                url = "https://github.com/siderolabs/talos/releases/download/v1.14.6/talosctl-linux-amd64";
-                sha256 = "11acde7f7578ffe9cbe6fb8349b34595065f597de0842615982e350b365de987";
+                url = "https://github.com/siderolabs/talos/releases/download/v1.14.7/talosctl-linux-amd64";
+                sha256 = "823deb86e20d79f08d000b266e63e4bffc772ee80364ce405bad5659bcacfb18";
               };
               aarch64-linux = {
-                url = "https://github.com/siderolabs/talos/releases/download/v1.14.6/talosctl-linux-arm64";
-                sha256 = "fd22e0678d783105646d824c23ee45cf7a57f737edae274ca41376d03a4def65";
+                url = "https://github.com/siderolabs/talos/releases/download/v1.14.7/talosctl-linux-arm64";
+                sha256 = "b5537c9e59ab60c763bee9ab476bf936ecd400799ff670e1f1e8e19182f8233a";
               };
               x86_64-darwin = {
-                url = "https://github.com/siderolabs/talos/releases/download/v1.14.6/talosctl-darwin-amd64";
-                sha256 = "cb460e388de00628d7d42beb6ca037603025195c05115de9ec25442a870aa1ed";
+                url = "https://github.com/siderolabs/talos/releases/download/v1.14.7/talosctl-darwin-amd64";
+                sha256 = "a3e375d001ea04e9b4161eb9976ab14abd4e77957e9b6d33e894a41a7c6152eb";
               };
               aarch64-darwin = {
-                url = "https://github.com/siderolabs/talos/releases/download/v1.14.6/talosctl-darwin-arm64";
-                sha256 = "dd290798702d60ce8c1f59f4c223d5bdbc9c0638db45a9827d7f6cb4bd4a3f39";
+                url = "https://github.com/siderolabs/talos/releases/download/v1.14.7/talosctl-darwin-arm64";
+                sha256 = "7eb6696ead7f6b1a2451fc50f022f4634cdaf7298af963e13c290c5583e185b9";
               };
             }
             .${system}
