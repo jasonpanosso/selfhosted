@@ -26,6 +26,10 @@ spec:
       - name: pgvector
   instances: 3
   primaryUpdateMethod: switchover
+  # smart shutdown always waits out the full timeout (default 180s)
+  # cilium's lb-sock-terminate-all-protos kills standby walreceivers, set timeout
+  # to 5 seconds to not get wal checkpoint past primary
+  smartShutdownTimeout: 5
   priorityClassName: system-cluster-critical
   affinity:
     podAntiAffinityType: required
