@@ -105,20 +105,20 @@
           src = pkgs.fetchurl (
             {
               x86_64-linux = {
-                url = "https://dl.k8s.io/release/v1.36.7/bin/linux/amd64/kubectl";
-                sha256 = "b08f96b43904747897fe569b3c51056b00ddfc67847f6db1bf9fe0c9583a2d26";
+                url = "https://dl.k8s.io/release/v1.37.3/bin/linux/amd64/kubectl";
+                sha256 = "9a1b55af2795b25dd288dbef62387db9b5530087ab918d28c6ad067f2e3cb07c";
               };
               aarch64-linux = {
-                url = "https://dl.k8s.io/release/v1.36.7/bin/linux/arm64/kubectl";
-                sha256 = "4e83edb4cc75beae9dc7cfb42be71899d5397a7b6a2384fbe1ae163d4f544aaf";
+                url = "https://dl.k8s.io/release/v1.37.3/bin/linux/arm64/kubectl";
+                sha256 = "da160b41491cc5c5e575d78bb665810fb900f70fad666d834094b24ec56d304f";
               };
               x86_64-darwin = {
-                url = "https://dl.k8s.io/release/v1.36.7/bin/darwin/amd64/kubectl";
-                sha256 = "ca582ece9c1156578698c903ea6c3da015da753b3206e1274cbaa2be86d1545b";
+                url = "https://dl.k8s.io/release/v1.37.3/bin/darwin/amd64/kubectl";
+                sha256 = "82db1bc2b466e9f46ed36d609d8c10523a425664e6e648a666df252b9502fe9e";
               };
               aarch64-darwin = {
-                url = "https://dl.k8s.io/release/v1.36.7/bin/darwin/arm64/kubectl";
-                sha256 = "a6d4cd1d1b3806b152595637d3925f9cf349ce40e1809298829aba7670f6d4e9";
+                url = "https://dl.k8s.io/release/v1.37.3/bin/darwin/arm64/kubectl";
+                sha256 = "7ac1234e7731e902e5ab2153e2ed29bbe7abddd7b0be5ffd94afb7df47da8f27";
               };
             }
             .${system}
