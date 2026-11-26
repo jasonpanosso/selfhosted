@@ -51,7 +51,7 @@ spec:
       capacity: 1Gi
     - namespace: home-assistant
       app: home-assistant
-      capacity: 5Gi
+      capacity: 10Gi
       compressor: zstd
     - namespace: irc
       app: soju
